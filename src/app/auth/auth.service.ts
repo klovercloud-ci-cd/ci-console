@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError, Observable, tap, throwError} from "rxjs";
 import {TokenService} from "./token.service";
+import * as endpoints from "./auth.endpoint";
 
 const OAUTH_CLIENT = '';
 const OAUTH_SECRET = '';
@@ -20,7 +21,7 @@ export class AuthService {
   redirectUrl = '';
 
   private static handleError(error: HttpErrorResponse): any {
-    if(error.error instanceof ErrorEvent) {
+    if (error.error instanceof ErrorEvent) {
       console.error('An Error occurred: ', error.error.message)
     } else {
       console.error(
@@ -30,7 +31,7 @@ export class AuthService {
     }
 
     return throwError(
-        'Internal server error!'
+      'Internal server error!'
     )
   };
 
@@ -42,14 +43,14 @@ export class AuthService {
   }
 
   login(loginPayload: any): Observable<any> {
-    return this.http.post(BASE_URL, loginPayload, HTTP_OPTIONS).pipe(
-      tap(_=> AuthService.log('login')),
+    return this.http.post(BASE_URL + endpoints.LOGIN, loginPayload, HTTP_OPTIONS).pipe(
+      tap(_ => AuthService.log('login')),
       catchError(AuthService.handleError))
   }
 
   signUp(signUpPayload: any): Observable<any> {
-    return this.http.post(BASE_URL, signUpPayload, HTTP_OPTIONS).pipe(
-      tap(_=> AuthService.log('register')),
+    return this.http.post(BASE_URL + endpoints.REGISTER, signUpPayload, HTTP_OPTIONS).pipe(
+      tap(_ => AuthService.log('register')),
       catchError(AuthService.handleError));
   }
 
@@ -59,7 +60,7 @@ export class AuthService {
     const body = new HttpParams()
       .set('refresh-token', refreshTokenData.refresh_token)
       .set('grant-type', 'refresh_token')
-    return this.http.post(BASE_URL + 'oauth/token', body, HTTP_OPTIONS).pipe(
+    return this.http.post(BASE_URL + endpoints.REFRESH_TOKEN, body, HTTP_OPTIONS).pipe(
       tap((res: any) => {
         this.tokenService.saveAccessToken(res.access_token);
         this.tokenService.saveRefreshToken(res.refresh_token);
