@@ -1,9 +1,28 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import {getConfig} from "./environment.common";
 
+const webappUrl = 'http://localhost:2022';
+
+/*const CONFIG = {
+  host: 'http://192.168.68.140:3000/api/v1',
+  //host: 'http://localhost:8080',
+  port: '',
+  postfix: '/',
+  // mockPoint: './assets/mock-data/',
+  get apiEndPoint() {
+    return `${this.host}${this.port}${this.postfix}`;
+  }
+};*/
 export const environment = {
-  production: false
+  appUrl: webappUrl,
+  production: false,
+  v1AuthEndpoint: 'http://192.168.68.113:3000/api/v1/',
+  v1ApiEndPoint: 'http://192.168.68.113:3000/api/v1/',
+  // config: {
+  //   ...getConfig(CONFIG)
+  // },
 };
 
 /*

@@ -15,11 +15,15 @@ export class LoginComponent implements OnInit {
     private tokenService: TokenService) { }
 
   ngOnInit(): void {
-
-
-    this.authService.login({hola: 'hola'}).subscribe(res => {
-      console.log(res);
+    this.logIn();
+  }
+  logIn(): void {
+    this.authService.login({email: 'shabrul2451@gmail.com', password: 'bh0974316'}).subscribe(res => {
+      this.tokenService.saveAccessToken(res.data.access_token);
+      this.tokenService.saveRefreshToken(res.data.refresh_token);
     })
   }
-
+  logout(): void {
+    this.authService.logOut();
+  }
 }
