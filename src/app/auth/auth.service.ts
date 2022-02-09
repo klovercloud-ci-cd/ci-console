@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError, Observable, tap, throwError} from "rxjs";
 import {TokenService} from "./token.service";
 
@@ -50,6 +50,20 @@ export class AuthService {
   signUp(signUpPayload: any): Observable<any> {
     return this.http.post(BASE_URL, signUpPayload, HTTP_OPTIONS).pipe(
       tap(_=> AuthService.log('register')),
+      catchError(AuthService.handleError));
+  }
+
+  refreshToken(refreshTokenData: any): Observable<any> {
+    this.tokenService.removeAccessToken();
+    this.tokenService.removeRefreshToken();
+    const body = new HttpParams()
+      .set('refresh-token', refreshTokenData.refresh_token)
+      .set('grant-type', 'refresh_token')
+    return this.http.post(BASE_URL + 'oauth/token', body, HTTP_OPTIONS).pipe(
+      tap((res: any) => {
+        this.tokenService.saveAccessToken(res.access_token);
+        this.tokenService.saveRefreshToken(res.refresh_token);
+      }),
       catchError(AuthService.handleError));
   }
 }
