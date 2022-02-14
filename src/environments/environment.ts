@@ -18,8 +18,8 @@ const webappUrl = 'http://localhost:2022';
 export const environment = {
   appUrl: webappUrl,
   production: false,
-  v1AuthEndpoint: 'http://192.168.68.113:3000/api/v1/',
-  v1ApiEndPoint: 'http://192.168.68.113:3000/api/v1/',
+  v1AuthEndpoint: 'http://localhost:3000/api/v1/',
+  v1ApiEndPoint: 'http://localhost:3000/api/v1/',
   // config: {
   //   ...getConfig(CONFIG)
   // },

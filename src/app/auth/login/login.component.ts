@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
     this.authService.login({email: 'shabrul2451@gmail.com', password: 'bh0974316'}).subscribe(res => {
       this.tokenService.saveAccessToken(res.data.access_token);
       this.tokenService.saveRefreshToken(res.data.refresh_token);
+      console.log(this.authService.getUserData(), 'USER')
     })
   }
   logout(): void {

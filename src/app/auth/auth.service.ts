@@ -5,7 +5,7 @@ import {TokenService} from "./token.service";
 import * as endpoints from "./auth.endpoint";
 import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
-
+import jwt_decode from "jwt-decode";
 const BASE_URL = environment.v1AuthEndpoint;
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
@@ -53,13 +53,14 @@ export class AuthService {
     return this.http.post(BASE_URL + endpoints.LOGIN, loginPayload, HTTP_OPTIONS).pipe(
       tap((res: any) => {
         AuthService.log('login')
-        if(res.data.access_token) {
+        if(this.tokenService.getAccessToken()) {
          this.refreshTokenInterval =  setInterval(() => {
-           console.log(res.data.access_token);
-            this.refreshToken({refresh_token: res.data.access_token}).subscribe(res => {
-              AuthService.log(res)
-            })
-          },300000); // TODO: This is not the right way but it will do for now
+           if(this.isAccessTokenExpired(this.tokenService.getAccessToken()) ){
+             this.refreshToken({refresh_token: this.tokenService.getRefreshToken()}).subscribe(res => {
+               AuthService.log(res)
+             })
+           }
+          },2000); // TODO: This is not the right way but it will do for now
         }
       }),
       catchError(AuthService.handleError))
@@ -67,7 +68,7 @@ export class AuthService {
 
   signUp(signUpPayload: any): Observable<any> {
     return this.http.post(BASE_URL + endpoints.REGISTER, signUpPayload, HTTP_OPTIONS).pipe(
-      tap(_ => AuthService.log('register')),
+      tap(_ => AuthService.log('registered!')),
       catchError(AuthService.handleError));
   }
 
@@ -93,5 +94,37 @@ export class AuthService {
       clearInterval(this.refreshTokenInterval);
       this.router.navigate(['/auth/register']);
     }, 1000);
+  }
+
+  isAccessTokenExpired(accessToken: any): boolean {
+    const decoded: any = jwt_decode(accessToken);
+    const expMilSecond: number = decoded?.exp * 1000;
+    const currentTime = Date.now();
+    console.log(expMilSecond - currentTime, 'Difference');
+    if (expMilSecond < currentTime) {
+      return true;
+    }
+    return false;
+  }
+  timeDiff(accessToken: string): any {
+    const decoded: any = jwt_decode(accessToken);
+    const expMilSecond: number = decoded?.exp * 1000;
+    const currentTime = Date.now();
+
+    return (expMilSecond - currentTime);
+  }
+  getUserData(): any {
+    let data: any;
+    if(this.tokenService.getAccessToken()) {
+      const token = this.tokenService.getAccessToken()
+      if (token != null && !this.isAccessTokenExpired(token)) {
+        const decoded: any = jwt_decode(token);
+         data = {
+          ...decoded.data
+        };
+        return data
+      }
+    }
+     return [];
   }
 }
