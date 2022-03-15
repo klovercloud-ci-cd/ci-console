@@ -50,12 +50,10 @@ body {
   margin: 0;
   font-family: Popins, sans-serif;
 }
-* {
-  font-family: Popins, sans-serif !important;
-}
+
 //kc
 .kc-card {
-  @apply bg-dark-background border-1.5 border-dark-border text-dark-text;
+  @apply bg-dark-background border-1.5 border-dark-border-default text-dark-text;
 }
 .kc-button-primary {
   @apply bg-dark-primary px-4 text-white;
@@ -69,15 +67,12 @@ body {
 .kc-button-warn {
   @apply bg-dark-warn px-4 text-white;
 }
-
-.kc-form {
-  font-family: Popins, sans-serif;
-  .mat-form-field-outline {
-    @apply bg-dark-background-5 rounded;
-  }
+::ng-deep .mat-form-field {
+  @apply hover:border-white;
 }
-.kc-form {
-  .mat-focused .mat-form-field-label {
-    color: green !important;
+
+::ng-deep .mat-form-field-appearance-outline {
+  .mat-form-field-outline .mat-form-field-outline-thick {
+    @apply bg-dark-background hover:border-white rounded;
   }
 }
