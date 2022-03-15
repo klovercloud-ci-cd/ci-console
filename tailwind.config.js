@@ -15,9 +15,9 @@ module.exports = {
 
           'tomato-red':'#ff6347',
           'container':'#243C64',
-          'border': '#495C7D',
+          
           'border':{
-            'default':'#495C7D',
+            DEFAULT:'#495C7D',
             'form': '#1A2C4A',
           } ,
           'text':{

@@ -20,7 +20,7 @@ $ci-console-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$ci-console-theme: mat.define-light-theme((
+$ci-console-theme: mat.define-dark-theme((
   color: (
     primary: $ci-console-primary,
     accent: $ci-console-accent,
@@ -43,13 +43,15 @@ $ci-console-theme: mat.define-light-theme((
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Popins, sans-serif; }
-
+* {
+  font-family: Popins , sans-serif !important; 
+}
 //kc
 .kc-card{
-  @apply bg-dark-background border-1.5 border-dark-border-default text-dark-text
+  @apply bg-dark-background border-1.5 border-dark-border text-dark-text
 }
 .kc-button-primary{
-  @apply bg-dark-primary px-4 text-white git checkout -b iss53
+  @apply bg-dark-primary px-4 text-white 
 }
 .kc-button-info{
   @apply bg-dark-info px-4 text-white
@@ -60,16 +62,21 @@ body { margin: 0; font-family: Popins, sans-serif; }
 .kc-button-warn {
   @apply bg-dark-warn px-4 text-white
 }
-.kc-form .mat-form-field {
-  @apply hover:border-white
-  
-}
 
-.kc-form .mat-form-field-appearance-outline {
-    .mat-form-field-outline .mat-form-field-outline-thick {
-      @apply bg-dark-background hover:border-white rounded
-      
-    }
+  .kc-form {
+    font-family: Popins, sans-serif;
+    .mat-form-field-outline{
+      @apply bg-dark-background-5 rounded
+     }
+
+     
   }
+  .kc-form {
+    .mat-focused .mat-form-field-label {
+      color: green !important;
+     }
+  }
+
+ 
   
   
