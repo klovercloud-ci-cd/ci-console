@@ -1,0 +1,17 @@
+.form_container {
+  @apply bg-dark-background-1;
+}
+.registration-form {
+  @apply border-[#697ca2] border-2;
+}
+.registration-form-container {
+}
+.kcci-field-1 {
+  @apply w-[50%];
+}
+.kcci-field-2 {
+  @apply w-[100%];
+}
+.kc-register {
+  @apply w-full py-4 mx-auto rounded text-lg font-semibold tracking-wider;
+}

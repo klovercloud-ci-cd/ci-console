@@ -1,0 +1,12 @@
+.example-container {
+  // height: 100vh;
+  // color: white;
+  // background-color: #151f36;
+  @apply h-[100vh] text-white bg-dark-background-5;
+}
+.example-sidenav {
+  @apply border-r-1.5 border-dark-border bg-dark-background;
+}
+.content-body {
+  @apply bg-dark-background-5 flex justify-center items-center;
+}

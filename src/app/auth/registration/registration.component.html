@@ -1,1 +1,95 @@
-<p>registration works!</p>
+<div class="bg-dark-background-5 h-screen">
+  <div class="grid xl:grid-cols-2 grid-cols-1 h-full">
+    <div class="mx-auto xl:flex xl:items-end justify-center hidden">
+      <img
+        src="../../../assets/images/bg/registration-ls-illustration.svg"
+        alt=""
+        class=""
+      />
+    </div>
+    <div class="form_container h-full p-20">
+      <div class="container kc-form mx-auto">
+        <mat-card class="registration-form kc-card border-2 border-dark-border">
+          <div class="w-full px-7 py-10">
+            <img
+              class="mx-auto"
+              src="../../../assets/images/bg/logo-dark.svg"
+              alt=""
+            />
+            <div class="text-gray-300 pt-10">
+              <h1 class="text-xl font-[600]">Register for an account</h1>
+              <h1 class="text-lg font-[400]">Simply fill out the form below</h1>
+            </div>
+
+            <!-- Input Form -->
+
+            <div class="w-full mt-5">
+              <div class="text-zinc-600">
+                <!-- <form [formGroup]="addUserForm" (ngSubmit)="addUserFormData()"> -->
+                <mat-form-field class="kcci-field-1" appearance="outline">
+                  <mat-label class="text-white">First Name *</mat-label>
+                  <input type="text" matInput placeholder="Ex. John" />
+                </mat-form-field>
+                <mat-form-field class="kcci-field-1" appearance="outline">
+                  <mat-label class="text-white">Last Name *</mat-label>
+                  <input type="text" matInput placeholder="Ex. smith" />
+                </mat-form-field>
+                <mat-form-field class="kcci-field-2" appearance="outline">
+                  <mat-label class="text-white">Email *</mat-label>
+                  <input
+                    type="email"
+                    matInput
+                    placeholder="Ex. pat@example.com"
+                  />
+                </mat-form-field>
+                <mat-form-field class="kcci-field-2" appearance="outline">
+                  <mat-label class="text-white">Password *</mat-label>
+                  <input type="password" matInput />
+                </mat-form-field>
+                <mat-form-field class="kcci-field-2" appearance="outline">
+                  <mat-label class="text-white">Email *</mat-label>
+                  <input
+                    type="email"
+                    matInput
+                    placeholder="Ex. pat@example.com"
+                  />
+                </mat-form-field>
+                <mat-form-field class="kcci-field-2" appearance="outline">
+                  <mat-label class="text-white">Password *</mat-label>
+                  <input type="password" matInput />
+                </mat-form-field>
+                <!-- <br />
+                <input
+                  type="text"
+                  name="email"
+                  formControlName="email"
+                  placeholder="enter email"
+                />
+                <br />
+                <input
+                  type="text"
+                  name="phone"
+                  formControlName="phone"
+                  placeholder="enter phone"
+                />
+                <br /> -->
+                <mat-radio-group aria-label="Select an option">
+                  <mat-radio-button value="1"
+                    >I accept the terms and conditions</mat-radio-button
+                  >
+                </mat-radio-group>
+                <button
+                  class="kc-button-primary kc-register block"
+                  type="submit"
+                >
+                  Create an Account
+                </button>
+                <!-- </form> -->
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
