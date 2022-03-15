@@ -73,7 +73,7 @@ body {
 .kc-form {
   font-family: Popins, sans-serif;
   .mat-form-field-outline {
-    @apply bg-dark-background-5;
+    @apply bg-dark-background-5 rounded;
   }
 }
 .kc-form {

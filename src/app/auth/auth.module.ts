@@ -10,6 +10,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatRippleModule } from '@angular/material/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [LoginComponent, RegistrationComponent],
@@ -24,6 +27,13 @@ import { MatRadioModule } from '@angular/material/radio';
     MatInputModule,
     MatFormFieldModule,
     MatRadioModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatRippleModule,
+    FlexLayoutModule,
   ],
 })
 export class AuthModule {}
