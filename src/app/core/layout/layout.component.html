@@ -1,0 +1,28 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" opened mode="side">
+    <div class="bg-dark-background-default">
+      <app-sidebar></app-sidebar>
+    </div>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <div
+      class="flex justify-between items-center border-b-[1px] border-[#495c7d] p-5"
+    >
+      <div>
+        <button type="button" mat-button (click)="drawer.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+      <div>
+        <app-header></app-header>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="content-body">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</mat-drawer-container>
