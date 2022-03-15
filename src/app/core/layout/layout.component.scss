@@ -1,0 +1,16 @@
+.example-container {
+  height: 100vh;
+  color: white;
+  background-color: #151f36;
+}
+.example-sidenav {
+  background-color: #1a2c4a;
+  border-right: 1px solid #495c7d;
+}
+.content-body {
+  //   height: 94vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #151f36;
+}

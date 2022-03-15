@@ -34,6 +34,44 @@ $ci-console-theme: mat.define-light-theme((
 @include mat.all-component-themes($ci-console-theme);
 
 /* You can add global styles to this file, and also import other style files */
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+  font-family: Popins;
+  src: url(./assets/fonts/Poppins-Regular.ttf);
+}
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Popins, sans-serif; }
+
+//kc
+.kc-card{
+  @apply bg-dark-background border-1.5 border-dark-border-default text-dark-text
+}
+.kc-button-primary{
+  @apply bg-dark-primary px-4 text-white 
+}
+.kc-button-info{
+  @apply bg-dark-info px-4 text-white
+}
+.kc-button-danger{
+  @apply bg-dark-danger px-4 text-white
+}
+.kc-button-warn {
+  @apply bg-dark-warn px-4 text-white
+}
+::ng-deep .mat-form-field {
+  @apply hover:border-white
+  
+}
+
+::ng-deep .mat-form-field-appearance-outline {
+    .mat-form-field-outline .mat-form-field-outline-thick {
+      @apply bg-dark-background hover:border-white rounded
+      
+    }
+    
+      
+  }
+  
+  
