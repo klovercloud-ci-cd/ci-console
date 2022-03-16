@@ -1,4 +1,4 @@
-<div class="bg-dark-background-5">
+<div class="bg-dark-background-5 h-full">
   <div class="grid xl:grid-cols-2 grid-cols-1 h-full">
     <div class="mx-auto xl:flex xl:items-end justify-center hidden">
       <img
@@ -7,7 +7,7 @@
         class=""
       />
     </div>
-    <div class="form_container h-full py-[5%] px-40">
+    <div class="form_container h-full pt-[10%] px-40">
       <div class="container kc-form mx-auto">
         <mat-card class="registration-form kc-card border-2 border-dark-border">
           <div class="w-full px-7 pt-8">
@@ -26,17 +26,32 @@
             <div class="w-full mt-5">
               <div class="">
                 <form [formGroup]="addUserForm" (ngSubmit)="addUserFormData()">
-                  <mat-form-field class="kcci-field-1" appearance="outline">
-                    <mat-label class="text-white">First Name *</mat-label>
-                    <input type="text" matInput placeholder="Ex. John" />
-                  </mat-form-field>
-                  <mat-form-field class="kcci-field-1" appearance="outline">
-                    <mat-label class="text-white">Last Name *</mat-label>
-                    <input type="text" matInput placeholder="Ex. smith" />
-                  </mat-form-field>
+                  <div class="flex gap-2">
+                    <mat-form-field class="kcci-field-1" appearance="outline">
+                      <mat-label class="text-white">First Name</mat-label>
+                      <input
+                        formControlName="firstname"
+                        type="text"
+                        required
+                        matInput
+                        placeholder="Ex. John"
+                      />
+                    </mat-form-field>
+                    <mat-form-field class="kcci-field-1" appearance="outline">
+                      <mat-label class="text-white">Last Name </mat-label>
+                      <input
+                        formControlName="lastname"
+                        required
+                        type="text"
+                        matInput
+                        placeholder="Ex. smith"
+                      />
+                    </mat-form-field>
+                  </div>
                   <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Email *</mat-label>
+                    <mat-label class="text-white">Email </mat-label>
                     <input
+                      required
                       formControlName="email"
                       matInput
                       placeholder="Email Address"
@@ -52,22 +67,40 @@
                       >Email is not valid</mat-error
                     >
                   </mat-form-field>
-                  <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Password *</mat-label>
-                    <input type="password" matInput />
-                  </mat-form-field>
-                  <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Email *</mat-label>
+                  <mat-form-field
+                    class="kcci-field-2 kc-number"
+                    appearance="outline"
+                  >
+                    <mat-label class="text-white">Phone </mat-label>
                     <input
-                      type="email"
+                      formControlName="phone"
+                      required
+                      type="number"
                       matInput
-                      placeholder="Ex. pat@example.com"
                     />
                   </mat-form-field>
-                  <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Password *</mat-label>
-                    <input type="password" matInput />
-                  </mat-form-field>
+                  <div class="flex gap-2">
+                    <mat-form-field class="kcci-field-1" appearance="outline">
+                      <mat-label class="text-white">Password </mat-label>
+                      <input
+                        formControlName="password"
+                        required
+                        type="password"
+                        matInput
+                      />
+                    </mat-form-field>
+                    <mat-form-field class="kcci-field-1" appearance="outline">
+                      <mat-label class="text-white"
+                        >Confirm Password
+                      </mat-label>
+                      <input
+                        formControlName="c-password"
+                        required
+                        type="password"
+                        matInput
+                      />
+                    </mat-form-field>
+                  </div>
 
                   <div class="kc-radio-btn">
                     <mat-radio-button value="1"

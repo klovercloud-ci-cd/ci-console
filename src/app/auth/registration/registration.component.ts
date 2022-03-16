@@ -8,9 +8,11 @@ import { FormBuilder } from '@angular/forms';
 })
 export class RegistrationComponent implements OnInit {
   addUserForm = this.fb.group({
-    name: [''],
+    firstname: [''],
+    lastname: [''],
     email: [''],
     phone: [''],
+    password: [''],
   });
 
   constructor(private fb: FormBuilder) {}

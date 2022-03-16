@@ -2,6 +2,7 @@
   background: url(../../../assets/images/bg/login-right-bg-dark.svg) center
     top/100% 100% no-repeat;
 }
+
 .registration-form {
   @apply border-[#697ca2] bg-dark-container border-1.5;
 }
@@ -18,4 +19,15 @@
 }
 .kc-radio-btn {
   @apply pb-5 text-white;
+}
+.kc-number {
+  @apply bg-dark-container;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
