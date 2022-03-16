@@ -1,8 +1,9 @@
 .form_container {
-  @apply bg-dark-background-1;
+  background: url(../../../assets/images/bg/login-right-bg-dark.svg) center
+    top/100% 100% no-repeat;
 }
 .registration-form {
-  @apply border-[#697ca2] border-2;
+  @apply border-[#697ca2] bg-dark-container border-1.5;
 }
 .registration-form-container {
 }
@@ -14,4 +15,7 @@
 }
 .kc-register {
   @apply w-full py-4 mx-auto rounded text-lg font-semibold tracking-wider;
+}
+.kc-radio-btn {
+  @apply pb-5 text-white;
 }

@@ -1,12 +1,13 @@
-.kc-login-right-bg{
-    background: url(../../../assets/images/bg/login-right-bg-dark.svg) center top/100% 100% no-repeat;
-    height: 100%;
+.kc-login-right-bg {
+  background: url(../../../assets/images/bg/login-right-bg-dark.svg) center
+    top/100% 100% no-repeat;
+  height: 100%;
 }
-.kc-card-border{
-    border-width: 2.5px !important;
-    padding: 2.5rem;
-    @apply bg-dark-container
+.kc-card-border {
+  border-width: 2.5px !important;
+  padding: 2.5rem;
+  @apply bg-dark-container;
 }
-.kc-leading{
-    line-height: 56px !important;
+.kc-leading {
+  line-height: 56px !important;
 }

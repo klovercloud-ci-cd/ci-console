@@ -25,4 +25,7 @@ export class RegistrationComponent implements OnInit {
   // }
 
   ngOnInit(): void {}
+  get emailField(): any {
+    return this.addUserForm.get('email');
+  }
 }
