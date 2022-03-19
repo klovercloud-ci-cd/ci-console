@@ -31,3 +31,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.example-margin {
+  margin: 0 10px;
+  border-radius: 50% !important;
+}

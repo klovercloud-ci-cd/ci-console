@@ -36,6 +36,13 @@
                         matInput
                         placeholder="Ex. John"
                       />
+                      <mat-error
+                        *ngIf="
+                          addUserForm.get('firstname')?.touched &&
+                          addUserForm.get('firstname')?.hasError('maxlength')
+                        "
+                        >15 letters or less</mat-error
+                      >
                     </mat-form-field>
                     <mat-form-field class="kcci-field-1" appearance="outline">
                       <mat-label class="text-white">Last Name </mat-label>
@@ -46,10 +53,19 @@
                         matInput
                         placeholder="Ex. smith"
                       />
+                      <mat-error
+                        *ngIf="
+                          addUserForm.get('lastname')?.touched &&
+                          addUserForm.get('lastname')?.hasError('maxlength')
+                        "
+                        >15 letters or less</mat-error
+                      >
                     </mat-form-field>
                   </div>
                   <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Email </mat-label>
+                    <mat-label class="text-white bg-transparent"
+                      >Email
+                    </mat-label>
                     <input
                       required
                       formControlName="email"
@@ -58,12 +74,16 @@
                     />
                     <mat-error
                       *ngIf="
-                        emailField.touched && emailField.hasError('required')
+                        addUserForm.get('email')?.touched &&
+                        addUserForm.get('email')?.hasError('required')
                       "
                       >Email is required</mat-error
                     >
                     <mat-error
-                      *ngIf="emailField.touched && emailField.hasError('email')"
+                      *ngIf="
+                        addUserForm.get('email')?.touched &&
+                        addUserForm.get('email')?.hasError('email')
+                      "
                       >Email is not valid</mat-error
                     >
                   </mat-form-field>
@@ -94,7 +114,7 @@
                         >Confirm Password
                       </mat-label>
                       <input
-                        formControlName="c-password"
+                        formControlName="c_password"
                         required
                         type="password"
                         matInput
@@ -103,16 +123,31 @@
                   </div>
 
                   <div class="kc-radio-btn">
-                    <mat-radio-button value="1"
-                      >I accept the terms and conditions</mat-radio-button
+                    <mat-checkbox
+                      formControlName="checked"
+                      matInput
+                      class="example-margin"
+                      >I accept the terms and conditions</mat-checkbox
                     >
                   </div>
-                  <button
-                    class="kc-button-primary kc-register block"
-                    type="submit"
+                  <div *ngIf="addUserForm.valid; else other_content">
+                    <button
+                      class="kc-button-primary kc-register block"
+                      type="submit"
+                      [disabled]="!addUserForm.valid"
+                    >
+                      Create an Account
+                    </button>
+                  </div>
+                  <ng-template #other_content>
+                    <button
+                      class="bg-slate-500 kc-register block"
+                      type="submit"
+                      [disabled]="!addUserForm.valid"
+                    >
+                      Create an Account
+                    </button></ng-template
                   >
-                    Create an Account
-                  </button>
                 </form>
               </div>
             </div>

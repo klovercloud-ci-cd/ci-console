@@ -5,7 +5,7 @@
       <!-- <img src="../../../assets/images/bg/login-ls-illustration.svg" alt="" class="w-2/3"> -->
     </div>
     <div class="kc-login-right-bg bg-dark">
-      <div class="xl:w-4/6 xl:py-[10%] container mx-auto ">
+      <div class="xl:w-4/6 xl:py-[10%] container mx-auto">
         <mat-card class="kc-card kc-card-border border-dark-border space-y-6">
           <div class="flex justify-center items-center">
             <!-- <img src="../../../assets/images/logos/ic_klovercloud_logo.png" alt="" class="w-10"><div><h1 class="text-2xl font-semibold tracking-widest">KLOVER</h1><h2 class="tracking-[1em]">Cloud</h2></div> -->
@@ -21,7 +21,13 @@
             <div class="space-y-2">
               <mat-form-field appearance="outline" class="kc-form w-full">
                 <mat-label class="text-dark-text">Email</mat-label>
-                <input type="email" class="border-dark-border" matInput placeholder="Ex. pat@example.com" formControlName="email" />
+                <input
+                  type="email"
+                  class="border-dark-border"
+                  matInput
+                  placeholder="Ex. pat@example.com"
+                  formControlName="email"
+                />
                 <mat-error *ngIf="loginForm.get('email').errors?.required">
                   We need an email address to log you in
                 </mat-error>
@@ -31,20 +37,34 @@
               </mat-form-field>
               <mat-form-field appearance="outline" class="kc-form w-full">
                 <mat-label class="text-dark-text">Password</mat-label>
-                <input type="password" class="border-dark-border" matInput placeholder="Ex. pat@example.com" formControlName="password"/>
+                <input
+                  type="password"
+                  class="border-dark-border"
+                  matInput
+                  placeholder="Ex. pat@example.com"
+                  formControlName="password"
+                />
                 <mat-error *ngIf="loginForm.get('password').errors?.required">
                   We need password to log you in
                 </mat-error>
               </mat-form-field>
-              <a routerLink="#" class="flex justify-end font-bold mb-4">Forgot Password?</a>
+              <a routerLink="#" class="flex justify-end font-bold mb-4"
+                >Forgot Password?</a
+              >
             </div>
-            <button mat-button class="kc-leading kc-button-primary text-lg w-full"> Sign In </button>
+            <button
+              mat-button
+              class="kc-leading kc-button-primary text-lg w-full"
+            >
+              Sign In
+            </button>
           </form>
           <div class="flex justify-between items-center">
             <div class="h-0.5 w-full bg-white"></div>
             <p class="mx-4">Or</p>
             <div class="h-0.5 w-full bg-white"></div>
-          </div><!--
+          </div>
+          <!--
           <div class="grid grid-cols-2 gap-4">
             <div class="bg-dark-background hover:bg-dark-background-1 h-8 w-full rounded border-dark-border border"></div>
             <div class="bg-dark-background hover:bg-dark-background-1 h-8 w-full rounded border-dark-border border"></div>
@@ -54,7 +74,7 @@
           <div class="flex justify-center text-center">
             <div class="text-lg space-y-1.5">
               <p>Don't have an account?</p>
-              <a routerLink="#" class="font-bold">Create an account</a>
+              <a routerLink="auth/login" class="font-bold">Create an account</a>
             </div>
           </div>
         </mat-card>
