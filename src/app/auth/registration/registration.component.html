@@ -34,7 +34,7 @@
                       <mat-form-field appearance="outline">
                         <mat-label class="text-white">First Name</mat-label>
                         <input
-                          formControlName="firstname"
+                          formControlName="first_name"
                           type="text"
                           required
                           matInput
@@ -42,9 +42,9 @@
                         />
                         <mat-error
                           *ngIf="
-                            registrationForm.get('firstname')?.touched &&
+                            registrationForm.get('first_name')?.touched &&
                             registrationForm
-                              .get('firstname')
+                              .get('first_name')
                               ?.hasError('maxlength')
                           "
                           >15 letters or less</mat-error
@@ -53,7 +53,7 @@
                       <mat-form-field appearance="outline">
                         <mat-label class="text-white">Last Name </mat-label>
                         <input
-                          formControlName="lastname"
+                          formControlName="last_name"
                           required
                           type="text"
                           matInput
@@ -61,9 +61,9 @@
                         />
                         <mat-error
                           *ngIf="
-                            registrationForm.get('lastname')?.touched &&
+                            registrationForm.get('last_name')?.touched &&
                             registrationForm
-                              .get('lastname')
+                              .get('last_name')
                               ?.hasError('maxlength')
                           "
                           >15 letters or less</mat-error
@@ -133,9 +133,9 @@
                         >I accept the terms and conditions</mat-checkbox
                       >
                     </div>
-                    <div *ngIf="registrationForm.valid; else other_content">
+                    <div *ngIf="!registrationForm.valid; else other_content">
                       <button
-                        class="kc-button-primary kc-register block"
+                        class="bg-slate-500 kc-register block"
                         type="submit"
                         [disabled]="!registrationForm.valid"
                       >
@@ -144,18 +144,23 @@
                     </div>
                     <ng-template #other_content>
                       <button
-                        class="bg-slate-500 kc-register block"
+                        class="kc-button-primary kc-register block"
                         type="submit"
                         [disabled]="!registrationForm.valid"
                       >
-                        Create an Account
-                        <!-- <mat-progress-bar
-                          mode="indeterminate"
-                          color="red"
-                          class="text-red-500"
-                        ></mat-progress-bar> -->
-                      </button></ng-template
-                    >
+                        <span *ngIf="!isLoading; else before_submit">
+                          Create an Account
+                        </span>
+                        <ng-template #before_submit>
+                          <div class="py-3">
+                            <mat-progress-bar
+                              class="green-progress"
+                              mode="indeterminate"
+                            >
+                            </mat-progress-bar>
+                          </div>
+                        </ng-template></button
+                    ></ng-template>
                   </form>
                 </div>
               </div>

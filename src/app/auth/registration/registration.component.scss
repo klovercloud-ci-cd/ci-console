@@ -7,9 +7,9 @@
     no-repeat;
   @apply h-full pt-[10%] px-[5%] sm:px-[10%] 2xl:px-[15%];
 }
-.bg-shape {
-  background-image: url(../../../assets/images/bg/bg-shapes.svg);
-}
+// .bg-shape {
+//   background-image: url(../../../assets/images/bg/bg-shapes.svg);
+// }
 .main-container {
   @apply bg-dark-background-5 h-full;
 }
@@ -29,6 +29,7 @@
 .form-logo {
   @apply flex justify-center;
 }
+
 .text-instruction {
   @apply text-gray-300 pt-10;
 }
