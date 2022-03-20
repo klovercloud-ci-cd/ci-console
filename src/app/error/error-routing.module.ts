@@ -4,7 +4,7 @@ import { Error404Component } from './error404/error404.component';
 
 const routes: Routes = [
   {
-    path: 'error',
+    path: '',
     component: Error404Component,
   },
 ];

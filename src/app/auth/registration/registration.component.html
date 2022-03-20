@@ -1,99 +1,176 @@
-<div class="bg-dark-background-5">
-  <div class="grid xl:grid-cols-2 grid-cols-1 h-full">
-    <div class="mx-auto xl:flex xl:items-end justify-center hidden">
+<div class="main-container">
+  <div class="wrapper-grid">
+    <div class="left-content">
       <img
         src="../../../assets/images/bg/registration-ls-illustration.svg"
         alt=""
         class=""
       />
     </div>
-    <div class="form_container h-full py-[5%] px-40">
-      <div class="container kc-form mx-auto">
-        <mat-card class="registration-form kc-card border-2 border-dark-border">
-          <div class="w-full px-7 pt-8">
-            <img
-              class="mx-auto"
-              src="../../../assets/images/bg/logo-dark.svg"
-              alt=""
-            />
-            <div class="text-gray-300 pt-10">
-              <h1 class="text-xl font-[600]">Register for an account</h1>
-              <h1 class="text-lg font-[400]">Simply fill out the form below</h1>
-            </div>
+    <div class="boom">
+      <div class="right-content">
+        <div class="kc-form bg-shape">
+          <mat-card class="registration-form">
+            <div class="form-wrapper">
+              <h1 class="form-logo">
+                <img src="../../../assets/images/logos/logo.png" alt="" />
+              </h1>
+              <div class="text-instruction">
+                <h1 class="text-xl font-[600]">Register for an account</h1>
+                <h1 class="text-lg font-[400]">
+                  Simply fill out the form below
+                </h1>
+              </div>
 
-            <!-- Input Form -->
+              <!-- Input Form -->
 
-            <div class="w-full mt-5">
-              <div class="">
-                <form [formGroup]="addUserForm" (ngSubmit)="addUserFormData()">
-                  <mat-form-field class="kcci-field-1" appearance="outline">
-                    <mat-label class="text-white">First Name *</mat-label>
-                    <input type="text" matInput placeholder="Ex. John" />
-                  </mat-form-field>
-                  <mat-form-field class="kcci-field-1" appearance="outline">
-                    <mat-label class="text-white">Last Name *</mat-label>
-                    <input type="text" matInput placeholder="Ex. smith" />
-                  </mat-form-field>
-                  <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Email *</mat-label>
-                    <input
-                      formControlName="email"
-                      matInput
-                      placeholder="Email Address"
-                    />
-                    <mat-error
-                      *ngIf="
-                        emailField.touched && emailField.hasError('required')
-                      "
-                      >Email is required</mat-error
-                    >
-                    <mat-error
-                      *ngIf="emailField.touched && emailField.hasError('email')"
-                      >Email is not valid</mat-error
-                    >
-                  </mat-form-field>
-                  <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Password *</mat-label>
-                    <input type="password" matInput />
-                  </mat-form-field>
-                  <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Email *</mat-label>
-                    <input
-                      type="email"
-                      matInput
-                      placeholder="Ex. pat@example.com"
-                    />
-                  </mat-form-field>
-                  <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white">Password *</mat-label>
-                    <input type="password" matInput />
-                  </mat-form-field>
-
-                  <div class="kc-radio-btn">
-                    <mat-radio-button value="1"
-                      >I accept the terms and conditions</mat-radio-button
-                    >
-                  </div>
-                  <button
-                    class="kc-button-primary kc-register block"
-                    type="submit"
+              <div class="w-full mt-5">
+                <div class="">
+                  <form
+                    [formGroup]="registrationForm"
+                    (ngSubmit)="registrationFormData()"
                   >
-                    Create an Account
-                  </button>
-                </form>
+                    <div class="two-input">
+                      <mat-form-field appearance="outline">
+                        <mat-label class="text-white">First Name</mat-label>
+                        <input
+                          formControlName="first_name"
+                          type="text"
+                          required
+                          matInput
+                          placeholder="Ex. John"
+                        />
+                        <mat-error
+                          *ngIf="
+                            registrationForm.get('first_name')?.touched &&
+                            registrationForm
+                              .get('first_name')
+                              ?.hasError('maxlength')
+                          "
+                          >15 letters or less</mat-error
+                        >
+                      </mat-form-field>
+                      <mat-form-field appearance="outline">
+                        <mat-label class="text-white">Last Name </mat-label>
+                        <input
+                          formControlName="last_name"
+                          required
+                          type="text"
+                          matInput
+                          placeholder="Ex. smith"
+                        />
+                        <mat-error
+                          *ngIf="
+                            registrationForm.get('last_name')?.touched &&
+                            registrationForm
+                              .get('last_name')
+                              ?.hasError('maxlength')
+                          "
+                          >15 letters or less</mat-error
+                        >
+                      </mat-form-field>
+                    </div>
+                    <mat-form-field class="kcci-field-2" appearance="outline">
+                      <mat-label class="text-white">Email </mat-label>
+                      <input
+                        required
+                        formControlName="email"
+                        matInput
+                        placeholder="Email Address"
+                      />
+                      <mat-error
+                        *ngIf="
+                          registrationForm.get('email')?.touched &&
+                          registrationForm.get('email')?.hasError('required')
+                        "
+                        >Email is required</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          registrationForm.get('email')?.touched &&
+                          registrationForm.get('email')?.hasError('email')
+                        "
+                        >Email is not valid</mat-error
+                      >
+                    </mat-form-field>
+                    <mat-form-field class="kcci-field-2" appearance="outline">
+                      <mat-label class="text-white">Phone </mat-label>
+                      <input
+                        formControlName="phone"
+                        required
+                        type="number"
+                        matInput
+                      />
+                    </mat-form-field>
+                    <div class="two-input">
+                      <mat-form-field appearance="outline">
+                        <mat-label class="text-white">Password </mat-label>
+                        <input
+                          formControlName="password"
+                          required
+                          type="password"
+                          matInput
+                        />
+                      </mat-form-field>
+                      <mat-form-field appearance="outline">
+                        <mat-label class="text-white"
+                          >Confirm Password
+                        </mat-label>
+                        <input
+                          formControlName="c_password"
+                          required
+                          type="password"
+                          matInput
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="kc-radio-btn">
+                      <mat-checkbox
+                        formControlName="checked"
+                        matInput
+                        class="custom-frame"
+                        >I accept the terms and conditions</mat-checkbox
+                      >
+                    </div>
+                    <div *ngIf="!registrationForm.valid; else other_content">
+                      <button
+                        class="bg-slate-500 kc-register block"
+                        type="submit"
+                        [disabled]="!registrationForm.valid"
+                      >
+                        Create an Account
+                      </button>
+                    </div>
+                    <ng-template #other_content>
+                      <button
+                        class="kc-button-primary kc-register block"
+                        type="submit"
+                        [disabled]="!registrationForm.valid"
+                      >
+                        <span *ngIf="!isLoading; else before_submit">
+                          Create an Account
+                        </span>
+                        <ng-template #before_submit>
+                          <div class="py-3">
+                            <mat-progress-bar
+                              class="green-progress"
+                              mode="indeterminate"
+                            >
+                            </mat-progress-bar>
+                          </div>
+                        </ng-template></button
+                    ></ng-template>
+                  </form>
+                </div>
+              </div>
+              <div class="text-center py-5">
+                <h1 class="text-lg">Already have an account?</h1>
+                <a class="signup-btn" routerLink="/auth/login">Sign in here</a>
               </div>
             </div>
-            <div class="text-center py-5">
-              <h1 class="text-lg">Already have an account?</h1>
-              <h1
-                class="cursor-pointer text-lg font-semibold tracking-wider"
-                routerLink="auth/login"
-              >
-                Sign in here
-              </h1>
-            </div>
-          </div>
-        </mat-card>
+          </mat-card>
+        </div>
       </div>
     </div>
   </div>

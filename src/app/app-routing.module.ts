@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
-import {AuthGuard} from "./shared/guard/auth.guard";
+import { Error404Component } from './error/error404/error404.component';
+import { AuthGuard } from './shared/guard/auth.guard';
 
 const childrenRoutes: Routes = [
   {
@@ -18,12 +19,15 @@ const routes: Routes = [
     data: {
       containerEnabled: true,
     },
-    
   },
   {
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
+  },
+  {
+    path: '**',
+    component: Error404Component,
   },
 ];
 
