@@ -77,4 +77,9 @@ body {
   }
 
 }
+.kc-form {
+  .mat-form-field-autofill-control{
+    @apply bg-dark-background text-amber-300
+  }
+}
 
