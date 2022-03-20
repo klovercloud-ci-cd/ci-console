@@ -48,7 +48,9 @@
                   We need password to log you in
                 </mat-error>
               </mat-form-field>
-              <a routerLink="#" class="flex justify-end font-bold mb-4"
+              <a
+                routerLink="/auth/forgot-password"
+                class="flex justify-end font-bold mb-4"
                 >Forgot Password?</a
               >
             </div>
@@ -74,7 +76,9 @@
           <div class="flex justify-center text-center">
             <div class="text-lg space-y-1.5">
               <p>Don't have an account?</p>
-              <a routerLink="auth/login" class="font-bold">Create an account</a>
+              <a routerLink="/auth/register" class="font-bold cursor-pointer">
+                Create an account
+              </a>
             </div>
           </div>
         </mat-card>

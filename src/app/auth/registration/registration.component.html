@@ -1,22 +1,23 @@
-<div class="bg-dark-background-5 h-full">
-  <div class="grid xl:grid-cols-2 grid-cols-1 h-full">
-    <div class="mx-auto xl:flex xl:items-end justify-center hidden">
+<div class="main-container">
+  <div class="wrapper-grid">
+    <div class="left-content">
       <img
         src="../../../assets/images/bg/registration-ls-illustration.svg"
         alt=""
         class=""
       />
     </div>
-    <div class="form_container h-full pt-[10%] px-40">
-      <div class="container kc-form mx-auto">
-        <mat-card class="registration-form kc-card border-2 border-dark-border">
-          <div class="w-full px-7 pt-8">
-            <img
-              class="mx-auto"
-              src="../../../assets/images/bg/logo-dark.svg"
-              alt=""
-            />
-            <div class="text-gray-300 pt-10">
+    <div class="right-content">
+      <div class="kc-form">
+        <mat-card class="registration-form">
+          <div class="form-wrapper">
+            <h1 class="form-logo">
+              Klover<span class="text-teal-400">Cloud</span> CI-<span
+                class="text-teal-400"
+                >CD</span
+              >
+            </h1>
+            <div class="text-instruction">
               <h1 class="text-xl font-[600]">Register for an account</h1>
               <h1 class="text-lg font-[400]">Simply fill out the form below</h1>
             </div>
@@ -25,9 +26,12 @@
 
             <div class="w-full mt-5">
               <div class="">
-                <form [formGroup]="addUserForm" (ngSubmit)="addUserFormData()">
-                  <div class="flex gap-2">
-                    <mat-form-field class="kcci-field-1" appearance="outline">
+                <form
+                  [formGroup]="registrationForm"
+                  (ngSubmit)="registrationFormData()"
+                >
+                  <div class="two-input">
+                    <mat-form-field appearance="outline">
                       <mat-label class="text-white">First Name</mat-label>
                       <input
                         formControlName="firstname"
@@ -38,13 +42,15 @@
                       />
                       <mat-error
                         *ngIf="
-                          addUserForm.get('firstname')?.touched &&
-                          addUserForm.get('firstname')?.hasError('maxlength')
+                          registrationForm.get('firstname')?.touched &&
+                          registrationForm
+                            .get('firstname')
+                            ?.hasError('maxlength')
                         "
                         >15 letters or less</mat-error
                       >
                     </mat-form-field>
-                    <mat-form-field class="kcci-field-1" appearance="outline">
+                    <mat-form-field appearance="outline">
                       <mat-label class="text-white">Last Name </mat-label>
                       <input
                         formControlName="lastname"
@@ -55,17 +61,17 @@
                       />
                       <mat-error
                         *ngIf="
-                          addUserForm.get('lastname')?.touched &&
-                          addUserForm.get('lastname')?.hasError('maxlength')
+                          registrationForm.get('lastname')?.touched &&
+                          registrationForm
+                            .get('lastname')
+                            ?.hasError('maxlength')
                         "
                         >15 letters or less</mat-error
                       >
                     </mat-form-field>
                   </div>
                   <mat-form-field class="kcci-field-2" appearance="outline">
-                    <mat-label class="text-white bg-transparent"
-                      >Email
-                    </mat-label>
+                    <mat-label class="text-white">Email </mat-label>
                     <input
                       required
                       formControlName="email"
@@ -74,15 +80,15 @@
                     />
                     <mat-error
                       *ngIf="
-                        addUserForm.get('email')?.touched &&
-                        addUserForm.get('email')?.hasError('required')
+                        registrationForm.get('email')?.touched &&
+                        registrationForm.get('email')?.hasError('required')
                       "
                       >Email is required</mat-error
                     >
                     <mat-error
                       *ngIf="
-                        addUserForm.get('email')?.touched &&
-                        addUserForm.get('email')?.hasError('email')
+                        registrationForm.get('email')?.touched &&
+                        registrationForm.get('email')?.hasError('email')
                       "
                       >Email is not valid</mat-error
                     >
@@ -99,8 +105,8 @@
                       matInput
                     />
                   </mat-form-field>
-                  <div class="flex gap-2">
-                    <mat-form-field class="kcci-field-1" appearance="outline">
+                  <div class="two-input">
+                    <mat-form-field appearance="outline">
                       <mat-label class="text-white">Password </mat-label>
                       <input
                         formControlName="password"
@@ -109,7 +115,7 @@
                         matInput
                       />
                     </mat-form-field>
-                    <mat-form-field class="kcci-field-1" appearance="outline">
+                    <mat-form-field appearance="outline">
                       <mat-label class="text-white"
                         >Confirm Password
                       </mat-label>
@@ -130,11 +136,11 @@
                       >I accept the terms and conditions</mat-checkbox
                     >
                   </div>
-                  <div *ngIf="addUserForm.valid; else other_content">
+                  <div *ngIf="registrationForm.valid; else other_content">
                     <button
                       class="kc-button-primary kc-register block"
                       type="submit"
-                      [disabled]="!addUserForm.valid"
+                      [disabled]="!registrationForm.valid"
                     >
                       Create an Account
                     </button>
@@ -143,9 +149,14 @@
                     <button
                       class="bg-slate-500 kc-register block"
                       type="submit"
-                      [disabled]="!addUserForm.valid"
+                      [disabled]="!registrationForm.valid"
                     >
                       Create an Account
+                      <!-- <mat-progress-bar
+                        mode="indeterminate"
+                        color="red"
+                        class="text-red-500"
+                      ></mat-progress-bar> -->
                     </button></ng-template
                   >
                 </form>
@@ -153,12 +164,7 @@
             </div>
             <div class="text-center py-5">
               <h1 class="text-lg">Already have an account?</h1>
-              <h1
-                class="cursor-pointer text-lg font-semibold tracking-wider"
-                routerLink="auth/login"
-              >
-                Sign in here
-              </h1>
+              <a class="signup-btn" routerLink="/auth/login">Sign in here</a>
             </div>
           </div>
         </mat-card>

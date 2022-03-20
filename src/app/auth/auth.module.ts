@@ -15,7 +15,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 @NgModule({
   declarations: [
     LoginComponent,
@@ -41,6 +41,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatRippleModule,
     FlexLayoutModule,
     MatCheckboxModule,
+    MatProgressBarModule,
   ],
 })
 export class AuthModule {}

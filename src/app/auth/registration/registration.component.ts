@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  addUserForm = this.fb.group(
+  registrationForm = this.fb.group(
     {
       firstname: ['', [Validators.required, Validators.maxLength(15)]],
       lastname: ['', [Validators.required, Validators.maxLength(15)]],
@@ -24,8 +24,8 @@ export class RegistrationComponent implements OnInit {
   );
 
   constructor(private fb: FormBuilder, private router: Router) {}
-  addUserFormData() {
-    console.log('Form Value:', this.addUserForm.value);
+  registrationFormData() {
+    console.log('Form Value:', this.registrationForm.value);
     // setTimeout(() => {
     //   this.router.navigate(['/auth/login']);
     // }, 1000);
@@ -47,6 +47,6 @@ export class RegistrationComponent implements OnInit {
   }
 
   get emailField(): any {
-    return this.addUserForm.get('email');
+    return this.registrationForm.get('email');
   }
 }
