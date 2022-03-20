@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
+import {AuthGuard} from "./shared/guard/auth.guard";
 
 const childrenRoutes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
     data: {
       containerEnabled: true,
     },
+    
   },
   {
     path: '',

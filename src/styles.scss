@@ -50,6 +50,9 @@ body {
   margin: 0;
   font-family: Popins, sans-serif;
 }
+*{
+  font-family: Popins, sans-serif;
+}
 
 //kc
 .kc-card {
@@ -67,12 +70,9 @@ body {
 .kc-button-warn {
   @apply bg-dark-warn px-4 text-white;
 }
-::ng-deep .mat-form-field {
-  @apply hover:border-white;
-}
+.kc-form {
 
-::ng-deep .mat-form-field-appearance-outline {
-  .mat-form-field-outline .mat-form-field-outline-thick {
-    @apply bg-dark-background hover:border-white rounded;
+  .mat-form-field-outline{
+    @apply  bg-dark-background
   }
 }

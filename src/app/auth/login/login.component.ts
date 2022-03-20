@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { TokenService } from '../token.service';
 import { FormBuilder, Validators} from "@angular/forms";
+import {Router, Routes} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -15,11 +16,15 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
-    private fb : FormBuilder
+    private fb : FormBuilder,
+    private router : Router
     ) { }
 
   ngOnInit(): void {
     this.logIn();
+    if (this.authService.isLogin()){
+      this.router.navigate([''])
+    }
   }
   loginForm:any = this.fb.group({
     email:['',[Validators.email,Validators.required]],
