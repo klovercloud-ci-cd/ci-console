@@ -92,7 +92,7 @@ export class AuthService {
     this.tokenService.removeRefreshToken();
     setTimeout(() => {
       clearInterval(this.refreshTokenInterval);
-      this.router.navigate(['/auth/register']);
+      this.router.navigate(['/auth/login']);
     }, 1000);
   }
 
