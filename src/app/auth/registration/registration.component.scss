@@ -1,7 +1,14 @@
-.right-content {
+.boom {
   background: url(../../../assets/images/bg/login-right-bg-dark.svg) center
     top/100% 100% no-repeat;
+}
+.right-content {
+  background: url(../../../assets/images/bg/bg-shapes.svg) center top/100% 100%
+    no-repeat;
   @apply h-full pt-[10%] px-[5%] sm:px-[10%] 2xl:px-[15%];
+}
+.bg-shape {
+  background-image: url(../../../assets/images/bg/bg-shapes.svg);
 }
 .main-container {
   @apply bg-dark-background-5 h-full;
@@ -13,13 +20,14 @@
   @apply mx-auto xl:flex xl:items-end justify-center hidden;
 }
 .registration-form {
-  @apply border-[#697ca2] bg-dark-container border-1.5  text-dark-text;
+  background-image: url(../../../assets/images/bg/bg-shapes.svg);
+  @apply border-[#697ca2] bg-gradient-to-r from-dark-container to-dark-background-4 border-2  text-dark-text;
 }
 .form-wrapper {
   @apply w-full px-7 pt-8;
 }
 .form-logo {
-  @apply text-white text-3xl font-medium text-center;
+  @apply flex justify-center;
 }
 .text-instruction {
   @apply text-gray-300 pt-10;

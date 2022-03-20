@@ -1,6 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-registration',
@@ -23,9 +25,45 @@ export class RegistrationComponent implements OnInit {
     }
   );
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
+
   registrationFormData() {
     console.log('Form Value:', this.registrationForm.value);
+
+    this.authService
+      .signUp({
+        first_name: this.registrationForm.value.firstname,
+        last_name: this.registrationForm.value.lastname,
+        email: this.registrationForm.value.email,
+        phone: this.registrationForm.value.phone,
+        password: this.registrationForm.value.password,
+        auth_type: 'password',
+      })
+      .subscribe((res) => {
+        console.log(this.authService.getUserData(), 'USER');
+      });
+
+    // var formData: any = new FormData();
+    // formData.append('first_name', this.registrationForm.value.firstname);
+    // formData.append('last_name', this.registrationForm.value.lastname);
+    // formData.append('email', this.registrationForm.value.email);
+    // formData.append('phone', this.registrationForm.value.phone);
+    // formData.append('password', this.registrationForm.value.password);
+    // formData.append('auth_type', 'password');
+    // console.log('FOrmData: ', formData);
+
+    // this.http
+    //   .post('http://192.168.68.162:4200/api/v1/users', formData)
+    //   .subscribe({
+    //     next: (response) => console.log('This is response: ', response),
+    //     error: (error) => console.log(error),
+    //   });
+
     // setTimeout(() => {
     //   this.router.navigate(['/auth/login']);
     // }, 1000);
