@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { Error404Component } from './error/error404/error404.component';
+import { AuthGuard } from './shared/guard/auth.guard';
 
 const childrenRoutes: Routes = [
   {

@@ -69,7 +69,7 @@ export class AuthService {
                   AuthService.log(res);
                 });
               }
-            }, 2000); // TODO: This is not the right way but it will do for now
+            }, 300000); // TODO: This is not the right way but it will do for now
           }
         }),
         catchError(AuthService.handleError)
@@ -91,7 +91,7 @@ export class AuthService {
       token_type: 'regular',
     };
     return this.http
-      .post(BASE_URL + endpoints.LOGIN, refreshTokenData, HTTP_OPTIONS)
+      .post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
           this.tokenService.removeAccessToken();
@@ -142,7 +142,11 @@ export class AuthService {
     }
     return [];
   }
-  isLoginTest() {
-    return true;
+  isLogin() {
+    if (this.tokenService.getAccessToken()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -8,8 +8,18 @@ export const environment = {
   appUrl: webappUrl,
   production: false,
   v1AuthEndpoint: 'http://192.168.68.162:4200/api/v1/',
-  // v1ApiEndPoint: 'https://facade.console.klovercloud.io/api/v1/',
+  v1ApiEndPoint: 'http://192.168.68.162:4200/api/v1/',
+  // config: {
+  //   ...getConfig(CONFIG)
+  // },
 };
+
+// export const environment = {
+//   appUrl: webappUrl,
+//   production: false,
+//   v1AuthEndpoint: 'http://192.168.68.162:4200/api/v1/',
+//   v1ApiEndPoint: 'https://facade.console.klovercloud.io/api/v1/',
+// };
 
 // import {getConfig} from "./environment.common";
 
@@ -25,15 +35,6 @@ export const environment = {
     return `${this.host}${this.port}${this.postfix}`;
   }
 };*/
-// export const environment = {
-//   appUrl: webappUrl,
-//   production: false,
-//   v1AuthEndpoint: 'http://localhost:3000/api/v1/',
-//   v1ApiEndPoint: 'http://localhost:3000/api/v1/',
-//   // config: {
-//   //   ...getConfig(CONFIG)
-//   // },
-// };
 
 /*
  * For easier debugging in development mode, you can import the following file
