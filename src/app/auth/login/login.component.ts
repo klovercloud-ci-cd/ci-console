@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   isLoading:boolean = false;
+  passwordHide = true;
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
   });
   logIn(): void {
     this.isLoading =true
+
     this.authService
       .login({
         email: this.loginForm.value.email,
