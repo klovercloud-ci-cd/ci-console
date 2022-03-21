@@ -98,7 +98,7 @@ body {
 
 .kc-progress-bar{
   .mat-progress-bar {
-    border-radius: 2px;
+    @apply rounded
   }
 }
 

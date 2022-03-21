@@ -38,27 +38,34 @@
             <mat-form-field appearance="outline" class="kc-form w-full">
               <mat-label class="text-dark-text">Password</mat-label>
               <input
-                type="password"
+                [type]="passwordHide ? 'password' : 'text'"
                 class="border-dark-border"
                 matInput
                 placeholder="Ex. pat@example.com"
                 formControlName="password"
               />
+              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
               <mat-error *ngIf="loginForm.get('password').errors?.required">
                 We need password to log you in
               </mat-error>
             </mat-form-field>
             <a
               routerLink="/auth/forgot-password"
-              class="flex justify-end font-bold p-4"
+              class="flex justify-end font-bold pb-4"
               >Forgot Password?</a
             >
 
-            <button mat-button class="kc-leading kc-button-primary text-lg w-full mt-8">
-              Sign In
-              <mat-progress-bar *ngIf="isLoading" class="green-progress kc-progress-bar" mode="indeterminate">
-              </mat-progress-bar>
+            <button mat-button class="kc-leading kc-button-primary text-lg h-16 w-full mt-8" [disabled]="!loginForm.valid">
+              <span *ngIf="!isLoading; else progressbar">Sign In</span>
+              <ng-template #progressbar class="h-full">
+                <mat-progress-bar class=" kc-progress-bar" mode="indeterminate">
+                </mat-progress-bar>
+              </ng-template>
             </button>
+            <!--<button mat-raised-button class="h-3 w-full">
+              <mat-progress-bar class=" kc-progress-bar" mode="indeterminate">
+              </mat-progress-bar>
+            </button>-->
           </div>
         </form>
         <div class="flex justify-between items-center">

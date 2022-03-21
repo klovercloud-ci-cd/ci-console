@@ -16,32 +16,34 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatIconModule} from "@angular/material/icon";
 @NgModule({
   declarations: [
     LoginComponent,
     RegistrationComponent,
     ForgotPasswordComponent,
   ],
-  imports: [
-    CommonModule,
-    AuthRoutingModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatCardModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatRadioModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatRippleModule,
-    FlexLayoutModule,
-    MatCheckboxModule,
-    MatProgressBarModule,
-  ],
+    imports: [
+        CommonModule,
+        AuthRoutingModule,
+        MatButtonModule,
+        MatSidenavModule,
+        MatCardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatRadioModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatRippleModule,
+        FlexLayoutModule,
+        MatCheckboxModule,
+        MatProgressBarModule,
+        MatIconModule,
+    ],
 })
 export class AuthModule {}

@@ -1,6 +1,8 @@
 .kc-login-right-bg {
-  background: url(../../../assets/images/bg/login-right-bg-dark.svg) center top/50% 100% repeat-y;
-  background-position: right 50% ;
+  background: url(../../../assets/images/bg/bg-shapes.svg) center top/60% 100% repeat-y, url(../../../assets/images/bg/bg-shapes.svg) center top/30% 100%  ,url(../../../assets/images/bg/login-right-bg-dark.svg) center top/50% 100% repeat-y;
+  background-position: right 50%;
+
+
 }
 @media screen and (max-width: 1024px) {
   .kc-login-right-bg {
@@ -20,4 +22,8 @@
 
 .kc-leading {
   line-height: 56px !important;
+}
+
+button:disabled{
+  @apply bg-slate-500
 }

@@ -146,8 +146,7 @@
                       <button
                         class="kc-button-primary kc-register block"
                         type="submit"
-                        [disabled]="!registrationForm.valid"
-                      >
+                        [disabled]="!registrationForm.valid">
                         <span *ngIf="!isLoading; else before_submit">
                           Create an Account
                         </span>
@@ -159,8 +158,8 @@
                             >
                             </mat-progress-bar>
                           </div>
-                        </ng-template></button
-                    ></ng-template>
+                        </ng-template></button>
+                    </ng-template>
                   </form>
                 </div>
               </div>
