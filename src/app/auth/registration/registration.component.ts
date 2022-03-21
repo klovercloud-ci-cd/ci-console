@@ -28,7 +28,7 @@ export class RegistrationComponent implements OnInit {
       validator: this.confirmPasswordMatch('password', 'c_password'),
     }
   );
-  isLoading = true;
+  isLoading = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -56,12 +56,13 @@ export class RegistrationComponent implements OnInit {
         if (res.status === 'success') {
           this.isLoading = false;
           this.router.navigate(['/auth/login']);
-          this.openSnackBar('Successfull', '');
+          this.openSnackBar('Registration Successfull', '');
         }
         console.log(res.status);
         console.log(this.authService.getUserData(), 'USER');
       },
       (err) => {
+        this.openSnackBar(err, '');
         console.log('err', err);
       }
     );

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  isLoading:boolean = false;
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
@@ -18,27 +19,29 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.logIn();
     if (this.authService.isLogin()) {
       this.router.navigate(['']);
     }
-    //this.authService.logOut();
   }
   loginForm: any = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
     password: ['', Validators.required],
   });
   logIn(): void {
+    this.isLoading =true
     this.authService
       .login({
         email: this.loginForm.value.email,
         password: this.loginForm.value.password,
       })
       .subscribe((res) => {
-        this.tokenService.saveAccessToken(res.data.access_token);
-        this.tokenService.saveRefreshToken(res.data.refresh_token);
-        this.router.navigate(['']);
-        console.log(this.authService.getUserData(), 'USER');
+        if (res.status ==='success'){
+          this.isLoading =false
+          this.tokenService.saveAccessToken(res.data.access_token);
+          this.tokenService.saveRefreshToken(res.data.refresh_token);
+          this.router.navigate(['']);
+          console.log(this.authService.getUserData(), 'USER');
+        }
       });
   }
   logout(): void {
