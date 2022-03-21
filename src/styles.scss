@@ -76,16 +76,30 @@ body {
     @apply bg-dark-background;
   }
 }
-::ng-deep .custom-frame {
-  & .mat-checkbox-background,
-  .mat-checkbox-frame {
-    border-radius: 70% !important;
-  }
 
-}
-.kc-form {
-  .mat-form-field-autofill-control{
-    @apply bg-dark-background text-amber-300
+.kc-form{
+  input:-webkit-autofill{
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
   }
 }
+
+.kc-progress-bar{
+  .mat-progress-bar-fill::after {
+    @apply bg-dark-primary
+  }
+}
+
+.kc-progress-bar {
+  .mat-progress-bar-buffer {
+    @apply bg-white
+  }
+}
+
+.kc-progress-bar{
+  .mat-progress-bar {
+    border-radius: 2px;
+  }
+}
+
 

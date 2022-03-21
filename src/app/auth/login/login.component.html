@@ -54,11 +54,10 @@
               >Forgot Password?</a
             >
 
-            <button
-              mat-button
-              class="kc-leading kc-button-primary text-lg w-full mt-8"
-            >
+            <button mat-button class="kc-leading kc-button-primary text-lg w-full mt-8">
               Sign In
+              <mat-progress-bar *ngIf="isLoading" class="green-progress kc-progress-bar" mode="indeterminate">
+              </mat-progress-bar>
             </button>
           </div>
         </form>
