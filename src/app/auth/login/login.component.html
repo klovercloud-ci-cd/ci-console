@@ -63,9 +63,14 @@
               [disabled]="!loginForm.valid"
             >
               <span *ngIf="!isLoading; else progressbar">Sign In</span>
-              <ng-template #progressbar class="h-full">
-                <mat-progress-bar class="kc-progress-bar" mode="indeterminate">
-                </mat-progress-bar>
+              <ng-template #progressbar class="h-full w-full">
+                <div class="w-52 mx-auto">
+                  <mat-progress-bar
+                    class="kc-progress-bar"
+                    mode="indeterminate"
+                  >
+                  </mat-progress-bar>
+                </div>
               </ng-template>
             </button>
             <!--<button mat-raised-button class="h-3 w-full">
