@@ -1,9 +1,29 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-import {getConfig} from "./environment.common";
 
 const webappUrl = 'http://localhost:2022';
+
+export const environment = {
+  appUrl: webappUrl,
+  production: false,
+  v1AuthEndpoint: 'http://192.168.68.162:4200/api/v1/',
+  v1ApiEndPoint: 'http://192.168.68.162:4200/api/v1/',
+  // config: {
+  //   ...getConfig(CONFIG)
+  // },
+};
+
+// export const environment = {
+//   appUrl: webappUrl,
+//   production: false,
+//   v1AuthEndpoint: 'http://192.168.68.162:4200/api/v1/',
+//   v1ApiEndPoint: 'https://facade.console.klovercloud.io/api/v1/',
+// };
+
+// import {getConfig} from "./environment.common";
+
+// const webappUrl = 'http://localhost:2022';
 
 /*const CONFIG = {
   host: 'http://192.168.68.140:3000/api/v1',
@@ -15,15 +35,6 @@ const webappUrl = 'http://localhost:2022';
     return `${this.host}${this.port}${this.postfix}`;
   }
 };*/
-export const environment = {
-  appUrl: webappUrl,
-  production: false,
-  v1AuthEndpoint: 'http://localhost:3000/api/v1/',
-  v1ApiEndPoint: 'http://localhost:3000/api/v1/',
-  // config: {
-  //   ...getConfig(CONFIG)
-  // },
-};
 
 /*
  * For easier debugging in development mode, you can import the following file

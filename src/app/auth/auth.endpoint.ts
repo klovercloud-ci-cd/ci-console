@@ -1,3 +1,3 @@
 export const LOGIN = 'oauth/login';
-export const REGISTER = 'register';
+export const REGISTER = 'users';
 export const REFRESH_TOKEN = 'oauth/token';

@@ -1,0 +1,23 @@
+.kc-login-right-bg {
+  background: url(../../../assets/images/bg/login-right-bg-dark.svg) center top/50% 100% repeat-y;
+  background-position: right 50% ;
+}
+@media screen and (max-width: 1024px) {
+  .kc-login-right-bg {
+    background: url(../../../assets/images/bg/login-right-bg-dark.svg) center
+    top/100% 100% repeat-y;
+  }
+}
+
+.kc-card-border {
+  border: 2px solid #697ca2;
+  padding: 2.5rem;
+  @apply bg-dark-container;
+  height: 100% !important;
+  background: linear-gradient(280.19deg,#3d4d6d -5.42%,#182641 204.15%);
+  box-shadow: 0 0 30px rgb(0 0 0 / 8%);
+}
+
+.kc-leading {
+  line-height: 56px !important;
+}
