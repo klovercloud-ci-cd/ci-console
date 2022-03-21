@@ -76,11 +76,3 @@ body {
     @apply bg-dark-background;
   }
 }
-::ng-deep .custom-frame {
-  & .mat-checkbox-background,
-  .mat-checkbox-frame {
-    border-radius: 70% !important;
-  }
-
-}
-
