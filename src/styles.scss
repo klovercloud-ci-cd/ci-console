@@ -77,29 +77,27 @@ body {
   }
 }
 
-.kc-form{
-  input:-webkit-autofill{
+.kc-form {
+  input:-webkit-autofill {
     -webkit-text-fill-color: white !important;
     transition: background-color 5000s ease-in-out 0s;
   }
 }
 
-.kc-progress-bar{
+.kc-progress-bar {
   .mat-progress-bar-fill::after {
-    @apply bg-dark-primary
+    @apply bg-dark-primary;
   }
 }
 
 .kc-progress-bar {
   .mat-progress-bar-buffer {
-    @apply bg-white
+    @apply bg-white;
   }
 }
 
-.kc-progress-bar{
+.kc-progress-bar {
   .mat-progress-bar {
-    border-radius: 2px;
+    @apply rounded
   }
 }
-
-
