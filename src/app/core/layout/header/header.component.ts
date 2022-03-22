@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {AuthService} from "../../../auth/auth.service";
+import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
+import {UserDataService} from "../../../shared/services/user-data.service";
 
 @Component({
   selector: 'app-header',
@@ -8,15 +10,26 @@ import {AuthService} from "../../../auth/auth.service";
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(public dialog: MatDialog, private auth:AuthService) {}
 
+  constructor(public dialog: MatDialog, private auth: AuthService,
+              private userInfo : UserDataService
+              ) {}
+  pageTitle: string = '';
+  user:any = this.auth.getUserData();
+  usesssss:any
   openDialog() {
     // this.dialog.open(DialogElementsExampleDialog);
     alert('User clicked!');
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userInfo.getUserInfo(this.user.user_id).subscribe(res=>{
+      this.usesssss = res;
+    })
+
+  }
+
 
   logout() {
-    this.auth.logOut()
+    this.auth.logOut();
   }
 }

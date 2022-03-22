@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from "../../auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-test',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TestComponent implements OnInit {
 
-  constructor() { }
+  constructor(private auth:AuthService,private route:Router) { }
 
   ngOnInit(): void {
+    if (this.auth.getUserData().data.metadata.company_id ===""){
+      this.route.navigate(['company'])
+    }
   }
 
 }

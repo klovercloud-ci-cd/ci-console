@@ -1,9 +1,21 @@
 
-
+/*
 ::ng-deep{
   .mat-menu-panel{
     min-width: 350px !important;
     max-width: 350px !important;
+    background-color: #13121f;
+  }
+}*/
+
+::ng-deep .kc-menu {
+  min-width: 350px !important;
+  max-width: 350px !important;
+  background-color: #13121f;
+}
+::ng-deep .kc-profile-icon{
+  svg {
+    fill: red;
   }
 }
 

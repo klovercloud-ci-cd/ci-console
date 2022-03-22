@@ -69,7 +69,7 @@ export class AuthService {
                   AuthService.log(res);
                 });
               }
-            }, 300000); // TODO: This is not the right way but it will do for now
+            }, 270000); // TODO: This is not the right way but it will do for now
           }
         }),
         catchError(AuthService.handleError)

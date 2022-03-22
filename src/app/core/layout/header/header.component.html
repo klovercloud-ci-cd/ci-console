@@ -11,14 +11,16 @@
   >
     User name <mat-icon>account_circle</mat-icon>
   </button>
-  <mat-menu #afterMenu="matMenu" xPosition="before" class="text-white w-[500px]">
+  <mat-menu #afterMenu="matMenu" xPosition="before" class="text-white  kc-menu">
     <div class="flex bg-[#8700ff] items-center p-4 py-6 gap-2">
-      <mat-icon class="text-5xl -mt-6 mr-6 -ml-1 material-icons-sharp">account_circle</mat-icon>
-      <h1 class="text-xl">User Name <span class="text-sm">(Admin)</span></h1>
+      <div class="h-12 w-12 bg-gray-500 rounded-full flex justify-center items-center bg-opacity-25 font-bold">
+        <mat-icon class=" material-icons-sharp kc-profile-icon text-3xl -mt-3 mr-1.5">perm_identity</mat-icon>
+      </div>
+      <h1 class="text-xl"><span class="text-sm">(Admin)</span></h1>
     </div>
-    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-5">
+    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-active">
       <div class="flex h-full  items-center p-4 gap-6">
-        <mat-icon>account_circle</mat-icon>
+        <mat-icon class="text-fill-green-700 material-icons-outlined text-stroke-white">account_circle</mat-icon>
         <div>
           <h1>ffdf</h1>
           <h2>sdds</h2>
@@ -28,9 +30,9 @@
         <mat-icon>navigate_next</mat-icon>
       </div>
     </div>
-    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-5">
+    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-active">
       <div class="flex h-full  items-center p-4 gap-6">
-        <mat-icon>account_circle</mat-icon>
+        <mat-icon class="material-icons-outlined text-dark-danger">settings</mat-icon>
         <div>
           <h1>ffdf</h1>
           <h2>sdds</h2>
@@ -40,6 +42,6 @@
         <mat-icon>navigate_next</mat-icon>
       </div>
     </div>
-    <button matRipple mat-button class="text-center w-full" (click)="logout()">Logout</button>
+    <button matRipple mat-button class="text-center w-full " (click)="logout()">LOGOUT</button>
   </mat-menu>
 </div>

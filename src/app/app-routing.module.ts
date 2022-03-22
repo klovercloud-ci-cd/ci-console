@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { Error404Component } from './error/error404/error404.component';
 import { AuthGuard } from './shared/guard/auth.guard';
+import {TestComponent} from "./dashboard/test/test.component";
 
 const childrenRoutes: Routes = [
   {
@@ -10,6 +11,10 @@ const childrenRoutes: Routes = [
     loadChildren: () =>
       import('./example/example.module').then((m) => m.ExampleModule),
   },
+  {
+    path:'',
+    component: TestComponent
+  }
 ];
 
 const routes: Routes = [
