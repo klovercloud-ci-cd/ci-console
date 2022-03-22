@@ -14,6 +14,6 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.router.url.substring(1));
 
-    this.pageTitle = this.router.url.substring(1);
+    // this.pageTitle = this.router.url.substring(1);
   }
 }
