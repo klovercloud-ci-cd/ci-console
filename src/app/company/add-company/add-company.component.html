@@ -1,0 +1,109 @@
+<div class="kc-form kc-attach-company">
+  <mat-card class="registration-form mt-2">
+    <div class="form-wrapper py-20">
+      <h1 class="form-title">Attach Company</h1>
+      <div class="text-instruction">
+        <h1 class="text-xl font-[600]">Company Attachment is Coming Soon...</h1>
+      </div>
+
+      <!-- Input Form -->
+
+      <form [formGroup]="registrationForm" (ngSubmit)="registrationFormData()">
+        <mat-form-field class="kcci-field" appearance="outline">
+          <mat-label class="text-white">ID </mat-label>
+          <input
+            type="number"
+            autocomplete="off"
+            required
+            formControlName="id"
+            matInput
+            placeholder="Enter ID"
+          />
+        </mat-form-field>
+
+        <mat-form-field
+          class="kcci-field kc-select-container text-white"
+          appearance="outline"
+        >
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type" name="food">
+            <mat-option
+              class="kc-select-type"
+              *ngFor="let food of foods"
+              [value]="food.value"
+            >
+              {{ food.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="kcci-field" appearance="outline">
+          <mat-label class="text-white">Token </mat-label>
+          <input
+            formControlName="token"
+            required
+            type="text"
+            autocomplete="off"
+            matInput
+          />
+        </mat-form-field>
+        <div class="mb-5">
+          <h1 class="text-right" (click)="getToken()">
+            <span class="cursor-pointer"
+              ><div class="flex justify-end gap-1">
+                <mat-icon aria-hidden="false" aria-label="Example home icon"
+                  >control_point</mat-icon
+                >
+                <h1>Generate token here</h1>
+              </div>
+            </span>
+          </h1>
+        </div>
+
+        <!-- Add APlication Section -->
+        <div class="kc-application-add">
+          <div class="mb-5">
+            <h1 class="text-left" (click)="getToken()">
+              <span class="cursor-pointer">
+                <div class="flex gap-1">
+                  <mat-icon aria-hidden="false" aria-label="Example home icon"
+                    >control_point</mat-icon
+                  >
+                  <h1>Add Application</h1>
+                </div>
+              </span>
+            </h1>
+          </div>
+        </div>
+
+        <div *ngIf="!registrationForm.valid; else other_content">
+          <button
+            class="bg-slate-500 kc-register block"
+            type="submit"
+            [disabled]="!registrationForm.valid"
+          >
+            Attach Company
+          </button>
+        </div>
+        <ng-template #other_content>
+          <button
+            class="kc-button-primary kc-register block"
+            type="submit"
+            [disabled]="!registrationForm.valid"
+          >
+            <span *ngIf="!isLoading; else before_submit"> Attach Company </span>
+            <ng-template #before_submit>
+              <div class="py-3 mx-auto w-52">
+                <mat-progress-bar
+                  class="green-progress kc-progress-bar"
+                  mode="indeterminate"
+                >
+                </mat-progress-bar>
+              </div>
+            </ng-template>
+          </button>
+        </ng-template>
+      </form>
+    </div>
+  </mat-card>
+</div>

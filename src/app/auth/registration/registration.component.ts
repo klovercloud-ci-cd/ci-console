@@ -40,7 +40,14 @@ export class RegistrationComponent implements OnInit {
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
-      duration: 5000,
+      duration: 500000,
+      panelClass: ['blue-snackbar'],
+    });
+  }
+  openSnackBarError(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 500000,
+      panelClass: ['error-snackbar'],
     });
   }
 
@@ -62,13 +69,16 @@ export class RegistrationComponent implements OnInit {
         console.log(this.authService.getUserData(), 'USER');
       },
       (err) => {
-        this.openSnackBar(err, '');
+        this.openSnackBarError('Authentication Error', '');
         console.log('err', err);
       }
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.openSnackBarError('Authentication Error', '');
+    // this.openSnackBar('Registration Successfull', '');
+  }
 
   confirmPasswordMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
