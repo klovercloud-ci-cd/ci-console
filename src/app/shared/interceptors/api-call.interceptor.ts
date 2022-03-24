@@ -7,16 +7,14 @@ import {
   HttpResponse,
   HttpErrorResponse
 } from '@angular/common/http';
-import {BehaviorSubject, catchError, map, Observable, switchMap, throwError} from 'rxjs';
+import {catchError, map, Observable, throwError} from 'rxjs';
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {TokenService} from "../../auth/token.service";
 
 @Injectable()
 export class ApiCallInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
+  public static refreshTokenInterval: any;
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -25,8 +23,7 @@ export class ApiCallInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const accessToken = this.tokenService.getAccessToken();
     const refreshToken = this.tokenService.getRefreshToken();
-
-    if(accessToken) {
+    if(accessToken && request.params.get('grant_type') !== 'refresh_token') {
       request = request.clone({
           setHeaders: {
             Authorization: "Bearer " + accessToken
@@ -45,7 +42,20 @@ export class ApiCallInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {
         if(event instanceof HttpResponse) {
-            console.log("event => ", event)
+          console.log("event => ", event)
+          setTimeout(()=>{
+            if (this.tokenService.getAccessToken() && !ApiCallInterceptor.refreshTokenInterval) {
+              ApiCallInterceptor.refreshTokenInterval = setInterval(() => {
+                if (this.authService.isAccessTokenExpired(this.tokenService.getAccessToken())) {
+                  this.authService.refreshToken({
+                    refresh_token: this.tokenService.getRefreshToken(),
+                  }).subscribe((res) => {
+                    AuthService.log(res);
+                  });
+                }
+              }, 240000);
+            }
+          }, 500);
         }
         return event;
       }),
@@ -57,60 +67,18 @@ export class ApiCallInterceptor implements HttpInterceptor {
             }).subscribe(() => {
               location.reload();
             })
-          } else {
-            this.router.navigate(['login']).then( _=> {
+          }
+
+          else {
+            this.router.navigate(['auth/login']).then( _=> {
               console.log('Redirecting to login page');
             })
           }
-          /*if (!this.isRefreshing) {
-            this.isRefreshing = true;
-            this.refreshTokenSubject.next(null);
-            const token = this.tokenService.getRefreshToken();
-            if (token)
-              return this.authService.refreshToken(token).pipe(
-                switchMap((token: any) => {
-                  this.isRefreshing = false;
-                  this.tokenService.saveToken(token.accessToken);
-                  this.refreshTokenSubject.next(token.accessToken);
-
-                  return next.handle(this.addTokenHeader(request, token.accessToken));
-                }),
-                catchError((err) => {
-                  this.isRefreshing = false;
-
-                  this.tokenService.signOut();
-                  return throwError(err);
-                })
-              );
-          }
-          return this.refreshTokenSubject.pipe(
-            filter(token => token !== null),
-            take(1),
-            switchMap((token) => next.handle(this.addTokenHeader(request, token)))
-          );
         }
-      private addTokenHeader(request: HttpRequest<any>, token: string) {
-          /!* for Spring Boot back-end *!/
-          // return request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
-          /!* for Node.js Express back-end *!/
-          return request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, token) });
-        }*/
-          /*if (!this.isRefreshing){
-            this.isRefreshing = true;
-            this.refreshTokenSubject.next(null);
-            const token = this.tokenService.getRefreshToken();
-            if (token){
-              this.authService.refreshToken(token).pipe(
-                switchMap((token: any) => {
-                  this.isRefreshing = false;
-                  this.tokenService.saveAccessToken(token.accessToken);
-                  this.refreshTokenSubject.next(token.accessToken);
-
-                  return next.handle(this.addTokenHeader(request, token.accessToken));
-                })
-              )
-            }
-          }*/
+        else if (error.status === 400){
+          this.router.navigate(['auth/login']).then( _=> {
+            console.log('Redirecting to login page');
+          })
         }
         return throwError(error);
       })

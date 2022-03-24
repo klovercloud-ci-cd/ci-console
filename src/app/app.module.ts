@@ -13,9 +13,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {CompanyModule} from "./company/company.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,8 +33,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    CompanyModule
   ],
   providers: [
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiCallInterceptor,

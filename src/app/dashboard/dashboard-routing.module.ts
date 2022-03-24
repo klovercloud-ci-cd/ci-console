@@ -1,16 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TestComponent } from './test/test.component';
+import { DashboardIndexComponent } from './dashboard-index/dashboard-index.component';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: 'list',
-  //   pathMatch: 'full',
-  // },
   {
     path: '',
-    component: TestComponent,
+    component: DashboardIndexComponent,
   },
 ];
 
