@@ -1,39 +1,38 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
   HttpRequest,
-  HttpResponse
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
-import {BehaviorSubject, catchError, map, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, map, Observable, switchMap, throwError} from 'rxjs';
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {TokenService} from "../../auth/token.service";
 
 @Injectable()
 export class ApiCallInterceptor implements HttpInterceptor {
+  public static refreshTokenInterval: any;
   constructor(
     private router: Router,
     private authService: AuthService,
-    private tokenService: TokenService) {
-  }
+    private tokenService: TokenService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const accessToken = this.tokenService.getAccessToken();
     const refreshToken = this.tokenService.getRefreshToken();
-
-    if (accessToken) {
-        request = request.clone({
-            setHeaders: {
-              Authorization: "Bearer " + accessToken
-            }
+    if(accessToken && request.params.get('grant_type') !== 'refresh_token') {
+      request = request.clone({
+          setHeaders: {
+            Authorization: "Bearer " + accessToken
           }
-        )
+        }
+      )
     }
 
-    if (!request.headers.has('content-type')) {
+    if(!request.headers.has('content-type')) {
       request = request.clone({
         setHeaders: {
           'content-type': "application/json"
@@ -42,32 +41,37 @@ export class ApiCallInterceptor implements HttpInterceptor {
     }
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
+        if(event instanceof HttpResponse) {
           console.log("event => ", event)
+          setTimeout(()=>{
+            if (this.tokenService.getAccessToken() && !ApiCallInterceptor.refreshTokenInterval) {
+              ApiCallInterceptor.refreshTokenInterval = setInterval(() => {
+                if (this.authService.isAccessTokenExpired(this.tokenService.getAccessToken())) {
+                  this.authService.refreshToken({
+                    refresh_token: this.tokenService.getRefreshToken(),
+                  }).subscribe((res) => {
+                    AuthService.log(res);
+                  });
+                }
+              }, 240000);
+            }
+          }, 500);
         }
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          if (error.error.error === 'invalid_token') {
+        if(error.status === 401) {
+          if(error.error.error === 'invalid_token') {
             this.authService.refreshToken({
               refresh_token: refreshToken
             }).subscribe(() => {
               location.reload();
             })
-
-
-          }
-          else {
-            this.router.navigate(['login']).then(_ => {
+          } else {
+            this.router.navigate(['login']).then( _=> {
               console.log('Redirecting to login page');
             })
           }
-
-        }
-        else if (error.status === 403){
-          localStorage.clear();
-          location.reload();
         }
         return throwError(error);
       })

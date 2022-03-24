@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders,} from '@angular/common/http';
 import {catchError, Observable, switchMap, tap, throwError} from 'rxjs';
 import {TokenService} from './token.service';
+import {ApiCallInterceptor} from '../shared/interceptors/api-call.interceptor'
 import * as endpoints from './auth.endpoint';
 import {environment} from '../../environments/environment';
 import {Router} from '@angular/router';
@@ -20,7 +21,6 @@ const HTTP_OPTIONS = {
 })
 export class AuthService {
   redirectUrl = '';
-  refreshTokenInterval: any;
 
   constructor(
     private http: HttpClient,
@@ -28,7 +28,6 @@ export class AuthService {
     private router: Router
   ) {
   }
-
   private static handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       console.error('An Error occurred: ', error.error.message);
@@ -42,7 +41,7 @@ export class AuthService {
     return throwError('Internal server error!');
   }
 
-  private static log(message: string): any {
+  static log(message: string): any {
     console.log(message);
   }
 
@@ -55,19 +54,7 @@ export class AuthService {
       .post(BASE_URL + endpoints.LOGIN, loginPayload, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
-          setTimeout(() =>{
-            if (this.tokenService.getAccessToken()) {
-
-              this.refreshTokenInterval = setInterval(() => {
-                this.refreshToken({
-                  refresh_token: this.tokenService.getRefreshToken(),
-                }).subscribe((res) => {
-                  AuthService.log(res);
-                });
-              }, 240000); // TODO: This is not the right way but it will do for now
-            }
-          }, 500)
-
+          AuthService.log('login');
         }),
         catchError(AuthService.handleError)
       );
@@ -104,7 +91,8 @@ export class AuthService {
     this.tokenService.removeAccessToken();
     this.tokenService.removeRefreshToken();
     setTimeout(() => {
-      clearInterval(this.refreshTokenInterval);
+      clearInterval(ApiCallInterceptor.refreshTokenInterval);
+      ApiCallInterceptor.refreshTokenInterval = null;
       this.router.navigate(['/auth/login']);
     }, 1000);
   }
@@ -112,19 +100,13 @@ export class AuthService {
   isAccessTokenExpired(accessToken: any): boolean {
     const decoded: any = jwt_decode(accessToken);
     const expMilSecond: number = decoded?.exp * 1000;
-    const currentTime = Date.now();
-    console.log(expMilSecond - currentTime, 'Difference');
-    if (expMilSecond < currentTime) {
+    const currentTime = Date.now() + 60000;
+    if ((expMilSecond - currentTime) < 0) {
+      clearInterval(ApiCallInterceptor.refreshTokenInterval)
+      ApiCallInterceptor.refreshTokenInterval = null
       return true;
     }
     return false;
-  }
-
-  timeDiff(accessToken: string | any): any {
-    const decoded: any = jwt_decode(accessToken);
-    const expMilSecond: number = decoded?.exp * 1000;
-    const currentTime = Date.now();
-    return expMilSecond - currentTime;
   }
 
   getUserData(): any {
