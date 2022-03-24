@@ -11,17 +11,37 @@
   >
     User name <mat-icon>account_circle</mat-icon>
   </button>
-  <mat-menu #afterMenu="matMenu" xPosition="before" class="text-white w-full">
-    <div class="flex h-full bg-dark-primary items-center p-4 gap-4">
-      <mat-icon class="text-4xl m-0 p-0 -mt-3">account_circle</mat-icon>
-      <h1 class="text-2xl">User Name</h1>
+  <mat-menu #afterMenu="matMenu" xPosition="before" class="text-white  kc-menu">
+    <div class="flex bg-[#8700ff] items-center p-4 py-6 gap-2">
+      <div class="h-12 w-12 bg-gray-500 rounded-full flex justify-center items-center bg-opacity-25 font-bold">
+        <mat-icon class=" material-icons-sharp kc-profile-icon text-3xl -mt-3 mr-1.5">perm_identity</mat-icon>
+      </div>
+      <h1 class="text-xl">{{userPersonalInfo?.data?.first_name}}<span class="text-sm">(Admin)</span></h1>
     </div>
-    <div class="flex h-full bg-dark-background items-center p-4 gap-4">
-      <mat-icon class="text-4xl m-0 p-0 -mt-3">account_circle</mat-icon>
-      <h1>hdsdkj</h1>
+    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-active">
+      <div class="flex h-full  items-center p-4 gap-6">
+        <mat-icon class="text-fill-green-700 material-icons-outlined text-stroke-white">account_circle</mat-icon>
+        <div>
+          <h1>ffdf</h1>
+          <h2>sdds</h2>
+        </div>
+      </div>
+      <div>
+        <mat-icon>navigate_next</mat-icon>
+      </div>
     </div>
-    <button mat-menu-item class="content-center" (click)="logout()">
-      LogOut
-    </button>
+    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-active">
+      <div class="flex h-full  items-center p-4 gap-6">
+        <mat-icon class="material-icons-outlined text-dark-danger">settings</mat-icon>
+        <div>
+          <h1>ffdf</h1>
+          <h2>sdds</h2>
+        </div>
+      </div>
+      <div>
+        <mat-icon>navigate_next</mat-icon>
+      </div>
+    </div>
+    <button matRipple mat-button class="text-center w-full " (click)="logout()">LOGOUT</button>
   </mat-menu>
 </div>
