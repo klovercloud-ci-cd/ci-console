@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { Error404Component } from './error/error404/error404.component';
 import { AuthGuard } from './shared/guard/auth.guard';
-import {TestComponent} from "./dashboard/test/test.component";
+import {DashboardIndexComponent} from "./dashboard/dashboard-index/dashboard-index.component";
 
 const childrenRoutes: Routes = [
   {
@@ -13,8 +13,13 @@ const childrenRoutes: Routes = [
   },
   {
     path:'',
-    component: TestComponent
-  }
+    component: DashboardIndexComponent
+  },
+  {
+    path: 'company',
+    loadChildren: () =>
+      import('./company/company.module').then((m) => m.CompanyModule),
+  },
 ];
 
 const routes: Routes = [

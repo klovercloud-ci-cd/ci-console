@@ -55,6 +55,24 @@ body {
   font-family: Popins, sans-serif;
 }
 
+.blue-snackbar {
+  // background: #3c4c72;
+  // color: white;
+  @apply bg-dark-background-4 mx-auto text-white shadow-2xl;
+  .mat-simple-snack-bar-content {
+    @apply py-8 px-9 text-xl;
+  }
+}
+
+.error-snackbar {
+  @apply bg-dark-warn text-dark-container pl-10 shadow-2xl;
+  .mat-simple-snack-bar-content {
+    @apply py-8 px-14 text-xl font-bold;
+  }
+}
+// .error-snackbar > .mat-simple-snack-bar-content {
+//   @apply py-8 ml-14 text-xl;
+// }
 //kc
 .kc-card {
   @apply bg-dark-background border-1.5 border-dark-border-default text-dark-text;
@@ -76,7 +94,12 @@ body {
     @apply bg-dark-background;
   }
 }
-
+.mat-option-text {
+  @apply text-white;
+}
+.mat-form-field-flex {
+  // @apply bg-dark-container;
+}
 .kc-form {
   input:-webkit-autofill {
     -webkit-text-fill-color: white !important;
@@ -98,6 +121,11 @@ body {
 
 .kc-progress-bar {
   .mat-progress-bar {
-    @apply rounded
+    @apply rounded;
+  }
+}
+.kc-dialog{
+  .mat-dialog-container{
+    @apply bg-dark-background max-w-5xl
   }
 }

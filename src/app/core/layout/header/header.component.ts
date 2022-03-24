@@ -16,14 +16,10 @@ export class HeaderComponent implements OnInit {
               ) {}
   pageTitle: string = '';
   user:any = this.auth.getUserData();
-  usesssss:any
-  openDialog() {
-    // this.dialog.open(DialogElementsExampleDialog);
-    alert('User clicked!');
-  }
+  userPersonalInfo:any
   ngOnInit(): void {
     this.userInfo.getUserInfo(this.user.user_id).subscribe(res=>{
-      this.usesssss = res;
+      this.userPersonalInfo = res;
     })
 
   }
