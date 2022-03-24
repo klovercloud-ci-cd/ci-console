@@ -24,6 +24,7 @@ import {MatMenuModule} from "@angular/material/menu";
         MatDialogModule,
         MatButtonModule,
         MatMenuModule,
+
     ],
   exports: [LayoutComponent, HeaderComponent, SidebarComponent],
 })

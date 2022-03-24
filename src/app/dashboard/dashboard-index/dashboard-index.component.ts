@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {AddCompanyModalComponent} from "../add-company-modal/add-company-modal.component";
+import {MatDialog} from "@angular/material/dialog";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'kcci-dashboard-index',
@@ -7,9 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardIndexComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dialog: MatDialog,private authService:AuthService) { }
 
   ngOnInit(): void {
+    this.dialog.open(AddCompanyModalComponent,{
+      panelClass: 'kc-dialog'
+    })
   }
 
 }
