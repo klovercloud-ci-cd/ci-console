@@ -1,86 +1,256 @@
 <div class="kc-form kc-attach-company">
-  <mat-card class="registration-form mt-2">
-    <div class="form-wrapper py-20">
+  <mat-card class="registration-form mt-4">
+    <div class="form-wrapper form-drop">
       <h1 class="form-title">Attach Company</h1>
       <div class="text-instruction">
-        <h1 class="text-xl font-[600]">Company Attachment is Coming Soon...</h1>
+        <h1 class="text-xl">Company Info</h1>
       </div>
 
       <!-- Input Form -->
 
-      <form [formGroup]="registrationForm" (ngSubmit)="registrationFormData()">
+      <form
+        [formGroup]="attachCompanyForm"
+        (ngSubmit)="attachCompanyFormData()"
+      >
         <mat-form-field class="kcci-field" appearance="outline">
           <mat-label class="text-white">ID </mat-label>
           <input
             type="number"
             autocomplete="off"
             required
-            formControlName="id"
+            formControlName="companyId"
             matInput
             placeholder="Enter ID"
           />
         </mat-form-field>
-
-        <mat-form-field
-          class="kcci-field kc-select-container text-white"
-          appearance="outline"
-        >
-          <mat-label>Type</mat-label>
-          <mat-select formControlName="type" name="food">
-            <mat-option
-              class="kc-select-type"
-              *ngFor="let food of foods"
-              [value]="food.value"
-            >
-              {{ food.viewValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
         <mat-form-field class="kcci-field" appearance="outline">
-          <mat-label class="text-white">Token </mat-label>
+          <mat-label class="text-white">Name </mat-label>
           <input
-            formControlName="token"
-            required
             type="text"
             autocomplete="off"
+            required
+            formControlName="name"
             matInput
+            placeholder="Enter Company Name"
           />
         </mat-form-field>
-        <div class="mb-5">
-          <h1 class="text-right" (click)="getToken()">
-            <span class="cursor-pointer"
-              ><div class="flex justify-end gap-1">
-                <mat-icon aria-hidden="false" aria-label="Example home icon"
-                  >control_point</mat-icon
-                >
-                <h1>Generate token here</h1>
-              </div>
-            </span>
-          </h1>
-        </div>
 
-        <!-- Add APlication Section -->
-        <div class="kc-application-add">
-          <div class="mb-5">
-            <h1 class="text-left" (click)="getToken()">
-              <span class="cursor-pointer">
-                <div class="flex gap-1">
-                  <mat-icon aria-hidden="false" aria-label="Example home icon"
-                    >control_point</mat-icon
-                  >
-                  <h1>Add Application</h1>
+        <!-- Add Repository Section -->
+        <!-- formGroupName="address" -->
+        <div class="flex justify-center">
+          <div
+            class="w-full h-full"
+            gdColumns="1fr 1fr 1fr"
+            gdColumns.md="1fr 1fr"
+            gdColumns.lt-md="1fr"
+            gdColumns.lt-sm="1fr"
+            gdColumns.lt-xs="1fr"
+            gdGap="20px"
+          >
+            <!-- fxLayoutAlign="center center" -->
+            <div
+              class="cluster-card rounded-md form-drop border-dark-primary border-1.5 p-4 mb-4"
+              *ngFor="let repo of repositories.controls; let i = index"
+              formArrayName="repositories"
+            >
+              <div [formGroupName]="i">
+                <h1 class="text-lg mb-2">Repository Info</h1>
+                <mat-form-field class="kcci-field" appearance="outline">
+                  <mat-label class="text-white">ID </mat-label>
+                  <input
+                    type="number"
+                    autocomplete="off"
+                    required
+                    formControlName="id"
+                    matInput
+                    placeholder="Enter ID"
+                  />
+                </mat-form-field>
+
+                <mat-form-field
+                  class="kcci-field kc-select-container text-white"
+                  appearance="outline"
+                >
+                  <mat-label>Type</mat-label>
+                  <mat-select formControlName="type" name="food">
+                    <mat-option
+                      class="kc-select-type"
+                      *ngFor="let food of foods"
+                      [value]="food.value"
+                    >
+                      {{ food.viewValue }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="kcci-field" appearance="outline">
+                  <mat-label class="text-white">Token </mat-label>
+                  <input
+                    formControlName="token"
+                    required
+                    type="text"
+                    autocomplete="off"
+                    matInput
+                  />
+                </mat-form-field>
+
+                <!-- Navigating to Get Access Token -->
+
+                <div class="mb-5">
+                  <h1 class="text-right">
+                    <span class="cursor-pointer">
+                      <div
+                        [ngSwitch]="
+                          attachCompanyForm.value.repositories[i].type
+                        "
+                      >
+                        <div *ngSwitchCase="'github'">
+                          <a
+                            href="https://github.com/settings/tokens"
+                            target="_blank"
+                          >
+                            <div class="flex justify-end gap-1">
+                              <mat-icon
+                                aria-hidden="false"
+                                aria-label="Example home icon"
+                                >control_point</mat-icon
+                              >
+                              <h1>Generate token here</h1>
+                            </div>
+                          </a>
+                        </div>
+                        <div *ngSwitchCase="'gitlab'">
+                          <a
+                            href="https://gitlab.com/-/profile/personal_access_tokens"
+                            target="_blank"
+                          >
+                            <div class="flex justify-end gap-1">
+                              <mat-icon
+                                aria-hidden="false"
+                                aria-label="Example home icon"
+                                >control_point</mat-icon
+                              >
+                              <h1>Generate token here</h1>
+                            </div>
+                          </a>
+                        </div>
+                        <div *ngSwitchCase="'bitbucket'">
+                          <a
+                            href="https://bitbucket.org/account/settings/app-passwords/"
+                            target="_blank"
+                          >
+                            <div class="flex justify-end gap-1">
+                              <mat-icon
+                                aria-hidden="false"
+                                aria-label="Example home icon"
+                                >control_point</mat-icon
+                              >
+                              <h1>Generate token here</h1>
+                            </div>
+                          </a>
+                        </div>
+                        <div *ngSwitchDefault="">
+                          <div class="flex justify-end gap-1">
+                            <mat-icon
+                              aria-hidden="false"
+                              aria-label="Example home icon"
+                              >control_point</mat-icon
+                            >
+                            <h1>Generate token here</h1>
+                          </div>
+                        </div>
+                      </div>
+                    </span>
+                  </h1>
                 </div>
-              </span>
-            </h1>
+
+                <!-- Add APlication Section -->
+                <div class="kc-application-add my-5">
+                  <div class="mb-5">
+                    <h1 class="text-left">
+                      <span class="cursor-pointer" (click)="addApplicaiton(i)">
+                        <div class="flex gap-1">
+                          <mat-icon
+                            aria-hidden="false"
+                            aria-label="Example home icon"
+                            >control_point</mat-icon
+                          >
+                          <h1>Add Application</h1>
+                        </div>
+                      </span>
+                    </h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    class="form-drop"
+                    *ngFor="
+                      let app of repoApplication(i).controls;
+                      let i = index
+                    "
+                    formArrayName="applications"
+                  >
+                    <mat-form-field class="kcci-field" appearance="outline">
+                      <mat-label class="text-white">Name </mat-label>
+                      <input
+                        [formControlName]="i"
+                        type="text"
+                        autocomplete="off"
+                        matInput
+                      />
+                    </mat-form-field>
+
+                    <mat-form-field class="kcci-field" appearance="outline">
+                      <mat-label class="text-white">URL </mat-label>
+                      <input
+                        [formControlName]="i"
+                        type="text"
+                        autocomplete="off"
+                        matInput
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <!-- <div class="flex justify-end mb-5">
+                  <button
+                    class="kc-button-primary kc-add-app"
+                    type="button"
+                    (click)="addApplicationControl()"
+                  >
+                    Add Application
+                  </button>
+                </div> -->
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div *ngIf="!registrationForm.valid; else other_content">
+        <div *ngIf="!attachCompanyForm.valid" class="flex justify-end my-4">
+          <!-- [disabled]="!attachCompanyForm.valid" -->
+          <button
+            type="button"
+            class="cursor-pointer"
+            (click)="addRepoFormGroupControl()"
+          >
+            <div class="flex gap-1">
+              <mat-icon aria-hidden="false" aria-label="Example home icon"
+                >control_point</mat-icon
+              >
+              <h1>Add Repository</h1>
+            </div>
+          </button>
+        </div>
+
+        <div *ngIf="!attachCompanyForm.valid; else other_content">
+          <!-- <button class="bg-green-500 kc-register block" type="submit">
+            Attach Company
+          </button> -->
           <button
             class="bg-slate-500 kc-register block"
             type="submit"
-            [disabled]="!registrationForm.valid"
+            [disabled]="!attachCompanyForm.valid"
           >
             Attach Company
           </button>
@@ -89,7 +259,7 @@
           <button
             class="kc-button-primary kc-register block"
             type="submit"
-            [disabled]="!registrationForm.valid"
+            [disabled]="!attachCompanyForm.valid"
           >
             <span *ngIf="!isLoading; else before_submit"> Attach Company </span>
             <ng-template #before_submit>
@@ -107,3 +277,5 @@
     </div>
   </mat-card>
 </div>
+<!-- <hr /> -->
+<!-- {{ attachCompanyForm.value | json }} -->

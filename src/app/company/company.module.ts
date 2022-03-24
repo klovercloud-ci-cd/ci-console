@@ -10,6 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [AddCompanyComponent],
@@ -24,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
+    FlexLayoutModule,
   ],
 })
 export class CompanyModule {}

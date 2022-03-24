@@ -6,20 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  appList: string[] = [
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-  ];
+  appList: string[] = ['Dashboard', 'Settings'];
+  panelOpenState = false;
   constructor() {}
 
   ngOnInit(): void {}

@@ -3,17 +3,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { Error404Component } from './error/error404/error404.component';
 import { AuthGuard } from './shared/guard/auth.guard';
-import {DashboardIndexComponent} from "./dashboard/dashboard-index/dashboard-index.component";
+import { DashboardIndexComponent } from './dashboard/dashboard-index/dashboard-index.component';
 
 const childrenRoutes: Routes = [
+  {
+    path: '',
+    loadChildren: () =>
+      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+  },
   {
     path: 'example',
     loadChildren: () =>
       import('./example/example.module').then((m) => m.ExampleModule),
   },
   {
-    path:'',
-    component: DashboardIndexComponent
+    path: '',
+    component: DashboardIndexComponent,
   },
   {
     path: 'company',
@@ -34,7 +39,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard],
   },
   {
     path: '**',
