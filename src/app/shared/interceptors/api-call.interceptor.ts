@@ -7,7 +7,7 @@ import {
   HttpResponse,
   HttpErrorResponse
 } from '@angular/common/http';
-import {BehaviorSubject, catchError, map, Observable, switchMap, throwError} from 'rxjs';
+import {catchError, map, Observable, throwError} from 'rxjs';
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {TokenService} from "../../auth/token.service";
