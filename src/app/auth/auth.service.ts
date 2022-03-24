@@ -125,7 +125,7 @@ export class AuthService {
   }
 
   isLogin() {
-    if (this.tokenService.getAccessToken()) {
+    if (this.tokenService.getAccessToken() && !this.isAccessTokenExpired(this.tokenService.getAccessToken())) {
       return true;
     } else {
       return false;

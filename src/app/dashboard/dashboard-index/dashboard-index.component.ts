@@ -13,9 +13,11 @@ export class DashboardIndexComponent implements OnInit {
   constructor(private dialog: MatDialog,private authService:AuthService) { }
 
   ngOnInit(): void {
-    this.dialog.open(AddCompanyModalComponent,{
-      panelClass: 'kc-dialog'
-    })
+    setTimeout(()=>{
+      this.dialog.open(AddCompanyModalComponent,{
+        panelClass: 'kc-dialog'
+      })
+    },1000)
   }
 
 }

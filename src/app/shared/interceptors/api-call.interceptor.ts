@@ -67,11 +67,18 @@ export class ApiCallInterceptor implements HttpInterceptor {
             }).subscribe(() => {
               location.reload();
             })
-          } else {
-            this.router.navigate(['login']).then( _=> {
+          }
+
+          else {
+            this.router.navigate(['auth/login']).then( _=> {
               console.log('Redirecting to login page');
             })
           }
+        }
+        else if (error.status === 400){
+          this.router.navigate(['auth/login']).then( _=> {
+            console.log('Redirecting to login page');
+          })
         }
         return throwError(error);
       })
