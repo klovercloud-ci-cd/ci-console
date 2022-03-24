@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
-import { TestComponent } from './test/test.component';
 import { AddCompanyModalComponent } from './add-company-modal/add-company-modal.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from "@angular/material/button";
@@ -13,7 +12,6 @@ import { DashboardIndexComponent } from './dashboard-index/dashboard-index.compo
 
 @NgModule({
   declarations: [
-    TestComponent,
     AddCompanyModalComponent,
     DashboardIndexComponent
   ],
