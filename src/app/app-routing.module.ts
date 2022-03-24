@@ -39,7 +39,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: '**',
