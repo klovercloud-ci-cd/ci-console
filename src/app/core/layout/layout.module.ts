@@ -10,21 +10,23 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { AppRoutingModule } from 'src/app/app-routing.module';
-import {MatMenuModule} from "@angular/material/menu";
+import { MatMenuModule } from '@angular/material/menu';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [LayoutComponent, HeaderComponent, SidebarComponent],
-    imports: [
-        AppRoutingModule,
-        CommonModule,
-        RouterModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatCardModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatMenuModule,
-    ],
+  imports: [
+    AppRoutingModule,
+    CommonModule,
+    RouterModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatCardModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatExpansionModule,
+  ],
   exports: [LayoutComponent, HeaderComponent, SidebarComponent],
 })
 export class LayoutModule {}

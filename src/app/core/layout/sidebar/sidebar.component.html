@@ -5,7 +5,8 @@
   >
     <img class="w-[175px]" src="../../../../assets/images/logos/logo.png" />
   </div>
-  <ul *ngFor="let app of appList">
+
+  <ul>
     <li
       routerLink="example"
       class="px-8 py-3 text-sm hover:bg-dark-background-active hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
@@ -14,7 +15,18 @@
         <div>
           <mat-icon>settings</mat-icon>
         </div>
-        <div>{{ app }}</div>
+        <div>Dashboard</div>
+      </div>
+    </li>
+    <li
+      routerLink="company"
+      class="px-8 py-3 text-sm hover:bg-dark-background-active hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
+    >
+      <div class="flex gap-x-4">
+        <div>
+          <mat-icon>store</mat-icon>
+        </div>
+        <div>Attach Company</div>
       </div>
     </li>
   </ul>

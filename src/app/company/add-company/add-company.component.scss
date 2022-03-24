@@ -2,7 +2,7 @@
   width: 100%;
 }
 .registration-form {
-  @apply w-[90vw] sm:w-[60vw] md:w-[70vw] lg:w-[65vw] xl:w-[50vw]  border-[#697ca2] border-2  text-dark-text;
+  @apply w-[85vw] text-dark-text;
   background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
 }
 
@@ -11,7 +11,7 @@
 }
 
 .text-instruction {
-  @apply text-gray-300 pt-10;
+  @apply text-gray-300 py-4;
 }
 
 .signup-btn {
@@ -29,7 +29,9 @@ input[type="number"] {
   margin: 0 10px;
   border-radius: 50% !important;
 }
-
+.form-drop {
+  animation: formDown 1s;
+}
 .form-wrapper {
   @apply w-full px-7 pt-8;
 }
@@ -56,6 +58,9 @@ input[type="number"] {
 .kcci-field {
   @apply w-[100%];
 }
+.kc-add-app {
+  @apply w-[25%] py-4  rounded text-lg font-semibold tracking-wider;
+}
 .kc-register {
   @apply w-full py-4 mx-auto rounded text-lg font-semibold tracking-wider;
 }
@@ -64,4 +69,36 @@ input[type="number"] {
 }
 .kc-number {
   @apply bg-dark-container;
+}
+
+.cluster-card {
+  background: var(--color-bg-primary);
+  padding: 15px;
+  border-radius: 5px;
+  height: 100%;
+  background: linear-gradient(280.19deg, #25324e -5.42%, #1f2c46 204.15%);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  .name {
+    padding: 7px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    background: var(--color-bg-dark);
+    svg {
+      margin-right: 10px;
+    }
+  }
+}
+
+@keyframes formDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
