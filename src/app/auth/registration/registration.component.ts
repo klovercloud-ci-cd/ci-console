@@ -18,7 +18,7 @@ export class RegistrationComponent implements OnInit {
       first_name: ['', [Validators.required, Validators.maxLength(15)]],
       last_name: ['', [Validators.required, Validators.maxLength(15)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       c_password: ['', Validators.required],
       checked: [false, Validators.requiredTrue],
@@ -37,6 +37,11 @@ export class RegistrationComponent implements OnInit {
     private http: HttpClient,
     private authService: AuthService
   ) {}
+
+  ngOnInit(): void {
+    // this.openSnackBarError('Authentication Error', '');
+    // this.openSnackBar('Registration Successfull', '');
+  }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
@@ -75,11 +80,6 @@ export class RegistrationComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    // this.openSnackBarError('Authentication Error', '');
-    // this.openSnackBar('Registration Successfull', '');
-  }
-
   confirmPasswordMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
@@ -91,6 +91,19 @@ export class RegistrationComponent implements OnInit {
         matchingControl.setErrors(null);
       }
     };
+  }
+
+  phoneNumberCheck(phoneNumber: number) {
+    //  var regEx = ^\+{0,2}([\-\. ])?(\(?\d{0,3}\))?([\-\. ])?\(?\d{0,3}\)?([\-\. ])?\d{3}([\-\. ])?\d{4};
+    //  if(phoneNumber.value.match(regEx))
+    //    {
+    //     return true;
+    //    }
+    //  else
+    //    {
+    //    alert("Please enter a valid phone number.");
+    //    return false;
+    //    }
   }
 
   get emailField(): any {

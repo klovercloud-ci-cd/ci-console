@@ -6,8 +6,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { AttachCompanyService } from '../attach-company.service';
 
-interface Food {
+interface RepoType {
   value: string;
   viewValue: string;
 }
@@ -20,8 +21,9 @@ interface Food {
 export class AddCompanyComponent implements OnInit {
   selectedValue: string = '';
   selectedCar: string = '';
+  panelOpenState = true;
 
-  foods: Food[] = [
+  repos: RepoType[] = [
     { value: 'bitbucket', viewValue: 'Bitbucket' },
     { value: 'github', viewValue: 'Github' },
     { value: 'gitlab', viewValue: 'Gitlab' },
@@ -29,12 +31,22 @@ export class AddCompanyComponent implements OnInit {
   isLoading = false;
   showAddApp = false;
   showAddRepo = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private attachCompanyService: AttachCompanyService
+  ) {}
+
+  ngOnInit(): void {}
+
+  // ----------------- Where it all began -----------------
+
   formDataFormat: any;
   repoData: any = [];
 
-  get hobbyControls() {
-    return (<FormArray>this.attachCompanyForm.get('hobbies')).controls;
-  }
+  // get hobbyControls() {
+  //   return (<FormArray>this.attachCompanyForm.get('hobbies')).controls;
+  // }
 
   attachCompanyForm = this.fb.group({
     companyId: ['', Validators.required],
@@ -42,18 +54,14 @@ export class AddCompanyComponent implements OnInit {
     repositories: this.fb.array([], [Validators.required]),
   });
 
-  addHobby() {
-    const control = new FormControl(null);
-    (<FormArray>this.attachCompanyForm.get('hobbies')).push(control);
-  }
+  // addHobby() {
+  //   const control = new FormControl(null);
+  //   (<FormArray>this.attachCompanyForm.get('hobbies')).push(control);
+  // }
 
   // Application
   applicaitonVal!: string;
   applicaitonVal1!: string;
-
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   // Form Repo
   get repositories(): FormArray {
@@ -62,11 +70,17 @@ export class AddCompanyComponent implements OnInit {
 
   repoFormGroup(): FormGroup {
     return this.fb.group({
-      id: [, [Validators.required]],
       type: ['', [Validators.required]],
       token: ['', [Validators.required]],
       auth_type: ['password'],
       applications: this.fb.array([]),
+    });
+  }
+
+  appNameGroup(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required]],
+      url: ['', [Validators.required]],
     });
   }
 
@@ -80,18 +94,23 @@ export class AddCompanyComponent implements OnInit {
     return <FormArray>this.repositories.at(repoIndex).get('applications');
   }
 
-  addApplicaitonControl(repoIndex: string): void {}
+  // addApplicaitonControl(repoIndex: string): void {}
 
   addApplicaiton(repoIndex: number): void {
-    console.log(this.repoApplication(repoIndex));
+    console.log('Add app: ', this.repoApplication(repoIndex));
     this.repoApplication(repoIndex).push(
-      new FormControl('', [Validators.required])
+      // new FormControl('', [Validators.required])
+      this.appNameGroup()
     );
   }
 
-  // removeApplicaiton(empIndex:number) {
-  //   this.addApplicaiton().removeAt(empIndex);
-  // }
+  removeRepository(repositoryIndex: number) {
+    this.repositories.removeAt(repositoryIndex);
+  }
+
+  removeApplicaiton(empIndex: number, appIndex: number) {
+    this.repoApplication(empIndex).removeAt(appIndex);
+  }
 
   // ---------------------------------------------
 
@@ -100,10 +119,47 @@ export class AddCompanyComponent implements OnInit {
   }
 
   attachCompanyFormData() {
+    // this.attachCompanyForm.delete('field1');
+    console.log(this.attachCompanyForm.value);
+    let { companyId, name, repositories } = this.attachCompanyForm.value;
+
+    repositories.map((item: any) => {
+      const app = item.applications.map((app: any) => {
+        return { _metedata: { name: app.name }, url: app.url };
+      });
+      item.applications = app;
+      return item;
+    });
+    let companyData = {
+      id: companyId,
+      name,
+      repositories,
+    };
+
+    console.log(companyData);
+
+    // this.attachCompanyService
+    //   .attachCompany(this.attachCompanyForm.value)
+    //   .subscribe(
+    //     (res) => {
+    //       if (res.status === 'success') {
+    //         // this.isLoading = false;
+    //         // this.router.navigate(['/auth/login']);
+    //         // this.openSnackBar('Registration Successfull', '');
+    //         console.log('Registration Successfull', '');
+    //       }
+    //       console.log(res.status);
+    //       // console.log(this.authService.getUserData(), 'USER');
+    //     },
+    //     (err) => {
+    //       // this.openSnackBarError('Authentication Error', '');
+    //       console.log('err', err);
+    //     }
+    //   );
+
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;
     }, 1500);
-    console.log(this.attachCompanyForm.value);
   }
 }

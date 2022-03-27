@@ -2,16 +2,21 @@
   width: 100%;
 }
 .registration-form {
-  @apply w-[85vw] text-dark-text;
+  @apply w-[85vw] h-full text-dark-text;
   background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
 }
 
 .form-title {
-  @apply text-center text-2xl uppercase;
+  @apply text-2xl uppercase;
 }
 
 .text-instruction {
   @apply text-gray-300 py-4;
+}
+.example-tooltip-red {
+  @apply bg-dark-info text-sm;
+
+  background: #b71c1c;
 }
 
 .signup-btn {
@@ -33,7 +38,7 @@ input[type="number"] {
   animation: formDown 1s;
 }
 .form-wrapper {
-  @apply w-full px-7 pt-8;
+  @apply w-full md:px-[20%] pb-4;
 }
 
 .two-input {
@@ -62,13 +67,16 @@ input[type="number"] {
   @apply w-[25%] py-4  rounded text-lg font-semibold tracking-wider;
 }
 .kc-register {
-  @apply w-full py-4 mx-auto rounded text-lg font-semibold tracking-wider;
+  @apply w-full py-4 mx-auto rounded text-sm md:text-lg font-semibold tracking-wider;
 }
 .kc-radio-btn {
   @apply pb-5 text-white;
 }
 .kc-number {
   @apply bg-dark-container;
+}
+.tooltip {
+  background-color: green;
 }
 
 .cluster-card {

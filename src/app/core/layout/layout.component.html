@@ -9,8 +9,13 @@
     <div
       class="flex justify-between items-center border-b-[1px] border-[#495c7d] p-5"
     >
-      <div>Homepage</div>
-      <!-- <div>{{ pageTitle }}</div> -->
+      <div class="uppercase text-base font-medium">Homepage</div>
+      <!-- <div *ngSwitch="pageTitle" class="uppercase text-xl font-medium">
+        <div *ngSwitchCase="'attach-company'">Attach Company</div>
+
+        <div *ngSwitchDefault="">Dashboard</div>
+      </div> -->
+
       <!-- <ng-template #defaultTitle>Homepage</ng-template> -->
       <div>
         <app-header></app-header>

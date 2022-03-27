@@ -1,7 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TokenService } from '../auth/token.service';
 
@@ -23,11 +27,30 @@ export class AttachCompanyService {
     private router: Router
   ) {}
 
+  private static handleError(error: HttpErrorResponse): any {
+    if (error.error instanceof ErrorEvent) {
+      console.error('An Error occurred: ', error.error.message);
+    } else {
+      console.error(
+        `Error Code From Backend: ${error.status}`,
+        `Body: ${error.error}`
+      );
+    }
+    return throwError('Internal server error!');
+  }
+
   attachCompany(attachCompanyPayload: any): Observable<any> {
-    return this.http.put(
-      BASE_URL + 'users',
-      attachCompanyPayload,
-      HTTP_OPTIONS
-    );
+    HTTP_OPTIONS.params = {
+      action: 'attach_company',
+    };
+
+    return this.http
+      .post(BASE_URL + 'users', attachCompanyPayload, HTTP_OPTIONS)
+      .pipe(
+        tap((res: any) => {
+          console.log(res);
+        }),
+        catchError(AttachCompanyService.handleError)
+      );
   }
 }

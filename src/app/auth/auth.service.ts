@@ -1,11 +1,15 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders,} from '@angular/common/http';
-import {catchError, Observable, switchMap, tap, throwError} from 'rxjs';
-import {TokenService} from './token.service';
-import {ApiCallInterceptor} from '../shared/interceptors/api-call.interceptor'
+import { Injectable } from '@angular/core';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
+import { TokenService } from './token.service';
+import { ApiCallInterceptor } from '../shared/interceptors/api-call.interceptor';
 import * as endpoints from './auth.endpoint';
-import {environment} from '../../environments/environment';
-import {Router} from '@angular/router';
+import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 
 const BASE_URL = environment.v1AuthEndpoint;
@@ -26,8 +30,7 @@ export class AuthService {
     private http: HttpClient,
     private tokenService: TokenService,
     private router: Router
-  ) {
-  }
+  ) {}
   private static handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       console.error('An Error occurred: ', error.error.message);
@@ -47,8 +50,7 @@ export class AuthService {
 
   login(loginPayload: any): Observable<any> {
     HTTP_OPTIONS.params = {
-      grant_type: 'password',
-      token_type: 'regular',
+      action: 'attach_company',
     };
     return this.http
       .post(BASE_URL + endpoints.LOGIN, loginPayload, HTTP_OPTIONS)
@@ -73,18 +75,19 @@ export class AuthService {
     HTTP_OPTIONS.params = {
       grant_type: 'refresh_token',
     };
-    return this.http.post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS).pipe(
-      tap((event: any) => {
-        // Save new Tokens
-        this.tokenService.removeAccessToken();
-        this.tokenService.removeRefreshToken();
-        this.tokenService.saveAccessToken(event.data.access_token);
-        this.tokenService.saveRefreshToken(event.data.refresh_token);
-        //return event;
-
-      }),
-      catchError(AuthService.handleError)
-    );
+    return this.http
+      .post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS)
+      .pipe(
+        tap((event: any) => {
+          // Save new Tokens
+          this.tokenService.removeAccessToken();
+          this.tokenService.removeRefreshToken();
+          this.tokenService.saveAccessToken(event.data.access_token);
+          this.tokenService.saveRefreshToken(event.data.refresh_token);
+          //return event;
+        }),
+        catchError(AuthService.handleError)
+      );
   }
 
   logOut(): void {
@@ -101,9 +104,9 @@ export class AuthService {
     const decoded: any = jwt_decode(accessToken);
     const expMilSecond: number = decoded?.exp * 1000;
     const currentTime = Date.now() + 60000;
-    if ((expMilSecond - currentTime) < 0) {
-      clearInterval(ApiCallInterceptor.refreshTokenInterval)
-      ApiCallInterceptor.refreshTokenInterval = null
+    if (expMilSecond - currentTime < 0) {
+      clearInterval(ApiCallInterceptor.refreshTokenInterval);
+      ApiCallInterceptor.refreshTokenInterval = null;
       return true;
     }
     return false;
@@ -125,7 +128,10 @@ export class AuthService {
   }
 
   isLogin() {
-    if (this.tokenService.getAccessToken() && !this.isAccessTokenExpired(this.tokenService.getAccessToken())) {
+    if (
+      this.tokenService.getAccessToken() &&
+      !this.isAccessTokenExpired(this.tokenService.getAccessToken())
+    ) {
       return true;
     } else {
       return false;

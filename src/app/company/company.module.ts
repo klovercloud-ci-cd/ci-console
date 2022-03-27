@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [AddCompanyComponent],
@@ -26,6 +28,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatSelectModule,
     MatIconModule,
     FlexLayoutModule,
+    MatExpansionModule,
+    MatTooltipModule,
   ],
 })
 export class CompanyModule {}

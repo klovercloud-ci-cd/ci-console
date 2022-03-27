@@ -21,7 +21,7 @@ const childrenRoutes: Routes = [
     component: DashboardIndexComponent,
   },
   {
-    path: 'company',
+    path: 'attach-company',
     loadChildren: () =>
       import('./company/company.module').then((m) => m.CompanyModule),
   },
@@ -39,7 +39,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: '**',
