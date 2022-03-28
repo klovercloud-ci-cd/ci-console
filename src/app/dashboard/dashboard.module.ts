@@ -3,26 +3,26 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { AddCompanyModalComponent } from './add-company-modal/add-company-modal.component';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule} from "@angular/material/button";
-import {MatCardModule} from '@angular/material/card';
-import {MatIconModule} from "@angular/material/icon";
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { DashboardIndexComponent } from './dashboard-index/dashboard-index.component';
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-  declarations: [
-    AddCompanyModalComponent,
-    DashboardIndexComponent
-  ],
+  declarations: [AddCompanyModalComponent, DashboardIndexComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     MatDialogModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatExpansionModule,
+    FlexLayoutModule,
   ],
-  exports:[]
+  exports: [],
 })
-export class DashboardModule { }
+export class DashboardModule {}

@@ -1,5 +1,6 @@
 .kc-attach-company {
   width: 100%;
+  @apply flex justify-center items-center;
 }
 .registration-form {
   @apply w-[85vw] h-full text-dark-text;
@@ -15,8 +16,6 @@
 }
 .example-tooltip-red {
   @apply bg-dark-info text-sm;
-
-  background: #b71c1c;
 }
 
 .signup-btn {
@@ -40,7 +39,10 @@ input[type="number"] {
 .form-wrapper {
   @apply w-full md:px-[20%] pb-4;
 }
-
+.kc-expansion-panel {
+  background: transparent;
+  margin-top: 0;
+}
 .two-input {
   @apply flex flex-col md:flex-row gap-2;
 }
@@ -67,7 +69,7 @@ input[type="number"] {
   @apply w-[25%] py-4  rounded text-lg font-semibold tracking-wider;
 }
 .kc-register {
-  @apply w-full py-4 mx-auto rounded text-sm md:text-lg font-semibold tracking-wider;
+  @apply w-full py-3 mx-auto rounded-[50px] text-sm md:text-base font-semibold tracking-wider;
 }
 .kc-radio-btn {
   @apply pb-5 text-white;

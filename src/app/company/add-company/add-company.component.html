@@ -38,45 +38,23 @@
 
         <!-- Add Repository Section -->
         <!-- formGroupName="address" -->
-        <!-- <div class="flex justify-center">
+
+        <mat-accordion multi="false">
           <div
-            class="w-full h-full"
-            gdColumns="1fr 1fr 1fr"
-            gdColumns.md="1fr 1fr"
-            gdColumns.lt-md="1fr"
-            gdColumns.lt-sm="1fr"
-            gdColumns.lt-xs="1fr"
-            gdGap="20px"
-          > -->
-        <!-- fxLayoutAlign="center center" -->
-        <div
-          class="rounded-md form-drop border-dark-primary border-1.5 p-4 mb-4"
-          *ngFor="let repo of repositories.controls; let i = index"
-          formArrayName="repositories"
-        >
-          <div [formGroupName]="i">
-            <mat-accordion multi="false">
+            class="rounded-md form-drop bg-[#1A2C4A] border-dark-primary border-1.5 p-2 mb-4 relative"
+            *ngFor="let repo of repositories.controls; let i = index"
+            formArrayName="repositories"
+          >
+            <div [formGroupName]="i">
               <mat-expansion-panel
                 [expanded]="true"
-                class="bg-transparent"
+                class="kc-expansion-panel"
                 (opened)="panelOpenState = true"
                 (closed)="panelOpenState = false"
               >
                 <mat-expansion-panel-header>
                   <h1 class="text-lg mb-2">Repository</h1>
                 </mat-expansion-panel-header>
-
-                <!-- <mat-form-field class="kcci-field" appearance="outline">
-                  <mat-label class="text-white">ID </mat-label>
-                  <input
-                    type="number"
-                    autocomplete="off"
-                    required
-                    formControlName="id"
-                    matInput
-                    placeholder="Enter ID"
-                  />
-                </mat-form-field> -->
 
                 <div class="flex flex-col xl:flex-row gap-5">
                   <mat-form-field
@@ -144,21 +122,6 @@
                             </div>
                           </a>
                         </div>
-
-                        <!-- <div class="example-container" cdkScrollable>
-                          <button
-                            mat-raised-button
-                            #tooltip="matTooltip"
-                            matTooltip="Info about the action"
-                            [matTooltipPosition]="'right'"
-                            matTooltipHideDelay="100000"
-                            aria-label="Button that displays a tooltip that hides when scrolled out of the container"
-                            class="example-button"
-                          >
-                            Action
-                          </button>
-                        </div> -->
-
                         <div *ngSwitchCase="'gitlab'">
                           <a
                             href="https://gitlab.com/-/profile/personal_access_tokens"
@@ -279,20 +242,11 @@
                       </div>
                     </div>
                   </div>
-                  <!-- <div class="flex justify-end mb-5">
-                  <button
-                    class="kc-button-primary kc-add-app"
-                    type="button"
-                    (click)="addApplicationControl()"
-                  >
-                    Add Application
-                  </button>
-                </div> -->
                 </div>
+
                 <!-- Add APlication Section -->
-                <div
-                  class="flex flex-col sm:flex-row justify-between items-center mt-5"
-                >
+
+                <div class="ml-auto mt-5">
                   <div class="kc-application-add">
                     <div class="">
                       <h1 class="text-right">
@@ -316,18 +270,19 @@
                   </div>
                   <h1
                     (click)="removeRepository(i)"
-                    class="cursor-pointer text-dark-danger flex justify-end"
+                    class="cursor-pointer text-dark-danger absolute top-0 right-0 z-10"
                   >
-                    <div class="flex items-center gap-1">
-                      <mat-icon>highlight_off</mat-icon>
-                      <h1 class="text-base">Repository</h1>
-                    </div>
+                    <span class="-mt-5 -mr-5">
+                      <div class="flex items-center gap-1">
+                        <mat-icon>highlight_off</mat-icon>
+                      </div>
+                    </span>
                   </h1>
                 </div>
               </mat-expansion-panel>
-            </mat-accordion>
+            </div>
           </div>
-        </div>
+        </mat-accordion>
         <!-- </div>
         </div> -->
 
@@ -337,6 +292,10 @@
             type="button"
             class="cursor-pointer"
             (click)="addRepoFormGroupControl()"
+            [disabled]="
+              attachCompanyForm.value.repositories.length != 0 &&
+              !attachCompanyForm.valid
+            "
           >
             <div class="flex items-center gap-1">
               <mat-icon
@@ -345,7 +304,7 @@
                 aria-label="Example home icon"
                 >control_point</mat-icon
               >
-              <h1 class="text-base">Repository</h1>
+              <h1 class="text-base text-white">Repository</h1>
             </div>
           </button>
         </div>
@@ -354,10 +313,7 @@
           class="w-full"
           *ngIf="!attachCompanyForm.valid; else other_content"
         >
-          <div class="w-52 sm:w-56 md:w-60 lg:w-80 mx-auto">
-            <!-- <button class="bg-green-500 kc-register block" type="submit">
-            Attach Company
-          </button> -->
+          <div class="w-52 sm:w-56 md:w-60 lg:w-52 ml-auto">
             <button
               class="bg-slate-500 kc-register block"
               type="submit"
@@ -368,9 +324,9 @@
           </div>
         </div>
         <ng-template #other_content>
-          <div class="w-40 md:w-60 lg:w-80 mx-auto">
+          <div class="w-40 md:w-60 lg:w-52 ml-auto">
             <button
-              class="bg-dark-primary kc-register block text-dark-container"
+              class="bg-dark-primary kc-register block text-white"
               type="submit"
               [disabled]="!attachCompanyForm.valid"
             >
@@ -393,5 +349,3 @@
     </div>
   </mat-card>
 </div>
-<!-- <hr /> -->
-<!-- {{ attachCompanyForm.value | json }} -->
