@@ -4,7 +4,8 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { tap, switchMap } from 'rxjs/operators';
 import { TokenService } from './token.service';
 import { ApiCallInterceptor } from '../shared/interceptors/api-call.interceptor';
 import * as endpoints from './auth.endpoint';

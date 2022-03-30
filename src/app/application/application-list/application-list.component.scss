@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+}
+.mat-table {
+  overflow-x: scroll;
+}
+
+.uploader-status ::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  @apply stroke-dark-text-label h-5 w-5;
+}
+
+.mat-form-field {
+  @apply text-sm w-1/5;
+}
+th {
+  @apply bg-dark-border-form text-sm font-semibold;
+}
+td,
+th {
+  width: 25%;
+}

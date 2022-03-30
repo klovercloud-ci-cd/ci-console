@@ -17,7 +17,14 @@ const childrenRoutes: Routes = [
       import('./example/example.module').then((m) => m.ExampleModule),
   },
   {
-    path: '',
+    path: 'app-list',
+    loadChildren: () =>
+      import('./application/application.module').then(
+        (m) => m.ApplicationModule
+      ),
+  },
+  {
+    path: 'test',
     component: DashboardIndexComponent,
   },
   {

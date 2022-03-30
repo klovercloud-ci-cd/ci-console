@@ -15,7 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {CompanyModule} from "./company/company.module";
+import { CompanyModule } from './company/company.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,10 +33,9 @@ import {CompanyModule} from "./company/company.module";
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    CompanyModule
+    CompanyModule,
   ],
   providers: [
-
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiCallInterceptor,

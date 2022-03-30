@@ -12,6 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTreeModule } from '@angular/material/tree';
+
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [LayoutComponent, HeaderComponent, SidebarComponent],
@@ -26,6 +29,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatButtonModule,
     MatMenuModule,
     MatExpansionModule,
+    MatTreeModule,
+    MatRippleModule,
   ],
   exports: [LayoutComponent, HeaderComponent, SidebarComponent],
 })

@@ -1,3 +1,6 @@
-.kc-dialog{
-  @apply bg-dark-background
+.kc-dialog {
+  @apply bg-dark-background;
+}
+.relative {
+  @apply w-full flex justify-center;
 }
