@@ -26,7 +26,7 @@ const HTTP_OPTIONS = {
 })
 export class AuthService {
   redirectUrl = '';
-
+  refreshTokenInterval: any;
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
@@ -73,30 +73,26 @@ export class AuthService {
   }
 
   refreshToken(refreshTokenData: any): Observable<any> {
-    HTTP_OPTIONS.params = {
-      grant_type: 'refresh_token',
-    };
-    return this.http
-      .post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS)
-      .pipe(
-        tap((event: any) => {
-          // Save new Tokens
-          this.tokenService.removeAccessToken();
-          this.tokenService.removeRefreshToken();
-          this.tokenService.saveAccessToken(event.data.access_token);
-          this.tokenService.saveRefreshToken(event.data.refresh_token);
-          //return event;
-        }),
-        catchError(AuthService.handleError)
-      );
+    return this.http.post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS).pipe(
+      tap((event: any) => {
+        // Save new Tokens
+        this.tokenService.removeAccessToken();
+        this.tokenService.removeRefreshToken();
+        this.tokenService.saveAccessToken(event.access_token);
+        this.tokenService.saveRefreshToken(event.refresh_token);
+        //return event;
+
+      }),
+      catchError(AuthService.handleError)
+    );
   }
 
   logOut(): void {
     this.tokenService.removeAccessToken();
     this.tokenService.removeRefreshToken();
     setTimeout(() => {
-      clearInterval(ApiCallInterceptor.refreshTokenInterval);
-      ApiCallInterceptor.refreshTokenInterval = null;
+      clearInterval(this.refreshTokenInterval);
+      this.refreshTokenInterval = null;
       this.router.navigate(['/auth/login']);
     }, 1000);
   }
@@ -105,9 +101,9 @@ export class AuthService {
     const decoded: any = jwt_decode(accessToken);
     const expMilSecond: number = decoded?.exp * 1000;
     const currentTime = Date.now() + 60000;
-    if (expMilSecond - currentTime < 0) {
-      clearInterval(ApiCallInterceptor.refreshTokenInterval);
-      ApiCallInterceptor.refreshTokenInterval = null;
+    if ((expMilSecond - currentTime) < 0) {
+      clearInterval(this.refreshTokenInterval)
+      this.refreshTokenInterval = null
       return true;
     }
     return false;
@@ -129,13 +125,29 @@ export class AuthService {
   }
 
   isLogin() {
-    if (
-      this.tokenService.getAccessToken() &&
-      !this.isAccessTokenExpired(this.tokenService.getAccessToken())
-    ) {
+    if (this.tokenService.getRefreshToken() &&
+      !this.isAccessTokenExpired(this.tokenService.getRefreshToken())) {
       return true;
     } else {
       return false;
     }
   }
+  forgotPassData(media:string){
+
+    HTTP_OPTIONS.params = {
+      action: 'forgot_password',
+      media: media
+    };
+    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , '', HTTP_OPTIONS)
+  }
+  chnagePasword(media:string){
+
+    HTTP_OPTIONS.params = {
+      action: 'forgot_password',
+      media: media
+    };
+    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , '', HTTP_OPTIONS)
+  }
+
+
 }

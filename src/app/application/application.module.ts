@@ -9,13 +9,14 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ApplicationPipelineComponent } from './application-pipeline/application-pipeline.component';
+import { CiCdPipelineComponent } from './ci-cd-pipeline/ci-cd-pipeline.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
     ApplicationListComponent,
     ApplicationListComponent,
-    ApplicationPipelineComponent,
+    CiCdPipelineComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +32,7 @@ import { ApplicationPipelineComponent } from './application-pipeline/application
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatCardModule,
   ],
 })
 export class ApplicationModule {}

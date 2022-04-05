@@ -1,93 +1,94 @@
-<div
-  class="grid lg:grid-cols-2 grid-cols-1 h-screen place-items-center kc-login-right-bg"
->
-  <div class="hidden lg:block">
-    <img src="../../../assets/images/bg/Asset_1_3.png" alt="" class="" />
-  </div>
-  <div class="w-full flex justify-center">
-    <div class="w-3/5 min-w-fit">
-      <mat-card class="kc-card kc-card-border border-dark-border space-y-6">
-        <div class="flex justify-center items-center">
-          <img src="../../../assets/images/logos/logo.png" alt="" class="" />
-        </div>
-        <div class="text-xl py-4">
-          <p class="font-bold">Welcome Back!</p>
-          <p>
-            <span class="font-bold">Sign in</span> with your credential below
-          </p>
-        </div>
-        <form [formGroup]="loginForm" (ngSubmit)="logIn()">
-          <div class="space-y-2">
-            <mat-form-field appearance="outline" class="kc-form w-full">
-              <mat-label class="text-dark-text">Email</mat-label>
-              <input
-                type="email"
-                class="border-dark-border"
-                matInput
-                placeholder="Ex. pat@example.com"
-                formControlName="email"
-              />
-              <mat-error *ngIf="loginForm.get('email').errors?.required">
-                We need an email address to log you in
-              </mat-error>
-              <mat-error *ngIf="loginForm.get('email').errors?.email">
-                We need a valid email address to log you in
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="kc-form w-full">
-              <mat-label class="text-dark-text">Password</mat-label>
-              <input
-                [type]="passwordHide ? 'password' : 'text'"
-                class="border-dark-border"
-                matInput
-                placeholder="Ex. pat@example.com"
-                formControlName="password"
-              />
-              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{
-                passwordHide ? "visibility_off" : "visibility"
-              }}</mat-icon>
-              <mat-error *ngIf="loginForm.get('password').errors?.required">
-                We need password to log you in
-              </mat-error>
-            </mat-form-field>
-            <a
-              routerLink="/auth/forgot-password"
-              class="flex justify-end font-bold pb-4"
-              >Forgot Password?</a
-            >
+<div class="h-full">
+  <div
+    class="grid lg:grid-cols-2 grid-cols-1 h-screen place-items-center kc-login-right-bg "
+  >
+    <div class="hidden lg:block">
+      <img src="../../../assets/images/bg/Asset_1_3.png" alt="" class="" />
+    </div>
+    <div class="w-full flex justify-center">
+      <div class="w-3/5 min-w-fit">
+        <mat-card class="kc-card kc-card-border border-dark-border space-y-6">
+          <div class="flex justify-center items-center">
+            <img src="../../../assets/images/logos/logo.png" alt="" class="" />
+          </div>
+          <div class="text-xl py-4">
+            <p class="font-bold">Welcome Back!</p>
+            <p>
+              <span class="font-bold">Sign in</span> with your credential below
+            </p>
+          </div>
+          <form [formGroup]="loginForm" (ngSubmit)="logIn()">
+            <div class="space-y-2">
+              <mat-form-field appearance="outline" class="kc-form w-full">
+                <mat-label class="text-dark-text">Email</mat-label>
+                <input
+                  type="email"
+                  class="border-dark-border"
+                  matInput
+                  placeholder="Ex. pat@example.com"
+                  formControlName="email"
+                />
+                <mat-error *ngIf="loginForm.get('email').errors?.required">
+                  We need an email address to log you in
+                </mat-error>
+                <mat-error *ngIf="loginForm.get('email').errors?.email">
+                  We need a valid email address to log you in
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="kc-form w-full">
+                <mat-label class="text-dark-text">Password</mat-label>
+                <input
+                  [type]="passwordHide ? 'password' : 'text'"
+                  class="border-dark-border"
+                  matInput
+                  placeholder="Ex. pat@example.com"
+                  formControlName="password"
+                />
+                <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{
+                  passwordHide ? "visibility_off" : "visibility"
+                  }}</mat-icon>
+                <mat-error *ngIf="loginForm.get('password').errors?.required">
+                  We need password to log you in
+                </mat-error>
+              </mat-form-field>
+              <div
 
-            <button
-              mat-button
-              class="kc-leading kc-button-primary text-lg h-16 w-full mt-8"
-              [disabled]="!loginForm.valid"
-            >
-              <span *ngIf="!isLoading; else progressbar">Sign In</span>
-              <ng-template #progressbar class="h-full w-full">
-                <div class="w-52 mx-auto">
-                  <mat-progress-bar
-                    class="kc-progress-bar"
-                    mode="indeterminate"
-                  >
-                  </mat-progress-bar>
-                </div>
-              </ng-template>
-            </button>
+                class="flex justify-end font-bold pb-4"
+              ><a routerLink="/auth/forgot-password">Forgot Password?</a></div>
+
+              <button
+                mat-button
+                class="kc-leading kc-button-primary text-lg h-16 w-full mt-8"
+                [disabled]="!loginForm.valid"
+              >
+                <span *ngIf="!isLoading; else progressbar">Sign In</span>
+                <ng-template #progressbar class="h-full w-full">
+                  <div class="w-52 mx-auto">
+                    <mat-progress-bar
+                      class="kc-progress-bar"
+                      mode="indeterminate"
+                    >
+                    </mat-progress-bar>
+                  </div>
+                </ng-template>
+              </button>
+            </div>
+          </form>
+          <div class="flex justify-between items-center">
+            <div class="h-0.5 w-full bg-white"></div>
+            <p class="mx-4">Or</p>
+            <div class="h-0.5 w-full bg-white"></div>
           </div>
-        </form>
-        <div class="flex justify-between items-center">
-          <div class="h-0.5 w-full bg-white"></div>
-          <p class="mx-4">Or</p>
-          <div class="h-0.5 w-full bg-white"></div>
-        </div>
-        <div class="flex justify-center text-center">
-          <div class="text-lg space-y-1.5">
-            <p>Don't have an account?</p>
-            <a routerLink="/auth/register" class="font-bold"
+          <div class="flex justify-center text-center">
+            <div class="text-lg space-y-1.5">
+              <p>Don't have an account?</p>
+              <a routerLink="/auth/register" class="font-bold"
               >Create an account</a
-            >
+              >
+            </div>
           </div>
-        </div>
-      </mat-card>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>
