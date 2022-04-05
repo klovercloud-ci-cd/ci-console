@@ -13,16 +13,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [AddCompanyModalComponent, DashboardIndexComponent],
-  imports: [
-    CommonModule,
-    DashboardRoutingModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatExpansionModule,
-    FlexLayoutModule,
-  ],
+    imports: [
+        CommonModule,
+        DashboardRoutingModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatExpansionModule,
+        FlexLayoutModule,
+    ],
   exports: [],
 })
 export class DashboardModule {}

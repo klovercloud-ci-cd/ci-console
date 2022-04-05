@@ -1,0 +1,21 @@
+<mat-card class="kc-card m-4 relative" id = "holder">
+  <svg class="absolute h-full w-full " >
+    <line x1="17.5" y1="17.5" x2="17.5" y2="73.5" style="stroke:rgb(255,0,0);stroke-width:2" />
+  </svg>
+  <svg class="absolute h-full w-full" >
+    <line x1="17.5" y1="73.5" x2="17.5" y2="129.5" style="stroke:rgb(255,0,0);stroke-width:2" />
+  </svg>
+  <svg class="absolute h-full w-full" >
+    <line x1="17.5" y1="17.5" x2="17.5" y2="73.5" style="stroke:rgb(255,0,0);stroke-width:2" />
+  </svg>
+
+  <div *ngFor="let x of datapipeline" class="">
+    <div id="{{x.name}}" class="h-10 w-10 bg-dark-primary rounded-full z-20">
+    </div>
+    <div class="mb-4">
+
+    </div>
+  </div>
+
+
+</mat-card>

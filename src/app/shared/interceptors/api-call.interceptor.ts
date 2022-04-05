@@ -11,6 +11,7 @@ import {catchError, map, Observable, throwError} from 'rxjs';
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {TokenService} from "../../auth/token.service";
+import jwt_decode from "jwt-decode";
 
 @Injectable()
 export class ApiCallInterceptor implements HttpInterceptor {
@@ -44,8 +45,15 @@ export class ApiCallInterceptor implements HttpInterceptor {
         if(event instanceof HttpResponse) {
           console.log("event => ", event)
           setTimeout(()=>{
-            if (this.tokenService.getAccessToken() && !ApiCallInterceptor.refreshTokenInterval) {
-              ApiCallInterceptor.refreshTokenInterval = setInterval(() => {
+            if (this.tokenService.getAccessToken() && !this.authService.refreshTokenInterval) {
+              const jwtToken = this.tokenService.getAccessToken();
+              let jwt_data:any;
+              if (jwtToken != null) {
+                jwt_data = jwt_decode(jwtToken)
+              }
+              const expires = new Date( parseInt(jwt_data.exp) * 1000 )
+              const timeout = expires.getTime() - Date.now() - (60 * 1000);
+              this.authService.refreshTokenInterval = setInterval(() => {
                 if (this.authService.isAccessTokenExpired(this.tokenService.getAccessToken())) {
                   this.authService.refreshToken({
                     refresh_token: this.tokenService.getRefreshToken(),
@@ -53,7 +61,7 @@ export class ApiCallInterceptor implements HttpInterceptor {
                     AuthService.log(res);
                   });
                 }
-              }, 240000);
+              }, timeout);
             }
           }, 500);
         }
