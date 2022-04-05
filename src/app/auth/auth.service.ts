@@ -51,7 +51,7 @@ export class AuthService {
 
   login(loginPayload: any): Observable<any> {
     HTTP_OPTIONS.params = {
-      action: 'attach_company',
+      grant_type: 'password',
     };
     return this.http
       .post(BASE_URL + endpoints.LOGIN, loginPayload, HTTP_OPTIONS)

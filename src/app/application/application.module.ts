@@ -9,9 +9,14 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ApplicationPipelineComponent } from './application-pipeline/application-pipeline.component';
 
 @NgModule({
-  declarations: [ApplicationListComponent, ApplicationListComponent],
+  declarations: [
+    ApplicationListComponent,
+    ApplicationListComponent,
+    ApplicationPipelineComponent,
+  ],
   imports: [
     CommonModule,
     ApplicationRoutingModule,

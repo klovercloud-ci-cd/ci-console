@@ -17,7 +17,7 @@ const childrenRoutes: Routes = [
       import('./example/example.module').then((m) => m.ExampleModule),
   },
   {
-    path: 'app-list',
+    path: 'app',
     loadChildren: () =>
       import('./application/application.module').then(
         (m) => m.ApplicationModule

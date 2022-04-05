@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./example-list.component.scss'],
 })
 export class ExampleListComponent implements OnInit {
+  color: number = 1;
   constructor() {}
 
   ngOnInit(): void {}
