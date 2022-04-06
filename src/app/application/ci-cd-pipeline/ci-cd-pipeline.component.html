@@ -1,21 +1,46 @@
-<mat-card class="kc-card m-4 relative" id = "holder">
-  <svg class="absolute h-full w-full " >
-    <line x1="17.5" y1="17.5" x2="17.5" y2="73.5" style="stroke:rgb(255,0,0);stroke-width:2" />
-  </svg>
-  <svg class="absolute h-full w-full" >
-    <line x1="17.5" y1="73.5" x2="17.5" y2="129.5" style="stroke:rgb(255,0,0);stroke-width:2" />
-  </svg>
-  <svg class="absolute h-full w-full" >
-    <line x1="17.5" y1="17.5" x2="17.5" y2="73.5" style="stroke:rgb(255,0,0);stroke-width:2" />
-  </svg>
+<!--<mat-card class="kc-card m-4" id = "holder">
 
-  <div *ngFor="let x of datapipeline" class="">
-    <div id="{{x.name}}" class="h-10 w-10 bg-dark-primary rounded-full z-20">
-    </div>
-    <div class="mb-4">
-
+  <div class="  h-full w-full flex flex-col gap-4 z-10">
+    <div *ngFor="let x of datapipeline" class="">
+      <div id="{{x.name}}" class="h-10 w-10 bg-dark-primary rounded-full z-20">
+      </div>
     </div>
   </div>
+    <svg class="absolute h-full w-full top-0">
+      <line class="-z-20" x1="19.5" y1="56" x2="19.5" y2="72" style="stroke:rgb(255,0,0);stroke-width:4" />
+      <line class="" x1="19.5" y1="112" x2="19.5" y2="128" style="stroke:rgb(255,0,0);stroke-width:4" />
+    </svg>
+</mat-card>-->
+<!--<mat-card class="kc-card m-4" id = "holder">
 
+  <div id="nodeContainer" class="h-full w-full">
+    <div *ngFor="let x of datapipeline">
+      <div *ngIf="x.next !== null">
+        <ng-container *ngIf="x.next.length> 1;else third">
+          <div class="flex gap-14">
+            <div *ngFor="let nextPipeName of x.next">
 
+              <div class="w-14 h-14 bg-dark-primary rounded-full">
+              </div>
+              {{nextPipeName}}
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #third>
+          {{x.name}}
+          <div class="w-14 h-14 bg-dark-primary rounded-full"></div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+ &lt;!&ndash; <svg class="absolute h-full w-full top-0">
+    <line class="-z-20" x1="19.5" y1="56" x2="19.5" y2="72" style="stroke:rgb(255,0,0);stroke-width:4" />
+    <line class="" x1="19.5" y1="112" x2="19.5" y2="128" style="stroke:rgb(255,0,0);stroke-width:4" />
+  </svg>&ndash;&gt;
+</mat-card>-->
+<mat-card class="kc-card m-4" id ="holder">
+
+  <div id="nodeContainer" class="h-full w-full  space-y-4">
+  </div>
+  <svg class="absolute h-full w-full top-0 z-50" id="lines"></svg>
 </mat-card>
