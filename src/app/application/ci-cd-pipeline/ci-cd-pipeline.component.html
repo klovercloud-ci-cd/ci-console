@@ -1,46 +1,66 @@
-<!--<mat-card class="kc-card m-4" id = "holder">
 
-  <div class="  h-full w-full flex flex-col gap-4 z-10">
-    <div *ngFor="let x of datapipeline" class="">
-      <div id="{{x.name}}" class="h-10 w-10 bg-dark-primary rounded-full z-20">
-      </div>
+<!--<mat-card class="kc-card m-4 relative" id ="holder">
+
+    <div id="nodeContainer" class="h-full w-full flex items-center gap-x-8">
     </div>
-  </div>
-    <svg class="absolute h-full w-full top-0">
-      <line class="-z-20" x1="19.5" y1="56" x2="19.5" y2="72" style="stroke:rgb(255,0,0);stroke-width:4" />
-      <line class="" x1="19.5" y1="112" x2="19.5" y2="128" style="stroke:rgb(255,0,0);stroke-width:4" />
+  <svg class="absolute h-full w-full top-0" id="lines">
+    <defs>
+      <marker id="triangle" viewBox="0 0 10 10"
+              refX="1" refY="5"
+              markerUnits="strokeWidth"
+              markerWidth="2" markerHeight="2"
+              orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#f00"/>
+      </marker>
+    </defs>
+    &lt;!&ndash;<line x1="50.828125" y1="133.828125" x2="159.5" y2="78.5" stroke-width="5" stroke="gray"></line>&ndash;&gt;
+    &lt;!&ndash;<polyline fill="none" stroke="black" stroke-width="5"
+              points="50.828125 133.828125,159.5 78.5" marker-end="url(#triangle)"/>&ndash;&gt;
+  </svg>
+
+
+</mat-card>-->
+
+<mat-card class="kc-card m-4 relative" id ="holder">
+<span class="">
+    <svg id="diagramSvg" xmlns="http://www.w3.org/2000/svg" class="relative h-[10vh] w-[100vw] overflow-scroll">
+      <style id="stylesheet">
+      text {
+        text-anchor: middle;
+        font-size: small;
+        font-weight: bold;
+      }
+
+      rect {
+        fill: aqua;
+        stroke: black;
+        opacity: 0.5;
+        stroke-width: .2;
+        rx: 50;
+      }
+      rect:hover{
+        fill: #3d8fa8;
+      }
+
+      line {
+        stroke: gray;
+        opacity: 1;
+        stroke-width: 5;
+      }
+      </style>
+      <defs>
+          <marker id="arrowHead" viewBox="0 0 10 10"
+                  refX="7" refY="5"
+                  markerUnits="strokeWidth"
+                  markerWidth="4" markerHeight="4"
+                  orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="gray"/>
+      </marker>
+      </defs>
+      <g id="diagramGroup" class="absolute
+">
+      </g>
     </svg>
-</mat-card>-->
-<!--<mat-card class="kc-card m-4" id = "holder">
 
-  <div id="nodeContainer" class="h-full w-full">
-    <div *ngFor="let x of datapipeline">
-      <div *ngIf="x.next !== null">
-        <ng-container *ngIf="x.next.length> 1;else third">
-          <div class="flex gap-14">
-            <div *ngFor="let nextPipeName of x.next">
-
-              <div class="w-14 h-14 bg-dark-primary rounded-full">
-              </div>
-              {{nextPipeName}}
-            </div>
-          </div>
-        </ng-container>
-        <ng-template #third>
-          {{x.name}}
-          <div class="w-14 h-14 bg-dark-primary rounded-full"></div>
-        </ng-template>
-      </div>
-    </div>
-  </div>
- &lt;!&ndash; <svg class="absolute h-full w-full top-0">
-    <line class="-z-20" x1="19.5" y1="56" x2="19.5" y2="72" style="stroke:rgb(255,0,0);stroke-width:4" />
-    <line class="" x1="19.5" y1="112" x2="19.5" y2="128" style="stroke:rgb(255,0,0);stroke-width:4" />
-  </svg>&ndash;&gt;
-</mat-card>-->
-<mat-card class="kc-card m-4" id ="holder">
-
-  <div id="nodeContainer" class="h-full w-full  space-y-4">
-  </div>
-  <svg class="absolute h-full w-full top-0 z-50" id="lines"></svg>
+  </span>
 </mat-card>

@@ -1,4 +1,5 @@
 {
+
   "pipeline": {
     "metadata": {
       "companyid": "a4807912-1f40-490b-b3a4-07587ac370eb",
@@ -39,10 +40,8 @@
           "args_from_configmaps": "tekton/cm-test"
         },
         "next": [
-          "build1",
-          "build2",
-          "build3",
-          "next1"
+          "interstep",
+          "next"
         ],
         "argdata": {
           "key3": "value1",
@@ -54,7 +53,7 @@
         "descriptors": null
       },
       {
-        "name": "build1",
+        "name": "next",
         "type": "BUILD",
         "status": "",
         "trigger": "AUTO",
@@ -69,7 +68,7 @@
           "args_from_configmaps": "tekton/cm-test"
         },
         "next": [
-          "jenkinsjob"
+          "hello"
         ],
         "argdata": {
           "key3": "value1",
@@ -81,128 +80,90 @@
         "descriptors": null
       },
       {
-        "name": "build2",
-        "type": "BUILD",
+        "name": "interstep",
+        "type": "INTERMEDIARY",
         "status": "",
         "trigger": "AUTO",
         "params": {
-          "images": "shabrul2451/test-dev:master,shabrul2451/test-pro:master",
-          "repository_type": "git",
-          "revision": "34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
+          "envs_from_configmaps": "tekton/cm-test",
+          "envs_from_secrets": "tekton/cm-test",
+          "images": "ubuntu:latest",
+          "revision": "latest",
           "service_account": "test-sa",
-          "storage": "500Mi",
-          "url": "https://github.com/shabrul2451/test-app",
-          "args": "key3:value1,key4:value2",
-          "args_from_configmaps": "tekton/cm-test"
+          "command": "echo",
+          "command_args": "Hello World",
+          "envs": "key3:value1,key4:value2"
         },
         "next": [
-          "jenkinsjob"
+          "deployDev"
         ],
         "argdata": {
-          "key3": "value1",
-          "key4": "value2"
+
         },
         "envdata": {
-
+          "key3": "value1",
+          "key4": "value2"
         },
         "descriptors": null
       },
       {
-        "name": "build3",
-        "type": "BUILD",
+        "name": "deployDev",
+        "type": "DEPLOY",
         "status": "",
         "trigger": "AUTO",
         "params": {
-          "images": "shabrul2451/test-dev:master,shabrul2451/test-pro:master",
-          "repository_type": "git",
-          "revision": "34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
-          "service_account": "test-sa",
-          "storage": "500Mi",
-          "url": "https://github.com/shabrul2451/test-app",
-          "args": "key3:value1,key4:value2",
-          "args_from_configmaps": "tekton/cm-test"
+          "agent": "local_agent",
+          "env": "dev",
+          "images": "shabrul2451/test-dev:34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
+          "name": "ubuntu",
+          "namespace": "default",
+          "revision": "master",
+          "type": "deployment"
         },
         "next": [
-          "jenkinsjob"
+          "jenkinsJob"
         ],
         "argdata": {
-          "key3": "value1",
-          "key4": "value2"
+
         },
         "envdata": {
 
         },
-        "descriptors": null
+        "descriptors": [
+          {
+            "object": {
+              "apiVersion": "v1",
+              "data": {
+                "game.properties": "enemy.types=aliens,monsters\nplayer.maximum-lives=5\n",
+                "player_initial_lives": "3",
+                "ui_properties_file_name": "user-interface.properties",
+                "user-interface.properties": "color.good=purple\ncolor.bad=yellow\nallow.textmode=true\n"
+              },
+              "kind": "ConfigMap",
+              "metadata": {
+                "name": "game-demo3"
+              }
+            }
+          },
+          {
+            "object": {
+              "apiVersion": "v1",
+              "data": {
+                "ui_properties_file_name": "user-interface.properties",
+                "user-interface.properties": "color.good=purple\ncolor.bad=yellow\nallow.textmode=true\n",
+                "game.properties": "enemy.types=aliens,monsters\nplayer.maximum-lives=5\n",
+                "player_initial_lives": "3"
+              },
+              "kind": "ConfigMap",
+              "metadata": {
+                "name": "game-demo2"
+              }
+            }
+          }
+        ]
       },
       {
         "name": "jenkinsjob",
-        "type": "JENKINS_JOB",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "job": "new",
-          "params": "id:123,verbosity:high",
-          "secret": "jenkins-credentials",
-          "url": "http://jenkins.default.svc:8080"
-        },
-        "next": [
-          "next1",
-          "next2"
-        ],
-        "argdata": {
-
-        },
-        "envdata": {
-
-        },
-        "descriptors": null
-      },
-      {
-        "name": "next1",
-        "type": "JENKINS_JOB",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "job": "new",
-          "params": "id:123,verbosity:high",
-          "secret": "jenkins-credentials",
-          "url": "http://jenkins.default.svc:8080"
-        },
-        "next": [
-          "final"
-        ],
-        "argdata": {
-
-        },
-        "envdata": {
-
-        },
-        "descriptors": null
-      },
-      {
-        "name": "next2",
-        "type": "JENKINS_JOB",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "job": "new",
-          "params": "id:123,verbosity:high",
-          "secret": "jenkins-credentials",
-          "url": "http://jenkins.default.svc:8080"
-        },
-        "next": [
-          "final"
-        ],
-        "argdata": {
-
-        },
-        "envdata": {
-
-        },
-        "descriptors": null
-      },
-      {
-        "name": "final",
         "type": "JENKINS_JOB",
         "status": "",
         "trigger": "AUTO",

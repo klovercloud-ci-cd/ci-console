@@ -1,68 +1,144 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import data from './demo.json'
+import {DrawDiagram} from './drawDiagram'
+const draw = new DrawDiagram()
 @Component({
   selector: 'kcci-ci-cd-pipeline',
   templateUrl: './ci-cd-pipeline.component.html',
   styleUrls: ['./ci-cd-pipeline.component.scss']
 })
 export class CiCdPipelineComponent implements OnInit,AfterViewInit {
-  datapipeline =  data.pipeline.steps
+  dataPipeLine =  data.pipeline.steps
   completeNodeDraw : string[]  = []
 
   constructor() { }
-  drawNode(){
+
+  drawNodeNew(){
+
+    //main container
     const nodeContainer = document.getElementById('nodeContainer');
-    const singleNodeDiv = document.createElement('div')
-    for(let x of this.datapipeline){
-      if (x.next !== null){// null == end node//if not the end node
-        if (x.next.length !== 1){// for multiple nex node
-          if (this.completeNodeDraw.find(element => element === x.name)){
-            //
-          }else{
-            const nullNode = document.createElement('div')
-            nullNode.setAttribute("class", "w-14 h-14 bg-green-700 rounded-full")
-            nullNode.setAttribute("id", x.name)
-            // @ts-ignore
-            nodeContainer.appendChild(nullNode)
-            this.completeNodeDraw.push(x.name)
 
-          }
-
-          const multiNodeDiv = document.createElement('div')
-          multiNodeDiv.setAttribute('class','flex gap-4')
-          for(let nextPipeName of x.next){
-            if (this.completeNodeDraw.find(element => element === nextPipeName)){
-              //do something
-            }
-            else {
-              const multiNode = document.createElement('div')
-              multiNode.setAttribute("class", "w-14 h-14 bg-red-700 rounded-full")
-              multiNode.setAttribute("id", nextPipeName)
-              multiNodeDiv.appendChild(multiNode)
-              this.completeNodeDraw.push(nextPipeName)
-              //console.log(nextPipeName)
-            }
-          }
-          // @ts-ignore
-          nodeContainer.appendChild(multiNodeDiv)
-        }
+    for(let pipeLine of this.dataPipeLine) {
+      if (pipeLine.next !== null) {
         // @ts-ignore
-        nodeContainer.appendChild(singleNodeDiv)
+        if (!this.completeNodeDraw.find(element => element === pipeLine.name)){
+
+            //single node div container
+            const singleContainer = document.createElement('div')
+
+          if (pipeLine.name ==='build'){
+            singleContainer.setAttribute('class','flex justify-center')
+
+          }
+          else {
+            singleContainer.setAttribute('class','flex justify-center my-24')
+          }
+
+            //creating single node div
+            const singleNode = document.createElement('div')
+            singleNode.setAttribute('class','h-10 w-10 bg-dark-primary rounded-full relative')
+
+            //creating single node entry pointer
+            if (pipeLine.name !=='build'){
+              const singleNodeEntry = document.createElement('div')
+              singleNodeEntry.setAttribute('class','absolute h-5 w-5 bg-gray-400 rounded-full top-1/3 -left-1/3')
+              singleNodeEntry.setAttribute('id','entry_'+pipeLine.name)
+              //appending entry pointer to the node
+              singleNode.appendChild(singleNodeEntry)
+            }
+            //creating exit point
+          const singleNodeExit = document.createElement('div')
+          singleNodeExit.setAttribute('class','absolute h-5 w-5 bg-gray-400 rounded-full top-1/3 -right-1/3')
+          singleNodeExit.setAttribute('id','exit_'+pipeLine.name)
+          //appending entry pointer to the node
+          singleNode.appendChild(singleNodeExit)
+
+            //appending null node to null container
+            singleContainer.appendChild(singleNode)
+
+            //appending null to main container
+            // @ts-ignore
+            nodeContainer.appendChild(singleContainer)
+
+            //keep track of done node
+            this.completeNodeDraw.push(pipeLine.name)
 
 
-      }
-      else{// this is for end node
-        if (this.completeNodeDraw.find(element => element === x.name)){
-          //do something
+
+            //creating multiple next node container
+            const multiNextNode = document.createElement('div')
+            multiNextNode.setAttribute("class", "flex justify-center mx-24")
+
+            //creatinng flex container for multi node
+            const flexBoxMultiNode = document.createElement('div')
+            flexBoxMultiNode.setAttribute('class','flex flex-col gap-16')
+
+            for(let nextPipeName of pipeLine.next){
+              //creting multi nodes
+              const multiNode = document.createElement('div')
+              multiNode.setAttribute("class", "h-10 w-10 bg-dark-primary rounded-full relative")
+
+              //creating exit point
+              const multiNodeExit = document.createElement('div')
+              multiNodeExit.setAttribute('class','absolute h-5 w-5 bg-gray-400 rounded-full top-1/4 -right-1/4')
+              multiNodeExit.setAttribute('marker-end','url(#triangle)')
+              multiNodeExit.setAttribute('id','exit_'+nextPipeName)
+
+              //appending entry pointer to the node
+              multiNode.appendChild(multiNodeExit)
+
+              //creating exit point
+              const multiNodeEnty = document.createElement('div')
+              multiNodeEnty.setAttribute('class','absolute h-5 w-5 bg-gray-400 rounded-full top-1/4 -left-1/4')
+              multiNodeEnty.setAttribute('id','entry_'+nextPipeName)
+
+              //appending entry pointer to the node
+              multiNode.appendChild(multiNodeEnty)
+
+              //appending multi nodes to flex box
+              flexBoxMultiNode.appendChild(multiNode)
+
+              //keep track of done node
+              this.completeNodeDraw.push(nextPipeName)
+            }
+
+            //flex box appending
+            multiNextNode.appendChild(flexBoxMultiNode)
+
+            //appending multiple to main container
+            // @ts-ignore
+            nodeContainer.appendChild(multiNextNode)
+
         }
-        else{
+      }
+      else {
+        if (!this.completeNodeDraw.find(element => element === pipeLine.name)){
+          //create null div container
+          const nullContainer = document.createElement('div')
+          nullContainer.setAttribute('class','flex justify-center')
+
+          //creating null node div
           const nullNode = document.createElement('div')
-          nullNode.setAttribute("class", "w-14 h-14 bg-yellow-700 rounded-full")
-          nullNode.setAttribute("id", x.name)
+          nullNode.setAttribute('class','h-10 w-10 bg-dark-primary rounded-full relative')
+
+          //creating null node entry pointer
+          const nullNodeEntry = document.createElement('div')
+          nullNodeEntry.setAttribute('class','absolute h-5 w-5 bg-gray-400 rounded-full top-1/3 -left-1/3')
+          nullNodeEntry.setAttribute('id','entry_'+pipeLine.name)
+
+          //appending entry pointer to the node
+          nullNode.appendChild(nullNodeEntry)
+
+          //appending null node to null container
+          nullContainer.appendChild(nullNode)
+
+          //appending null to main container
           // @ts-ignore
-          nodeContainer.appendChild(nullNode)
-          this.completeNodeDraw.push(x.name)
-          //console.log(x.name)
+          nodeContainer.appendChild(nullContainer)
+
+          //keep track of done node
+          this.completeNodeDraw.push(pipeLine.name)
+
         }
       }
     }
@@ -71,34 +147,30 @@ export class CiCdPipelineComponent implements OnInit,AfterViewInit {
 
   drowLines(){
     const svg = document.getElementById('lines')
-    for (let pipeline of this.datapipeline){
-      const mainNode = document.getElementById(pipeline.name)
-      const mainNodeOffset = this.getOffset(mainNode)
-      //console.log(pipeline.name)
+    for (let pipeline of this.dataPipeLine){
+      const exitNode = document.getElementById('exit_'+pipeline.name)
+      const exitNodeOffset = this.getOffset(exitNode)
+      //console.log(exitNodeOffset)
       if (pipeline.next !==null){
 
-          for (let next of pipeline.next){
-            setTimeout(()=>{
-              const nextNode = document.getElementById(next)
-              const nextNodeOffset = this.getOffset(nextNode)
-              const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-              line.setAttribute('x1',String(mainNodeOffset.x))
-              line.setAttribute('y1',String(mainNodeOffset.y))
-              line.setAttribute('x2',String(nextNodeOffset.x))
-              line.setAttribute('y2',String(nextNodeOffset.y))
-              line.setAttribute("stroke-width",'5')
-              line.setAttribute("stroke",'red')
-              // @ts-ignore
-              svg.appendChild(line);
-              //console.log('__'+next)
-            })
-          }
+        for (let next of pipeline.next) {
+          const nextNodeEntry = document.getElementById('entry_'+next)
+          const nextNodeOffsetEntry = this.getOffset(nextNodeEntry)
+
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute('x1',String(exitNodeOffset.x))
+          line.setAttribute('y1',String(exitNodeOffset.y+7))
+          line.setAttribute('x2',String(nextNodeOffsetEntry.x-16))
+          line.setAttribute('y2',String(nextNodeOffsetEntry.y+7))
+          line.setAttribute("stroke-width",'5')
+          line.setAttribute("stroke",'gray')
+          // @ts-ignore
+          svg.appendChild(line);
+          //console.log(nextNodeOffsetEntry)
         }
-        //console.log(pipeline.next)
+
       }
-
-
-
+    }
   }
 
   getOffset(el: any) {
@@ -117,11 +189,44 @@ export class CiCdPipelineComponent implements OnInit,AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
-
     setTimeout(()=>{
-      this.drawNode()
-      this.drowLines()
-    })
+      //this.drawNodeNew()
+      //this.drowLines()
+      const arr = [
+        'a',
+        ' b',
+        '  b',
+        '  b',
+        '    b',
+        '     b',
+        '  b',
+        '  b',
+        '  b',
+        '   b',
+        '    b',
+        '     b',
+        '     b',
+        '     b',
+        '     b',
+        '   b',
+        '    b',
+        '     b',
+        '      b',
+        '      b',
+        '       b',
+        '        b',
+
+      ]
+
+      const tree = draw.textToTree(arr);
+      const diagramSvg = document.getElementById("diagramSvg");
+      const diagramGroup = document.getElementById("diagramGroup");
+
+      // @ts-ignore
+      draw.clear(diagramGroup);
+
+      // @ts-ignore
+      draw.treeToDiagram(tree, diagramSvg, diagramGroup);
+    },100)
   }
 }
