@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 
 @Component({
   selector: 'app-layout',
@@ -9,11 +10,21 @@ import { Router } from '@angular/router';
 export class LayoutComponent implements OnInit {
   showFiller = true;
   pageTitle: string = '';
-  constructor(private router: Router) {}
+  data: any = {
+    title: 'KloverCloud'
+  };
+  collapsed:boolean=false;
+
+  constructor(private router: Router,
+    private toolbarService: ToolbarService,) {}
 
   ngOnInit(): void {
-    console.log(this.router.url.substring(1));
-
-    this.pageTitle = this.router.url.substring(1);
+    this.toolbarService.currentData.subscribe(currentData => this.data = currentData);
   }
+
+
+  toggleCollapse(){
+   this.collapsed = !this.collapsed;
+  }
+
 }

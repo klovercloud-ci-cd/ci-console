@@ -16,7 +16,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CompanyModule } from './company/company.module';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { MAT_RIPPLE_GLOBAL_OPTIONS, RippleGlobalOptions } from '@angular/material/core';
 
+const globalRippleConfig: RippleGlobalOptions = {
+  animation: {
+    enterDuration: 600,
+    exitDuration: 0
+  }
+};
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -34,6 +42,7 @@ import { CompanyModule } from './company/company.module';
     MatFormFieldModule,
     MatInputModule,
     CompanyModule,
+    LoadingBarModule,
   ],
   providers: [
     {
@@ -41,6 +50,7 @@ import { CompanyModule } from './company/company.module';
       useClass: ApiCallInterceptor,
       multi: true,
     },
+    {provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: globalRippleConfig}
   ],
   bootstrap: [AppComponent],
 })

@@ -1,26 +1,33 @@
 <div>
   <div
     routerLink=""
-    class="p-7 flex text-white justify-center items-center gap-x-4 cursor-pointer"
+    class="px-6 py-7  gap-x-4 cursor-pointer"
   >
     <img class="w-[175px]" src="../../../../assets/images/logos/logo.png" />
   </div>
 
   <ul>
     <li
-      routerLink=""
-      class="px-8 py-3 text-sm hover:bg-[#0f172a] hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
+    matRipple
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact:true}"
+      class="px-6 py-3 text-sm hover:bg-[#0f172a]  hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
     >
       <div class="flex gap-x-4">
         <div>
           <mat-icon>dashboard</mat-icon>
         </div>
         <div>Dashboard</div>
+        
       </div>
     </li>
     <li
+    matRipple
       routerLink="/app/list"
-      class="px-8 py-3 text-sm hover:bg-[#0f172a] hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact:true}"
+      class="px-6 py-3 text-sm hover:bg-[#0f172a] hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
     >
       <div class="flex gap-x-4">
         <div>
@@ -30,8 +37,11 @@
       </div>
     </li>
     <li
+    matRipple
       routerLink="/app/pipe"
-      class="px-8 py-3 text-sm hover:bg-[#0f172a] hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact:true}"
+      class="px-6 py-3 text-sm hover:bg-[#0f172a] hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
     >
       <div class="flex gap-x-4">
         <div>
@@ -41,8 +51,11 @@
       </div>
     </li>
     <li
+    matRipple
       routerLink="attach-company"
-      class="px-8 py-3 text-sm hover:bg-[#0f172a] hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact:true}"
+      class="px-6 py-3 text-sm hover:bg-[#0f172a] hover:text-dark-slider-color text-white transition duration-100 cursor-pointer"
     >
       <div class="flex gap-x-4">
         <div>

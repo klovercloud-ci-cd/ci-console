@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { AttachCompanyService } from '../attach-company.service';
 
 interface RepoType {
@@ -34,10 +35,12 @@ export class AddCompanyComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private attachCompanyService: AttachCompanyService
+    private attachCompanyService: AttachCompanyService,private _toolbarService: ToolbarService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._toolbarService.changeData({ title: 'Attach Company' });
+  }
 
   // ----------------- Where it all began -----------------
 

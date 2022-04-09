@@ -3,14 +3,13 @@
   @apply flex justify-center items-center;
 }
 .registration-form {
-  @apply w-[85vw] h-full text-dark-text;
+  min-height: 80vh;
+  @apply w-full h-full text-dark-text mx-7;
   background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
 }
-
 .form-title {
   @apply text-2xl uppercase;
 }
-
 .text-instruction {
   @apply text-gray-300 py-4;
 }

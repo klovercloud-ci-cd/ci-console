@@ -1,21 +1,40 @@
-<mat-card class="kc-card m-4 relative" id = "holder">
-  <svg class="absolute h-full w-full " >
-    <line x1="17.5" y1="17.5" x2="17.5" y2="73.5" style="stroke:rgb(255,0,0);stroke-width:2" />
-  </svg>
-  <svg class="absolute h-full w-full" >
-    <line x1="17.5" y1="73.5" x2="17.5" y2="129.5" style="stroke:rgb(255,0,0);stroke-width:2" />
-  </svg>
-  <svg class="absolute h-full w-full" >
-    <line x1="17.5" y1="17.5" x2="17.5" y2="73.5" style="stroke:rgb(255,0,0);stroke-width:2" />
+<div>
+<mat-card class="kc-card min-h-[85vh] w-[80vw] mx-auto relative" id="holder">
+  <svg class="absolute h-full w-full">
+    <line
+      x1="19.5"
+      y1="40"
+      x2="19.5"
+      y2="64"
+      style="stroke: rgb(255, 0, 0); stroke-width: 2"
+    />
   </svg>
 
-  <div *ngFor="let x of datapipeline" class="">
-    <div id="{{x.name}}" class="h-10 w-10 bg-dark-primary rounded-full z-20">
-    </div>
-    <div class="mb-4">
+  <svg class="absolute h-full w-full">
+    <line
+      x1="19.5"
+      y1="104"
+      x2="19.5"
+      y2="128"
+      style="stroke: rgb(255, 0, 0); stroke-width: 2"
+    />
+  </svg>
+  <svg class="absolute h-full w-full">
+    <line
+      x1="19.5"
+      y1="168"
+      x2="19.5"
+      y2="192"
+      style="stroke: rgb(255, 0, 0); stroke-width: 2"
+    />
+  </svg>
 
-    </div>
+  <div
+    *ngFor="let x of datapipeline"
+    id="{{ x.name }}"
+    class="h-10 w-10 bg-dark-primary rounded-full mb-6"
+  >
+    {{ x.name }}
   </div>
-
-
 </mat-card>
+</div>

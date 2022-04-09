@@ -1,33 +1,35 @@
-<div class="">
-  <div class="w-screen bg-dark-background-5 mx-auto container">
+<div>
+<div class="w-full overflow-x-auto mx-auto ">
+  <div class="mx-7 my-5 bg-dark-background-5 ">
     <div class="search-container flex items-center justify-between px-6 py-5">
       <div>
-        <h1 class="text-base font-semibold">All Applications</h1>
+        <h1 class="text-base font-semibold tracking-wide">Application List</h1>
       </div>
       <div>
         <input
-          class="block rounded-3xl py-3 pl-5 bg-dark-border-form border-[.5px] border-dark-border-default outline-none"
-          matInput
+          class="w-[200px] md:w-[250px] xl:w-[300px] block rounded-3xl py-3 pl-5 bg-dark-border-form border-[.5px] border-dark-border-default outline-none"
+          
           placeholder="search"
           autocomplete="off"
           (keyup)="filterData($event)"
         />
       </div>
     </div>
-    <div class="">
+
+    <div  class="">
       <table
         mat-table
         matSort
         [dataSource]="dataSource"
-        class="mat-elevation-z8 bg-transparent"
+        class="mat-elevation-z8 bg-transparent overflow-x-scroll md:overflow-x-hidden"
       >
         <ng-container matColumnDef="name">
           <th mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          <td mat-cell *matCellDef="let element" class="px-10">{{ element.name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="username">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>Label</th>
+          <th mat-header-cell  *matHeaderCellDef>Label</th>
           <td mat-cell *matCellDef="let element">{{ element.username }}</td>
         </ng-container>
 
@@ -44,8 +46,8 @@
           <td mat-cell *matCellDef="let element">{{ element.website }}</td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"  ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-[#1A2C4A] transition duration-100"></tr>
       </table>
       <!-- <mat-paginator
         class="bg-transparent"
@@ -55,9 +57,10 @@
       >
       </mat-paginator> -->
     </div>
-
-    <div *ngIf="isLoading" class="uploader-status flex justify-center p-5">
+    
+    <div *ngIf="isLoading" class="uploader-status  p-5">
       <mat-spinner [diameter]="50"></mat-spinner>
     </div>
   </div>
+</div>
 </div>

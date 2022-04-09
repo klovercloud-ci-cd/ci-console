@@ -15,6 +15,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTreeModule } from '@angular/material/tree';
 
 import { MatRippleModule } from '@angular/material/core';
+import { ProgressBarModule } from 'src/app/progress-bar/progress-bar.module';
 
 @NgModule({
   declarations: [LayoutComponent, HeaderComponent, SidebarComponent],
@@ -31,6 +32,9 @@ import { MatRippleModule } from '@angular/material/core';
     MatExpansionModule,
     MatTreeModule,
     MatRippleModule,
+    ProgressBarModule,
+    
+    
   ],
   exports: [LayoutComponent, HeaderComponent, SidebarComponent],
 })
