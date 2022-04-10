@@ -1,40 +1,67 @@
+
+<!--<mat-card class="kc-card m-4 relative" id ="holder">
+
+    <div id="nodeContainer" class="h-full w-full flex items-center gap-x-8">
+    </div>
+  <svg class="absolute h-full w-full top-0" id="lines">
+    <defs>
+      <marker id="triangle" viewBox="0 0 10 10"
+              refX="1" refY="5"
+              markerUnits="strokeWidth"
+              markerWidth="2" markerHeight="2"
+              orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#f00"/>
+      </marker>
+    </defs>
+    &lt;!&ndash;<line x1="50.828125" y1="133.828125" x2="159.5" y2="78.5" stroke-width="5" stroke="gray"></line>&ndash;&gt;
+    &lt;!&ndash;<polyline fill="none" stroke="black" stroke-width="5"
+              points="50.828125 133.828125,159.5 78.5" marker-end="url(#triangle)"/>&ndash;&gt;
+  </svg>
+
+
+</mat-card>-->
 <div>
-<mat-card class="kc-card min-h-[85vh] w-[80vw] mx-auto relative" id="holder">
-  <svg class="absolute h-full w-full">
-    <line
-      x1="19.5"
-      y1="40"
-      x2="19.5"
-      y2="64"
-      style="stroke: rgb(255, 0, 0); stroke-width: 2"
-    />
-  </svg>
+<mat-card class="kc-card m-4 relative overflow-x-scroll" id ="holder">
+<span class="">
+    <svg id="diagramSvg" xmlns="http://www.w3.org/2000/svg" class="relative h-[10vh] w-[100vw] overflow-scroll">
+      <style id="stylesheet">
+      text {
+        text-anchor: middle;
+        font-size: small;
+        font-weight: bold;
+      }
 
-  <svg class="absolute h-full w-full">
-    <line
-      x1="19.5"
-      y1="104"
-      x2="19.5"
-      y2="128"
-      style="stroke: rgb(255, 0, 0); stroke-width: 2"
-    />
-  </svg>
-  <svg class="absolute h-full w-full">
-    <line
-      x1="19.5"
-      y1="168"
-      x2="19.5"
-      y2="192"
-      style="stroke: rgb(255, 0, 0); stroke-width: 2"
-    />
-  </svg>
+      rect {
+        fill: aqua;
+        stroke: black;
+        opacity: 0.5;
+        stroke-width: .2;
+        rx: 50;
+      }
+      rect:hover{
+        fill: #3d8fa8;
+      }
 
-  <div
-    *ngFor="let x of datapipeline"
-    id="{{ x.name }}"
-    class="h-10 w-10 bg-dark-primary rounded-full mb-6"
-  >
-    {{ x.name }}
-  </div>
+      line {
+        stroke: gray;
+        opacity: 1;
+        stroke-width: 5;
+      }
+      </style>
+      <defs>
+          <marker id="arrowHead" viewBox="0 0 10 10"
+                  refX="7" refY="5"
+                  markerUnits="strokeWidth"
+                  markerWidth="4" markerHeight="4"
+                  orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="gray"/>
+      </marker>
+      </defs>
+      <g id="diagramGroup" class="absolute
+">
+      </g>
+    </svg>
+
+  </span>
 </mat-card>
 </div>

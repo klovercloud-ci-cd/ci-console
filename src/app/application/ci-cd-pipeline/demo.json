@@ -1,4 +1,5 @@
 {
+
   "pipeline": {
     "metadata": {
       "companyid": "a4807912-1f40-490b-b3a4-07587ac370eb",
@@ -39,7 +40,35 @@
           "args_from_configmaps": "tekton/cm-test"
         },
         "next": [
-          "interstep"
+          "interstep",
+          "next"
+        ],
+        "argdata": {
+          "key3": "value1",
+          "key4": "value2"
+        },
+        "envdata": {
+
+        },
+        "descriptors": null
+      },
+      {
+        "name": "next",
+        "type": "BUILD",
+        "status": "",
+        "trigger": "AUTO",
+        "params": {
+          "images": "shabrul2451/test-dev:master,shabrul2451/test-pro:master",
+          "repository_type": "git",
+          "revision": "34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
+          "service_account": "test-sa",
+          "storage": "500Mi",
+          "url": "https://github.com/shabrul2451/test-app",
+          "args": "key3:value1,key4:value2",
+          "args_from_configmaps": "tekton/cm-test"
+        },
+        "next": [
+          "hello"
         ],
         "argdata": {
           "key3": "value1",
