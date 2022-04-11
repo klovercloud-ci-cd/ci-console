@@ -9,7 +9,6 @@ import { LoadingBarService } from '@ngx-loading-bar/core';
 export class ProgressBarComponent implements OnInit {
 
   constructor(public loader: LoadingBarService) { 
-    console.log(this.loader);
     
   }
 

@@ -16,9 +16,10 @@ import { MatTreeModule } from '@angular/material/tree';
 
 import { MatRippleModule } from '@angular/material/core';
 import { ProgressBarModule } from 'src/app/progress-bar/progress-bar.module';
+import { CollapsedSidebarComponent } from './collapsed-sidebar/collapsed-sidebar.component';
 
 @NgModule({
-  declarations: [LayoutComponent, HeaderComponent, SidebarComponent],
+  declarations: [LayoutComponent, HeaderComponent, SidebarComponent, CollapsedSidebarComponent],
   imports: [
     AppRoutingModule,
     CommonModule,

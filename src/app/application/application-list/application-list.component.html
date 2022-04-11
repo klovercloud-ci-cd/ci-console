@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div  class="">
+    <div  class="resp">
       <table
         mat-table
         matSort
@@ -24,8 +24,8 @@
         class="mat-elevation-z8 bg-transparent overflow-x-scroll md:overflow-x-hidden"
       >
         <ng-container matColumnDef="name">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let element" class="px-10">{{ element.name }}</td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef class="px-10">Name</th>
+          <td mat-cell *matCellDef="let element"  class="kc-table" >{{ element.name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="username">
