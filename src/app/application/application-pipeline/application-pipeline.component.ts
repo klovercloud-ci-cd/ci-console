@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 
 @Component({
   selector: 'kcci-application-pipeline',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./application-pipeline.component.scss'],
 })
 export class ApplicationPipelineComponent implements OnInit {
-  constructor() {}
+  constructor(private _toolbarService: ToolbarService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._toolbarService.changeData({ title: 'pipelines' })
+  }
 }

@@ -1,28 +1,119 @@
+<kc-progress-bar></kc-progress-bar>
+
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav" opened mode="side">
-    <div class="bg-dark-background-default hidden md:block">
+  <!-- <div
+    [ngClass]="openCollapsedBar == true ? 'w-[260px] z-40' : 'w-0'"
+    *ngIf="openCollapsedBar == true"
+  >
+    <kcci-collapsed-sidebar></kcci-collapsed-sidebar>
+  </div> -->
+  <mat-drawer
+    #drawer
+    [ngClass]="
+      collapsed == true
+        ? 'example-sidenav  relative border-none'
+        : 'example-sidenav relative '
+    "
+    opened
+    mode="side"
+  >
+    <button (click)="toggleCollapse()" class="absolute top-[31px] right-3 z-50">
+      <span
+        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dark-primary opacity-30"
+      ></span>
+      <mat-icon
+        *ngIf="!collapsed"
+        class="text-sm text-green-400 relative top-[2px]"
+        >radio_button_checked</mat-icon
+      >
+    </button>
+
+    <div
+      [ngClass]="
+        collapsed == true
+          ? 'sidePanel kc-sidebar bg-dark-background-default hidden transition ease-in-out duration-500'
+          : 'sidePanel kc-sidebar bg-dark-background-default xl:block hidden transition ease-in-out duration-500'
+      "
+    >
       <app-sidebar></app-sidebar>
     </div>
   </mat-drawer>
+  <div class="example-sidenav-content relative">
+    <div class="flex justify-between items-center p-5">
+      <button
+        (click)="toggleCollapse()"
+        class="absolute top-[26px] left-2 z-50"
+      >
+        <span
+          class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dark-primary opacity-50"
+        ></span>
+        <mat-icon
+          *ngIf="collapsed && getScreenWidth > 1280"
+          class="text-sm text-green-500 top-[2px] relative"
+          >radio_button_unchecked</mat-icon
+        >
+      </button>
+      <div *ngIf="getScreenWidth > 1280; else something">
+        <div
+          class="capitalize text-2xl font-medium tracking-wide transition ease-in-out duration-500"
+          [ngClass]="!collapsed ? 'pl-2' : 'pl-5'"
+        >
+          {{ data?.title }}
+        </div>
+      </div>
 
-  <div class="example-sidenav-content">
-    <div
-      class="flex justify-between items-center border-b-[1px] border-[#495c7d] p-5"
-    >
-      <div class="uppercase text-base font-medium">Homepage</div>
-      <!-- <div *ngSwitch="pageTitle" class="uppercase text-xl font-medium">
-        <div *ngSwitchCase="'attach-company'">Attach Company</div>
+      <ng-template #something>
+        <!-- Collapsed Navbar -->
 
-        <div *ngSwitchDefault="">Dashboard</div>
-      </div> -->
+        <div
+          id="mySidepanel"
+          [ngClass]="
+            openCollapsedBar == true
+              ? 'sidePanel translate-x-[260px] duration-500 absolute kc-sidebar bg-dark-background-default transition ease-in-out sidepanel text-green-400 w-[260px] border-r-1.5 border-[#495c7d]'
+              : 'w-0 translate-x-0'
+          "
+          *ngIf="openCollapsedBar == true"
+        >
+          <button (click)="openNav()" class="absolute top-[31px] right-3 z-50">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dark-primary opacity-30"
+            ></span>
+            <mat-icon
+              *ngIf="openCollapsedBar"
+              class="text-sm relative top-[2px]"
+              >radio_button_checked</mat-icon
+            >
+          </button>
+          <kcci-collapsed-sidebar></kcci-collapsed-sidebar>
+        </div>
 
-      <!-- <ng-template #defaultTitle>Homepage</ng-template> -->
+        <!-- (setStatus)="something($event)" -->
+
+        <!-- <nav [ngClass]="openCollapsedBar ? 'nav nav--open' : 'nav '">
+          <div class="nav__links">
+            <a href="#" class="nav__link">
+              <i class="material-icons">dashboard</i>
+              Dashboard
+            </a>
+          </div>
+        </nav> -->
+
+        <div class="flex items-center">
+          <button class="block mt-2" (click)="openNav()">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <div
+            class="capitalize text-2xl font-medium tracking-wide transition ease-in-out duration-500 pl-5"
+          >
+            {{ data?.title }}
+          </div>
+        </div>
+      </ng-template>
       <div>
         <app-header></app-header>
       </div>
     </div>
   </div>
-
   <div>
     <router-outlet></router-outlet>
   </div>

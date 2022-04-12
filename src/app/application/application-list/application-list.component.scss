@@ -1,3 +1,10 @@
+.resp{
+  width: 100%;
+overflow-x: auto;
+}
+.kc-table{
+  @apply mr-16 lg:mr-0
+}
 table {
   width: 100%;
 }
@@ -19,4 +26,5 @@ th {
 td,
 th {
   width: 25%;
+  padding: 50px;
 }

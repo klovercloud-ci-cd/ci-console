@@ -3,11 +3,12 @@
   id="hideMeAfter5Seconds"
 >
   <div routerLink="" class="px-6 py-7 gap-x-4 cursor-pointer">
-    <img class="w-[175px]" src="../../../../assets/images/logos/logo.png" />
+    <img class="w-[175px]" src="/assets/images/logos/logo.png" />
   </div>
 
   <ul *ngFor="let item of menuItem">
     <li
+      (click)="openNav()"
       matRipple
       [routerLink]="item.route"
       routerLinkActive="active"

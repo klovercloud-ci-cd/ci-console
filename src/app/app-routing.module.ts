@@ -4,6 +4,7 @@ import { LayoutComponent } from './core/layout/layout.component';
 import { Error404Component } from './error/error404/error404.component';
 import { AuthGuard } from './shared/guard/auth.guard';
 import { DashboardIndexComponent } from './dashboard/dashboard-index/dashboard-index.component';
+import { AppCustomPreloader } from './app-custom-preloader';
 
 const childrenRoutes: Routes = [
   {
@@ -55,7 +56,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    preloadingStrategy: AppCustomPreloader,
+    scrollPositionRestoration: 'enabled',
+    relativeLinkResolution: 'corrected',
+    anchorScrolling: 'enabled'
+  })],
   exports: [RouterModule],
+  providers: [AppCustomPreloader]
 })
 export class AppRoutingModule {}

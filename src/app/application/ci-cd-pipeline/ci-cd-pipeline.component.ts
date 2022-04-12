@@ -1,17 +1,18 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import data from './demo.json'
 import {DrawDiagram} from './drawDiagram'
 const draw = new DrawDiagram()
 @Component({
   selector: 'kcci-ci-cd-pipeline',
   templateUrl: './ci-cd-pipeline.component.html',
-  styleUrls: ['./ci-cd-pipeline.component.scss']
+  styleUrls: ['./ci-cd-pipeline.component.scss'],
 })
 export class CiCdPipelineComponent implements OnInit,AfterViewInit {
   dataPipeLine =  data.pipeline.steps
   completeNodeDraw : string[]  = []
 
-  constructor() { }
+  constructor(private _toolbarService: ToolbarService) { }
 
   drawNodeNew(){
 
@@ -185,7 +186,7 @@ export class CiCdPipelineComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
-
+    this._toolbarService.changeData({ title: 'pipelines' })
   }
 
   ngAfterViewInit(): void {
