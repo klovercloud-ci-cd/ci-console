@@ -105,19 +105,19 @@ export class DrawDiagram {
       previousFit = tspan.textContent;
     }
 
-    var baselineShift = -2;
+    const baselineShift = -2;
     // @ts-ignore
     firstTspan.setAttributeNS(null, "dy", dy + baselineShift + height / 2);
   }
 
 
   buildNextLevel(groups: string | any[]) {
-    var groupsOut = [];
+    const groupsOut = [];
     for (var groupIdx = 0; groupIdx !== groups.length; groupIdx++) {
-      var group = groups[groupIdx];
+      const group = groups[groupIdx];
 
       for (var memberIdx = 0; memberIdx !== group.length; memberIdx++) {
-        var member = group[memberIdx];
+        const member = group[memberIdx];
         if (!member.children.length)
           continue;
         groupsOut.push(member.children);
@@ -164,7 +164,7 @@ export class DrawDiagram {
       level = levels[levelIdx];
       let spacing = 0;
       let nodesWidth = 0;
-      let groupSpacing = 0;
+      let groupSpacing = 3;
       for (let memberIdx = 0; memberIdx !== level.length; memberIdx++) {
         spacing += groupSpacing;
         let group = level[memberIdx];
@@ -294,7 +294,6 @@ export class DrawDiagram {
           node = group[nodeIdx];
           const link = document.createElementNS("http://www.w3.org/2000/svg", "a");
           link.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', "https://google.com");
-
           const rect = document.createElementNS(namespace, "rect");
           link.appendChild(rect);
           diagramGroup.appendChild(link);

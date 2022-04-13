@@ -193,6 +193,23 @@ export class CiCdPipelineComponent implements OnInit,AfterViewInit {
     setTimeout(()=>{
       //this.drawNodeNew()
       //this.drowLines()
+      const array =[];
+      const count: string[] =[]
+      for(let x of this.dataPipeLine){
+        if (!count.find(element => element === x.name)){
+          array.push(x.name)
+          count.push(x.name)
+        }
+        if (x.next){
+          for (let n of x.next){
+            if (!count.find(element => element === n)){
+              array.push(' '+n)
+              count.push(' ' +n)
+            }
+          }
+        }
+      }
+      console.log(array)
       const arr = [
         'a',
         ' b',
@@ -202,21 +219,10 @@ export class CiCdPipelineComponent implements OnInit,AfterViewInit {
         '     b',
         '  b',
         '  b',
-        '  b',
-        '   b',
-        '    b',
-        '     b',
-        '     b',
-        '     b',
-        '     b',
         '   b',
         '    b',
         '     b',
         '      b',
-        '      b',
-        '       b',
-        '        b',
-
       ]
 
       const tree = draw.textToTree(arr);
