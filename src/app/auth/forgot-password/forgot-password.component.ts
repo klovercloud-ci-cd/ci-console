@@ -29,7 +29,7 @@ export class ForgotPasswordComponent implements OnInit {
 
     this.forgotPassMail = this.forgotPass.value.email;
     this.auth.forgotPassData(this.forgotPassMail).subscribe(res=>{
-      console.log(this.forgotPassMail)
+      //console.log(this.forgotPassMail)
     })
   }
   resendCode(){
@@ -39,7 +39,15 @@ export class ForgotPasswordComponent implements OnInit {
     this.otpCode = this.otpForm.value.otp
   }
   channgePassword(){
-
+    const payload ={
+      "current_password": "",
+      "email": this.forgotPassMail,
+      "new_password": this.setNewPassword.value.password,
+      "otp": this.otpCode
+    }
+    this.auth.chnagePasword(payload,this.forgotPassMail).subscribe(res=>{
+      console.log(res)
+    })
   }
   ngOnInit(): void {}
 }

@@ -7,7 +7,7 @@ import {
   HttpResponse,
   HttpErrorResponse
 } from '@angular/common/http';
-import {catchError, map, Observable, throwError} from 'rxjs';
+import {catchError, map, Observable, throwError, timeout} from 'rxjs';
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {TokenService} from "../../auth/token.service";
@@ -52,7 +52,8 @@ export class ApiCallInterceptor implements HttpInterceptor {
                 jwt_data = jwt_decode(jwtToken)
               }
               const expires = new Date( parseInt(jwt_data.exp) * 1000 )
-              const timeout = expires.getTime() - Date.now() - (60 * 1000);
+              let timeout = expires.getTime() - Date.now() - (60 * 1000);
+              timeout = timeout-1000;
               this.authService.refreshTokenInterval = setInterval(() => {
                 if (this.authService.isAccessTokenExpired(this.tokenService.getAccessToken())) {
                   this.authService.refreshToken({
