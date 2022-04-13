@@ -35,7 +35,7 @@ export class AddCompanyComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private attachCompanyService: AttachCompanyService,private _toolbarService: ToolbarService
+    private attachCompanyService: AttachCompanyService, private _toolbarService: ToolbarService
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class AddCompanyComponent implements OnInit {
     return this.fb.group({
       type: ['', [Validators.required]],
       token: ['', [Validators.required]],
-      auth_type: ['password'],
+      // auth_type: ['password'],
       applications: this.fb.array([]),
     });
   }
@@ -126,10 +126,11 @@ export class AddCompanyComponent implements OnInit {
     console.log(this.attachCompanyForm.value);
     let { companyId, name, repositories } = this.attachCompanyForm.value;
 
-    repositories.map((item: any) => {
+    repositories.map((item: any,index:number) => {
       const app = item.applications.map((app: any) => {
         return { _metedata: { name: app.name }, url: app.url };
       });
+      item.id = index+1;
       item.applications = app;
       return item;
     });
@@ -141,6 +142,16 @@ export class AddCompanyComponent implements OnInit {
 
     console.log(companyData);
 
+    this.attachCompanyService.attachCompany(JSON.stringify(companyData)).subscribe((res) => {
+      if (res.status ==='success'){
+        this.isLoading =false
+        console.log('Company Attached!');
+      }
+      else{
+        console.log("Errorrrr!!");
+        
+      }
+    })
     // this.attachCompanyService
     //   .attachCompany(this.attachCompanyForm.value)
     //   .subscribe(

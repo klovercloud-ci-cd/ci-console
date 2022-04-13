@@ -3,6 +3,8 @@ import { AuthService } from '../auth.service';
 import { TokenService } from '../token.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +16,15 @@ export class LoginComponent implements OnInit {
   passwordHide = true;
   constructor(
     private authService: AuthService,
+    private snack: SharedSnackbarService,
     private tokenService: TokenService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
+
     if (this.authService.isLogin()) {
       this.router.navigate(['']);
     }
@@ -29,6 +34,7 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required],
   });
   logIn(): void {
+
     this.isLoading =true
 
     this.authService
