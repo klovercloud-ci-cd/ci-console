@@ -43,7 +43,7 @@ export class ApiCallInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       map((event: HttpEvent<any>) => {
         if(event instanceof HttpResponse) {
-          console.log("event => ", event)
+          //console.log("event => ", event)
           setTimeout(()=>{
             if (this.tokenService.getAccessToken() && !this.authService.refreshTokenInterval) {
               const jwtToken = this.tokenService.getAccessToken();
@@ -52,8 +52,8 @@ export class ApiCallInterceptor implements HttpInterceptor {
                 jwt_data = jwt_decode(jwtToken)
               }
               const expires = new Date( parseInt(jwt_data.exp) * 1000 )
-              let timeout = expires.getTime() - Date.now() - (60 * 1000);
-              timeout = timeout-1000;
+              const timeout = expires.getTime() - Date.now() - (60 * 1000);
+              console.log('timeout:'+timeout)
               this.authService.refreshTokenInterval = setInterval(() => {
                 if (this.authService.isAccessTokenExpired(this.tokenService.getAccessToken())) {
                   this.authService.refreshToken({

@@ -80,8 +80,8 @@ export class AuthService {
         // Save new Tokens
         this.tokenService.removeAccessToken();
         this.tokenService.removeRefreshToken();
-        this.tokenService.saveAccessToken(event.access_token);
-        this.tokenService.saveRefreshToken(event.refresh_token);
+        this.tokenService.saveAccessToken(event.data.access_token);
+        this.tokenService.saveRefreshToken(event.data.refresh_token);
         //return event;
 
       }),

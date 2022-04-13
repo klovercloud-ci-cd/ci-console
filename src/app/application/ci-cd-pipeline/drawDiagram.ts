@@ -279,7 +279,7 @@ export class DrawDiagram {
 
     const diagramWidth = 1000;
     const diagramHeight = 1000;
-    console.log(diagramWidth)
+    //console.log(diagramWidth)
 
     const xMultiplier = diagramWidth / maxWidth;
     const yMultiplier = diagramHeight / height;
