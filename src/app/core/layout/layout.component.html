@@ -29,7 +29,7 @@
       >
     </button>
 
-    <div
+    <!-- <div
       [ngClass]="
         collapsed == true
           ? 'sidePanel kc-sidebar bg-dark-background-default hidden transition ease-in-out duration-500'
@@ -37,7 +37,36 @@
       "
     >
       <app-sidebar></app-sidebar>
-    </div>
+    </div> -->
+
+    <nav [ngClass]="open?'nav--open':''" class="nav text-black sidePanel kc-sidebar">
+      <div class="nav__links">
+        
+          <a href="#" class="nav__link">
+              
+              Dashboard
+          </a>
+          <a class="nav__link nav__link--active" href="#">
+              
+              Projects
+          </a>
+          <a class="nav__link" href="#">
+              
+              Security
+          </a>
+          <a class="nav__link" href="#">
+              
+              History
+          </a>
+          <a class="nav__link" href="#">
+              
+              Profile
+          </a>
+    <button (click)="clickEvent()" class="text-red-500 px-10 py-4 bg-green-400 rounded-lg ml-10">Hit</button>
+      </div>
+      <div class="nav__overlay" (click)="clickEvent()"></div>
+    </nav>
+
   </mat-drawer>
   <div class="example-sidenav-content relative">
     <div class="flex justify-between items-center p-5">

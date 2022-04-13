@@ -13,6 +13,8 @@ export class LayoutComponent implements OnInit {
   showFiller = true;
   pageTitle: string = '';
   public innerWidth: any;
+
+  open:boolean = false;
   data: any = {
     title: 'KloverCloud',
   };
@@ -59,5 +61,10 @@ export class LayoutComponent implements OnInit {
     // @ts-ignore
     this.ss.toggleState$.subscribe((res) => (this.openCollapsedBar = res));
     this.ss.emitData();
+  }
+  clickEvent(){
+    this.open = !this.open;
+    console.log(this.open);
+    
   }
 }

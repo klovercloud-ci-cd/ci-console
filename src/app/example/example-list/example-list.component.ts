@@ -7,7 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExampleListComponent implements OnInit {
   color: number = 1;
+  open:boolean = false;
   constructor() {}
 
   ngOnInit(): void {}
+
+  clickEvent(){
+    this.open = !this.open;
+    console.log(this.open);
+    
+  }
 }
