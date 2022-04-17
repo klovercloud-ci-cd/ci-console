@@ -69,7 +69,7 @@ export class ApiCallInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        if(error.status === 401) {
+        /*if(error.status === 401) {
           if(error.error.error === 'invalid_token') {
             this.authService.refreshToken({
               refresh_token: refreshToken
@@ -88,7 +88,7 @@ export class ApiCallInterceptor implements HttpInterceptor {
           this.router.navigate(['auth/login']).then( _=> {
             console.log('Redirecting to login page');
           })
-        }
+        }*/
         return throwError(error);
       })
     );
