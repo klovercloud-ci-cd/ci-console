@@ -7,7 +7,6 @@ import {
 import { catchError, Observable, throwError } from 'rxjs';
 import { tap, switchMap } from 'rxjs/operators';
 import { TokenService } from './token.service';
-import { ApiCallInterceptor } from '../shared/interceptors/api-call.interceptor';
 import * as endpoints from './auth.endpoint';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
@@ -73,13 +72,16 @@ export class AuthService {
   }
 
   refreshToken(refreshTokenData: any): Observable<any> {
+    HTTP_OPTIONS.params = {
+      grant_type: 'refresh_token',
+    };
     return this.http.post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS).pipe(
       tap((event: any) => {
         // Save new Tokens
         this.tokenService.removeAccessToken();
         this.tokenService.removeRefreshToken();
-        this.tokenService.saveAccessToken(event.access_token);
-        this.tokenService.saveRefreshToken(event.refresh_token);
+        this.tokenService.saveAccessToken(event.data.access_token);
+        this.tokenService.saveRefreshToken(event.data.refresh_token);
         //return event;
 
       }),
@@ -140,14 +142,11 @@ export class AuthService {
     };
     return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , '', HTTP_OPTIONS)
   }
-  chnagePasword(media:string){
+  chnagePasword(payload:any, media:string){
 
     HTTP_OPTIONS.params = {
       action: 'forgot_password',
-      media: media
     };
-    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , '', HTTP_OPTIONS)
+    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , payload, HTTP_OPTIONS)
   }
-
-
 }

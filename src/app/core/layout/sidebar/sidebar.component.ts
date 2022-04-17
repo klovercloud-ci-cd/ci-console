@@ -27,11 +27,6 @@ export class SidebarComponent implements OnInit {
       icon: 'store',
       route: '/attach-company',
     },
-    {
-      title: 'Example',
-      icon: 'dashboard',
-      route: '/example',
-    }
   ];
   constructor() {}
   ngOnInit(): void {}

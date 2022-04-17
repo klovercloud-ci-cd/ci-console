@@ -29,7 +29,7 @@ export class ApplicationListComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.matSort;
       this.isLoading = false;
-      console.log("Data: ",this.tableData);
+      //console.log("Data: ",this.tableData);
     });
   }
 

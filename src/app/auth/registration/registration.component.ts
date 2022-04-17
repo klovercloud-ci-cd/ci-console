@@ -41,7 +41,7 @@ export class RegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.snack.openSnackBar('Authentication Error!','Please check the Credentials again.', 2000,'sb-notification');    
+    this.snack.openSnackBar('Authentication Error!','Please check the Credentials again.', 2000,'sb-error');    
   }
 
   registrationFormData() {
