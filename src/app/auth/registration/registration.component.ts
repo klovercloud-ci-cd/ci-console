@@ -41,7 +41,7 @@ export class RegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.snack.openSnackBar('Authentication Error!','Please check the Credentials again.', 2000,'sb-error');    
+    this.snack.openSnackBar('Authentication Error!','Please check the Credentials again.', 20000,'sb-error');    
   }
 
   registrationFormData() {
@@ -63,7 +63,7 @@ export class RegistrationComponent implements OnInit {
       },
       (err) => {
         this.isLoading = false;
-        this.snack.openSnackBar('Registration Failed!', 'Please submit valid credentials.', 10000,'sb-error');
+        this.snack.openSnackBar('Registration Failed!', 'Please submit valid credentials.', 3000,'sb-warn');
         console.log('err', err);
       }
     );

@@ -1,7 +1,7 @@
 <div>
 <div class="w-full overflow-x-auto mx-auto ">
   <div class="mx-2 md:mx-7 my-5 bg-dark-background-5 ">
-    <div class="search-container flex items-center justify-between px-6 py-5">
+    <div class="search-container w-full flex items-center justify-between px-6 py-5">
       <div>
         <h1 class="text-base font-semibold tracking-wide">Application List</h1>
       </div>
@@ -48,13 +48,13 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"  ></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-[#1A2C4A] transition duration-100"></tr>
       </table>
-      <!-- <mat-paginator
+      <mat-paginator
         class="bg-transparent"
         #paginator
         [pageSize]="25"
         [pageSizeOptions]="[2, 5, 10, 25, 100]"
       >
-      </mat-paginator> -->
+      </mat-paginator>
     </div>
     
     <div *ngIf="isLoading" class="uploader-status  p-5">

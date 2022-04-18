@@ -10,8 +10,6 @@ export class SnackComponent implements OnInit {
   closeBtnClass: string = '';
   constructor(
     private snackBar: MatSnackBar,@Inject(MAT_SNACK_BAR_DATA) public data: any) {
-      console.log(data);
-      
      }
 
   ngOnInit(): void {

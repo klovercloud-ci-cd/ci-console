@@ -50,6 +50,11 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['']);
           console.log(this.authService.getUserData(), 'USER');
         }
+      },
+      (err) => {
+        this.isLoading = false;
+        this.snack.openSnackBar('Registration Boom!', 'Please submit valid credentials.', 3000,'sb-warn');
+        console.log('err', err);
       });
   }
   logout(): void {

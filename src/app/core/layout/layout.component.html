@@ -46,12 +46,12 @@
 
         <div
           id="mySidepanel"
+          class="bg-dark-background-default text-green-400 border-r-1.5 border-[#495c7d] sidepanel"
           [ngClass]="
             openCollapsedBar == true
-              ? ' translate-x-[260px] duration-500 absolute kc-sidebar bg-dark-background-default transition ease-in-out sidepanel text-green-400  border-r-1.5 border-[#495c7d]'
-              : 'w-0 translate-x-0'
+              ? 'open'
+              : ''
           "
-          *ngIf="openCollapsedBar == true"
         >
           <button (click)="toggleCollapse()" class="absolute top-[31px] right-3 z-50">
             <span

@@ -2,32 +2,96 @@
   width: 100%;
 overflow-x: auto;
 }
-.kc-table{
-  @apply mr-16 lg:mr-0
-}
-table {
+// .kc-table{
+//   @apply mr-16 lg:mr-0
+// }
+// table {
+//   width: 100%;
+// }
+// .mat-table {
+//   overflow-x: scroll;
+// }
+
+// .uploader-status ::ng-deep .mat-progress-spinner circle,
+// .mat-spinner circle {
+//   @apply stroke-dark-text-label h-5 w-5;
+// }
+
+// .mat-form-field {
+//   @apply text-sm w-1/5;
+// }
+// th {
+//   @apply bg-dark-border-form text-sm font-semibold;
+// }
+// td,
+// th {
+//   width: 25%;
+//   padding: 50px;
+//   color: teal;
+//   background-color: bisque;
+//   margin-left: 200px;
+// }
+
+// .example-container {
+//   display: flex;
+//   flex-direction: column;
+//   max-height: 500px;
+// }
+
+.search-container{
   width: 100%;
 }
+.container{
+    background-color: white;
+    border: 1.5px solid black;
+    border-radius: 10px;
+    text-align: center;
+}
 .mat-table {
-  overflow-x: scroll;
+  overflow: auto;
+  max-height: 500px;
 }
-
-.uploader-status ::ng-deep .mat-progress-spinner circle,
 .mat-spinner circle {
-  @apply stroke-dark-text-label h-5 w-5;
+    @apply stroke-dark-text-label h-5 w-5;
+  }
+  
+  .mat-form-field {
+    @apply text-sm w-1/5;
+  }
+  th {
+    @apply bg-dark-border-form text-sm font-semibold;
+  }
+.mat-table{
+    overflow: auto;   
+    width: 100%;
+    min-width: 900px;
+}
+.mat-header-cell, .mat-cell {
+    min-width: 150px;
+}
+.mat-form-field-underline{
+    background-color:transparent;
 }
 
-.mat-form-field {
-  @apply text-sm w-1/5;
+.mat-form-field-flex{
+    font-size: 14px;
+    line-height: 1em;
+    color: #555;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 8px;
+    padding: 2px;
 }
-th {
-  @apply bg-dark-border-form text-sm font-semibold;
+.mat-form-field-wrapper{
+    padding-bottom: 1.25em;
+    padding-top: 1.25em;
 }
-td,
-th {
-  // width: 25%;
-  // padding: 50px;
-  // color: teal;
-  // background-color: bisque;
-  // margin-left: 200px;
+.mat-form-field-infix{
+    border:0px;
 }
+
+.mat-row, .mat-header-row {
+    min-width: 2800px;
+    width: 100%;
+  }
