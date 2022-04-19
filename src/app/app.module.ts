@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CompanyModule } from './company/company.module';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { MAT_RIPPLE_GLOBAL_OPTIONS, RippleGlobalOptions } from '@angular/material/core';
+import { SnackbarModule } from './shared/snackbar/snackbar.module';
 
 const globalRippleConfig: RippleGlobalOptions = {
   animation: {
@@ -43,6 +44,7 @@ const globalRippleConfig: RippleGlobalOptions = {
     MatInputModule,
     CompanyModule,
     LoadingBarModule,
+    SnackbarModule
   ],
   providers: [
     {

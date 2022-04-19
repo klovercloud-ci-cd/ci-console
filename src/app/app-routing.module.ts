@@ -10,7 +10,18 @@ const childrenRoutes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./dashboard/dashboard.module').then((m) => m.DashboardModule)
+      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    // canActivate: [AuthGuard],
+  },
+  {
+    path: 'settings',
+    loadChildren: () =>
+      import('./settings/settings.module').then((m) => m.SettingsModule),
+  },
+  {
+    path: 'user-profile',
+    loadChildren: () =>
+      import('./user-profile/user-profile.module').then((m) => m.UserProfileModule),
   },
   {
     path: 'settings',
@@ -57,7 +68,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    /*canActivate: [AuthGuard],*/
+    canActivate: [AuthGuard],
   },
   {
     path: '**',

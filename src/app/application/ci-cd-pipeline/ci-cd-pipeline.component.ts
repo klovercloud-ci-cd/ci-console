@@ -209,7 +209,7 @@ export class CiCdPipelineComponent implements OnInit,AfterViewInit {
           }
         }
       }
-      console.log(array)
+      //console.log(array)
       const arr = [
         'a',
         ' b',

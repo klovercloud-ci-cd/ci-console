@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
 
 @Component({
   selector: 'app-registration',
@@ -35,25 +36,12 @@ export class RegistrationComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private snack: SharedSnackbarService,
   ) {}
 
   ngOnInit(): void {
-    // this.openSnackBarError('Authentication Error', '');
-    // this.openSnackBar('Registration Successfull', '');
-  }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 500000,
-      panelClass: ['blue-snackbar'],
-    });
-  }
-  openSnackBarError(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 500000,
-      panelClass: ['error-snackbar'],
-    });
+    this.snack.openSnackBar('Authentication Error!','Please check the Credentials again.', 2000,'sb-error');    
   }
 
   registrationFormData() {
@@ -68,13 +56,14 @@ export class RegistrationComponent implements OnInit {
         if (res.status === 'success') {
           this.isLoading = false;
           this.router.navigate(['/auth/login']);
-          this.openSnackBar('Registration Successfull', '');
+          this.snack.openSnackBar('Registration Successfull', 'You can login now', 10000,'sb-success');
         }
         console.log(res.status);
         console.log(this.authService.getUserData(), 'USER');
       },
       (err) => {
-        this.openSnackBarError('Authentication Error', '');
+        this.isLoading = false;
+        this.snack.openSnackBar('Registration Failed!', 'Please submit valid credentials.', 10000,'sb-error');
         console.log('err', err);
       }
     );

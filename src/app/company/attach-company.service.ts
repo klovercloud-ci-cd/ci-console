@@ -48,7 +48,7 @@ export class AttachCompanyService {
       .post(BASE_URL + 'users', attachCompanyPayload, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
-          console.log(res);
+          console.log("Response Log: ",res);
         }),
         catchError(AttachCompanyService.handleError)
       );

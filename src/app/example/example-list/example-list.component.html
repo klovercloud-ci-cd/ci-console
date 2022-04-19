@@ -1,4 +1,4 @@
-<div class="ml-[20%] mt-[5%]">
+<!-- <div class="ml-[20%] mt-[5%]">
   <div class="text-slate-200">
     <h1
       [ngClass]="
@@ -54,4 +54,34 @@
       </mat-form-field>
     </form>
   </div>
-</div>
+</div> -->
+
+
+<nav [ngClass]="open?'nav--open':''" class="nav text-black">
+  <div class="nav__links">
+      <a href="#" class="nav__link">
+          
+          Dashboard
+      </a>
+      <a class="nav__link nav__link--active" href="#">
+          
+          Projects
+      </a>
+      <a class="nav__link" href="#">
+          
+          Security
+      </a>
+      <a class="nav__link" href="#">
+          
+          History
+      </a>
+      <a class="nav__link" href="#">
+          
+          Profile
+      </a>
+<button (click)="clickEvent()" class="text-red-500 px-10 py-4 bg-green-400 rounded-lg ml-10">Hit it</button>
+  </div>
+  <div class="nav__overlay" (click)="clickEvent()">
+  </div>
+</nav>
+    <h1 class="text-white bg-red-500">Something..</h1>

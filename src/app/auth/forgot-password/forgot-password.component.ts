@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {AuthService} from "../auth.service";
-import {tap} from "rxjs";
+import {Observable, tap} from "rxjs";
+import {Router} from "@angular/router";
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 @Component({
   selector: 'kcci-forgot-password',
@@ -17,7 +19,9 @@ export class ForgotPasswordComponent implements OnInit {
   });
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router,
+    private snackBar: SharedSnackbarService
   ) {}
   forgotPassMail = ''
   otpCode =''
@@ -38,15 +42,20 @@ export class ForgotPasswordComponent implements OnInit {
   otpSumit(){
     this.otpCode = this.otpForm.value.otp
   }
+  // @ts-ignore
   channgePassword(){
     const payload ={
-      "current_password": "",
       "email": this.forgotPassMail,
       "new_password": this.setNewPassword.value.password,
       "otp": this.otpCode
     }
-    this.auth.chnagePasword(payload,this.forgotPassMail).subscribe(res=>{
-      console.log(res)
+    this.auth.chnagePasword(payload).subscribe((res)=>{
+      //console.log(res.status)
+      if(res.status ==='success'){
+        this.router.navigate(['auth/login']).then( _=> {
+          this.snackBar.openSnackBar('SUCCESS!','Password Changed Successfully!', 2000,'sb-success');
+        })
+      }
     })
   }
   ngOnInit(): void {}

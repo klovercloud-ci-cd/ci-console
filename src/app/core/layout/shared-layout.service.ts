@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 export class SharedLayoutService {
   private toggleState = new Subject();
   public toggleState$ = this.toggleState.asObservable();
-  private toggleVal = undefined;
+  private toggleVal = true;
   constructor() {}
 
   emitData() {

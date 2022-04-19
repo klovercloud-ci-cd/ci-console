@@ -11,6 +11,7 @@ import * as endpoints from './auth.endpoint';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import {SharedSnackbarService} from "../shared/snackbar/shared-snackbar.service";
 
 const BASE_URL = environment.v1AuthEndpoint;
 const HTTP_OPTIONS = {
@@ -26,22 +27,22 @@ const HTTP_OPTIONS = {
 export class AuthService {
   redirectUrl = '';
   refreshTokenInterval: any;
+
   constructor(
+    private snackBar: SharedSnackbarService,
     private http: HttpClient,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
   ) {}
-  private static handleError(error: HttpErrorResponse): any {
+  private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
-      console.error('An Error occurred: ', error.error.message);
+      // @ts-ignore
+      return throwError('An Error occurred: ', error.error.message);
     } else {
-      console.error(
-        `Error Code From Backend: ${error.status}`,
-        `Body: ${error.error}`
-      );
+      return throwError(`${error.error.message}`);
     }
 
-    return throwError('Internal server error!');
+    //return throwError('Internal server error!');
   }
 
   static log(message: string): any {
@@ -58,7 +59,7 @@ export class AuthService {
         tap((res: any) => {
           AuthService.log('login');
         }),
-        catchError(AuthService.handleError)
+        catchError(this.handleError)
       );
   }
 
@@ -67,7 +68,7 @@ export class AuthService {
       .post(BASE_URL + endpoints.REGISTER, signUpPayload, HTTP_OPTIONS)
       .pipe(
         tap((_) => AuthService.log('registered!')),
-        catchError(AuthService.handleError)
+        catchError(this.handleError)
       );
   }
 
@@ -85,7 +86,7 @@ export class AuthService {
         //return event;
 
       }),
-      catchError(AuthService.handleError)
+      catchError(this.handleError)
     );
   }
 
@@ -142,10 +143,10 @@ export class AuthService {
     };
     return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , '', HTTP_OPTIONS)
   }
-  chnagePasword(payload:any, media:string){
+  chnagePasword(payload:any):Observable<any>{
 
     HTTP_OPTIONS.params = {
-      action: 'forgot_password',
+      action: 'reset_password',
     };
     return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , payload, HTTP_OPTIONS)
   }

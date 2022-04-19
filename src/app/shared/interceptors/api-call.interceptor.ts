@@ -12,6 +12,7 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {TokenService} from "../../auth/token.service";
 import jwt_decode from "jwt-decode";
+import {SharedSnackbarService} from "../snackbar/shared-snackbar.service";
 
 @Injectable()
 export class ApiCallInterceptor implements HttpInterceptor {
@@ -19,7 +20,8 @@ export class ApiCallInterceptor implements HttpInterceptor {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private tokenService: TokenService) {}
+    private tokenService: TokenService,
+    private snackBar: SharedSnackbarService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const accessToken = this.tokenService.getAccessToken();
@@ -53,13 +55,13 @@ export class ApiCallInterceptor implements HttpInterceptor {
               }
               const expires = new Date( parseInt(jwt_data.exp) * 1000 )
               const timeout = expires.getTime() - Date.now() - (60 * 1000);
-              console.log('timeout:'+timeout)
+              //console.log('timeout:'+timeout)
               this.authService.refreshTokenInterval = setInterval(() => {
                 if (this.authService.isAccessTokenExpired(this.tokenService.getAccessToken())) {
                   this.authService.refreshToken({
                     refresh_token: this.tokenService.getRefreshToken(),
                   }).subscribe((res) => {
-                    AuthService.log(res);
+                    //AuthService.log(res);
                   });
                 }
               }, timeout);
@@ -69,7 +71,7 @@ export class ApiCallInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        /*if(error.status === 401) {
+        if(error.status === 401) {
           if(error.error.error === 'invalid_token') {
             this.authService.refreshToken({
               refresh_token: refreshToken
@@ -80,15 +82,20 @@ export class ApiCallInterceptor implements HttpInterceptor {
 
           else {
             this.router.navigate(['auth/login']).then( _=> {
-              console.log('Redirecting to login page');
+              this.snackBar.openSnackBar('HTTP ERROR! ','Redirecting to login pagen.', 2000,'sb-error');
             })
           }
         }
         else if (error.status === 400){
           this.router.navigate(['auth/login']).then( _=> {
-            console.log('Redirecting to login page');
+            this.snackBar.openSnackBar('HTTP ERROR! ','Redirecting to login page', 2000,'sb-error');
           })
-        }*/
+        }
+        else if (error.status === 0){
+          this.router.navigate(['auth/login']).then( _=> {
+            this.snackBar.openSnackBar('ERROR!','Internal server error!', 2000,'sb-error');
+          })
+        }
         return throwError(error);
       })
     );
