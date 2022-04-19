@@ -11,6 +11,7 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit {
+  isLoading:boolean = false;
   setNewPassword = this.fb.group({
     oldpass: ['', [Validators.required,]],
     newpass: ['', [Validators.required,]],
@@ -50,10 +51,9 @@ export class ChangePasswordComponent implements OnInit {
       
     });
   }
-  sendOtp(){
-    this.otpForm = false
-  }
+
   changePassword(){
+    this.isLoading =true
     const user = this.auth.getUserData();
     
     const payload ={
@@ -63,10 +63,13 @@ export class ChangePasswordComponent implements OnInit {
     }
     this.auth.chnagePasword(payload).subscribe((res)=>{
       if(res.status ==='success'){
+        this.isLoading =false
         this.router.navigate(['']).then( _=> {
           this.snackBar.openSnackBar('SUCCESS!','Password Changed Successfully!','sb-success');
         })
       }
-    })
+    },error => {
+      this.isLoading =false
+      this.snackBar.openSnackBar('Error!',error,'sb-error')});
   }
 }

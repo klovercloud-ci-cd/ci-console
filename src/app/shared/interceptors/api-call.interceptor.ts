@@ -71,31 +71,29 @@ export class ApiCallInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        // if(error.status === 401) {
-        //   if(error.error.error === 'invalid_token') {
-        //     this.authService.refreshToken({
-        //       refresh_token: refreshToken
-        //     }).subscribe(() => {
-        //       location.reload();
-        //     })
-        //   }
+        if(error.status === 401) {
+          if(error.error.error === 'invalid_token') {
+            this.authService.refreshToken({
+              refresh_token: refreshToken
+            }).subscribe(() => {
+              location.reload();
+            })
+          }
 
-        //   else {
-        //     this.router.navigate(['auth/login']).then( _=> {
-        //       this.snackBar.openSnackBar('HTTP ERROR! ','Redirecting to login pagen.', 2000,'sb-error');
-        //     })
-        //   }
-        // }
-        // else if (error.status === 400){
-        //   this.router.navigate(['auth/login']).then( _=> {
-        //     this.snackBar.openSnackBar('HTTP ERROR! ','Redirecting to login page', 2000,'sb-error');
-        //   })
-        // }
-        // else if (error.status === 0){
-        //   this.router.navigate(['auth/login']).then( _=> {
-        //     this.snackBar.openSnackBar('ERROR!','Internal server error!', 2000,'sb-error');
-        //   })
-        // }
+          else {
+            this.router.navigate(['auth/login']).then( _=> {
+              this.snackBar.openSnackBar('HTTP ERROR! ','Redirecting to login pagen.', 'sb-error');
+            })
+          }
+        }
+        else if (error.status === 400){
+          /*this.router.navigate(['auth/login']).then( _=> {
+          })*/
+          this.snackBar.openSnackBar('HTTP ERROR! ','Redirecting to login page', 'sb-error');
+        }
+        else if (error.status === 0){
+          this.snackBar.openSnackBar('ERROR!','Internal server error!','sb-error');
+        }
         return throwError(error);
       })
     );
