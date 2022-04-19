@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
+import { ConfirmPasswordMatch } from 'src/app/shared/validators/confirmPassword.validator';
 
 @Component({
   selector: 'app-registration',
@@ -10,19 +12,21 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
+  durationInSeconds = 5;
+
   registrationForm = this.fb.group(
     {
       first_name: ['', [Validators.required, Validators.maxLength(15)]],
       last_name: ['', [Validators.required, Validators.maxLength(15)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       c_password: ['', Validators.required],
       checked: [false, Validators.requiredTrue],
       auth_type: ['password'],
     },
     {
-      validator: this.confirmPasswordMatch('password', 'c_password'),
+      validator: ConfirmPasswordMatch('password', 'c_password'),
     }
   );
   isLoading = false;
@@ -31,8 +35,11 @@ export class RegistrationComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private snack: SharedSnackbarService,
   ) {}
+
+  ngOnInit(): void {}
 
   registrationFormData() {
     this.isLoading = true;
@@ -46,29 +53,30 @@ export class RegistrationComponent implements OnInit {
         if (res.status === 'success') {
           this.isLoading = false;
           this.router.navigate(['/auth/login']);
+          this.snack.openSnackBar('Registration Successfull', 'You can login now','sb-success');
         }
         console.log(res.status);
         console.log(this.authService.getUserData(), 'USER');
       },
       (err) => {
+        this.isLoading = false;
+        this.snack.openSnackBar('Registration Failed!', 'Please submit valid credentials.','sb-warn');
         console.log('err', err);
       }
     );
   }
 
-  ngOnInit(): void {}
-
-  confirmPasswordMatch(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-
-      if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ confirmPasswordMatch: true });
-      } else {
-        matchingControl.setErrors(null);
-      }
-    };
+  phoneNumberCheck(phoneNumber: number) {
+    //  var regEx = ^\+{0,2}([\-\. ])?(\(?\d{0,3}\))?([\-\. ])?\(?\d{0,3}\)?([\-\. ])?\d{3}([\-\. ])?\d{4};
+    //  if(phoneNumber.value.match(regEx))
+    //    {
+    //     return true;
+    //    }
+    //  else
+    //    {
+    //    alert("Please enter a valid phone number.");
+    //    return false;
+    //    }
   }
 
   get emailField(): any {

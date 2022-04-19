@@ -1,23 +1,147 @@
-.kc-login-right-bg {
-  background: url(../../../assets/images/bg/login-right-bg-dark.svg) center top/50% 100% repeat-y;
-  background-position: right 50% ;
-}
-@media screen and (max-width: 1024px) {
-  .kc-login-right-bg {
-    background: url(../../../assets/images/bg/login-right-bg-dark.svg) center
-    top/100% 100% repeat-y;
-  }
-}
+
 
 .kc-card-border {
   border: 2px solid #697ca2;
   padding: 2.5rem;
   @apply bg-dark-container;
   height: 100% !important;
-  background: linear-gradient(280.19deg,#3d4d6d -5.42%,#182641 204.15%);
+  background: linear-gradient(280.19deg, #3d4d6d -5.42%, #182641 204.15%);
   box-shadow: 0 0 30px rgb(0 0 0 / 8%);
 }
 
 .kc-leading {
   line-height: 56px !important;
 }
+
+button:disabled {
+  @apply bg-slate-500;
+}
+
+
+
+.left-side-bg {
+  background: url("../../../assets/img/illustrations/login-left-bg-dark.svg");
+  // background: linear-gradient(180deg, #0E162F 84.13%, #111A37 107.75%, #202B4F 125.91%, #7B88B3 141.35%, rgba(190, 198, 213, 0.161458) 157.25%, #BFC6DA 171.33%);
+  display: none !important;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center top;
+  position: relative;
+  .login-left-1,
+  .login-left-2,
+  .login-left-3,
+  .login-left-4,
+  .login-left-5,
+  .login-left-6,
+  .login-left-7 {
+    z-index: 1;
+  }
+  .login-left-1 {
+    top: 2%;
+    left: 5%;
+  }
+  .login-left-2 {
+    top: 20%;
+    left: 10%;
+  }
+  .login-left-3 {
+    top: 33%;
+    left: 0;
+  }
+  .login-left-4 {
+    bottom: 0;
+    right: 5%;
+  }
+  .login-left-5 {
+    right: 5%;
+    bottom: 25%;
+  }
+  .login-left-6 {
+    top: 30%;
+    right: 15%;
+  }
+  .login-left-7 {
+    left: 40%;
+    top: 0;
+  }
+}
+
+.ls-infographics {
+  width: 90%;
+  height: auto;
+  @apply pb-10 pt-10;
+  margin-bottom: 5vh;
+  z-index: 2;
+}
+
+.right-side-bg {
+  position: relative;
+  z-index: 2 !important;
+  /*overflow: hidden !important;*/
+  background: url("../../../assets/images/bg/bg-shapes.svg"),url("../../../assets/img/illustrations/login-right-bg-dark1.svg");
+  background-repeat: no-repeat;
+  background-size: 120% 120%;
+  background-position: center top;
+
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .btn-auth {
+    height: 55px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1280px) {
+  .left-side-bg {
+    display: flex !important;
+  }
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1400px) {
+  .left-side-bg {
+    display: flex !important;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1600px and up) */
+@media only screen and (min-width: 1600px) {
+  .left-side-bg {
+    display: flex !important;
+  }
+  .rs-form-box {
+    width: 60%;
+    margin: 0px;
+  }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: none !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+

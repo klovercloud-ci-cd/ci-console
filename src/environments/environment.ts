@@ -7,8 +7,8 @@ const webappUrl = 'http://localhost:2022';
 export const environment = {
   appUrl: webappUrl,
   production: false,
-  v1AuthEndpoint: 'http://192.168.68.162:4200/api/v1/',
-  v1ApiEndPoint: 'http://192.168.68.162:4200/api/v1/',
+  v1AuthEndpoint: 'http://192.168.68.114:4200/api/v1/',
+  v1ApiEndPoint: 'http://192.168.68.114:4200/api/v1/',
   // config: {
   //   ...getConfig(CONFIG)
   // },

@@ -1,0 +1,113 @@
+.kc-attach-company {
+  width: 100%;
+  @apply flex justify-center items-center;
+}
+.registration-form {
+  min-height: 80vh;
+  @apply w-full h-full text-dark-text mx-7;
+  background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
+}
+.form-title {
+  @apply text-2xl uppercase;
+}
+.text-instruction {
+  @apply text-gray-300 py-4;
+}
+.example-tooltip-red {
+  @apply bg-dark-info text-sm;
+}
+
+.signup-btn {
+  @apply cursor-pointer text-lg font-semibold tracking-wider;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+.example-margin {
+  margin: 0 10px;
+  border-radius: 50% !important;
+}
+.form-drop {
+  animation: formDown 1s;
+}
+.form-wrapper {
+  @apply w-full md:px-[20%] pb-4;
+}
+.kc-expansion-panel {
+  background: transparent;
+  margin-top: 0;
+}
+.two-input {
+  @apply flex flex-col md:flex-row gap-2;
+}
+.two-input > mat-form-field {
+  @apply w-full block;
+}
+
+.kc-select-container {
+  .mat-form-field-flex {
+    @apply bg-orange-500;
+  }
+}
+
+.kc-select-type {
+  @apply bg-dark-background-3 hover:bg-dark-slider-color;
+}
+.mat-option-text {
+  @apply text-white;
+}
+.kcci-field {
+  @apply w-[100%];
+}
+.kc-add-app {
+  @apply w-[25%] py-4  rounded text-lg font-semibold tracking-wider;
+}
+.kc-register {
+  @apply w-full py-3 mx-auto rounded-[50px] text-sm md:text-base font-semibold tracking-wider;
+}
+.kc-radio-btn {
+  @apply pb-5 text-white;
+}
+.kc-number {
+  @apply bg-dark-container;
+}
+.tooltip {
+  background-color: green;
+}
+
+.cluster-card {
+  background: var(--color-bg-primary);
+  padding: 15px;
+  border-radius: 5px;
+  height: 100%;
+  background: linear-gradient(280.19deg, #25324e -5.42%, #1f2c46 204.15%);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+  .name {
+    padding: 7px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    background: var(--color-bg-dark);
+    svg {
+      margin-right: 10px;
+    }
+  }
+}
+
+@keyframes formDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

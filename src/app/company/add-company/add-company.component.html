@@ -1,0 +1,351 @@
+<div>
+<div class="kc-form kc-attach-company">
+  <mat-card class="registration-form mt-4">
+    <div class="form-wrapper form-drop">
+      <div class="text-instruction">
+        <h1 class="text-xl">Company Info</h1>
+      </div>
+
+      <!-- Input Form -->
+
+      <form
+        [formGroup]="attachCompanyForm"
+        (ngSubmit)="attachCompanyFormData()"
+      >
+        <div class="flex flex-col xl:flex-row gap-5">
+          <mat-form-field class="kcci-field" appearance="outline">
+            <mat-label class="text-white">ID </mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              required
+              formControlName="companyId"
+              matInput
+              placeholder="Enter ID"
+            />
+          </mat-form-field>
+          <mat-form-field class="kcci-field" appearance="outline">
+            <mat-label class="text-white">Name </mat-label>
+            <input
+              type="text"
+              autocomplete="off"
+              required
+              formControlName="name"
+              matInput
+              placeholder="Enter Company Name"
+            />
+          </mat-form-field>
+        </div>
+
+        <!-- Add Repository Section -->
+        <!-- formGroupName="address" -->
+
+        <mat-accordion multi="false">
+          <div
+            class="rounded-md form-drop bg-[#1A2C4A] border-dark-primary border-1.5 p-2 mb-4 relative"
+            *ngFor="let repo of repositories.controls; let i = index"
+            formArrayName="repositories"
+          >
+            <div [formGroupName]="i">
+              <mat-expansion-panel
+                [expanded]="true"
+                class="kc-expansion-panel"
+                (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false"
+              >
+                <mat-expansion-panel-header>
+                  <h1 class="text-lg mb-2">Repository</h1>
+                </mat-expansion-panel-header>
+
+                <div class="flex flex-col xl:flex-row gap-5">
+                  <mat-form-field
+                    class="kcci-field kc-select-container text-white"
+                    appearance="outline"
+                  >
+                    <mat-label>Type</mat-label>
+                    <mat-select formControlName="type" name="repo">
+                      <mat-option
+                        class="kc-select-type"
+                        *ngFor="let repo of repos"
+                        [value]="repo.value"
+                      >
+                        {{ repo.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field class="kcci-field" appearance="outline">
+                    <mat-label class="text-white">Token </mat-label>
+                    <input
+                      formControlName="token"
+                      required
+                      type="text"
+                      autocomplete="off"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div>
+
+                <!-- Navigating to Get Access Token -->
+
+                <div class="mb-5">
+                  <h1 class="text-right">
+                    <span class="cursor-pointer">
+                      <div
+                        [ngSwitch]="
+                          attachCompanyForm.value.repositories[i].type
+                        "
+                      >
+                        <div *ngSwitchCase="'github'">
+                          <a
+                            href="https://github.com/settings/tokens"
+                            target="_blank"
+                          >
+                            <div class="flex justify-end gap-1">
+                              <div
+                                class="flex items-center"
+                                matTooltip="Click on 'Generate token' to generate the token and paste that in the input field.'"
+                                matTooltipPosition="before"
+                                matTooltipClass="example-tooltip-red "
+                                matTooltipHideDelay="500"
+                                matTooltipShowDelay="500"
+                                matTooltipClass="tooltip"
+                              >
+                                <mat-icon
+                                  class="text-yellow-500"
+                                  aria-hidden="false"
+                                  aria-label="Example home icon"
+                                  >help_outline</mat-icon
+                                >
+                              </div>
+                              <h1>Generate token</h1>
+                            </div>
+                          </a>
+                        </div>
+                        <div *ngSwitchCase="'gitlab'">
+                          <a
+                            href="https://gitlab.com/-/profile/personal_access_tokens"
+                            target="_blank"
+                          >
+                            <div class="flex justify-end gap-1">
+                              <span class="example-container" cdkScrollable>
+                                <div
+                                  #tooltip="matTooltip"
+                                  matTooltip="Click on 'Generate Here to generate the token and paste that in the input field.'"
+                                  [matTooltipPosition]="'left'"
+                                  matTooltipClass="example-tooltip-red "
+                                  matTooltipHideDelay="100000"
+                                >
+                                  <mat-icon
+                                    class="text-yellow-500"
+                                    aria-hidden="false"
+                                    aria-label="Example home icon"
+                                    >help_outline</mat-icon
+                                  >
+                                </div>
+                              </span>
+                              <h1>Generate token</h1>
+                            </div>
+                          </a>
+                        </div>
+                        <div *ngSwitchCase="'bitbucket'">
+                          <a
+                            href="https://bitbucket.org/account/settings/app-passwords/"
+                            target="_blank"
+                          >
+                            <div class="flex justify-end gap-1">
+                              <span class="example-container" cdkScrollable>
+                                <div
+                                  #tooltip="matTooltip"
+                                  matTooltip="Click on 'Generate Here to generate the token and paste that in the input field.'"
+                                  [matTooltipPosition]="'left'"
+                                  matTooltipClass="example-tooltip-red "
+                                  matTooltipHideDelay="100000"
+                                >
+                                  <mat-icon
+                                    class="text-yellow-500"
+                                    aria-hidden="false"
+                                    aria-label="Example home icon"
+                                    >help_outline</mat-icon
+                                  >
+                                </div>
+                              </span>
+                              <h1>Generate token</h1>
+                            </div>
+                          </a>
+                        </div>
+                        <div *ngSwitchDefault="">
+                          <div class="flex justify-end gap-1">
+                            <span class="example-container" cdkScrollable>
+                              <div
+                                #tooltip="matTooltip"
+                                matTooltip="Click on 'Generate Here to generate the token and paste that in the input field.'"
+                                [matTooltipPosition]="'left'"
+                                matTooltipClass="example-tooltip-red "
+                                matTooltipHideDelay="100000"
+                              >
+                                <mat-icon
+                                  class="text-yellow-500"
+                                  aria-hidden="false"
+                                  aria-label="Example home icon"
+                                  >help_outline</mat-icon
+                                >
+                              </div>
+                            </span>
+                            <h1>Generate token</h1>
+                          </div>
+                        </div>
+                      </div>
+                    </span>
+                  </h1>
+                </div>
+
+                <div>
+                  <div
+                    class="border-dark-primary border-1.5 rounded-md form-drop my-2"
+                    *ngFor="
+                      let app of repoApplication(i).controls;
+                      let appIndex = index
+                    "
+                    formArrayName="applications"
+                  >
+                    <div>
+                      <h1 class="flex justify-end p-2">
+                        <mat-icon
+                          (click)="removeApplicaiton(i, appIndex)"
+                          class="cursor-pointer text-dark-danger"
+                          >highlight_off</mat-icon
+                        >
+                      </h1>
+                      <div
+                        [formGroupName]="appIndex"
+                        class="flex flex-col xl:flex-row gap-5 px-4"
+                      >
+                        <mat-form-field class="kcci-field" appearance="outline">
+                          <mat-label class="text-white">Name </mat-label>
+                          <input
+                            formControlName="name"
+                            type="text"
+                            autocomplete="off"
+                            matInput
+                          />
+                        </mat-form-field>
+                        <mat-form-field class="kcci-field" appearance="outline">
+                          <mat-label class="text-white">URL </mat-label>
+                          <input
+                            formControlName="url"
+                            type="text"
+                            autocomplete="off"
+                            matInput
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Add APlication Section -->
+
+                <div class="ml-auto mt-5">
+                  <div class="kc-application-add">
+                    <div class="">
+                      <h1 class="text-right">
+                        <button
+                          class="cursor-pointer"
+                          (click)="addApplicaiton(i)"
+                          [disabled]="!attachCompanyForm.valid"
+                        >
+                          <div class="flex items-center gap-1">
+                            <mat-icon
+                              class="text-green-500"
+                              aria-hidden="false"
+                              aria-label="Example home icon"
+                              >control_point</mat-icon
+                            >
+                            <h1 class="text-base">Application</h1>
+                          </div>
+                        </button>
+                      </h1>
+                    </div>
+                  </div>
+                  <h1
+                    (click)="removeRepository(i)"
+                    class="cursor-pointer text-dark-danger absolute top-0 right-0 z-10"
+                  >
+                    <span class="-mt-5 -mr-5">
+                      <div class="flex items-center gap-1">
+                        <mat-icon>highlight_off</mat-icon>
+                      </div>
+                    </span>
+                  </h1>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </mat-accordion>
+
+        <div class="flex justify-end my-4">
+          <!-- [disabled]="!attachCompanyForm.valid" *ngIf="!attachCompanyForm.valid"-->
+          <button
+            type="button"
+            class="cursor-pointer"
+            (click)="addRepoFormGroupControl()"
+            [disabled]="
+              attachCompanyForm.value.repositories.length != 0 &&
+              !attachCompanyForm.valid
+            "
+          >
+            <div class="flex items-center gap-1">
+              <mat-icon
+                class="text-green-500"
+                aria-hidden="false"
+                aria-label="Example home icon"
+                >control_point</mat-icon
+              >
+              <h1 class="text-base text-white">Repository</h1>
+            </div>
+          </button>
+        </div>
+
+        <div
+          class="w-full"
+          *ngIf="!attachCompanyForm.valid; else other_content"
+        >
+          <div class="w-52 sm:w-56 md:w-60 lg:w-52 ml-auto">
+            <button
+              class="bg-slate-500 kc-register block"
+              type="submit"
+              [disabled]="!attachCompanyForm.valid"
+            >
+              Attach Company
+            </button>
+          </div>
+        </div>
+        <ng-template #other_content>
+          <div class="w-40 md:w-60 lg:w-52 ml-auto">
+            <button
+              class="bg-dark-primary kc-register block text-white"
+              type="submit"
+              [disabled]="!attachCompanyForm.valid"
+            >
+              <span *ngIf="!isLoading; else before_submit">
+                Attach Company
+              </span>
+              <ng-template #before_submit>
+                <div class="py-3 mx-auto w-52">
+                  <mat-progress-bar
+                    class="green-progress kc-progress-bar"
+                    mode="indeterminate"
+                  >
+                  </mat-progress-bar>
+                </div>
+              </ng-template>
+            </button>
+          </div>
+        </ng-template>
+      </form>
+    </div>
+  </mat-card>
+  
+</div>
+</div>

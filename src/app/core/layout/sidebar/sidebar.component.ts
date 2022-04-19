@@ -6,21 +6,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  appList: string[] = [
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
-    'App',
+  menuItem: any = [
+    {
+      title: 'Dashboard',
+      icon: 'dashboard',
+      route: '/',
+    },
+    {
+      title: 'Applications',
+      icon: 'apps',
+      route: '/app/list',
+    },
+    {
+      title: 'Pipeline',
+      icon: 'analytics',
+      route: '/app/pipe',
+    },
+    {
+      title: 'Attach Company',
+      icon: 'store',
+      route: '/attach-company',
+    },
   ];
   constructor() {}
-
   ngOnInit(): void {}
 }

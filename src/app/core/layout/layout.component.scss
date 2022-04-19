@@ -1,16 +1,31 @@
 .example-container {
   height: 100vh;
   color: white;
-  background-color: #151f36;
+  background-color: #0d1527;
 }
 .example-sidenav {
-  background-color: #1a2c4a;
-  border-right: 1px solid #495c7d;
+  background-color: #131d35;
+  @apply xl:border-r-[1px] xl:border-[#495c7d] w-[260px];
 }
+
 .content-body {
-  //   height: 94vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #151f36;
+  background-color: #0d1527;
+}
+
+
+.sidepanel {
+  position: fixed;  
+  z-index: 1;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #131d35;
+  transform: translateX(-260px);
+  transition: transform .5s;
+}
+.open{
+  transform: translateX(0px);
 }

@@ -3,14 +3,16 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
-  HttpParams,
 } from '@angular/common/http';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { tap, switchMap } from 'rxjs/operators';
 import { TokenService } from './token.service';
 import * as endpoints from './auth.endpoint';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import {SharedSnackbarService} from "../shared/snackbar/shared-snackbar.service";
+
 const BASE_URL = environment.v1AuthEndpoint;
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
@@ -25,54 +27,39 @@ const HTTP_OPTIONS = {
 export class AuthService {
   redirectUrl = '';
   refreshTokenInterval: any;
-  private static handleError(error: HttpErrorResponse): any {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An Error occurred: ', error.error.message);
-    } else {
-      console.error(
-        `Error Code From Backend: ${error.status}`,
-        `Body: ${error.error}`
-      );
-    }
-
-    return throwError('Internal server error!');
-  }
-
-  private static log(message: string): any {
-    console.log(message);
-  }
 
   constructor(
+    private snackBar: SharedSnackbarService,
     private http: HttpClient,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
   ) {}
+  private handleError(error: HttpErrorResponse): any {
+    if (error.error instanceof ErrorEvent) {
+      // @ts-ignore
+      return throwError('An Error occurred: ', error.error.message);
+    } else {
+      return throwError(`${error.error.message}`);
+    }
+
+    //return throwError('Internal server error!');
+  }
+
+  static log(message: string): any {
+    console.log(message);
+  }
 
   login(loginPayload: any): Observable<any> {
     HTTP_OPTIONS.params = {
       grant_type: 'password',
-      token_type: 'regular',
     };
     return this.http
       .post(BASE_URL + endpoints.LOGIN, loginPayload, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
           AuthService.log('login');
-          if (this.tokenService.getAccessToken()) {
-            this.refreshTokenInterval = setInterval(() => {
-              if (
-                this.isAccessTokenExpired(this.tokenService.getAccessToken())
-              ) {
-                this.refreshToken({
-                  refresh_token: this.tokenService.getRefreshToken(),
-                }).subscribe((res) => {
-                  AuthService.log(res);
-                });
-              }
-            }, 300000); // TODO: This is not the right way but it will do for now
-          }
         }),
-        catchError(AuthService.handleError)
+        catchError(this.handleError)
       );
   }
 
@@ -81,26 +68,26 @@ export class AuthService {
       .post(BASE_URL + endpoints.REGISTER, signUpPayload, HTTP_OPTIONS)
       .pipe(
         tap((_) => AuthService.log('registered!')),
-        catchError(AuthService.handleError)
+        catchError(this.handleError)
       );
   }
 
   refreshToken(refreshTokenData: any): Observable<any> {
     HTTP_OPTIONS.params = {
       grant_type: 'refresh_token',
-      token_type: 'regular',
     };
-    return this.http
-      .post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS)
-      .pipe(
-        tap((res: any) => {
-          this.tokenService.removeAccessToken();
-          this.tokenService.removeRefreshToken();
-          this.tokenService.saveAccessToken(res.access_token);
-          this.tokenService.saveRefreshToken(res.refresh_token);
-        }),
-        catchError(AuthService.handleError)
-      );
+    return this.http.post(BASE_URL + endpoints.REFRESH_TOKEN, refreshTokenData, HTTP_OPTIONS).pipe(
+      tap((event: any) => {
+        // Save new Tokens
+        this.tokenService.removeAccessToken();
+        this.tokenService.removeRefreshToken();
+        this.tokenService.saveAccessToken(event.data.access_token);
+        this.tokenService.saveRefreshToken(event.data.refresh_token);
+        //return event;
+
+      }),
+      catchError(this.handleError)
+    );
   }
 
   logOut(): void {
@@ -108,6 +95,7 @@ export class AuthService {
     this.tokenService.removeRefreshToken();
     setTimeout(() => {
       clearInterval(this.refreshTokenInterval);
+      this.refreshTokenInterval = null;
       this.router.navigate(['/auth/login']);
     }, 1000);
   }
@@ -115,24 +103,20 @@ export class AuthService {
   isAccessTokenExpired(accessToken: any): boolean {
     const decoded: any = jwt_decode(accessToken);
     const expMilSecond: number = decoded?.exp * 1000;
-    const currentTime = Date.now();
-    console.log(expMilSecond - currentTime, 'Difference');
-    if (expMilSecond < currentTime) {
+    const currentTime = Date.now() + 60000;
+    if ((expMilSecond - currentTime) < 0) {
+      clearInterval(this.refreshTokenInterval)
+      this.refreshTokenInterval = null
       return true;
     }
     return false;
   }
-  timeDiff(accessToken: string): any {
-    const decoded: any = jwt_decode(accessToken);
-    const expMilSecond: number = decoded?.exp * 1000;
-    const currentTime = Date.now();
-    return expMilSecond - currentTime;
-  }
+
   getUserData(): any {
     let data: any;
     if (this.tokenService.getAccessToken()) {
       const token = this.tokenService.getAccessToken();
-      if (token != null && !this.isAccessTokenExpired(token)) {
+      if (token != null) {
         const decoded: any = jwt_decode(token);
         data = {
           ...decoded.data,
@@ -142,11 +126,33 @@ export class AuthService {
     }
     return [];
   }
+
   isLogin() {
-    if (this.tokenService.getAccessToken()) {
+    if (this.tokenService.getRefreshToken() &&
+      !this.isAccessTokenExpired(this.tokenService.getRefreshToken())) {
       return true;
     } else {
       return false;
     }
+  }
+  forgotPassData(media:string){
+
+    HTTP_OPTIONS.params = {
+      action: 'forgot_password',
+      media: media
+    };
+    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , '', HTTP_OPTIONS)
+  }
+  chnagePasword(payload:any):Observable<any>{
+
+    HTTP_OPTIONS.params = {
+      action: 'reset_password',
+    };
+    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , payload, HTTP_OPTIONS).pipe(
+      tap((event: any)=>{
+
+      }),
+    catchError(this.handleError)
+    )
   }
 }
