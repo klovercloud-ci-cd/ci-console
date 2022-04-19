@@ -148,6 +148,11 @@ export class AuthService {
     HTTP_OPTIONS.params = {
       action: 'reset_password',
     };
-    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , payload, HTTP_OPTIONS)
+    return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , payload, HTTP_OPTIONS).pipe(
+      tap((event: any)=>{
+
+      }),
+    catchError(this.handleError)
+    )
   }
 }

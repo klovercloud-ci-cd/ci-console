@@ -83,7 +83,7 @@ body {
   }
     transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
   box-shadow: 0 0 10px 5px rgba(219, 219, 68, 0.878);
-  background: #293F65;  
+  background: #293F65;
   background: -webkit-linear-gradient(to right, #293F65, #293F65);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #293F65, #293F65); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   border-radius: 4px;
@@ -135,6 +135,9 @@ body {
 
 .kc-card {
   @apply bg-dark-background border-1.5 border-dark-border-default text-dark-text;
+}
+.kc-button-primary {
+  @apply bg-dark-primary px-4 text-white;
 }
 .kc-button-primary {
   @apply bg-dark-primary px-4 text-white;

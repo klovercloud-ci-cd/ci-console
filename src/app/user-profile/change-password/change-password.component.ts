@@ -11,6 +11,7 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit {
+  isLoading:boolean = false;
   setNewPassword = this.fb.group({
     oldpass: ['', [Validators.required,]],
     newpass: ['', [Validators.required,]],
@@ -20,7 +21,6 @@ export class ChangePasswordComponent implements OnInit {
     {
       validator: this.confirmPasswordMatch('newpass', 'newpassconfirm'),
     });
-  otpForm =true;
   constructor(private fb: FormBuilder,
               private auth: AuthService,
               private userData :UserDataService,
@@ -41,10 +41,9 @@ export class ChangePasswordComponent implements OnInit {
   }
   ngOnInit(): void {
   }
-  sendOtp(){
-    this.otpForm = false
-  }
+
   channgePassword(){
+    this.isLoading =true
     const user = this.auth.getUserData();
     let email;
     this.userData.getUserInfo(user.user_id).subscribe(res=>{
@@ -58,11 +57,14 @@ export class ChangePasswordComponent implements OnInit {
     this.auth.chnagePasword(payload).subscribe((res)=>{
       //console.log(res.status)
       if(res.status ==='success'){
+        this.isLoading =false
         this.router.navigate(['']).then( _=> {
           this.snackBar.openSnackBar('SUCCESS!','Password Changed Successfully!', 2000,'sb-success');
         })
       }
-    })
+    },error => {
+      this.isLoading =false
+      this.snackBar.openSnackBar('Error!',error,2000,'sb-error')});
   }
 
 }

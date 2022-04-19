@@ -31,9 +31,8 @@ export class ForgotPasswordComponent implements OnInit {
   });
   forgotPassComponent() {
 
-    this.forgotPassMail = this.forgotPass.value.email;
-    this.auth.forgotPassData(this.forgotPassMail).subscribe(res=>{
-      //console.log(this.forgotPassMail)
+    this.auth.forgotPassData(this.forgotPass.value.email).subscribe(res=>{
+      this.forgotPassMail = this.forgotPass.value.email;
     })
   }
   resendCode(){
@@ -56,7 +55,11 @@ export class ForgotPasswordComponent implements OnInit {
           this.snackBar.openSnackBar('SUCCESS!','Password Changed Successfully!', 2000,'sb-success');
         })
       }
-    })
+    },
+      error => {
+      this.snackBar.openSnackBar('Error!',error,2000,'sb-error');
+
+  })
   }
   ngOnInit(): void {}
 }
