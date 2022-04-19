@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { SharedLayoutService } from './shared-layout.service';
@@ -58,16 +57,14 @@ export class LayoutComponent implements OnInit {
       this.ss.toggleState$.subscribe((res) => (this.openCollapsedBar = res));
       console.log('this.openCollapsedBar: ',this.openCollapsedBar);
       this.ss.emitData();
-    
   }
 
   openNav(boom:any) {
-    this.openCollapsedBar = !this.openCollapsedBar;
+    // this.openCollapsedBar = !this.openCollapsedBar;
     // @ts-ignore
     this.ss.toggleState$.subscribe((res) => (this.openCollapsedBar = res));
     this.ss.emitData();
     this.isOpen = boom;
-    
   }
 }
 

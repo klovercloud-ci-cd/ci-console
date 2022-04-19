@@ -72,38 +72,10 @@ body {
   position: relative;
   margin-top: 8px;
   padding: 27px;
-  height: 100px;
-  width: 344px;
+  min-height: 100px;
+  min-width: 344px;
 }
-// .kc-toastr {
-//   transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
-//   box-shadow: 0 0 10px 5px rgba(240, 241, 243, 0.878);
-//   animation: fadeInFromBellow 0.5s;
-//   background: #293F65;  /* fallback for old browsers */
-//   background: -webkit-linear-gradient(to right, #293F65, #293F65);  /* Chrome 10-25, Safari 5.1-6 */
-//   background: linear-gradient(to right, #293F65, #293F65); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-//   border-radius: 4px;
-//   color: white;
-//   position: relative;
-//   margin-top: 8px;
-//   padding: 27px;
-//   // height: 100px;
-//   width: 344px;
-// }
-// .kc-toastr-close {
-//   position: absolute;
-//   text-align: center;
-//   line-height: 16px;
-//   color: #7a8eb2;
-//   font-size: 13px;
-//   display: block;
-//   right: 10px;
-//   top: 10px;
-//   &:hover {
-//     border-radius: 2px;
-//     cursor: pointer;
-//   }
-// }
+
 .sb-warn {
   @apply bg-dark-warn text-dark-container pl-10 shadow-2xl;
   .mat-simple-snack-bar-content {
@@ -119,8 +91,8 @@ body {
   position: relative;
   margin-top: 8px;
   padding: 27px;
-  height: 100px;
-  width: 344px;
+  min-height: 100px;
+  min-width: 344px;
 }
 .sb-notification {
   @apply bg-dark-warn text-dark-container pl-10 shadow-2xl;
@@ -137,8 +109,8 @@ body {
   position: relative;
   margin-top: 8px;
   padding: 27px;
-  height: 100px;
-  width: 344px;
+  min-height: 100px;
+  min-width: 344px;
 }
 .sb-error {
   @apply bg-dark-warn text-dark-container pl-10 shadow-2xl;
@@ -155,8 +127,8 @@ body {
   position: relative;
   margin-top: 8px;
   padding: 27px;
-  height: 100px;
-  width: 344px;
+  min-height: 100px;
+  min-width: 344px;
 }
 
 
