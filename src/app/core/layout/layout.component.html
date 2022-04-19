@@ -5,7 +5,8 @@
 >
   <mat-drawer #drawer class="example-sidenav  relative" [opened]="isOpen" mode="side">
     
-    <button (click)="openNav(!isOpen)" class="absolute top-[31px] right-3 z-50">
+    
+    <button (click)="openNav(!isOpen)" class="absolute top-[26px] right-3 z-50">
       <span
         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-dark-primary opacity-30"
       ></span>
@@ -15,7 +16,13 @@
         >radio_button_checked</mat-icon
       >
     </button>
+   
+    <span class="z-10">
     <app-sidebar></app-sidebar>
+  </span>
+   <!-- <div class="h-[100vh] bg-green-400 w-20 ">
+      ss
+    </div> -->
   </mat-drawer>
 
   <div class="example-sidenav-content relative">

@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
     } else {
       this.route.navigate(['auth/login']).then((navigated: boolean) => {
         if(navigated) {
-          this.snackBar.openSnackBar('Please Login!','You Dont Have access to this page! Please Login', 2000,'sb-warn');
+          this.snackBar.openSnackBar('Please Login!','You Dont Have access to this page! Please Login', 'sb-warn');
         }
       });
       return false;

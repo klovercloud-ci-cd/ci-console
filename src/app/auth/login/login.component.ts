@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
           //console.log(this.authService.getUserData(), 'USER');
         }
       },error => {
-        this.snack.openSnackBar('Error!',error,2000,'sb-error')
+        this.snack.openSnackBar('Error!',error,'sb-error')
         this.isLoading =false;
       });
   }

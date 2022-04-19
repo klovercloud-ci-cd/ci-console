@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
+import { ConfirmPasswordMatch } from 'src/app/shared/validators/confirmPassword.validator';
 
 @Component({
   selector: 'app-registration',
@@ -26,13 +26,12 @@ export class RegistrationComponent implements OnInit {
       auth_type: ['password'],
     },
     {
-      validator: this.confirmPasswordMatch('password', 'c_password'),
+      validator: ConfirmPasswordMatch('password', 'c_password'),
     }
   );
   isLoading = false;
 
   constructor(
-    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private router: Router,
     private http: HttpClient,
@@ -40,9 +39,7 @@ export class RegistrationComponent implements OnInit {
     private snack: SharedSnackbarService,
   ) {}
 
-  ngOnInit(): void {
-    this.snack.openSnackBar('Authentication Error!','Please check the Credentials again.', 20000,'sb-error');    
-  }
+  ngOnInit(): void {}
 
   registrationFormData() {
     this.isLoading = true;
@@ -56,30 +53,17 @@ export class RegistrationComponent implements OnInit {
         if (res.status === 'success') {
           this.isLoading = false;
           this.router.navigate(['/auth/login']);
-          this.snack.openSnackBar('Registration Successfull', 'You can login now', 10000,'sb-success');
+          this.snack.openSnackBar('Registration Successfull', 'You can login now','sb-success');
         }
         console.log(res.status);
         console.log(this.authService.getUserData(), 'USER');
       },
       (err) => {
         this.isLoading = false;
-        this.snack.openSnackBar('Registration Failed!', 'Please submit valid credentials.', 3000,'sb-warn');
+        this.snack.openSnackBar('Registration Failed!', 'Please submit valid credentials.','sb-warn');
         console.log('err', err);
       }
     );
-  }
-
-  confirmPasswordMatch(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-
-      if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ confirmPasswordMatch: true });
-      } else {
-        matchingControl.setErrors(null);
-      }
-    };
   }
 
   phoneNumberCheck(phoneNumber: number) {

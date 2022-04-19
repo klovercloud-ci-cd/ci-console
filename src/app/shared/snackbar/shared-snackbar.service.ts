@@ -15,9 +15,9 @@ export class SharedSnackbarService {
   constructor(private snackBar: MatSnackBar) { }
 
     openSnackBar(title:string,message:string,
-      duration:number,panelClass:string) {
+      panelClass:string) {
       this.snackBar.openFromComponent(SnackComponent, {
-        duration: duration,
+        duration: 5000,
         data: { title: title , message: message, snackType: 'warn', panelClass: panelClass},
         panelClass: [panelClass],
       });

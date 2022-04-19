@@ -16,16 +16,20 @@ export class ChangePasswordComponent implements OnInit {
     newpass: ['', [Validators.required,]],
     newpassconfirm: ['', [Validators.required,]],
   },
-
     {
       validator: this.confirmPasswordMatch('newpass', 'newpassconfirm'),
-    });
+    }
+    );
+
+    user: any = this.auth.getUserData();
+    userPersonalInfo: any;
+    userEmail: string = '';
   otpForm =true;
   constructor(private fb: FormBuilder,
               private auth: AuthService,
               private userData :UserDataService,
               private router: Router,
-              private snackBar : SharedSnackbarService
+              private snackBar : SharedSnackbarService,
               ) { }
   confirmPasswordMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
@@ -40,29 +44,29 @@ export class ChangePasswordComponent implements OnInit {
     };
   }
   ngOnInit(): void {
+    this.userData.getUserInfo(this.user.user_id).subscribe((res) => {
+      this.userPersonalInfo = res;
+      this.userEmail = res.data.email;
+      
+    });
   }
   sendOtp(){
     this.otpForm = false
   }
-  channgePassword(){
+  changePassword(){
     const user = this.auth.getUserData();
-    let email;
-    this.userData.getUserInfo(user.user_id).subscribe(res=>{
-      email = res.data.email;
-    })
+    
     const payload ={
-      "email": email,
+      "email": this.userEmail,
       "current_password": this.setNewPassword.value.oldpass,
       "new_password": this.setNewPassword.value.newpass,
     }
     this.auth.chnagePasword(payload).subscribe((res)=>{
-      //console.log(res.status)
       if(res.status ==='success'){
         this.router.navigate(['']).then( _=> {
-          this.snackBar.openSnackBar('SUCCESS!','Password Changed Successfully!', 2000,'sb-success');
+          this.snackBar.openSnackBar('SUCCESS!','Password Changed Successfully!','sb-success');
         })
       }
     })
   }
-
 }

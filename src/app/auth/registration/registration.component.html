@@ -111,6 +111,9 @@
                           type="password"
                           matInput
                         />
+                        <mat-error *ngIf="registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched">
+                          We need a password to log you in!
+                        </mat-error>
                       </mat-form-field>
                       <mat-form-field appearance="outline">
                         <mat-label class="text-white"
@@ -122,9 +125,13 @@
                           type="password"
                           matInput
                         />
+                        <mat-error *ngIf="!registrationForm.get('password')?.hasError('pattern') && (((registrationForm.get('c_password')?.hasError('mustMatch') || registrationForm.get('c_password')?.hasError('required')) ) ||
+                         ((registrationForm.get('c_password')?.hasError('mustMatch') || registrationForm.get('c_password')?.hasError('required')) && registrationForm.get('c_password')?.touched))">
+                  Passwords need to match!
+                </mat-error>
                       </mat-form-field>
                     </div>
-
+                  
                     <div class="kc-radio-btn">
                       <mat-checkbox
                         formControlName="checked"
