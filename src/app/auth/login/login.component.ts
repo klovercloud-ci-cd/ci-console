@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
           this.tokenService.saveAccessToken(res.data.access_token);
           this.tokenService.saveRefreshToken(res.data.refresh_token);
           this.router.navigate(['']);
-          //console.log(this.authService.getUserData(), 'USER');
         }
       },error => {
         this.snack.openSnackBar('Error!',error,'sb-error')

@@ -97,92 +97,15 @@
                         "
                       >
                         <div *ngSwitchCase="'github'">
-                          <a
-                            href="https://github.com/settings/tokens"
-                            target="_blank"
-                          >
-                            <div class="flex justify-end gap-1">
-                              <div
-                                class="flex items-center"
-                                matTooltip="Click on 'Generate token' to generate the token and paste that in the input field.'"
-                                matTooltipPosition="before"
-                                matTooltipClass="example-tooltip-red "
-                                matTooltipHideDelay="500"
-                                matTooltipShowDelay="500"
-                                matTooltipClass="tooltip"
-                              >
-                                <mat-icon
-                                  class="text-yellow-500"
-                                  aria-hidden="false"
-                                  aria-label="Example home icon"
-                                  >help_outline</mat-icon
-                                >
-                              </div>
-                              <h1>Generate token</h1>
-                            </div>
-                          </a>
-                        </div>
-                        <div *ngSwitchCase="'gitlab'">
-                          <a
-                            href="https://gitlab.com/-/profile/personal_access_tokens"
-                            target="_blank"
-                          >
-                            <div class="flex justify-end gap-1">
-                              <span class="example-container" cdkScrollable>
-                                <div
-                                  #tooltip="matTooltip"
-                                  matTooltip="Click on 'Generate Here to generate the token and paste that in the input field.'"
-                                  [matTooltipPosition]="'left'"
-                                  matTooltipClass="example-tooltip-red "
-                                  matTooltipHideDelay="100000"
-                                >
-                                  <mat-icon
-                                    class="text-yellow-500"
-                                    aria-hidden="false"
-                                    aria-label="Example home icon"
-                                    >help_outline</mat-icon
-                                  >
-                                </div>
-                              </span>
-                              <h1>Generate token</h1>
-                            </div>
-                          </a>
-                        </div>
-                        <div *ngSwitchCase="'bitbucket'">
-                          <a
-                            href="https://bitbucket.org/account/settings/app-passwords/"
-                            target="_blank"
-                          >
-                            <div class="flex justify-end gap-1">
-                              <span class="example-container" cdkScrollable>
-                                <div
-                                  #tooltip="matTooltip"
-                                  matTooltip="Click on 'Generate Here to generate the token and paste that in the input field.'"
-                                  [matTooltipPosition]="'left'"
-                                  matTooltipClass="example-tooltip-red "
-                                  matTooltipHideDelay="100000"
-                                >
-                                  <mat-icon
-                                    class="text-yellow-500"
-                                    aria-hidden="false"
-                                    aria-label="Example home icon"
-                                    >help_outline</mat-icon
-                                  >
-                                </div>
-                              </span>
-                              <h1>Generate token</h1>
-                            </div>
-                          </a>
-                        </div>
-                        <div *ngSwitchDefault="">
-                          <div class="flex justify-end gap-1">
+                          <div class="flex justify-end  gap-1">
                             <span class="example-container" cdkScrollable>
                               <div
                                 #tooltip="matTooltip"
-                                matTooltip="Click on 'Generate Here to generate the token and paste that in the input field.'"
+                                [matTooltip]="tooltipMsg"
                                 [matTooltipPosition]="'left'"
-                                matTooltipClass="example-tooltip-red "
-                                matTooltipHideDelay="100000"
+                                matTooltipClass="my-tooltip"
+                                matTooltipHideDelay="500"
+                                matTooltipShowDelay="100"
                               >
                                 <mat-icon
                                   class="text-yellow-500"
@@ -192,7 +115,87 @@
                                 >
                               </div>
                             </span>
+                            <a
+                              href="https://github.com/settings/tokens"
+                              target="_blank">
                             <h1>Generate token</h1>
+                            </a>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'gitlab'">
+                            <div class="flex justify-end  gap-1">
+                              <span class="example-container" cdkScrollable>
+                                <div
+                                  #tooltip="matTooltip"
+                                  [matTooltip]="tooltipMsg"
+                                  [matTooltipPosition]="'left'"
+                                  matTooltipClass="my-tooltip"
+                                  matTooltipHideDelay="500"
+                                  matTooltipShowDelay="100"
+                                >
+                                  <mat-icon
+                                    class="text-yellow-500"
+                                    aria-hidden="false"
+                                    aria-label="Example home icon"
+                                    >help_outline</mat-icon
+                                  >
+                                </div>
+                              </span>
+                              <a
+                                href="https://gitlab.com/-/profile/personal_access_tokens"
+                                target="_blank">
+                              <h1>Generate token</h1>
+                              </a>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="'bitbucket'">
+                          
+                            <div class="flex justify-end gap-1">
+                              <span class="example-container" cdkScrollable>
+                                <div
+                                  #tooltip="matTooltip"
+                                  [matTooltip]="tooltipMsg"
+                                  [matTooltipPosition]="'left'"
+                                  matTooltipClass="my-tooltip "
+                                  matTooltipHideDelay="500"
+                                  matTooltipShowDelay="100"
+                                >
+                                  <mat-icon
+                                    class="text-yellow-500"
+                                    aria-hidden="false"
+                                    aria-label="Example home icon"
+                                    >help_outline</mat-icon
+                                  >
+                                </div>
+                              </span>
+                              <a
+                            href="https://bitbucket.org/account/settings/app-passwords/"
+                            target="_blank"
+                          >
+                              <span>Generate token</span>
+                          </a>
+                            </div>
+                        </div>
+                        <div *ngSwitchDefault="">
+                          <div class="flex justify-end gap-1">
+                            <span class="example-container" cdkScrollable>
+                              <div
+                                #tooltip="matTooltip"
+                                [matTooltip]="tooltipMsg"
+                                [matTooltipPosition]="'left'"
+                                matTooltipClass="my-tooltip"
+                                matTooltipHideDelay="500"
+                                matTooltipShowDelay="100"
+                              >
+                                <mat-icon
+                                  class="text-yellow-500"
+                                  aria-hidden="false"
+                                  aria-label="Example home icon"
+                                  >help_outline</mat-icon
+                                >
+                              </div>
+                            </span>
+                            <span>Generate token</span>
                           </div>
                         </div>
                       </div>

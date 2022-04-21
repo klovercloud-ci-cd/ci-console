@@ -20,7 +20,9 @@ const childrenRoutes: Routes = [
   {
     path: 'user-profile',
     loadChildren: () =>
-      import('./user-profile/user-profile.module').then((m) => m.UserProfileModule),
+      import('./user-profile/user-profile.module').then(
+        (m) => m.UserProfileModule
+      ),
   },
   {
     path: 'settings',
@@ -30,7 +32,9 @@ const childrenRoutes: Routes = [
   {
     path: 'user-profile',
     loadChildren: () =>
-      import('./user-profile/user-profile.module').then((m) => m.UserProfileModule),
+      import('./user-profile/user-profile.module').then(
+        (m) => m.UserProfileModule
+      ),
   },
   {
     path: 'app',
@@ -62,7 +66,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: '**',
@@ -71,13 +75,15 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    preloadingStrategy: AppCustomPreloader,
-    scrollPositionRestoration: 'enabled',
-    relativeLinkResolution: 'corrected',
-    anchorScrolling: 'enabled'
-  })],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: AppCustomPreloader,
+      scrollPositionRestoration: 'enabled',
+      relativeLinkResolution: 'corrected',
+      anchorScrolling: 'enabled',
+    }),
+  ],
   exports: [RouterModule],
-  providers: [AppCustomPreloader]
+  providers: [AppCustomPreloader],
 })
 export class AppRoutingModule {}

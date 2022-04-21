@@ -16,7 +16,11 @@
 .example-tooltip-red {
   @apply bg-dark-info text-sm;
 }
-
+::ng-deep .mat-tooltip {
+  /* your own custom styles here */ 
+  /* e.g. */
+  color: green;
+}
 .signup-btn {
   @apply cursor-pointer text-lg font-semibold tracking-wider;
 }
@@ -77,7 +81,7 @@ input[type="number"] {
   @apply bg-dark-container;
 }
 .tooltip {
-  background-color: green;
+  background-color: rgb(229, 18, 36);
 }
 
 .cluster-card {
@@ -109,5 +113,22 @@ input[type="number"] {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+
+::ng-deep{
+  .my-tooltip {
+    white-space: pre-line;
+    text-align: center;
+    @apply bg-dark-container border-[1px] border-dark-primary;
+    min-height: 50px;
+    padding: 8px 0px;
+    
+    font-weight:400;
+    font-size: 13px;
+  }
+  .mat-selected, .mat-active{
+    background: blueviolet;
   }
 }

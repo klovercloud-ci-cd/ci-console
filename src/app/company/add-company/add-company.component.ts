@@ -23,6 +23,7 @@ export class AddCompanyComponent implements OnInit {
   selectedValue: string = '';
   selectedCar: string = '';
   panelOpenState = true;
+  tooltipMsg : string = "Click on 'Generate Here' to generate the token and paste that in the input field."
 
   repos: RepoType[] = [
     { value: 'bitbucket', viewValue: 'Bitbucket' },
