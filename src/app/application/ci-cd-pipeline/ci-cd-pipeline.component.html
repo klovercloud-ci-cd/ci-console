@@ -1,171 +1,44 @@
-<mat-card class="kc-card m-4 w-[98%] overflow-scroll" id="holder">
-  <div class="relative">
-    <div class="flex border p-4 gap-32 h-full w-full top-0">
-      <div>
+<mat-card class="kc-card m-4 w-[98%]" id="holder">
+  <div class="h-[700px] overflow-scroll relative flex justify-center">
+    <!--viewBox="0 0 1920 1920"-->
+    <svg class="absolute border top-0 border" overflow="auto" id="svg">
+      <defs>
+        <marker
+          id="triangle"
+          viewBox="0 0 10 10"
+          refX="35"
+          refY="5"
+          markerUnits="strokeWidth"
+          markerWidth="4"
+          markerHeight="4"
+          orient="auto"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="gray" />
+        </marker>
+      </defs>
+    </svg>
+    <div class="absolute top-0 flex gap-32 justify-center">
+      <div *ngFor="let env of envList" class="flex flex-col items-center">
+        <div class="my-4 text-xl">
+          {{ env }}
+        </div>
         <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h1>ffj</h1>
-        </div>
-        <div class="space-y-4">
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
-          <div>node</div>
+          <div *ngFor="let nodeEnv of nodeByenv" class="">
+            <div
+              *ngIf="nodeEnv.name === env"
+              class="flex flex-col justify-center gap-32"
+            >
+              <div
+                *ngFor="let step of nodeEnv.steps"
+                class="h-16 w-16 rounded-full bg-white flex items-center justify-center text-black"
+                id="{{ step }}"
+              >
+                {{ step }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <svg
-      viewBox="0 0 100% 100%"
-      class="absolute border bg-slate-500 h-full w-full top-0 p-4"
-    >
-      <circle
-        cx="1250"
-        cy="50"
-        r="20"
-        stroke="green"
-        stroke-width="4"
-        fill="yellow"
-      />
-    </svg>
   </div>
 </mat-card>
