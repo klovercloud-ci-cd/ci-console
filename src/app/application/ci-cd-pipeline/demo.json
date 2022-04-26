@@ -89,7 +89,8 @@
         "name": "ubuntu"
       },
       "next": [
-        "jenkinsJob"
+        "jenkinsJob",
+        "hola"
       ],
       "argdata": {},
       "envdata": {},
@@ -127,7 +128,7 @@
       ]
     },
     {
-      "name": "jenkinsjob",
+      "name": "hfhf",
       "type": "JENKINS_JOB",
       "trigger": "AUTO",
       "params": {
@@ -142,6 +143,41 @@
       "argdata": {},
       "envdata": {},
       "descriptors": null
+    },
+    {
+      "name": "jenkinsJob",
+      "type": "JENKINS_JOB",
+      "trigger": "AUTO",
+      "params": {
+        "status": "failed",
+        "env": "init",
+        "url": "http://jenkins.default.svc:8080",
+        "job": "new",
+        "params": "id:123,verbosity:high",
+        "secret": "jenkins-credentials"
+      },
+      "next": null,
+      "argdata": {},
+      "envdata": {},
+      "descriptors": null
+    },
+    {
+      "name": "hola",
+      "type": "JENKINS_JOB",
+      "trigger": "AUTO",
+      "params": {
+        "status": "failed",
+        "env": "hola",
+        "url": "http://jenkins.default.svc:8080",
+        "job": "new",
+        "params": "id:123,verbosity:high",
+        "secret": "jenkins-credentials"
+      },
+      "next": null,
+      "argdata": {},
+      "envdata": {},
+      "descriptors": null
     }
   ]
 }
+
