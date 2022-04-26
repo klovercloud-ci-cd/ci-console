@@ -4,13 +4,13 @@
     [matMenuTriggerFor]="afterMenu"
     class="flex justify-center items-center"
   >
-    {{ userPersonalInfo?.data?.first_name || "User Name" }}
+    {{ userPersonalInfo?.data?.first_name || "User name" }}
     <mat-icon>account_circle</mat-icon>
   </button>
   <mat-menu #afterMenu="matMenu" xPosition="before" class="text-white kc-menu">
-    <div class="flex bg-[#8700ff] items-center p-4 py-6 gap-2">
+    <div class="flex bg-[#5460e3] items-center p-4 py-4 gap-2">
       <div
-        class="h-12 w-12 bg-gray-500 rounded-full flex justify-center items-center bg-opacity-25 font-bold"
+        class="h-12 w-12 bg-purple-200 rounded-full flex justify-center items-center bg-opacity-25 font-bold"
       >
         <mat-icon
           class="material-icons-sharp kc-profile-icon text-3xl -mt-3 mr-1.5"
@@ -23,7 +23,7 @@
       </h1>
     </div>
     <div
-      class="flex justify-between bg-dark-background items-center px-2 cursor-pointer hover:bg-dark-background-active"
+      class="hover:text-green-500 flex justify-between bg-dark-background items-center px-2 cursor-pointer hover:bg-dark-background-active"
       routerLink="/user-profile/profile"
     >
       <div class="flex h-full items-center p-4 gap-6">
@@ -41,7 +41,24 @@
       </div>
     </div>
     <div
-      class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-active"
+      class="hover:text-green-500 flex justify-between bg-dark-background items-center px-2 cursor-pointer hover:bg-dark-background-active"
+      routerLink="/user-profile/reset-password"
+    >
+      <div class="flex h-full items-center p-4 gap-6">
+        <mat-icon class="material-icons-outlined text-purple-600"
+          >lock</mat-icon
+        >
+        <div>
+          <h1>Change Password</h1>
+          <h2>Change Your Password From Here</h2>
+        </div>
+      </div>
+      <div>
+        <mat-icon>navigate_next</mat-icon>
+      </div>
+    </div>
+    <div
+      class="hover:text-green-500 flex justify-between bg-dark-background items-center px-2 cursor-pointer hover:bg-dark-background-active"
     >
       <div class="flex h-full items-center p-4 gap-6">
         <mat-icon class="material-icons-outlined text-dark-danger"

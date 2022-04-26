@@ -1,0 +1,62 @@
+.expansion {
+  @apply border-violet-400 rounded-sm border-[1px] p-5 mb-4 relative;
+}
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+::ng-deep {
+  .my-tooltip {
+    white-space: pre-line;
+    text-align: center;
+    @apply bg-dark-container border-[1px] border-dark-primary;
+    min-height: 50px;
+    padding: 8px 0px;
+
+    font-weight: 400;
+    font-size: 13px;
+  }
+  .mat-selected,
+  .mat-active {
+    background: blueviolet;
+  }
+}
+.kc-expansion-panel {
+  background: transparent;
+  margin-top: 0;
+}
+
+.logState {
+  position: fixed;
+  top: 20%;
+  right: -100px;
+  width: 40%;
+  height: auto;
+  opacity: 0;
+  z-index: 1;
+  background-color: var(--background);
+  border: solid 1px var(--dialog-border-color);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.2s ease-in-out;
+
+  .header-container {
+    padding-left: 25px;
+    padding-bottom: 5px;
+    border-bottom: solid 1px var(--border);
+
+    .header-title {
+      color: var(--text-color);
+      font-weight: bold;
+    }
+  }
+
+  .body-container {
+    padding-left: 25px;
+  }
+}
+
+.logState.expanded {
+  right: 5px !important;
+  opacity: 0.95;
+  z-index: 35;
+  transition: all 0.2s ease-in-out;
+}

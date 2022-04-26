@@ -1,4 +1,3 @@
-
 /*
 ::ng-deep{
   .mat-menu-panel{
@@ -13,9 +12,15 @@
   max-width: 350px !important;
   background-color: #13121f;
 }
-::ng-deep .kc-profile-icon{
+::ng-deep .kc-profile-icon {
   svg {
     fill: red;
   }
 }
+h1 {
+  @apply text-sm;
+}
 
+h2 {
+  @apply text-xs text-dark-text;
+}

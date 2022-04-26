@@ -1,187 +1,147 @@
 {
-
-  "pipeline": {
-    "metadata": {
-      "companyid": "a4807912-1f40-490b-b3a4-07587ac370eb",
-      "companymetadata": {
-        "labels": null,
-        "number_of_concurrent_process": {
-          "$numberLong": "10"
-        },
-        "total_process_per_day": {
-          "$numberLong": "10"
-        }
+  "metadata": {
+    "companyid": "a4807912-1f40-490b-b3a4-07587ac370eb",
+    "companymetadata": {
+      "labels": null,
+      "number_of_concurrent_process": {
+        "$numberLong": "10"
+      },
+      "total_process_per_day": {
+        "$numberLong": "10"
       }
-    },
-    "option": {
-      "purging": "ENABLE"
-    },
-    "apiversion": "api/v1",
-    "name": "test",
-    "processid": "47a0c41d-12d8-42c6-91a8-57db2def9a8e",
-    "label": {
-      "pipeline": "test",
-      "processId": "47a0c41d-12d8-42c6-91a8-57db2def9a8e"
-    },
-    "steps": [
-      {
-        "name": "build",
-        "type": "BUILD",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "images": "shabrul2451/test-dev:master,shabrul2451/test-pro:master",
-          "repository_type": "git",
-          "revision": "34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
-          "service_account": "test-sa",
-          "storage": "500Mi",
-          "url": "https://github.com/shabrul2451/test-app",
-          "args": "key3:value1,key4:value2",
-          "args_from_configmaps": "tekton/cm-test"
-        },
-        "next": [
-          "interstep",
-          "next"
-        ],
-        "argdata": {
-          "key3": "value1",
-          "key4": "value2"
-        },
-        "envdata": {
-
-        },
-        "descriptors": null
+    }
+  },
+  "option": {
+    "purging": "DISABLE"
+  },
+  "apiversion": "api/v1",
+  "name": "test",
+  "processid": "47a0c41d-12d8-42c6-91a8-57db2def9a8e",
+  "label": {
+    "processId": "47a0c41d-12d8-42c6-91a8-57db2def9a8e",
+    "pipeline": "test"
+  },
+  "steps": [
+    {
+      "name": "build",
+      "type": "BUILD",
+      "trigger": "AUTO",
+      "params": {
+        "status": "failed",
+        "env": "init",
+        "revision": "d325fd7c7cf2791bc18dec6d34473d6bdcc7b869",
+        "service_account": "test-sa",
+        "storage": "500Mi",
+        "url": "https://github.com/zeromsi/test-app",
+        "args": "key3:value1,key4:value2",
+        "args_from_configmaps": "tekton/cm-test",
+        "images": "zeromsi2/test-dev:master,zeromsi2/test-pro:master",
+        "repository_type": "git"
       },
-      {
-        "name": "next",
-        "type": "BUILD",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "images": "shabrul2451/test-dev:master,shabrul2451/test-pro:master",
-          "repository_type": "git",
-          "revision": "34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
-          "service_account": "test-sa",
-          "storage": "500Mi",
-          "url": "https://github.com/shabrul2451/test-app",
-          "args": "key3:value1,key4:value2",
-          "args_from_configmaps": "tekton/cm-test"
-        },
-        "next": [
-          "hello"
-        ],
-        "argdata": {
-          "key3": "value1",
-          "key4": "value2"
-        },
-        "envdata": {
-
-        },
-        "descriptors": null
+      "next": [
+        "interstep"
+      ],
+      "argdata": {
+        "key3": "value1",
+        "key4": "value2"
       },
-      {
-        "name": "interstep",
-        "type": "INTERMEDIARY",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "envs_from_configmaps": "tekton/cm-test",
-          "envs_from_secrets": "tekton/cm-test",
-          "images": "ubuntu:latest",
-          "revision": "latest",
-          "service_account": "test-sa",
-          "command": "echo",
-          "command_args": "Hello World",
-          "envs": "key3:value1,key4:value2"
-        },
-        "next": [
-          "deployDev"
-        ],
-        "argdata": {
-
-        },
-        "envdata": {
-          "key3": "value1",
-          "key4": "value2"
-        },
-        "descriptors": null
+      "envdata": {},
+      "descriptors": null
+    },
+    {
+      "name": "interstep",
+      "type": "INTERMEDIARY",
+      "trigger": "AUTO",
+      "params": {
+        "status": "non-initialized",
+        "env": "deployed",
+        "command_args": "Hello World",
+        "envs": "key3:value1,key4:value2",
+        "envs_from_configmaps": "tekton/cm-test",
+        "envs_from_secrets": "tekton/cm-test",
+        "images": "ubuntu:latest",
+        "revision": "latest",
+        "service_account": "test-sa",
+        "command": "echo"
       },
-      {
-        "name": "deployDev",
-        "type": "DEPLOY",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "agent": "local_agent",
-          "env": "dev",
-          "images": "shabrul2451/test-dev:34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
-          "name": "ubuntu",
-          "namespace": "default",
-          "revision": "master",
-          "type": "deployment"
-        },
-        "next": [
-          "jenkinsJob"
-        ],
-        "argdata": {
-
-        },
-        "envdata": {
-
-        },
-        "descriptors": [
-          {
-            "object": {
-              "apiVersion": "v1",
-              "data": {
-                "game.properties": "enemy.types=aliens,monsters\nplayer.maximum-lives=5\n",
-                "player_initial_lives": "3",
-                "ui_properties_file_name": "user-interface.properties",
-                "user-interface.properties": "color.good=purple\ncolor.bad=yellow\nallow.textmode=true\n"
-              },
-              "kind": "ConfigMap",
-              "metadata": {
-                "name": "game-demo3"
-              }
-            }
-          },
-          {
-            "object": {
-              "apiVersion": "v1",
-              "data": {
-                "ui_properties_file_name": "user-interface.properties",
-                "user-interface.properties": "color.good=purple\ncolor.bad=yellow\nallow.textmode=true\n",
-                "game.properties": "enemy.types=aliens,monsters\nplayer.maximum-lives=5\n",
-                "player_initial_lives": "3"
-              },
-              "kind": "ConfigMap",
-              "metadata": {
-                "name": "game-demo2"
-              }
+      "next": [
+        "deployDev"
+      ],
+      "argdata": {},
+      "envdata": {
+        "key4": "value2",
+        "key3": "value1"
+      },
+      "descriptors": null
+    },
+    {
+      "name": "deployDev",
+      "type": "DEPLOY",
+      "trigger": "AUTO",
+      "params": {
+        "status": "non-initialized",
+        "namespace": "default",
+        "revision": "master",
+        "type": "deployment",
+        "agent": "local_agent",
+        "env": "dev",
+        "images": "shabrul2451/test-dev:34a401bdfa8fbf1397ea20c2ea422aa8cc643866",
+        "name": "ubuntu"
+      },
+      "next": [
+        "jenkinsJob"
+      ],
+      "argdata": {},
+      "envdata": {},
+      "descriptors": [
+        {
+          "object": {
+            "kind": "ConfigMap",
+            "metadata": {
+              "name": "game-demo3"
+            },
+            "apiVersion": "v1",
+            "data": {
+              "game.properties": "enemy.types=aliens,monsters\nplayer.maximum-lives=5\n",
+              "player_initial_lives": "3",
+              "ui_properties_file_name": "user-interface.properties",
+              "user-interface.properties": "color.good=purple\ncolor.bad=yellow\nallow.textmode=true\n"
             }
           }
-        ]
+        },
+        {
+          "object": {
+            "metadata": {
+              "name": "game-demo2"
+            },
+            "apiVersion": "v1",
+            "data": {
+              "user-interface.properties": "color.good=purple\ncolor.bad=yellow\nallow.textmode=true\n",
+              "game.properties": "enemy.types=aliens,monsters\nplayer.maximum-lives=5\n",
+              "player_initial_lives": "3",
+              "ui_properties_file_name": "user-interface.properties"
+            },
+            "kind": "ConfigMap"
+          }
+        }
+      ]
+    },
+    {
+      "name": "jenkinsjob",
+      "type": "JENKINS_JOB",
+      "trigger": "AUTO",
+      "params": {
+        "status": "failed",
+        "env": "init",
+        "url": "http://jenkins.default.svc:8080",
+        "job": "new",
+        "params": "id:123,verbosity:high",
+        "secret": "jenkins-credentials"
       },
-      {
-        "name": "jenkinsjob",
-        "type": "JENKINS_JOB",
-        "status": "",
-        "trigger": "AUTO",
-        "params": {
-          "job": "new",
-          "params": "id:123,verbosity:high",
-          "secret": "jenkins-credentials",
-          "url": "http://jenkins.default.svc:8080"
-        },
-        "next": null,
-        "argdata": {
-
-        },
-        "envdata": {
-
-        },
-        "descriptors": null
-      }
-    ]
-  }
+      "next": null,
+      "argdata": {},
+      "envdata": {},
+      "descriptors": null
+    }
+  ]
 }

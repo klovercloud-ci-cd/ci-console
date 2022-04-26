@@ -11,12 +11,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CiCdPipelineComponent } from './ci-cd-pipeline/ci-cd-pipeline.component';
 import { MatCardModule } from '@angular/material/card';
+import { PipelineLogComponent } from './pipeline-log/pipeline-log.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     ApplicationListComponent,
     ApplicationListComponent,
     CiCdPipelineComponent,
+    PipelineLogComponent,
   ],
   imports: [
     CommonModule,
@@ -33,6 +37,8 @@ import { MatCardModule } from '@angular/material/card';
     MatInputModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    MatExpansionModule,
+    MatIconModule,
   ],
 })
 export class ApplicationModule {}

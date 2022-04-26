@@ -15,17 +15,16 @@
   background-color: #0d1527;
 }
 
-
 .sidepanel {
-  position: fixed;  
+  position: fixed;
   z-index: 1;
   height: 100%;
   top: 0;
   left: 0;
   background-color: #131d35;
   transform: translateX(-260px);
-  transition: transform .5s;
+  transition: transform 0.5s;
 }
-.open{
+.open {
   transform: translateX(0px);
 }

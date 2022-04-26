@@ -1,0 +1,28 @@
+<button (click)="clickMe()" class="p-5 bg-slate-400 m-5 rounded-md">
+  Expand
+</button>
+<div class="logState" [ngClass]="{ expanded: showPipelineStepDestailsView }">
+  <mat-accordion>
+    <div class="expansion bg-[#1A2C4A]">
+      <div class="flex justify-between">
+        <h1 class="text-lg tracking-wider">Stage-Title</h1>
+        <div (click)="clickMe()" class="hover:text-violet-400 cursor-pointer">
+          <mat-icon>close</mat-icon>
+        </div>
+      </div>
+      <h1 class="text-xs mt-1 mb-4 tracking-wider text-dark-text">
+        Stage-sub-Title
+      </h1>
+      <div *ngFor="let log of logStatus; let i = index">
+        <mat-expansion-panel class="kc-expansion-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title> {{ log.title }} </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngFor="let msg of log.info; let j = index">
+            <h1>{{ msg }}</h1>
+          </div>
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </mat-accordion>
+</div>

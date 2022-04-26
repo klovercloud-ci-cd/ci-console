@@ -10,7 +10,7 @@ import { UserDataService } from 'src/app/shared/services/user-data.service';
 })
 export class ProfileComponent implements OnInit {
   user: any = this.auth.getUserData();
-  userPersonalInfo: any;
+  userInfo: any;
 
   constructor(
     private _toolbarService: ToolbarService,
@@ -21,8 +21,8 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this._toolbarService.changeData({ title: 'Account' });
     this.userData.getUserInfo(this.user.user_id).subscribe((res) => {
-      this.userPersonalInfo = res;
-      console.log('this.userPersonalInfo', this.userPersonalInfo.data);
+      this.userInfo = res;
+      console.log('this.userPersonalInfo', this.userInfo.data);
     });
   }
 }
