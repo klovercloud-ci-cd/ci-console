@@ -1,35 +1,36 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
+  ElementRef, Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import data from './demo.json';
-import { DrawDiagram } from './drawDiagram';
-const draw = new DrawDiagram();
 @Component({
   selector: 'kcci-ci-cd-pipeline',
   templateUrl: './ci-cd-pipeline.component.html',
   styleUrls: ['./ci-cd-pipeline.component.scss'],
 })
 export class CiCdPipelineComponent implements OnInit, AfterViewInit {
-  pipelineStep = data.steps;
+  pipelineStep = data.data.steps;
   completeNodeDraw: string[] = [];
   envList = this.allenv();
-  nodeByenv = this.nodeByEnv();
+  stepsLists = this.stepsDetails()
+  isHttprequest =false
+  logToggle:boolean = false;
+   logOpen: boolean = false;
   constructor(private _toolbarService: ToolbarService) {}
-
+  @Input()  nodeName!: number | string;
   ngOnInit(): void {
-    this._toolbarService.changeData({ title: 'pipelines' });
+    this._toolbarService.changeData({ title: 'App Name' });
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       const svgHeight =
-        this.higestNodeEnv(this.nodeByEnv())[0].steps.length * 214;
-      const svgWidth = this.totalenv() * 214;
+        this.higestNodeEnv(this.nodeByEnv())[0].steps.length * 230;
+      const svgWidth = this.totalenv() * 230;
       // @ts-ignore
       document.getElementById('svg').style.height = svgHeight + 'px';
       // @ts-ignore
@@ -69,6 +70,33 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
     }
     return nodeObjByenv;
   }
+  private stepsDetails() {
+    const envs = this.allenv();
+    let nodList: string[] = [];
+    let stepsDetails:any[] =[];
+    let steps:any[]=[]
+    for (let env of envs) {
+      for (let step of this.pipelineStep) {
+        if (step.params.env === env && !nodList.includes(step.name)) {
+          nodList.push(step.name);
+          steps.push({
+            name: step.name,
+            params: step.params,
+            status: step.status
+          })
+
+        }
+      }
+      stepsDetails.push({
+        envName:env,
+        steps: steps
+      })
+      nodList = [];
+      steps= [];
+    }
+    console.log(stepsDetails)
+    return stepsDetails;
+  }
   private higestNodeEnv(nodeObjByenv: object) {
     var longest = 0;
     var longestEnv: any = [];
@@ -104,6 +132,7 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
         for (let next of step.next) {
           const start = this.getOffset(document.getElementById(step.name));
           const end = this.getOffset(document.getElementById(next));
+
           const line = document.createElementNS(
             'http://www.w3.org/2000/svg',
             'line'
@@ -113,9 +142,19 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
           line.setAttribute('x2', String(end.x - svgOfset.x + 30));
           line.setAttribute('y2', String(end.y - svgOfset.y + 30));
           line.setAttribute('id', step.name + '-' + next);
-          line.setAttribute('stroke', 'red');
-          line.setAttribute('stroke-width', '4px');
-          line.setAttribute('marker-end', 'url(#triangle)');
+          if (step.status ==='completed'){
+            line.setAttribute('stroke', '#5BC4D6');
+            line.setAttribute('marker-end', 'url(#trianglesuccess)');
+          }
+          else {
+            line.setAttribute('stroke', 'gray');
+            line.setAttribute('marker-end', 'url(#trianglegray)');
+          }
+          line.setAttribute('stroke-width', '5px');
+
+          line.addEventListener('mouseenter', e => {
+            line.setAttribute('stroke-width', '10px');
+          })
           // @ts-ignore
           if (svg.appendChild(line)) {
             console.log(step.name + '-' + next);
@@ -123,24 +162,78 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    /*for (let step of this.pipelineStep){
+  }
 
-      // @ts-ignore
-      for (let next of step.next){
-        const start = this.getOffset(document.getElementById(step.name))
-        const end  = this.getOffset(document.getElementById(next))
-        const line  = document.createElementNS('http://www.w3.org/2000/svg','line')
-        line.setAttribute('x1',String(start.x - svgOfset.x));
-        line.setAttribute('y1',String(start.y - svgOfset.y));
-        line.setAttribute('x2',String(end.x - svgOfset.x));
-        line.setAttribute('y2',String(end.y - svgOfset.y));
-        line.setAttribute('id',step.name+'-'+next);
-        line.setAttribute("stroke", "white")
-        // @ts-ignore
-        if (svg.appendChild(line)){
-          console.log(step.name+'-'+next)
-        }
-      }
-    }*/
+  hola():string {
+    return '';
+  }
+
+  startBuild(loaderid:any) {
+    this.loadInfo(loaderid)
+    const loader = document.getElementById(loaderid);
+    // @ts-ignore
+    loader.classList.add('active')
+
+    // http request gose here
+  }
+
+  logStatus: any = [
+    {
+      title: 'Set up job',
+      info: [
+        'Secret source: Actions',
+        'Prepare workfsdadceercfrrcvrvrbdv3333333333low directory',
+        'Prepare all required actions',
+        'Getting action download info',
+      ],
+    },
+    {
+      title: 'Run Action',
+      info: [
+        'Secret source: Acsdadceercfrrcvrvrbdv3333333333tions',
+        'Prepare workflow directory',
+        'Prepare all required actions',
+        'Getting action download info',
+      ],
+    },
+    {
+      title: 'Set up Go',
+      info: [
+        'Secret source: Actions',
+        'Prepare dworkflow directory',
+        'Prepare all required actions',
+        'Getting action dsdadceercfrrcvrvrbdv3333333333ownload info',
+      ],
+    },
+    {
+      title: 'Build',
+      info: [
+        'Secret source: Actions',
+        'Prepare workflow directory',
+        'Prepare all required actions',
+        'Getting action download info',
+      ],
+    },
+    {
+      title: 'Test',
+      info: [
+        'Secret source: Actions',
+        'Prepare workflow directory',
+        'Prepare all required actions',
+        'Getting action dodddddddddddddddddddddddddddwnload info',
+      ],
+    },
+  ];
+
+  logClose(){
+    this.logOpen =false
+  }
+  loadInfo(stepName:string) {
+    const info = data.data.steps.filter(
+      function(data){ return data.name == stepName }
+    );
+    if(!this.logOpen){
+      this.logOpen =true
+    }
   }
 }

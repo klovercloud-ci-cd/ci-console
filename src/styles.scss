@@ -131,10 +131,20 @@ body {
   min-width: 344px;
 }
 
-
+.hola{
+  stroke: black;
+  stroke-width:4;
+  height: 10px;
+  width: 10px;
+  cursor: pointer;
+  border: 2px solid red ;
+}
+.hola:hover{
+  stroke: red;
+}
 
 .kc-card {
-  @apply bg-dark-background border-1.5 border-dark-border-default text-dark-text;
+  @apply bg-dark-background-5 border-1.5 border-dark-border-default text-dark-text;
 }
 .kc-button-primary {
   @apply bg-dark-primary px-4 text-white;

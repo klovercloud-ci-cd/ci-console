@@ -6,14 +6,13 @@ module.exports = {
         dark: {
           primary: "#5BC4D6",
           info: "#4285F4",
-          warn: "#ffbb33;",
+          warn: "#ffbb33",
           success: "#36C678",
           "success-light": "#C3EED7",
           danger: "#B1122A",
 
           "tomato-red": "#ff6347",
           container: "#243C64",
-          border: "#495C7D",
           border: {
             default: "#495C7D",
             form: "#1A2C4A",
