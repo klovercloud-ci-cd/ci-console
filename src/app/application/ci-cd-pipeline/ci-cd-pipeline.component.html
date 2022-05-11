@@ -1,45 +1,207 @@
-<mat-card class="kc-card m-4 w-[98%]" id="holder">
-  <div class="h-[700px] overflow-scroll relative flex justify-center">
-    <!--viewBox="0 0 1920 1920"-->
-    <svg class="absolute top-0 border" overflow="auto" id="svg">
-      <defs>
-        <marker
-          id="triangle"
-          viewBox="0 0 10 10"
-          refX="35"
-          refY="5"
-          markerUnits="strokeWidth"
-          markerWidth="4"
-          markerHeight="4"
-          orient="auto"
-        >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="gray" />
-        </marker>
-      </defs>
-    </svg>
-    <div class="absolute top-0 flex gap-32 justify-center">
-      <div *ngFor="let env of envList" class="flex flex-col items-center">
-        <div class="my-4 text-xl">
-          {{ env }}
-        </div>
-        <div>
-          <div *ngFor="let nodeEnv of nodeByenv" class="">
-            <div
-              *ngIf="nodeEnv.name === env"
-              class="flex flex-col justify-center gap-32"
-            >
-              <button
-                *ngFor="let step of nodeEnv.steps"
-                class="h-16 w-16 rounded-full bg-white flex items-center justify-center text-black"
-                id="{{ step }}"
-                (click)="popupLog()"
+<div class="relative overflow-hidden">
+  <div class="log-card relative">
+    <div
+      id="log-wrapper"
+      (click)="logClose()"
+      class="absolute right-0 h-[calc(100vh-170px)] top-[4.4rem] z-30 w-[calc(100%-1.5rem)] bg-black"
+      [ngClass]="logOpen ? 'opacity-30 z-50' : 'hidden opacity-0 '"
+    ></div>
+    <div
+      class="log-card absolute h-[calc(100vh-170px)] top-[4.4rem] z-50 w-2/6 bg-dark-background p-6 rounded-l opacity-100"
+      [ngClass]="logOpen ? ' right-0 ' : '-right-3/4'"
+    >
+      <div class="logState">
+        <mat-accordion>
+          <div class="expansion bg-dark-background">
+            <div *ngFor="let log of logStatus; let i = index">
+              <mat-expansion-panel
+                class="kc-expansion-panel bg-dark-background"
               >
-                {{ step }}
-              </button>
+                <mat-expansion-panel-header>
+                  <mat-panel-title> {{ log.title }} </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div *ngFor="let msg of log.info; let j = index">
+                  <h1>{{ msg }}</h1>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+  <div
+    class="pipe-nav border w-fit mx-6 rounded-[6px] border-dark-border-default"
+  >
+    <div class="flex justify-start items-center">
+      <div class="flex-item active">CI/CD Pipeline</div>
+      <div class="flex-item">Overview</div>
+    </div>
+  </div>
+  <div
+    id="mainDiv"
+    [ngClass]="logToggle ? 'grid-cols-12' : 'grid-cols-8'"
+    class="grid h-[calc(100vh-170px)] mx-2 md:mx-6 mb-5 mt-3"
+  >
+    <mat-card id="left" class="kc-card col-span-2 kc-card-pipe-left">
+      <div class="logState">
+        <mat-accordion>
+          <div class="expansion bg-dark-background-5">
+            <div *ngFor="let log of logStatus; let i = index">
+              <mat-expansion-panel class="kc-expansion-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title> {{ log.title }} </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div *ngFor="let msg of log.info; let j = index">
+                  <h1>{{ msg }}</h1>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </mat-accordion>
+      </div>
+    </mat-card>
+    <mat-card
+      id="mid"
+      [ngClass]="logToggle ? 'col-span-7' : 'col-span-6 mid-right-border'"
+      class="kc-card overflow-hidden kc-card-pipe-mid"
+      id="holder"
+    >
+      <div class="absolute right-6">
+        <mat-form-field>
+          <mat-label>Select Process ID</mat-label>
+          <mat-select class="">
+            <div class="kc-node-menu">
+              <mat-option value="option1">Option 1</mat-option>
+              <mat-option value="option2">Option 2</mat-option>
+              <mat-option value="option3">Option 3</mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div
+        class="h-[calc(100%-3.5rem)] overflow-scroll relative flex px-6 top-[2.8rem]"
+      >
+        <!--viewBox="0 0 1920 1920"-->
+        <svg class="absolute top-10" overflow="auto" id="svg">
+          <marker
+            id="trianglegray"
+            viewBox="0 0 10 10"
+            refX="35"
+            refY="5"
+            markerUnits="strokeWidth"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="gray" />
+          </marker>
+          <marker
+            id="trianglesuccess"
+            viewBox="0 0 10 10"
+            refX="35"
+            refY="5"
+            markerUnits="strokeWidth"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#5BC4D6" />
+          </marker>
+        </svg>
+        <div class="absolute flex gap-28 justify-center">
+          <div class="flex gap-28 justify-center">
+            <div *ngFor="let env of envList" class="flex flex-col items-center">
+              <div
+                class="my-6 text-xl font-bold border border-dark-border-default bg-dark-primary text-white rounded-3xl env-name flex justify-center items-center gap-1"
+              >
+                <mat-icon aria-hidden="false" aria-label="Example home icon"
+                  >public</mat-icon
+                >{{ env }}
+              </div>
+              <div>
+                <div *ngFor="let nodeEnv of stepsLists" class="">
+                  <div
+                    *ngIf="nodeEnv.envName === env"
+                    class="flex flex-col justify-center gap-28"
+                  >
+                    <div
+                      *ngFor="let step of nodeEnv.steps"
+                      class="h-16 w-16 rounded-full flex items-center justify-center text-black cursor-pointer z-10 flex justify-center items-center"
+                      id="{{ step.name }}"
+                      [matMenuTriggerFor]="menu"
+                      [ngClass]="
+                        step.status === 'failed'
+                          ? 'bg-red-500'
+                          : step.status === 'completed'
+                          ? 'bg-green-500'
+                          : step.status === 'paused'
+                          ? 'bg-dark-warn'
+                          : 'bg-gray-500'
+                      "
+                    >
+                      <div
+                        id="{{ step.name + '_loader' }}"
+                        class="loader-inner ball-scale-multiple relative -z-20"
+                      >
+                        <div class="loader-inner"></div>
+                        <div class="loader-inner"></div>
+                        <div class="loader-inner"></div>
+                      </div>
+                      <mat-menu #menu="matMenu" class="kc-node-menu">
+                        <button mat-menu-item>
+                          <mat-icon
+                            aria-hidden="false"
+                            aria-label="Example home icon"
+                            >info </mat-icon
+                          >Info
+                        </button>
+                        <button
+                          mat-menu-item
+                          (click)="startBuild(step.name + '_loader')"
+                        >
+                          <mat-icon
+                            aria-hidden="false"
+                            aria-label="Example home icon"
+                            >start </mat-icon
+                          >Build
+                        </button>
+                      </mat-menu>
+                      <svg
+                        width="55"
+                        height="55"
+                        viewBox="0 0 31 31"
+                        fill="black"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect width="31" height="31" rx="100" fill="#EDF4FF" />
+                        <mask
+                          id="mask0_9094_6538"
+                          style="mask-type: alpha"
+                          maskUnits="userSpaceOnUse"
+                          x="0"
+                          y="0"
+                          width="31"
+                          height="31"
+                        >
+                          <rect width="31" height="31" fill="#CAEDF3" />
+                        </mask>
+                        <g mask="url(#mask0_9094_6538)">
+                          <path
+                            d="M21.8127 17.0283V13.1292C22.5964 12.9381 23.1698 12.25 23.1698 11.409C23.1698 10.4343 22.3861 9.65062 21.4113 9.65062C20.9144 9.65062 20.4557 9.86086 20.1308 10.2049L16.7668 8.27447C16.8242 8.12156 16.8433 7.94955 16.8433 7.75841C16.8433 6.78364 16.0597 6 15.0849 6C14.1101 6 13.3265 6.78364 13.3265 7.75841C13.3265 7.93043 13.3647 8.10245 13.4029 8.25536L10.039 10.2049C9.71407 9.86086 9.25536 9.65062 8.75841 9.65062C7.78364 9.65062 7 10.4343 7 11.409C7 12.25 7.59251 12.9381 8.35704 13.1292V17.0092C7.5734 17.2003 7 17.8884 7 18.7294C7 19.7042 7.78364 20.4878 8.75841 20.4878C9.25536 20.4878 9.71407 20.2776 10.039 19.9335L13.4029 21.8831C13.3647 22.036 13.3265 22.208 13.3265 22.38C13.3265 23.3548 14.1101 24.1384 15.0849 24.1384C16.0597 24.1384 16.8433 23.3548 16.8433 22.38C16.8433 22.208 16.8051 22.036 16.7668 21.8831L20.1308 19.9335C20.4557 20.2776 20.9144 20.4878 21.4113 20.4878C22.3861 20.4878 23.1698 19.7042 23.1698 18.7294C23.1889 17.9075 22.5964 17.2003 21.8127 17.0283ZM20.1308 17.5253L16.7668 15.5948C16.8242 15.4419 16.8433 15.2699 16.8433 15.0788C16.8433 14.9067 16.8051 14.7347 16.7668 14.5818L20.1308 12.6323C20.3601 12.8807 20.6659 13.0528 21.01 13.1292V17.0092C20.6659 17.1048 20.3792 17.2768 20.1308 17.5253ZM15.0849 16.0344C14.5497 16.0344 14.1292 15.5948 14.1292 15.0788C14.1292 14.5627 14.5688 14.1231 15.0849 14.1231C15.6009 14.1231 16.0405 14.5627 16.0405 15.0788C16.0405 15.5948 15.62 16.0344 15.0849 16.0344ZM9.15979 17.0283V13.1292C9.50383 13.0528 9.80964 12.8616 10.039 12.6323L13.4029 14.5818C13.3647 14.7347 13.3265 14.9067 13.3265 15.0788C13.3265 15.2508 13.3647 15.4228 13.4029 15.5757L10.039 17.5253C9.79053 17.2768 9.50383 17.1048 9.15979 17.0283ZM21.4113 10.4534C21.9465 10.4534 22.367 10.893 22.367 11.409C22.367 11.9251 21.9274 12.3647 21.4113 12.3647C20.8762 12.3647 20.4557 11.9251 20.4557 11.409C20.4557 10.893 20.8953 10.4534 21.4113 10.4534ZM19.7294 10.9121C19.672 11.065 19.6529 11.237 19.6529 11.409C19.6529 11.5811 19.6912 11.7531 19.7294 11.9251L16.3655 13.8746C16.1361 13.6262 15.8303 13.4541 15.4863 13.3586V9.4786C15.8303 9.40215 16.1361 9.21102 16.3655 8.98166L19.7294 10.9121ZM15.0849 6.80275C15.62 6.80275 16.0405 7.24236 16.0405 7.75841C16.0405 8.27447 15.6009 8.71407 15.0849 8.71407C14.5688 8.71407 14.1292 8.27447 14.1292 7.75841C14.1292 7.24236 14.5497 6.80275 15.0849 6.80275ZM13.8043 8.96254C14.0337 9.21102 14.3395 9.38303 14.6835 9.4786V13.3586C14.3395 13.435 14.0337 13.6262 13.8043 13.8746L10.4404 11.9251C10.4977 11.7722 10.5168 11.6002 10.5168 11.409C10.5168 11.237 10.4786 11.065 10.4404 10.893L13.8043 8.96254ZM7.78364 11.4281C7.78364 10.893 8.22324 10.4725 8.7393 10.4725C9.27447 10.4725 9.69496 10.9121 9.69496 11.4281C9.69496 11.9442 9.25536 12.3838 8.7393 12.3838C8.22324 12.3838 7.78364 11.9442 7.78364 11.4281ZM8.75841 19.7042C8.22324 19.7042 7.80275 19.2646 7.80275 18.7485C7.80275 18.2133 8.24236 17.7928 8.75841 17.7928C9.29358 17.7928 9.71407 18.2324 9.71407 18.7485C9.71407 19.2646 9.27447 19.7042 8.75841 19.7042ZM10.4404 19.2454C10.4977 19.0925 10.5168 18.9205 10.5168 18.7294C10.5168 18.5574 10.4786 18.3853 10.4404 18.2324L13.8043 16.2829C14.0337 16.5314 14.3395 16.7034 14.6835 16.799V20.6789C14.3395 20.7554 14.0337 20.9465 13.8043 21.195L10.4404 19.2454ZM15.0849 23.3548C14.5497 23.3548 14.1292 22.9152 14.1292 22.3991C14.1292 21.8639 14.5688 21.4435 15.0849 21.4435C15.6009 21.4435 16.0405 21.8831 16.0405 22.3991C16.0405 22.9152 15.62 23.3548 15.0849 23.3548ZM16.3655 21.1759C16.1361 20.9274 15.8303 20.7554 15.4863 20.6598V16.799C15.8303 16.7225 16.1361 16.5314 16.3655 16.302L19.7294 18.2516C19.672 18.4045 19.6529 18.5765 19.6529 18.7485C19.6529 18.9205 19.6912 19.0925 19.7294 19.2646L16.3655 21.1759ZM21.4113 19.7042C20.8762 19.7042 20.4557 19.2646 20.4557 18.7485C20.4557 18.2133 20.8953 17.7928 21.4113 17.7928C21.9465 17.7928 22.367 18.2324 22.367 18.7485C22.3861 19.2646 21.9465 19.7042 21.4113 19.7042Z"
+                            fill="#4164A9"
+                          />
+                        </g>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </mat-card>
   </div>
-</mat-card>
+</div>

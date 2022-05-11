@@ -19,6 +19,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ApplicationModalComponent } from './application-modal/application-modal.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -50,6 +54,10 @@ import { ApplicationModalComponent } from './application-modal/application-modal
     MatButtonToggleModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatTabsModule,
   ],
 })
 export class ApplicationModule {}
