@@ -52,6 +52,11 @@ const childrenRoutes: Routes = [
     loadChildren: () =>
       import('./company/company.module').then((m) => m.CompanyModule),
   },
+  {
+    path: 'repository',
+    loadChildren: () =>
+      import('./repository/repository.module').then((m) => m.RepositoryModule),
+  },
 ];
 
 const routes: Routes = [
@@ -66,7 +71,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: '**',

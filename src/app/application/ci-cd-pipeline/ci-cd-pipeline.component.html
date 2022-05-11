@@ -1,7 +1,7 @@
 <mat-card class="kc-card m-4 w-[98%]" id="holder">
   <div class="h-[700px] overflow-scroll relative flex justify-center">
     <!--viewBox="0 0 1920 1920"-->
-    <svg class="absolute border top-0 border" overflow="auto" id="svg">
+    <svg class="absolute top-0 border" overflow="auto" id="svg">
       <defs>
         <marker
           id="triangle"
@@ -28,13 +28,14 @@
               *ngIf="nodeEnv.name === env"
               class="flex flex-col justify-center gap-32"
             >
-              <div
+              <button
                 *ngFor="let step of nodeEnv.steps"
                 class="h-16 w-16 rounded-full bg-white flex items-center justify-center text-black"
                 id="{{ step }}"
+                (click)="popupLog()"
               >
                 {{ step }}
-              </div>
+              </button>
             </div>
           </div>
         </div>

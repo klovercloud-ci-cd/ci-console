@@ -1,0 +1,73 @@
+<div>
+  <div class="kc-repository">
+    <mat-card class="repo-container mt-4">
+      <div class="w-32 ml-auto">
+        <button
+          routerLink=""
+          class="kc-create-button text-center cursor-pointer mt-2"
+        >
+          Add New
+        </button>
+      </div>
+      <div class="">
+        <h1 class="text-xl my-3">Repository List</h1>
+        <div
+          class="w-full h-full"
+          gdColumns="1fr 1fr 1fr 1fr"
+          gdColumns.md="1fr 1fr 1fr"
+          gdColumns.lt-md="1fr 1fr"
+          gdColumns.lt-sm="1fr"
+          gdColumns.lt-xs="1fr"
+          gdGap="16px"
+        >
+          <div *ngFor="let repo of repoArray">
+            <div class="cluster-card">
+              <span class="flex justify-between">
+                <div class="flex gap-3 pl-3">
+                  <img
+                    class="w-10 h-10"
+                    src="../../../assets/images/logos/repo.svg"
+                    alt=""
+                  />
+                  <h1 class="text-sm font-semibold tracking-wider pt-1">
+                    {{ repo.name }}
+                  </h1>
+                </div>
+                <img
+                  *ngIf="repo.type == 'github'"
+                  class="w-7 h-7 mt-3 mr-2"
+                  src="../../../assets/images/logos/github.svg"
+                  alt=""
+                />
+                <img
+                  *ngIf="repo.type == 'gitlab'"
+                  class="w-7 h-7 mt-3 mr-2"
+                  src="../../../assets/images/logos/gitlab.svg"
+                  alt=""
+                />
+                <img
+                  *ngIf="repo.type == 'bitbucket'"
+                  class="w-7 h-7 mt-3 mr-2"
+                  src="../../../assets/images/logos/bitbucket.svg"
+                  alt=""
+                />
+              </span>
+              <div class="ml-3">
+                <button
+                  matRipple
+                  routerLink="/app/list"
+                  class="px-2 py-[5px] rounded bg-dark-container text-xs cursor-pointer flex items-center justify-center gap-1"
+                >
+                  <mat-icon class="text-xl">widgets</mat-icon>
+                  <span class="mt-1"
+                    >Applications({{ repo.application }})
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

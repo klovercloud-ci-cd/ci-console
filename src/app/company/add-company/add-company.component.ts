@@ -23,7 +23,8 @@ export class AddCompanyComponent implements OnInit {
   selectedValue: string = '';
   selectedCar: string = '';
   panelOpenState = true;
-  tooltipMsg : string = "Click on 'Generate Here' to generate the token and paste that in the input field."
+  tooltipMsg: string =
+    "Click on 'Generate Here' to generate the token and paste that in the input field.";
 
   repos: RepoType[] = [
     { value: 'bitbucket', viewValue: 'Bitbucket' },
@@ -36,7 +37,8 @@ export class AddCompanyComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private attachCompanyService: AttachCompanyService, private _toolbarService: ToolbarService
+    private attachCompanyService: AttachCompanyService,
+    private _toolbarService: ToolbarService
   ) {}
 
   ngOnInit(): void {
@@ -53,7 +55,7 @@ export class AddCompanyComponent implements OnInit {
   // }
 
   attachCompanyForm = this.fb.group({
-    companyId: ['', Validators.required],
+    // companyId: ['', Validators.required],
     name: [''],
     repositories: this.fb.array([], [Validators.required]),
   });
@@ -127,32 +129,32 @@ export class AddCompanyComponent implements OnInit {
     console.log(this.attachCompanyForm.value);
     let { companyId, name, repositories } = this.attachCompanyForm.value;
 
-    repositories.map((item: any,index:number) => {
+    repositories.map((item: any, index: number) => {
       const app = item.applications.map((app: any) => {
         return { _metedata: { name: app.name }, url: app.url };
       });
-      item.id = index+1;
+      // item.id = index + 1;
       item.applications = app;
       return item;
     });
     let companyData = {
-      id: companyId,
+      // id: companyId,
       name,
       repositories,
     };
 
     console.log(companyData);
 
-    this.attachCompanyService.attachCompany(JSON.stringify(companyData)).subscribe((res) => {
-      if (res.status ==='success'){
-        this.isLoading =false
-        console.log('Company Attached!');
-      }
-      else{
-        console.log("Errorrrr!!");
-        
-      }
-    })
+    this.attachCompanyService
+      .attachCompany(JSON.stringify(companyData))
+      .subscribe((res) => {
+        if (res.status === 'success') {
+          this.isLoading = false;
+          console.log('Company Attached!');
+        } else {
+          console.log('Errorrrr!!');
+        }
+      });
     // this.attachCompanyService
     //   .attachCompany(this.attachCompanyForm.value)
     //   .subscribe(

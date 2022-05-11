@@ -3,7 +3,7 @@
   @apply flex justify-center items-center;
 }
 .registration-form {
-  min-height: 80vh;
+  min-height: 85vh;
   @apply w-full h-full text-dark-text mx-7;
   background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
 }
@@ -17,7 +17,7 @@
   @apply bg-dark-info text-sm;
 }
 ::ng-deep .mat-tooltip {
-  /* your own custom styles here */ 
+  /* your own custom styles here */
   /* e.g. */
   color: green;
 }
@@ -116,19 +116,19 @@ input[type="number"] {
   }
 }
 
-
-::ng-deep{
+::ng-deep {
   .my-tooltip {
     white-space: pre-line;
     text-align: center;
     @apply bg-dark-container border-[1px] border-dark-primary;
     min-height: 50px;
     padding: 8px 0px;
-    
-    font-weight:400;
+
+    font-weight: 400;
     font-size: 13px;
   }
-  .mat-selected, .mat-active{
+  .mat-selected,
+  .mat-active {
     background: blueviolet;
   }
 }

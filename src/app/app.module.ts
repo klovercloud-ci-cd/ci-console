@@ -17,14 +17,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CompanyModule } from './company/company.module';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
-import { MAT_RIPPLE_GLOBAL_OPTIONS, RippleGlobalOptions } from '@angular/material/core';
+import {
+  MAT_RIPPLE_GLOBAL_OPTIONS,
+  RippleGlobalOptions,
+} from '@angular/material/core';
 import { SnackbarModule } from './shared/snackbar/snackbar.module';
+import { ApplicationModalComponent } from './application/application-modal/application-modal.component';
 
 const globalRippleConfig: RippleGlobalOptions = {
   animation: {
     enterDuration: 600,
-    exitDuration: 0
-  }
+    exitDuration: 0,
+  },
 };
 @NgModule({
   declarations: [AppComponent],
@@ -44,7 +48,7 @@ const globalRippleConfig: RippleGlobalOptions = {
     MatInputModule,
     CompanyModule,
     LoadingBarModule,
-    SnackbarModule
+    SnackbarModule,
   ],
   providers: [
     {
@@ -52,8 +56,9 @@ const globalRippleConfig: RippleGlobalOptions = {
       useClass: ApiCallInterceptor,
       multi: true,
     },
-    {provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: globalRippleConfig}
+    { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useValue: globalRippleConfig },
   ],
   bootstrap: [AppComponent],
+  entryComponents: [ApplicationModalComponent],
 })
 export class AppModule {}

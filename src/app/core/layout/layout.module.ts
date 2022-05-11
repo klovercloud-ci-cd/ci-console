@@ -19,7 +19,12 @@ import { ProgressBarModule } from 'src/app/progress-bar/progress-bar.module';
 import { CollapsedSidebarComponent } from './collapsed-sidebar/collapsed-sidebar.component';
 
 @NgModule({
-  declarations: [LayoutComponent, HeaderComponent, SidebarComponent, CollapsedSidebarComponent],
+  declarations: [
+    LayoutComponent,
+    HeaderComponent,
+    SidebarComponent,
+    CollapsedSidebarComponent,
+  ],
   imports: [
     AppRoutingModule,
     CommonModule,
@@ -34,8 +39,6 @@ import { CollapsedSidebarComponent } from './collapsed-sidebar/collapsed-sidebar
     MatTreeModule,
     MatRippleModule,
     ProgressBarModule,
-    
-    
   ],
   exports: [LayoutComponent, HeaderComponent, SidebarComponent],
 })
