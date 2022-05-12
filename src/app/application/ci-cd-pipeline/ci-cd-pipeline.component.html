@@ -3,16 +3,24 @@
     <div id="log-wrapper" (click)="logClose()" class="absolute right-0  h-[calc(100vh-170px)] top-[4.4rem] z-30 w-[calc(100%-1.5rem)] bg-black " [ngClass]="logOpen?'opacity-30 z-50':'hidden opacity-0 '">
     </div>
     <div class="log-card  absolute h-[calc(100vh-170px)] top-[4.4rem] z-50 w-2/6 bg-dark-background p-6 rounded-l opacity-100" [ngClass]="logOpen?' right-0 ':'-right-3/4'">
-      <div class="logState">
+      <div class="flex justify-end mb-4 cursor-pointer" (click)="logClose()">
+        <mat-icon>close</mat-icon>
+
+      </div>
+      <div class="logState overflow-auto">
         <mat-accordion>
-          <div class="expansion bg-dark-background">
+          <div class="expansion bg-dark-background p-4">
+
             <div *ngFor="let log of logStatus; let i = index">
-              <mat-expansion-panel class="kc-expansion-panel bg-dark-background">
-                <mat-expansion-panel-header>
+              <mat-expansion-panel class="kc-expansion-panel bg-dark-background hover:bg-red-500" [expanded]="true">
+                <mat-expansion-panel-header id="{{log.title}}" class="log " [ngClass]="expanded?'border-b border-dark-border-default':''">
                   <mat-panel-title> {{ log.title }} </mat-panel-title>
                 </mat-expansion-panel-header>
-                <div *ngFor="let msg of log.info; let j = index">
-                  <h1>{{ msg }}</h1>
+                <div class="flex justify-end"><mat-icon>open_in_full</mat-icon></div>
+                <div class="max-h-[200px] overflow-y-scroll">
+                  <div *ngFor="let msg of log.info; let j = index" class="">
+                    <h1>{{ msg }}</h1>
+                  </div>
                 </div>
               </mat-expansion-panel>
             </div>
@@ -33,7 +41,7 @@
   </div>
   <div id="mainDiv" [ngClass]="logToggle?'grid-cols-12':'grid-cols-8'" class="grid h-[calc(100vh-170px)] mx-2 md:mx-6 mb-5 mt-3">
 
-    <mat-card id="left" class="kc-card col-span-2 kc-card-pipe-left">
+    <mat-card id="left" class="kc-card col-span-2 kc-card-pipe-left overflow-auto">
       <div class="logState">
         <mat-accordion>
           <div class="expansion bg-dark-background-5">
