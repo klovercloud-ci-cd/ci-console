@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
-      console.log('User Info: ', res);
+     // console.log('User Info: ', res);
     });
   }
 

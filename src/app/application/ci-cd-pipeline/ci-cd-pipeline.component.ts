@@ -9,6 +9,11 @@ import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import data from './demo.json';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {ActivatedRoute, Router, Routes} from "@angular/router";
+import {UserDataService} from "../../shared/services/user-data.service";
+import {AuthService} from "../../auth/auth.service";
+import {RepoServiceService} from "../../repository/repo-service.service";
+import {AppListService} from "../app-list.service";
 @Component({
   selector: 'kcci-ci-cd-pipeline',
   templateUrl: './ci-cd-pipeline.component.html',
@@ -23,7 +28,16 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
   logToggle:boolean = false;
   logOpen: boolean = false;
   expanded = false;
-  constructor(private _toolbarService: ToolbarService,private http:HttpClient) {}
+  private id: any;
+  constructor(
+    private _toolbarService: ToolbarService,
+    private http:HttpClient,
+    private route:ActivatedRoute,
+    private userInfo: UserDataService,
+    private auth: AuthService,
+    private applist: AppListService,
+    private repo: RepoServiceService
+  ) {}
   @Input()  nodeName!: number | string;
   ngOnInit(): void {
     this._toolbarService.changeData({ title: 'App Name' });
@@ -31,6 +45,22 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
+      console.log('app id '+this.route.snapshot.paramMap.get('appID'))
+      console.log('repoID id '+this.route.snapshot.paramMap.get('repoID'))
+      const userId = this.auth.getUserData().user_id
+      let companyId ='';
+      let repo_type = '';
+      this.userInfo.getUserInfo(userId).subscribe(res=>{
+        companyId = res.data.metadata.company_id
+        this.applist.getRepositoryInfo(companyId,this.route.snapshot.paramMap.get('repoID')).subscribe(res=>{
+
+          repo_type = res.data.type;
+          console.log(repo_type)
+        })
+      })
+
+      const repoName =repo_type+'s';
+
       const svgHeight =
         this.higestNodeEnv(this.nodeByEnv())[0].steps.length * 230;
       const svgWidth = this.totalenv() * 230;
