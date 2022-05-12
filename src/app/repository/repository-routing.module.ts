@@ -5,12 +5,15 @@ import { RepositoryComponent } from './repository/repository.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: RepositoryComponent,
+    path: ':repoID',
+    loadChildren: () =>
+      import('../application/application.module').then(
+        (m) => m.ApplicationModule
+      ),
   },
   {
-    path: '/:id',
-    component: CiCdPipelineComponent,
+    path: '',
+    component: RepositoryComponent,
   },
 ];
 

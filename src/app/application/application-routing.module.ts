@@ -6,12 +6,12 @@ import { PipelineLogComponent } from './pipeline-log/pipeline-log.component';
 
 const routes: Routes = [
   {
-    path: 'pipe',
-    component: CiCdPipelineComponent,
-  },
-  {
     path: '',
     component: ApplicationListComponent,
+  },
+  {
+    path: 'application/:appID',
+    component: CiCdPipelineComponent,
   },
   {
     path: 'log',

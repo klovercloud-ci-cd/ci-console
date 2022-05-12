@@ -36,7 +36,7 @@
             <td mat-cell *matCellDef="let element" class="kc-table">
               <div
                 class="cursor-pointer"
-                [routerLink]="['/application/', element._metadata.id]"
+                [routerLink]="['application/', element._metadata.id]"
               >
                 {{ element._metadata.name }}
               </div>

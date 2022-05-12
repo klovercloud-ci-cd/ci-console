@@ -36,13 +36,13 @@ const childrenRoutes: Routes = [
         (m) => m.UserProfileModule
       ),
   },
-  {
-    path: 'repository/:id',
-    loadChildren: () =>
-      import('./application/application.module').then(
-        (m) => m.ApplicationModule
-      ),
-  },
+  // {
+  //   path: 'repository/:id',
+  //   loadChildren: () =>
+  //     import('./application/application.module').then(
+  //       (m) => m.ApplicationModule
+  //     ),
+  // },
   {
     path: 'test',
     component: DashboardIndexComponent,

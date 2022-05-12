@@ -63,7 +63,7 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     this._toolbarService.changeData({ title: 'Repositories' });
     console.log('Ree');
     this.repoService.getCompanyInfo().subscribe((response: any) => {
-      console.log('Re:', response);
+      console.log('Repok:', response);
       this.repoArray = response.data.repositories;
     });
   }

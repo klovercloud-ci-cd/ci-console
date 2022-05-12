@@ -3,7 +3,10 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { AppListService } from '../app-list.service';
 import { ApplicationModalComponent } from '../application-modal/application-modal.component';
 
@@ -114,6 +117,9 @@ export class ApplicationListComponent implements OnInit {
   checked = true;
   check = true;
   dataSource!: MatTableDataSource<any>;
+  userPersonalInfo: any;
+  user: any = this.auth.getUserData();
+  companyID: any;
   objectKeys = Object.keys;
   Object = Object;
 
@@ -123,31 +129,37 @@ export class ApplicationListComponent implements OnInit {
   constructor(
     private service: AppListService,
     private _toolbarService: ToolbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private userInfo: UserDataService,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
     this._toolbarService.changeData({ title: 'Applications' });
-    // this.service.getUserData().subscribe((response: any) => {
-    //   this.dataSource = new MatTableDataSource(this.tableData);
-    //   this.dataSource.paginator = this.paginator;
-    //   this.dataSource.sort = this.matSort;
-    //   this.isLoading = false;
-    // });
-    this.service.getRepositoryInfo().subscribe((response: any) => {
-      this.dataSource = new MatTableDataSource(response.data.applications);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.matSort;
-      this.isLoading = false;
-      console.log('sss: ', response.data.applications);
+
+    //@ts-ignore
+    let repositoryId = this.route.snapshot.paramMap.get('repoID');
+    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+      this.userPersonalInfo = res;
+      this.companyID = res.data.metadata.company_id;
+      console.log('sssecond', this.companyID);
+      this.service
+        .getRepositoryInfo(this.companyID, repositoryId)
+        .subscribe((response: any) => {
+          this.dataSource = new MatTableDataSource(response.data.applications);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.matSort;
+          this.isLoading = false;
+          console.log('sss: ', response.data.applications);
+        });
     });
+
+    // let applicationId = this.route.snapshot.paramMap.get('appID');
+    console.log('Null', this.companyID);
   }
 
   openDialog() {
-    // this.dialog.open(AddAppModal, {
-    //   panelClass: 'custom-modalbox',
-    // });
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
