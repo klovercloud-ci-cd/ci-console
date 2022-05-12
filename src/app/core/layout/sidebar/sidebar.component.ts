@@ -13,19 +13,9 @@ export class SidebarComponent implements OnInit {
       route: '/',
     },
     {
-      title: 'Applications',
-      icon: 'apps',
-      route: '/app/list',
-    },
-    {
       title: 'Repository',
       icon: 'widgets',
       route: '/repository',
-    },
-    {
-      title: 'Pipeline',
-      icon: 'route',
-      route: '/app/pipe',
     },
     {
       title: 'Attach Company',
