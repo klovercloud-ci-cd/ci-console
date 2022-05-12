@@ -67,6 +67,9 @@
           </div>
         </div>
       </div>
+      <div *ngIf="isLoading" class="uploader-status p-5">
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
     </mat-card>
   </div>
 </div>

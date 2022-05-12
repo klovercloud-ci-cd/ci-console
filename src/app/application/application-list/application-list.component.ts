@@ -143,7 +143,6 @@ export class ApplicationListComponent implements OnInit {
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
-      console.log('sssecond', this.companyID);
       this.service
         .getRepositoryInfo(this.companyID, repositoryId)
         .subscribe((response: any) => {

@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatRippleModule } from '@angular/material/core';
 import { RepositoryModalComponent } from './repository-modal/repository-modal.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [RepositoryComponent, RepositoryModalComponent],
@@ -18,6 +19,7 @@ import { RepositoryModalComponent } from './repository-modal/repository-modal.co
     MatIconModule,
     FlexLayoutModule,
     MatRippleModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class RepositoryModule {}
