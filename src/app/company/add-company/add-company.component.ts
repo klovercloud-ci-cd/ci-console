@@ -131,7 +131,7 @@ export class AddCompanyComponent implements OnInit {
 
     repositories.map((item: any, index: number) => {
       const app = item.applications.map((app: any) => {
-        return { _metedata: { name: app.name }, url: app.url };
+        return { _metadata: { name: app.name }, url: app.url };
       });
       // item.id = index + 1;
       item.applications = app;
@@ -145,34 +145,34 @@ export class AddCompanyComponent implements OnInit {
 
     console.log(companyData);
 
-    this.attachCompanyService
-      .attachCompany(JSON.stringify(companyData))
-      .subscribe((res) => {
-        if (res.status === 'success') {
-          this.isLoading = false;
-          console.log('Company Attached!');
-        } else {
-          console.log('Errorrrr!!');
-        }
-      });
     // this.attachCompanyService
-    //   .attachCompany(this.attachCompanyForm.value)
-    //   .subscribe(
-    //     (res) => {
-    //       if (res.status === 'success') {
-    //         // this.isLoading = false;
-    //         // this.router.navigate(['/auth/login']);
-    //         // this.openSnackBar('Registration Successfull', '');
-    //         console.log('Registration Successfull', '');
-    //       }
-    //       console.log(res.status);
-    //       // console.log(this.authService.getUserData(), 'USER');
-    //     },
-    //     (err) => {
-    //       // this.openSnackBarError('Authentication Error', '');
-    //       console.log('err', err);
+    //   .attachCompany(JSON.stringify(companyData))
+    //   .subscribe((res) => {
+    //     if (res.status === 'success') {
+    //       this.isLoading = false;
+    //       console.log('Company Attached!');
+    //     } else {
+    //       console.log('Errorrrr!!');
     //     }
-    //   );
+    //   });
+    this.attachCompanyService
+      .attachCompany(this.attachCompanyForm.value)
+      .subscribe(
+        (res) => {
+          if (res.status === 'success') {
+            // this.isLoading = false;
+            // this.router.navigate(['/auth/login']);
+            // this.openSnackBar('Registration Successfull', '');
+            console.log('Registration Successfull', '');
+          }
+          console.log(res.status);
+          // console.log(this.authService.getUserData(), 'USER');
+        },
+        (err) => {
+          // this.openSnackBarError('Authentication Error', '');
+          console.log('err', err);
+        }
+      );
 
     this.isLoading = true;
     setTimeout(() => {

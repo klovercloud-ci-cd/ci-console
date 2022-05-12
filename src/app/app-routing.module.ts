@@ -37,7 +37,7 @@ const childrenRoutes: Routes = [
       ),
   },
   {
-    path: 'app',
+    path: 'repository/:id',
     loadChildren: () =>
       import('./application/application.module').then(
         (m) => m.ApplicationModule

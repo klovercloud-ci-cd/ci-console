@@ -10,7 +10,6 @@
         </button>
       </div>
       <div class="">
-        <h1 class="text-xl my-3">Repository List</h1>
         <div
           class="w-full h-full"
           gdColumns="1fr 1fr 1fr 1fr"
@@ -20,7 +19,7 @@
           gdColumns.lt-xs="1fr"
           gdGap="16px"
         >
-          <div *ngFor="let repo of repoArray">
+          <div *ngFor="let repo of repoArray; let i = index">
             <div class="cluster-card">
               <span class="flex justify-between">
                 <div class="flex gap-3 pl-3">
@@ -30,7 +29,7 @@
                     alt=""
                   />
                   <h1 class="text-sm font-semibold tracking-wider pt-1">
-                    {{ repo.name }}
+                    Repository- {{ i + 1 }}
                   </h1>
                 </div>
                 <img
@@ -55,12 +54,12 @@
               <div class="ml-3">
                 <button
                   matRipple
-                  routerLink="/app/list"
+                  [routerLink]="['/repository', i + 1]"
                   class="px-2 py-[5px] rounded bg-dark-container text-xs cursor-pointer flex items-center justify-center gap-1"
                 >
                   <mat-icon class="text-xl">widgets</mat-icon>
                   <span class="mt-1"
-                    >Applications({{ repo.application }})
+                    >Applications({{ repo.applications.length }})
                   </span>
                 </button>
               </div>

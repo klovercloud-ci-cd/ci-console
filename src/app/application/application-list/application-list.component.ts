@@ -18,7 +18,8 @@ export class ApplicationListComponent implements OnInit {
   openForm: boolean = false;
   isLoading: boolean = true;
   load: boolean = false;
-  tableData: any = [
+  tableData: any = [];
+  tableeData: any = [
     {
       _metadata: {
         id: 'f5affce0-a813-424f-a013-107db54be06a',
@@ -127,11 +128,18 @@ export class ApplicationListComponent implements OnInit {
 
   ngOnInit() {
     this._toolbarService.changeData({ title: 'Applications' });
-    this.service.getUserData().subscribe((response: any) => {
-      this.dataSource = new MatTableDataSource(this.tableData);
+    // this.service.getUserData().subscribe((response: any) => {
+    //   this.dataSource = new MatTableDataSource(this.tableData);
+    //   this.dataSource.paginator = this.paginator;
+    //   this.dataSource.sort = this.matSort;
+    //   this.isLoading = false;
+    // });
+    this.service.getRepositoryInfo().subscribe((response: any) => {
+      this.dataSource = new MatTableDataSource(response.data.applications);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.matSort;
       this.isLoading = false;
+      console.log('sss: ', response.data.applications);
     });
   }
 

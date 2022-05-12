@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { RepoServiceService } from '../repo-service.service';
 
@@ -8,8 +9,8 @@ import { RepoServiceService } from '../repo-service.service';
   templateUrl: './repository.component.html',
   styleUrls: ['./repository.component.scss'],
 })
-export class RepositoryComponent implements OnInit {
-  repoArray: any = [
+export class RepositoryComponent implements OnInit, AfterViewInit {
+  repooArray: any = [
     {
       name: 'KloverCloud-CICD',
       type: 'github',
@@ -51,6 +52,7 @@ export class RepositoryComponent implements OnInit {
       application: 7,
     },
   ];
+  repoArray: any = [];
   constructor(
     private repoService: RepoServiceService,
     private _toolbarService: ToolbarService,
@@ -60,9 +62,10 @@ export class RepositoryComponent implements OnInit {
   ngOnInit(): void {
     this._toolbarService.changeData({ title: 'Repositories' });
     console.log('Ree');
-
     this.repoService.getCompanyInfo().subscribe((response: any) => {
       console.log('Re:', response);
+      this.repoArray = response.data.repositories;
     });
   }
+  ngAfterViewInit(): void {}
 }

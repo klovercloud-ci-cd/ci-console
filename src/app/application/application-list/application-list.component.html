@@ -34,7 +34,12 @@
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef class="px-10">Name</th>
             <td mat-cell *matCellDef="let element" class="kc-table">
-              {{ element._metadata.name }}
+              <div
+                class="cursor-pointer"
+                [routerLink]="['/application/', element._metadata.id]"
+              >
+                {{ element._metadata.name }}
+              </div>
             </td>
           </ng-container>
 
@@ -42,9 +47,15 @@
             <th mat-header-cell *matHeaderCellDef>Labels</th>
             <td mat-cell *matCellDef="let element">
               <!-- {{ element._metadata.labels.CompanyId }} -->
-              <div *ngFor="let key of objectKeys(element._metadata.labels)">
-                {{ key + " : " + element._metadata.labels[key] }}
+              <div *ngIf="element._metadata.labels != null; else noLabels">
+                <div *ngFor="let key of objectKeys(element._metadata.labels)">
+                  {{ key + " : " + element._metadata.labels[key] }}
+                </div>
               </div>
+
+              <ng-template #noLabels>
+                <span>N/A</span>
+              </ng-template>
               <!-- <div
                 *ngFor="
                   let key of objectKeys(element._metadata.labels);
