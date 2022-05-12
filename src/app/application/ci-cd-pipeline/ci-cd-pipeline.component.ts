@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import data from './demo.json';
+import {Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 @Component({
   selector: 'kcci-ci-cd-pipeline',
   templateUrl: './ci-cd-pipeline.component.html',
@@ -19,8 +21,9 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
   stepsLists = this.stepsDetails()
   isHttprequest =false
   logToggle:boolean = false;
-   logOpen: boolean = false;
-  constructor(private _toolbarService: ToolbarService) {}
+  logOpen: boolean = false;
+  expanded = false;
+  constructor(private _toolbarService: ToolbarService,private http:HttpClient) {}
   @Input()  nodeName!: number | string;
   ngOnInit(): void {
     this._toolbarService.changeData({ title: 'App Name' });
@@ -225,6 +228,12 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
         'Prepare workflow directory',
         'Prepare all required actions',
         'Getting action dodddddddddddddddddddddddddddwnload info',
+        'Getting action dodddddddddddddddddddddddddddwnload info',
+        'Getting action dodddddddddddddddddddddddddddwnload info',
+        'Getting action dodddddddddddddddddddddddddddwnload info',
+        'Getting action dodddddddddddddddddddddddddddwnload info',
+        'Getting action dodddddddddddddddddddddddddddwnload info',
+        'Getting action dodddddddddddddddddddddddddddwnload info',
       ],
     },
   ];
@@ -240,4 +249,5 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
       this.logOpen =true
     }
   }
+
 }
