@@ -10,10 +10,10 @@ import { SharedLayoutService } from './shared-layout.service';
 })
 export class LayoutComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
-
   isOpen: boolean = true;
   showFiller = true;
   pageTitle: string = '';
+  isCollapsed: boolean = true;
   public innerWidth: any;
   data: any = {
     title: 'KloverCloud',
@@ -31,11 +31,11 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit() {
     this.getScreenWidth = window.innerWidth;
-    if(this.getScreenWidth<1280){
+    if (this.getScreenWidth < 1280) {
       this.isOpen = false;
-    }else{
+    } else {
       this.isOpen = true;
-    } 
+    }
     this.toolbarService.currentData.subscribe(
       (currentData) => (this.data = currentData)
     );
@@ -44,22 +44,22 @@ export class LayoutComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
-    if(this.getScreenWidth<1280){
+    if (this.getScreenWidth < 1280) {
       this.isOpen = false;
-    }else{
+    } else {
       this.isOpen = true;
     }
   }
   toggleCollapse() {
     this.collapsed = !this.collapsed;
     this.openCollapsedBar = !this.openCollapsedBar;
-     // @ts-ignore
-      this.ss.toggleState$.subscribe((res) => (this.openCollapsedBar = res));
-      console.log('this.openCollapsedBar: ',this.openCollapsedBar);
-      this.ss.emitData();
+    // @ts-ignore
+    this.ss.toggleState$.subscribe((res) => (this.openCollapsedBar = res));
+    console.log('this.openCollapsedBar: ', this.openCollapsedBar);
+    this.ss.emitData();
   }
 
-  openNav(boom:any) {
+  openNav(boom: any) {
     // this.openCollapsedBar = !this.openCollapsedBar;
     // @ts-ignore
     this.ss.toggleState$.subscribe((res) => (this.openCollapsedBar = res));
@@ -67,4 +67,3 @@ export class LayoutComponent implements OnInit {
     this.isOpen = boom;
   }
 }
-

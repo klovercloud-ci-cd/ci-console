@@ -9,7 +9,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TokenService } from '../auth/token.service';
 
-const BASE_URL = environment.v1AuthEndpoint;
+const BASE_URL = 'http://192.168.68.114:4200/api/v1/';
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export class AttachCompanyService {
         `Body: ${error.error}`
       );
     }
-    return throwError('Internal server error!');
+    return throwError(error);
   }
 
   attachCompany(attachCompanyPayload: any): Observable<any> {
@@ -45,10 +45,10 @@ export class AttachCompanyService {
     };
 
     return this.http
-      .post(BASE_URL + 'users', attachCompanyPayload, HTTP_OPTIONS)
+      .put(BASE_URL + 'users', attachCompanyPayload, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
-          console.log("Response Log: ",res);
+          console.log('Response Log: ', res);
         }),
         catchError(AttachCompanyService.handleError)
       );

@@ -1,0 +1,36 @@
+<div class="bg-dark-container border border-dark-primary rounded-lg p-5">
+  <h1 class="pt-3 pb-4">Add New Application</h1>
+  <div class="example-container">
+    <form [formGroup]="addApplication" (ngSubmit)="addApplicationFormData()">
+      <div class="flex gap-x-2">
+        <mat-form-field class="kcci-field w-1/2" appearance="outline">
+          <mat-label class="text-white">Name </mat-label>
+          <input
+            formControlName="name"
+            type="text"
+            autocomplete="off"
+            matInput
+          />
+        </mat-form-field>
+        <mat-form-field class="kcci-field w-1/2" appearance="outline">
+          <mat-label class="text-white">URL </mat-label>
+          <input
+            formControlName="url"
+            type="text"
+            autocomplete="off"
+            matInput
+          />
+        </mat-form-field>
+      </div>
+      <div mat-dialog-actions>
+        <button
+          type="submit"
+          mat-button
+          class="px-4 py-2 bg-dark-primary rounded-md ml-auto"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -18,8 +18,13 @@ export class SidebarComponent implements OnInit {
       route: '/app/list',
     },
     {
+      title: 'Repository',
+      icon: 'widgets',
+      route: '/repository',
+    },
+    {
       title: 'Pipeline',
-      icon: 'analytics',
+      icon: 'route',
       route: '/app/pipe',
     },
     {

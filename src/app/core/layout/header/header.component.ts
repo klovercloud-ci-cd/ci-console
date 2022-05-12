@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private auth: AuthService,
-    private userInfo: UserDataService,
+    private userInfo: UserDataService
   ) {}
   pageTitle: string = '';
   user: any = this.auth.getUserData();
@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
+      console.log('User Info: ', res);
     });
   }
 

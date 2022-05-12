@@ -43,6 +43,10 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
     }, 1);
   }
 
+  popupLog() {
+    console.log('Popup Clicked!');
+  }
+
   private totalenv() {
     return this.allenv().length;
   }
