@@ -120,6 +120,7 @@ export class ApplicationListComponent implements OnInit {
   userPersonalInfo: any;
   user: any = this.auth.getUserData();
   companyID: any;
+  repositoryId: any;
   objectKeys = Object.keys;
   Object = Object;
 
@@ -139,12 +140,13 @@ export class ApplicationListComponent implements OnInit {
     this._toolbarService.changeData({ title: 'Applications' });
 
     //@ts-ignore
-    let repositoryId = this.route.snapshot.paramMap.get('repoID');
+    this.repositoryId = this.route.snapshot.paramMap.get('repoID');
+
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
       this.service
-        .getRepositoryInfo(this.companyID, repositoryId)
+        .getRepositoryInfo(this.companyID, this.repositoryId)
         .subscribe((response: any) => {
           this.dataSource = new MatTableDataSource(response.data.applications);
           this.dataSource.paginator = this.paginator;
@@ -153,9 +155,6 @@ export class ApplicationListComponent implements OnInit {
           console.log('sss: ', response.data.applications);
         });
     });
-
-    // let applicationId = this.route.snapshot.paramMap.get('appID');
-    console.log('Null', this.companyID);
   }
 
   openDialog() {
@@ -163,10 +162,13 @@ export class ApplicationListComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '40%';
-
     dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.data = {
+      repositoryId: this.repositoryId,
+    };
     this.dialog.open(ApplicationModalComponent, dialogConfig);
   }
+
   editApp(e: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -176,9 +178,42 @@ export class ApplicationListComponent implements OnInit {
     this.dialog.open(ApplicationModalComponent, dialogConfig);
     console.log('E:', e);
   }
+
+  deleteApp(e: any) {
+    console.log('Delete:', e);
+    let data = {
+      applications: [
+        {
+          _metadata: {
+            id: e._metadata.id,
+          },
+        },
+      ],
+    };
+    this.service
+      .deleteApplication(data, this.companyID, this.repositoryId)
+      .subscribe(
+        (res) => {
+          // if (res.status === 'success') {
+          //   // this.isLoading = false;
+          //   // this.router.navigate(['/auth/login']);
+          //   // this.openSnackBar('Registration Successfull', '');
+          //   console.log('Registration Successfull', '');
+          // }
+          console.log('Add Application response', res);
+          // console.log(this.authService.getUserData(), 'USER');
+        },
+        (err) => {
+          // this.openSnackBarError('Authentication Error', '');
+          console.log('err', err);
+        }
+      );
+  }
+
   clickMe() {
     this.openForm = !this.openForm;
   }
+
   onValChange(value: any) {}
   something() {
     this.load = !this.load;

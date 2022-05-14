@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const BASE_URL = 'http://192.168.68.114:4203/api/v1/';
+const BASE_URL = 'http://192.168.68.114:4202/api/v1/';
+
 @Injectable({
   providedIn: 'root',
 })

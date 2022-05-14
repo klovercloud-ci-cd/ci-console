@@ -112,8 +112,10 @@
                     >edit</mat-icon
                   ></span
                 >
-                <mat-icon class="cursor-pointer hover:text-red-500"
-                  >delete</mat-icon
+                <span (click)="deleteApp(element)">
+                  <mat-icon class="cursor-pointer hover:text-red-500"
+                    >delete</mat-icon
+                  ></span
                 >
               </div>
             </td>
