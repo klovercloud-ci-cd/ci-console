@@ -1,12 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-
-const BASE_URL = 'http://192.168.68.114:4203/api/v1/';
+const HTTP_OPTIONS = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+  }),
+  params: {},
+};
+const BASE_URL = 'http://192.168.68.114:4202/api/v1/';
 @Injectable({
   providedIn: 'root',
 })
+
 export class RepoServiceService {
   constructor(private http: HttpClient) {}
 
@@ -15,7 +21,19 @@ export class RepoServiceService {
       params: { loadRepositories: true, loadApplications: true },
     });
   }
-  getApplicationById(appId:string, repoId:string,companyId:string){
-    return this.http.get(BASE_URL+'/'+appId)
+  getApplicationById(appId:string |null, repoId:string |null,companyId:string |null){
+    HTTP_OPTIONS.params = {
+      companyId: companyId,
+      repositoryId: repoId,
+    };
+    return this.http.get(BASE_URL+'applications/'+appId,HTTP_OPTIONS)
+  }
+
+  getBranch(repoType:string,repoId:string,repoUrl:string) {
+    HTTP_OPTIONS.params = {
+      repoId: repoId,
+      url: repoUrl,
+    };
+    return this.http.get(BASE_URL+repoType+'/branches',HTTP_OPTIONS)
   }
 }

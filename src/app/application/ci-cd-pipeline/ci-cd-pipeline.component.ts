@@ -28,6 +28,7 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
   logToggle:boolean = false;
   logOpen: boolean = false;
   expanded = false;
+  branchList:any;
   private id: any;
   constructor(
     private _toolbarService: ToolbarService,
@@ -40,27 +41,41 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
   ) {}
   @Input()  nodeName!: number | string;
   ngOnInit(): void {
-    this._toolbarService.changeData({ title: 'App Name' });
+    let pageTitle ='';
+    const appId = this.route.snapshot.paramMap.get('appID')
+    const repoId = this.route.snapshot.paramMap.get('repoID')
+    const userId = this.auth.getUserData().user_id
+    let companyId ='';
+    let repo_type = '';
+    this.userInfo.getUserInfo(userId).subscribe(res=>{
+      companyId = res.data.metadata.company_id
+      this.applist.getRepositoryInfo(companyId,this.route.snapshot.paramMap.get('repoID')).subscribe(res=>{
+
+        repo_type = res.data.type;
+        repo_type = repo_type+'s';
+        let repoUrl = '';
+        this.repo.getApplicationById(appId,repoId,companyId).subscribe(res=>{
+          // @ts-ignore
+          repoUrl = res.data.url
+          // @ts-ignore
+          pageTitle =res.data._metadata.name
+          this._toolbarService.changeData({ title: pageTitle });
+          // @ts-ignore
+          this.repo.getBranch(repo_type,repoId,repoUrl).subscribe(res=>{
+            // @ts-ignore
+            this.branchList = res.data
+          })
+        })
+
+      })
+    })
+
+
+
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      console.log('app id '+this.route.snapshot.paramMap.get('appID'))
-      console.log('repoID id '+this.route.snapshot.paramMap.get('repoID'))
-      const userId = this.auth.getUserData().user_id
-      let companyId ='';
-      let repo_type = '';
-      this.userInfo.getUserInfo(userId).subscribe(res=>{
-        companyId = res.data.metadata.company_id
-        this.applist.getRepositoryInfo(companyId,this.route.snapshot.paramMap.get('repoID')).subscribe(res=>{
-
-          repo_type = res.data.type;
-          console.log(repo_type)
-        })
-      })
-
-      const repoName =repo_type+'s';
-
       const svgHeight =
         this.higestNodeEnv(this.nodeByEnv())[0].steps.length * 230;
       const svgWidth = this.totalenv() * 230;
