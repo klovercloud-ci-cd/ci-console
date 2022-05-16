@@ -36,4 +36,12 @@ export class RepoServiceService {
     };
     return this.http.get(BASE_URL+repoType+'/branches',HTTP_OPTIONS)
   }
+  getCommit(repoType:string,repoId:string,repoUrl:string,branceName:string){
+    HTTP_OPTIONS.params = {
+      repoId: repoId,
+      url: repoUrl,
+      branch: branceName,
+    };
+    return this.http.get(BASE_URL+repoType+'/commits',HTTP_OPTIONS)
+  }
 }
