@@ -23,41 +23,48 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import {MatRippleModule} from "@angular/material/core";
+import { PipelineGraphComponent } from './pipeline-graph/pipeline-graph.component';
+import { PipelineOverviewComponent } from './pipeline-overview/pipeline-overview.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
     ApplicationListComponent,
-    ApplicationListComponent,
     CiCdPipelineComponent,
     PipelineLogComponent,
     ApplicationModalComponent,
+    PipelineGraphComponent,
+    PipelineOverviewComponent,
   ],
-  imports: [
-    CommonModule,
-    ApplicationRoutingModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
+    imports: [
+        CommonModule,
+        ApplicationRoutingModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
 
-    MatInputModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
+        MatInputModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
 
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatExpansionModule,
-    MatIconModule,
-    MatSlideToggleModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatButtonToggleModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatTabsModule,
-  ],
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatExpansionModule,
+        MatIconModule,
+        MatSlideToggleModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatButtonToggleModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatRippleModule,
+        MatProgressBarModule
+    ],
 })
 export class ApplicationModule {}

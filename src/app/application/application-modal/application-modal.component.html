@@ -26,13 +26,51 @@
       </div>
       <div mat-dialog-actions class="flex justify-between">
         <div></div>
-        <button
+        <!-- <button
           type="submit"
           mat-button
           class="px-4 py-2 bg-dark-primary rounded-md"
         >
           Submit
-        </button>
+          <div class="py-3 mx-auto w-52">
+            <mat-progress-bar
+              class="green-progress kc-progress-bar"
+              mode="indeterminate"
+            >
+            </mat-progress-bar>
+          </div>
+        </button> -->
+        <div *ngIf="!addApplication.valid; else other_content" class="mb-2">
+          <button
+            class="bg-slate-500 kc-register block px-4 py-3 rounded-md"
+            type="submit"
+            [disabled]="!addApplication.valid"
+          >
+            Disable
+          </button>
+        </div>
+        <ng-template #other_content>
+          <div class="mb-2">
+          <button
+            class="kc-button-primary kc-register block px-4 py-3 rounded-md "
+            type="submit"
+            [disabled]="!addApplication.valid"
+          >
+            <span *ngIf="!isLoading; else before_submit">
+              Submit
+            </span>
+            <ng-template #before_submit>
+              <div class="py-[10px] mx-auto w-[57px]">
+                <mat-progress-bar
+                  class="green-progress kc-progress-bar"
+                  mode="indeterminate"
+                >
+                </mat-progress-bar>
+              </div>
+            </ng-template>
+          </button>
+        </div>
+        </ng-template>
       </div>
     </form>
   </div>

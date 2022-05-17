@@ -14,6 +14,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [RepositoryComponent, RepositoryModalComponent],
@@ -28,7 +33,25 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatFormFieldModule,
     ReactiveFormsModule,
     FormsModule,
-    MatSelectModule,MatInputModule,MatTooltipModule
+    MatSelectModule,
+    MatInputModule,
+    MatTooltipModule,
+
+    MatInputModule,
+
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatRippleModule,
+    MatProgressBarModule
   ],
 })
 export class RepositoryModule {}

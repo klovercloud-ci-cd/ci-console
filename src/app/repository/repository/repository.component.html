@@ -56,9 +56,13 @@
                   class="px-2 py-[5px] rounded bg-dark-container text-xs cursor-pointer flex items-center justify-center gap-1"
                 >
                   <mat-icon class="text-xl">widgets</mat-icon>
-                  <span class="mt-1"
-                    >Applications({{ repo.applications.length }})
+                  <span class="mt-1" *ngIf="repo.applications.length>0; else applist"
+                    >
+                    Applications({{ repo.applications.length}})
                   </span>
+                  <ng-template #applist>
+                    <span class="mt-1">No Application added</span>
+                  </ng-template>
                 </button>
               </div>
             </div>

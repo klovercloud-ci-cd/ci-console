@@ -71,8 +71,15 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this._toolbarService.changeData({ title: 'Repositories' });
+    this.repoService.refreshNeeded$.subscribe(()=>{
+this.getRepoList();  
+  })
+ 
+this.getRepoList();  
 
+  }
+  getRepoList(){
+    this._toolbarService.changeData({ title: 'Repositories' });
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
@@ -82,7 +89,7 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
           this.repoArray = response.data.repositories;
         });
-    });    
+    }); 
   }
 
   openDialog() {

@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { catchError, map, Observable, of, Subject, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
@@ -15,28 +15,34 @@ const BASE_URL = 'http://192.168.68.114:4202/api/v1/';
 export class RepoServiceService {
   constructor(private http: HttpClient) {}
 
+  private _refreshNeeded$ = new Subject<void>();
+
+  get refreshNeeded$(){
+    return this._refreshNeeded$;
+  }
+
   getCompanyInfo(companyID: any): Observable<any> {
     return this.http.get(BASE_URL + 'companies/' + companyID , {
       params: { loadRepositories: true, loadApplications: true },
     });
   }
 
-  addRepository(companyID: any): Observable<any> {
+  addRepository(companyID: any,payLoad:any): Observable<any> {
     HTTP_OPTIONS.params = {
       companyUpdateOption: 'APPEND_REPOSITORY'
     };
     let newRepo={
       "repositories": [
           {
-              "type": "gitlab",
-              "token": "MyTokens",
+              "type": payLoad.type,
+              "token": payLoad.token,
               "applications": [
-                  {
-                      "_metedata": {
-                          "name": "SomeApplication"
-                      },
-                      "url": "ssssssssssssssss"
-                  }
+              //     {
+              //         "_metedata": {
+              //             "name": "SomeApplication"
+              //         },
+              //         "url": "ssssssssssssssss"
+              //     }
               ]
           }
       ]
@@ -45,9 +51,9 @@ export class RepoServiceService {
     return this.http
       .put(BASE_URL + 'companies/' + companyID + '/repositories', newRepo, HTTP_OPTIONS)
       .pipe(
-        map((res: any) => {
-          // this._refreshNeeded$.next();
-          console.log('Response Log: ', res);
+        tap((res: any) => {
+          this._refreshNeeded$.next();
+          console.log('Response Loggg: ', res);
         }),
         // map(()=>{
         //   this._refreshNeeded$.next();
@@ -96,5 +102,13 @@ export class RepoServiceService {
       url: repoUrl,
     };
     return this.http.get(BASE_URL + repoType + '/branches', HTTP_OPTIONS);
+  }
+  getCommit(repoType:string,repoId:string,repoUrl:string,branceName:string){
+    HTTP_OPTIONS.params = {
+      repoId: repoId,
+      url: repoUrl,
+      branch: branceName,
+    };
+    return this.http.get(BASE_URL+repoType+'/commits',HTTP_OPTIONS)
   }
 }

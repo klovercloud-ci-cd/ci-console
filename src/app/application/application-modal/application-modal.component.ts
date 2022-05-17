@@ -41,17 +41,15 @@ export class ApplicationModalComponent implements OnInit {
       //   });
     });
   }
+  
   addApplication = this.fb.group({
     name: ['', Validators.required],
     url: ['', Validators.required],
   });
+
   addApplicationFormData() {
-    console.log(
-      'App Form',
-      this.addApplication.value,
-      this.repositoryId,
-      this.companyID
-    );
+    this.isLoading = true;
+
     let data = {
       applications: [
         {
@@ -68,12 +66,7 @@ export class ApplicationModalComponent implements OnInit {
       .addApplication(data, this.companyID, this.repositoryId)
       .subscribe(
         (res) => {
-          // if (res.status === 'success') {
-          //   // this.isLoading = false;
-          //   // this.router.navigate(['/auth/login']);
-          //   // this.openSnackBar('Registration Successfull', '');
-          //   console.log('Registration Successfull', '');
-          // }
+          this.isLoading = false
           console.log('Add Application response', res);
           this.dialogRef.close();
           // console.log(this.authService.getUserData(), 'USER');

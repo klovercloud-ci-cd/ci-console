@@ -30,6 +30,7 @@ export class AppListService {
   }
 
   getRepositoryInfo(companyID: any, repoId: any): Observable<any> {
+    
     return this.http.get(BASE_URL + 'repositories/' + repoId, {
       params: {
         companyId: companyID,
@@ -54,7 +55,7 @@ export class AppListService {
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
-          console.log('Response Log: ', res);
+          console.log('Response Logg: ', res);
         }),
         // map(()=>{
         //   this._refreshNeeded$.next();
