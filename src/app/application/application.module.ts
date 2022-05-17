@@ -26,10 +26,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import {MatRippleModule} from "@angular/material/core";
 import { PipelineGraphComponent } from './pipeline-graph/pipeline-graph.component';
 import { PipelineOverviewComponent } from './pipeline-overview/pipeline-overview.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
-    ApplicationListComponent,
     ApplicationListComponent,
     CiCdPipelineComponent,
     PipelineLogComponent,
@@ -64,6 +64,7 @@ import { PipelineOverviewComponent } from './pipeline-overview/pipeline-overview
         MatSelectModule,
         MatTabsModule,
         MatRippleModule,
+        MatProgressBarModule
     ],
 })
 export class ApplicationModule {}

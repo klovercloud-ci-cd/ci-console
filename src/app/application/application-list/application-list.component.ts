@@ -3,14 +3,13 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { RepoServiceService } from 'src/app/repository/repo-service.service';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { AppListService } from '../app-list.service';
 import { ApplicationModalComponent } from '../application-modal/application-modal.component';
-
-// import { DataService } from './data.service';
 
 @Component({
   selector: 'kcci-application-list',
@@ -120,8 +119,11 @@ export class ApplicationListComponent implements OnInit {
   userPersonalInfo: any;
   user: any = this.auth.getUserData();
   companyID: any;
+  repositoryId: any;
+  repoType:any;
   objectKeys = Object.keys;
   Object = Object;
+  array:any;
 
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) matSort!: MatSort;
@@ -132,53 +134,182 @@ export class ApplicationListComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private userInfo: UserDataService,
-    private auth: AuthService
+    private auth: AuthService,
+    private repo: RepoServiceService,
+    private navigateRoute: Router
   ) {}
 
   ngOnInit() {
     this._toolbarService.changeData({ title: 'Applications' });
 
     //@ts-ignore
-    let repositoryId = this.route.snapshot.paramMap.get('repoID');
+    this.repositoryId = this.route.snapshot.paramMap.get('repoID');
+
+    this.service.refreshNeeded$.subscribe(()=>{
+      this.getAppList()
+    })
+
+    // this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+    //   this.userPersonalInfo = res;
+    //   this.companyID = res.data.metadata.company_id;
+    //   this.service
+    //     .getRepositoryInfo(this.companyID, this.repositoryId)
+    //     .subscribe((response: any) => {
+    //       this.dataSource = new MatTableDataSource(response.data.applications);
+    //       this.dataSource.paginator = this.paginator;
+    //       this.dataSource.sort = this.matSort;
+    //       this.isLoading = false;
+    //       console.log('RepoInfo: ', response.data.type);
+    //       this.repoType = response.data.type;
+    //     });
+    // });
+    this.getAppList()
+
+  }
+
+  getAppList(){
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
       this.service
-        .getRepositoryInfo(this.companyID, repositoryId)
+        .getRepositoryInfo(this.companyID, this.repositoryId)
         .subscribe((response: any) => {
+          this.array = response;
           this.dataSource = new MatTableDataSource(response.data.applications);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.matSort;
           this.isLoading = false;
-          console.log('sss: ', response.data.applications);
+          console.log('RepoInfo: ', response.data.type);
+          this.repoType = response.data.type;
         });
     });
-
-    // let applicationId = this.route.snapshot.paramMap.get('appID');
-    console.log('Null', this.companyID);
   }
+someRoute(e:any){
 
+  this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+    this.userPersonalInfo = res;
+    this.companyID = res.data.metadata.company_id;
+    this.service
+      .getRepositoryInfo(this.companyID, this.repositoryId)
+      .subscribe((response: any) => {
+        this.repoType = response.data.type;
+        let data = {
+          title: e._metadata.name,
+          type: response.data.type,
+          url: e.url,
+          repoId:response.data.id,
+          appId: e._metadata.id
+        }
+      console.log(data);
+      //@ts-ignore
+      const encodedString = btoa(JSON.stringify(data));
+      console.log("Encoded Value: ",encodedString);
+      
+      const decodedData = function base64ToHex(str:any) {
+        for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; ++i) {
+            let tmp = bin.charCodeAt(i).toString(16);
+            if (tmp.length === 1) tmp = "0" + tmp;
+            hex[hex.length] = tmp;
+        }
+        return hex.join("");
+    }
+    
+  this.navigateRoute.navigate(['repository',response.data.id,'application',decodedData(encodedString)]);
+
+      });
+  });
+    // console.log("Any:",e);
+    // const json = { "a": 1, "b": 2 }
+    // const string = JSON.stringify(json) 
+    // const encodedString = btoa(string)
+    // const dec = atob('eyJhIjoxLCJiIjoyfQ==')
+    // console.log("encodedString",encodedString);
+
+  //   let data = {
+  //     "title": e._metadata.name,
+  //     "type": "",
+  //     "url": e.url,
+  //     "repoId":"",
+  //     "appId": e._metadata.id
+  //   }
+  // console.log(data);
+
+  // this.navigateRoute.navigate(['/']);
+  
+}
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '40%';
+    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.data = {
+      repositoryId: this.repositoryId,
+    };
+    this.dialog.open(ApplicationModalComponent, dialogConfig);
+  }
 
-    dialogConfig.panelClass = 'custom-modalbox';
-    this.dialog.open(ApplicationModalComponent, dialogConfig);
+  deleteApp(e: any) {
+    console.log('Delete:', e);
+    let data = {
+      applications: [
+        {
+          _metadata: {
+            id: e._metadata.id,
+          },
+        },
+      ],
+    };
+    this.service
+      .deleteApplication(data, this.companyID, this.repositoryId)
+      .subscribe(
+        (res) => {
+ 
+          console.log('Add Application response', res);
+        },
+        (err) => {
+          // this.openSnackBarError('Authentication Error', '');
+          console.log('err', err);
+        }
+      );
   }
-  editApp(e: any) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '40%';
-    dialogConfig.panelClass = 'custom-modalbox';
-    this.dialog.open(ApplicationModalComponent, dialogConfig);
-    console.log('E:', e);
+
+  webUpdate(appId: any) {
+    this.repositoryId = this.route.snapshot.paramMap.get('repoID');
+
+    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+      this.userPersonalInfo = res;
+      this.companyID = res.data.metadata.company_id;
+      this.service
+        .getRepositoryInfo(this.companyID, this.repositoryId)
+        .subscribe((response: any) => {
+          this.dataSource = new MatTableDataSource(response.data.applications);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.matSort;
+          this.isLoading = false;
+          console.log('RepoInfo: ', response.data.type, appId);
+          this.repoType = response.data.type;
+
+          let queryPayload = {
+          action: appId._metadata.is_webhook_enabled?'enable':'disable',
+          companyId: this.companyID,
+          repoId: this.repositoryId,
+          url: appId.url,
+          webhookId: appId.webhook.id
+          }
+          this.service.updateWebhook(queryPayload,response.data.type+'s').subscribe((res:any)=>{
+            console.log("Webhook response",res);
+            
+          })
+        });
+    });
+    console.log("Zumba",this.repoType);
   }
+
   clickMe() {
     this.openForm = !this.openForm;
   }
+
   onValChange(value: any) {}
   something() {
     this.load = !this.load;

@@ -36,7 +36,4 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
       this.content = PipelineOverviewComponent
     }
   }
-
-
-
 }
