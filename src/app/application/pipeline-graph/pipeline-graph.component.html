@@ -82,9 +82,9 @@
       <div class="logState">
         <mat-accordion>
           <div class="expansion bg-dark-background-5">
-            <div *ngFor="let branch of commitList; let i = index">
+            <div *ngFor="let branch of branchs; let i = index">
               <mat-expansion-panel class="kc-expansion-panel">
-                <mat-expansion-panel-header>
+                <mat-expansion-panel-header id="{{ branch.name }} " (click)="loadCommit(branch.name)">
                   <mat-panel-title class="flex gap-2 text-md"><svg height="20px" fill="white" id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                     <g opacity="0.2">
                       <circle cx="188" cy="67.99756" r="28"/>
@@ -93,13 +93,19 @@
                   </svg>
                     {{ branch.name }} </mat-panel-title>
                 </mat-expansion-panel-header>
-                <div *ngFor="let msg of branch.commits; let j = index">
-                  <div mat-ripple class="text-sm ml-6 p-3 flex gap-2 cursor-pointer hover:bg-dark-background-1 rounded">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
-                      <path d="M13,9.03544443 C14.6961471,9.27805926 16,10.736764 16,12.5 C16,14.263236 14.6961471,15.7219407 13,15.9645556 L13,21.5207973 C13,21.7969397 12.7761424,22.0207973 12.5,22.0207973 C12.2238576,22.0207973 12,21.7969397 12,21.5207973 L12,15.9645556 C10.3038529,15.7219407 9,14.263236 9,12.5 C9,10.736764 10.3038529,9.27805926 12,9.03544443 L12,3.5 C12,3.22385763 12.2238576,3 12.5,3 C12.7761424,3 13,3.22385763 13,3.5 L13,9.03544443 L13,9.03544443 Z M12.5,15 C13.8807119,15 15,13.8807119 15,12.5 C15,11.1192881 13.8807119,10 12.5,10 C11.1192881,10 10,11.1192881 10,12.5 C10,13.8807119 11.1192881,15 12.5,15 Z" transform="rotate(90 12.5 12.51)"/>
-                    </svg>
-                    {{msg.commit.message}}
+                <div *ngFor="let list of commitList">
+                  <div *ngIf="list.branch ===branch.name" >
+                    <div *ngFor="let msg of list.commits; let j = index">
+                      <div mat-ripple class="text-sm ml-6 p-3 flex gap-2 cursor-pointer hover:bg-dark-background-1 rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
+                          <path d="M13,9.03544443 C14.6961471,9.27805926 16,10.736764 16,12.5 C16,14.263236 14.6961471,15.7219407 13,15.9645556 L13,21.5207973 C13,21.7969397 12.7761424,22.0207973 12.5,22.0207973 C12.2238576,22.0207973 12,21.7969397 12,21.5207973 L12,15.9645556 C10.3038529,15.7219407 9,14.263236 9,12.5 C9,10.736764 10.3038529,9.27805926 12,9.03544443 L12,3.5 C12,3.22385763 12.2238576,3 12.5,3 C12.7761424,3 13,3.22385763 13,3.5 L13,9.03544443 L13,9.03544443 Z M12.5,15 C13.8807119,15 15,13.8807119 15,12.5 C15,11.1192881 13.8807119,10 12.5,10 C11.1192881,10 10,11.1192881 10,12.5 C10,13.8807119 11.1192881,15 12.5,15 Z" transform="rotate(90 12.5 12.51)"/>
+                        </svg>
+                        {{msg.commit.message}}
+                      </div>
+                    </div>
                   </div>
+
+
                 </div>
               </mat-expansion-panel>
             </div>

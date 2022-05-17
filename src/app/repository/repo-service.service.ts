@@ -29,19 +29,29 @@ export class RepoServiceService {
     return this.http.get(BASE_URL+'applications/'+appId,HTTP_OPTIONS)
   }
 
-  getBranch(repoType:string,repoId:string,repoUrl:string) {
+    getBranch(repoType: string, repoId: string | null, repoUrl: string) {
     HTTP_OPTIONS.params = {
       repoId: repoId,
       url: repoUrl,
     };
     return this.http.get(BASE_URL+repoType+'/branches',HTTP_OPTIONS)
   }
-  getCommit(repoType:string,repoId:string,repoUrl:string,branceName:string){
+
+  getCommit(repoType: string, repoId: string | null, repoUrl: string, branceName: string){
     HTTP_OPTIONS.params = {
       repoId: repoId,
       url: repoUrl,
       branch: branceName,
     };
     return this.http.get(BASE_URL+repoType+'/commits',HTTP_OPTIONS)
+  }
+
+  getProcess(repositoryId:any,appId:any,commitId:any) {
+    HTTP_OPTIONS.params = {
+      repositoryId: repositoryId,
+      appId: appId,
+      commitId: commitId,
+    };
+    return this.http.get(BASE_URL+'processes',HTTP_OPTIONS)
   }
 }

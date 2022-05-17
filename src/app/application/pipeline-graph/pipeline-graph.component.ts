@@ -15,7 +15,6 @@ import {RepoServiceService} from "../../repository/repo-service.service";
   styleUrls: ['./pipeline-graph.component.scss']
 })
 export class PipelineGraphComponent implements OnInit {
-
   pipelineStep = data.data.steps;
   completeNodeDraw: string[] = [];
   envList = this.allenv();
@@ -24,15 +23,26 @@ export class PipelineGraphComponent implements OnInit {
   logOpen: boolean = false;
   expanded = false;
   branchList:any;
-  private id: any;
+  private commitLoad =false;
   fullmode = false;
+  public branchs: any[]=[];
   public commitList: any[]=[];
+
+
+   appId = this.route.snapshot.paramMap.get('appID')
+   repoId = this.route.snapshot.paramMap.get('repoID')
+   // @ts-ignore
+    userInfo = this.auth.getUserData()
+   companyId = this.userInfo.metadata.company_id;
+   type = 'githubs'
+   repoUrl = 'https://github.com/shabrul2451/test-app'
+
   content:any = ApplicationListComponent;
   constructor(
     private _toolbarService: ToolbarService,
     private http:HttpClient,
     private route:ActivatedRoute,
-    private userInfo: UserDataService,
+    private usersInfo: UserDataService,
     private auth: AuthService,
     private applist: AppListService,
     private repo: RepoServiceService,
@@ -40,53 +50,41 @@ export class PipelineGraphComponent implements OnInit {
   @Input()  nodeName!: number | string;
   ngOnInit(): void {
     let pageTitle ='';
-    const appId = this.route.snapshot.paramMap.get('appID')
-    const repoId = this.route.snapshot.paramMap.get('repoID')
-    const userId = this.auth.getUserData().user_id
-    let companyId ='';
-    let repo_type = '';
-    this.userInfo.getUserInfo(userId).subscribe(res=>{
-      companyId = res.data.metadata.company_id
-      this.applist.getRepositoryInfo(companyId,this.route.snapshot.paramMap.get('repoID')).subscribe(res=>{
+    console.log(this.companyId, 'company id')
+    console.log(this.repoId, 'repoId')
+    console.log(this.appId, 'appId')
+    console.log(this.type, 'type')
+    console.log(this.repoUrl, 'repoUrl')
+    this.repo.getBranch(this.type,this.repoId,this.repoUrl).subscribe(res=>{
+      // @ts-ignore
+      console.log(res.data)
 
-        repo_type = res.data.type;
-        repo_type = repo_type+'s';
-        let repoUrl = '';
-        this.repo.getApplicationById(appId,repoId,companyId).subscribe(res=>{
-          // @ts-ignore
-          repoUrl = res.data.url
-          // @ts-ignore
-          pageTitle =res.data._metadata.name
-          this._toolbarService.changeData({ title: pageTitle });
-          // @ts-ignore
-          this.repo.getBranch(repo_type,repoId,repoUrl).subscribe(res=>{
+      let i=0
+      // @ts-ignore
+      for (let name of res.data){
+
+        this.branchs.push(name)
+        if (i===0){
+          this.repo.getCommit(this.type,this.repoId,this.repoUrl,name.name).subscribe(res=>{
             // @ts-ignore
-            this.branchList = res.data
-            for(let branch of this.branchList){
+            let i=0;
+            // @ts-ignore
 
-              // @ts-ignore
-              this.repo.getCommit(repo_type,repoId,repoUrl,branch.name).subscribe(res=>{
+            for (let commit of res.data){
+              if (i==0){
+                //console.log(commit)
+                this.repo.getProcess(this.repoId,this.appId,commit.sha).subscribe(res=>{
+                  console.log(res)
+                })
 
-                this.commitList.push(
-                  {
-                    name:branch.name,
-                    // @ts-ignore
-                    commits:[...res.data]
-                  }
-                )
-                // @ts-ignore
-                //console.log(res.data)
-              })
+              }
+              i++
             }
-
           })
-        })
-
-      })
+        }
+        i++;
+      }
     })
-
-
-
   }
 
   ngAfterViewInit(): void {
@@ -108,7 +106,27 @@ export class PipelineGraphComponent implements OnInit {
       this.drawLines();
     }, 1);
   }
-
+  loadCommit(branchName:string){
+    let index = true;
+    for (let x of this.commitList){
+      if (x.branch === branchName){
+        index = false
+      }
+    }
+    if (index) {
+      this.repo.getCommit(this.type,this.repoId,this.repoUrl,branchName).subscribe(res=>{
+        // @ts-ignore
+        this.commitList.push(
+          {
+            branch:branchName,
+        // @ts-ignore
+            commits:[...res.data]
+          }
+        )
+        console.log(this.commitList)
+      })
+    }
+  }
   expandLog(event:any,id:string) {
     const allFootSteps = document.getElementsByClassName('logExpansion');
 
