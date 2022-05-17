@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { RepoServiceService } from 'src/app/repository/repo-service.service';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { AppListService } from '../app-list.service';
@@ -121,6 +122,7 @@ export class ApplicationListComponent implements OnInit {
   user: any = this.auth.getUserData();
   companyID: any;
   repositoryId: any;
+  repoType:any;
   objectKeys = Object.keys;
   Object = Object;
 
@@ -133,7 +135,8 @@ export class ApplicationListComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private userInfo: UserDataService,
-    private auth: AuthService
+    private auth: AuthService,
+    private repo: RepoServiceService
   ) {}
 
   ngOnInit() {
@@ -141,6 +144,23 @@ export class ApplicationListComponent implements OnInit {
 
     //@ts-ignore
     this.repositoryId = this.route.snapshot.paramMap.get('repoID');
+
+    this.service.refreshNeeded$.subscribe(()=>{
+      this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+        this.userPersonalInfo = res;
+        this.companyID = res.data.metadata.company_id;
+        this.service
+          .getRepositoryInfo(this.companyID, this.repositoryId)
+          .subscribe((response: any) => {
+            this.dataSource = new MatTableDataSource(response.data.applications);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.matSort;
+            this.isLoading = false;
+            console.log('RepoInfo: ', response.data.type);
+            this.repoType = response.data.type;
+          });
+      });
+    })
 
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
@@ -152,9 +172,11 @@ export class ApplicationListComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.matSort;
           this.isLoading = false;
-          console.log('sss: ', response.data.applications);
+          console.log('RepoInfo: ', response.data.type);
+          this.repoType = response.data.type;
         });
     });
+    
   }
 
   openDialog() {
@@ -169,15 +191,15 @@ export class ApplicationListComponent implements OnInit {
     this.dialog.open(ApplicationModalComponent, dialogConfig);
   }
 
-  editApp(e: any) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '40%';
-    dialogConfig.panelClass = 'custom-modalbox';
-    this.dialog.open(ApplicationModalComponent, dialogConfig);
-    console.log('E:', e);
-  }
+  // editApp(e: any) {
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.autoFocus = true;
+  //   dialogConfig.width = '40%';
+  //   dialogConfig.panelClass = 'custom-modalbox';
+  //   this.dialog.open(ApplicationModalComponent, dialogConfig);
+  //   console.log('E:', e);
+  // }
 
   deleteApp(e: any) {
     console.log('Delete:', e);
@@ -208,6 +230,44 @@ export class ApplicationListComponent implements OnInit {
           console.log('err', err);
         }
       );
+  }
+
+  webUpdate(appId: any) {
+    
+    this.repositoryId = this.route.snapshot.paramMap.get('repoID');
+
+    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+      this.userPersonalInfo = res;
+      this.companyID = res.data.metadata.company_id;
+      this.service
+        .getRepositoryInfo(this.companyID, this.repositoryId)
+        .subscribe((response: any) => {
+          this.dataSource = new MatTableDataSource(response.data.applications);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.matSort;
+          this.isLoading = false;
+          console.log('RepoInfo: ', response.data.type, appId);
+          this.repoType = response.data.type;
+
+          let queryPayload = {
+          action: appId._metadata.is_webhook_enabled?'enable':'disable',
+          companyId: this.companyID,
+          repoId: this.repositoryId,
+          url: appId.url,
+          webhookId: appId.webhook.id
+          }
+          this.service.updateWebhook(queryPayload,response.data.type+'s').subscribe((res:any)=>{
+            console.log("Webhook response",res);
+            
+          })
+        });
+    });
+
+
+
+    console.log("Zumba",this.repoType);
+    
+
   }
 
   clickMe() {

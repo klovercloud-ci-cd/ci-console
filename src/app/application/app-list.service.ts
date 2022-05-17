@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, Observable, of, Subject, tap, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 const BASE_URL = 'http://192.168.68.114:4202/api/v1/';
@@ -23,6 +23,12 @@ const HTTP_OPTIONS = {
 export class AppListService {
   constructor(private http: HttpClient) {}
 
+  private _refreshNeeded$ = new Subject<void>();
+
+  get refreshNeeded$(){
+    return this._refreshNeeded$;
+  }
+
   getRepositoryInfo(companyID: any, repoId: any): Observable<any> {
     return this.http.get(BASE_URL + 'repositories/' + repoId, {
       params: {
@@ -31,6 +37,7 @@ export class AppListService {
       },
     });
   }
+
   addApplication(
     appPayload: any,
     companyID: any,
@@ -46,8 +53,12 @@ export class AppListService {
       .post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS)
       .pipe(
         map((res: any) => {
+          this._refreshNeeded$.next();
           console.log('Response Log: ', res);
         }),
+        // map(()=>{
+        //   this._refreshNeeded$.next();
+        // }),
         catchError((error: HttpErrorResponse): Observable<any> => {
           // we expect 404, it's not a failure for us.
           if (error.status === 404) {
@@ -59,6 +70,7 @@ export class AppListService {
         })
       );
   }
+
   deleteApplication(
     appPayload: any,
     companyID: any,
@@ -74,6 +86,39 @@ export class AppListService {
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
       .post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS)
+      .pipe(
+        map((res: any) => {
+          this._refreshNeeded$.next();
+          console.log('Response Log: ', res);
+        }),
+        catchError((error: HttpErrorResponse): Observable<any> => {
+          // we expect 404, it's not a failure for us.
+          if (error.status === 404) {
+            return of(null); // or any other stream like of('') etc.
+          }
+
+          // other errors we don't know how to handle and throw them further.
+          return throwError(error);
+        })
+      );
+  }
+
+  updateWebhook(
+    qp:any,type:string
+  ): Observable<any> {
+    HTTP_OPTIONS.params = {
+      action: qp.action,
+      // companyId: qp.companyId,
+      // repoId: qp.repoId,
+      url: qp.url,
+      webhookId: qp.webhookId,
+      // companyUpdateOption: 'DELETE_APPLICATION',
+    };
+console.log("QP:",qp);
+
+    // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
+    return this.http
+      .patch(BASE_URL + '/companies/'+ qp.companyId +'/repositories/'+ qp.repoId +'/webhooks',HTTP_OPTIONS.params)
       .pipe(
         map((res: any) => {
           console.log('Response Log: ', res);

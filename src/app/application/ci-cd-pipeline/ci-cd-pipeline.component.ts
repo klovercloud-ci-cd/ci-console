@@ -9,6 +9,11 @@ import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import data from './demo.json';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {ActivatedRoute, Router, Routes} from "@angular/router";
+import {UserDataService} from "../../shared/services/user-data.service";
+import {AuthService} from "../../auth/auth.service";
+import {RepoServiceService} from "../../repository/repo-service.service";
+import {AppListService} from "../app-list.service";
 @Component({
   selector: 'kcci-ci-cd-pipeline',
   templateUrl: './ci-cd-pipeline.component.html',
@@ -23,10 +28,53 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
   logToggle:boolean = false;
   logOpen: boolean = false;
   expanded = false;
-  constructor(private _toolbarService: ToolbarService,private http:HttpClient) {}
+  branchList:any;
+  private id: any;
+  constructor(
+    private _toolbarService: ToolbarService,
+    private http:HttpClient,
+    private route:ActivatedRoute,
+    private userInfo: UserDataService,
+    private auth: AuthService,
+    private applist: AppListService,
+    private repo: RepoServiceService
+  ) {}
   @Input()  nodeName!: number | string;
   ngOnInit(): void {
-    this._toolbarService.changeData({ title: 'App Name' });
+    let pageTitle ='';
+    const appId = this.route.snapshot.paramMap.get('appID')
+    const repoId = this.route.snapshot.paramMap.get('repoID')
+    const userId = this.auth.getUserData().user_id
+    let companyId ='';
+    let repo_type = '';
+    this.userInfo.getUserInfo(userId).subscribe(res=>{
+      companyId = res.data.metadata.company_id
+      this.applist.getRepositoryInfo(companyId,this.route.snapshot.paramMap.get('repoID')).subscribe(res=>{
+
+        repo_type = res.data.type;
+        repo_type = repo_type+'s';
+        let repoUrl = '';
+        this.repo.getApplicationById(appId,repoId,companyId).subscribe(res=>{
+          // @ts-ignore
+          repoUrl = res.data.url
+                    // @ts-ignore
+          console.log('res',res.data._metadata.is_webhook_enabled);
+          
+          // @ts-ignore
+          pageTitle =res.data._metadata.name
+          this._toolbarService.changeData({ title: pageTitle });
+          // @ts-ignore
+          this.repo.getBranch(repo_type,repoId,repoUrl).subscribe(res=>{
+            // @ts-ignore
+            this.branchList = res.data
+          })
+        })
+
+      })
+    })
+
+
+
   }
 
   ngAfterViewInit(): void {

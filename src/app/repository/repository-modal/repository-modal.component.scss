@@ -1,0 +1,36 @@
+.kc-select-container {
+    .mat-form-field-flex {
+      @apply bg-orange-500;
+    }
+  }
+  
+  .kc-select-type {
+    @apply bg-dark-background-3 hover:bg-dark-slider-color;
+  }
+  .mat-option-text {
+    @apply text-white;
+  }
+  .kcci-field {
+    @apply w-[100%];
+  }
+
+  
+  .tooltip {
+    background-color: rgb(229, 18, 36);
+  }
+  ::ng-deep {
+    .my-tooltip {
+      white-space: pre-line;
+      text-align: center;
+      @apply bg-dark-container border-[1px] border-dark-primary;
+      min-height: 50px;
+      padding: 8px 0px;
+  
+      font-weight: 400;
+      font-size: 13px;
+    }
+    .mat-selected,
+    .mat-active {
+      background: blueviolet;
+    }
+  }

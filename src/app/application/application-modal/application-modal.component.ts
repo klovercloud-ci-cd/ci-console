@@ -75,6 +75,7 @@ export class ApplicationModalComponent implements OnInit {
           //   console.log('Registration Successfull', '');
           // }
           console.log('Add Application response', res);
+          this.dialogRef.close();
           // console.log(this.authService.getUserData(), 'USER');
         },
         (err) => {
@@ -82,6 +83,8 @@ export class ApplicationModalComponent implements OnInit {
           console.log('err', err);
         }
       );
+  }
+  closeAppModal() {
     this.dialogRef.close();
   }
 }

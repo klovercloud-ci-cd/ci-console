@@ -1,15 +1,12 @@
 <div>
   <div class="kc-repository">
     <mat-card class="repo-container mt-4">
-      <div class="w-32 ml-auto">
-        <button
-          routerLink=""
-          class="kc-create-button text-center cursor-pointer mt-2"
-        >
+      <div class="w-32 ml-auto" (click)="openDialog()">
+        <button class="kc-create-button text-center cursor-pointer">
           Add New
         </button>
       </div>
-      <div class="">
+      <div class=" pt-4">
         <div
           class="w-full h-full"
           gdColumns="1fr 1fr 1fr 1fr"
@@ -20,7 +17,10 @@
           gdGap="16px"
         >
           <div *ngFor="let repo of repoArray; let i = index">
-            <div class="cluster-card">
+            <div
+              class=" cluster-card cursor-pointer transition duration-1000"
+              [routerLink]="['/repository', repo.id]"
+            >
               <span class="flex justify-between">
                 <div class="flex gap-3 pl-3">
                   <img
@@ -53,8 +53,6 @@
               </span>
               <div class="ml-3">
                 <button
-                  matRipple
-                  [routerLink]="['/repository', repo.id]"
                   class="px-2 py-[5px] rounded bg-dark-container text-xs cursor-pointer flex items-center justify-center gap-1"
                 >
                   <mat-icon class="text-xl">widgets</mat-icon>

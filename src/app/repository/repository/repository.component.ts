@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { RepoServiceService } from '../repo-service.service';
+import { RepositoryModalComponent } from '../repository-modal/repository-modal.component';
 
 @Component({
   selector: 'kcci-repository',
@@ -64,7 +66,8 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     private _toolbarService: ToolbarService,
     private http: HttpClient,
     private userInfo: UserDataService,
-    private auth: AuthService
+    private auth: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +82,28 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
           this.repoArray = response.data.repositories;
         });
-    });
+    });    
   }
+
+  openDialog() {
+
+    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+      this.userPersonalInfo = res;
+      this.companyID = res.data.metadata.company_id;
+      // console.log("I have Company: ",this.companyID);
+      
+    });
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '40%';
+    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.data = {
+      companyID: this.companyID,
+    };
+    this.dialog.open(RepositoryModalComponent, dialogConfig);
+  }
+
   ngAfterViewInit(): void {}
 }
