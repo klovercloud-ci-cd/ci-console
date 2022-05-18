@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import data from "../ci-cd-pipeline/demo.json";
 import {ApplicationListComponent} from "../application-list/application-list.component";
 import {ToolbarService} from "../../shared/services/toolbar.service";
 import {HttpClient} from "@angular/common/http";
@@ -15,10 +14,11 @@ import {RepoServiceService} from "../../repository/repo-service.service";
   styleUrls: ['./pipeline-graph.component.scss']
 })
 export class PipelineGraphComponent implements OnInit {
-  pipelineStep = data.data.steps;
+  pipeline:any
+  pipelineStep:any;
   completeNodeDraw: string[] = [];
-  envList = this.allenv();
-  stepsLists = this.stepsDetails()
+  envList :any;
+  stepsLists :any
   logToggle:boolean = false;
   logOpen: boolean = false;
   expanded = false;
@@ -28,8 +28,7 @@ export class PipelineGraphComponent implements OnInit {
   public branchs: any[]=[];
   public commitList: any[]=[];
 
-
-   appId = this.route.snapshot.paramMap.get('appID')
+   encodedUrlParams = this.route.snapshot.paramMap.get('appID')
    repoId = this.route.snapshot.paramMap.get('repoID')
    // @ts-ignore
     userInfo = this.auth.getUserData()
@@ -52,9 +51,9 @@ export class PipelineGraphComponent implements OnInit {
     let pageTitle ='';
     console.log(this.companyId, 'company id')
     console.log(this.repoId, 'repoId')
-    console.log(this.appId, 'appId')
     console.log(this.type, 'type')
     console.log(this.repoUrl, 'repoUrl')
+    console.log(atob(this.hexToBase64(this.encodedUrlParams)),'url params')
     this.repo.getBranch(this.type,this.repoId,this.repoUrl).subscribe(res=>{
       // @ts-ignore
       console.log(res.data)
@@ -73,8 +72,21 @@ export class PipelineGraphComponent implements OnInit {
             for (let commit of res.data){
               if (i==0){
                 //console.log(commit)
-                this.repo.getProcess(this.repoId,this.appId,commit.sha).subscribe(res=>{
-                  console.log(res)
+                // @ts-ignore
+                console.log(commit.sha ,'commit0id o')
+                // @ts-ignore
+                this.repo.getProcess(commit.sha).subscribe(res=>{
+                  // @ts-ignore
+                  console.log(res.data[0].process_id)
+                  // @ts-ignore
+                  this.repo.getPipeLine(res.data[0].process_id).subscribe(res=>{
+                    // @ts-ignore
+                   this.pipelineStep=res.data.steps
+                    this.envList = this.allenv();
+                    this.stepsLists = this.stepsDetails()
+                    console.log(this.stepsLists)
+
+                  })
                 })
 
               }
@@ -102,9 +114,9 @@ export class PipelineGraphComponent implements OnInit {
       document.getElementById('svg').style.height = svgHeight + 'px';
       // @ts-ignore
       document.getElementById('svg').style.width = svgWidth + 'px';
-
       this.drawLines();
-    }, 1);
+
+    }, 3000);
   }
   loadCommit(branchName:string){
     let index = true;
@@ -170,6 +182,11 @@ export class PipelineGraphComponent implements OnInit {
       nodList = [];
     }
     return nodeObjByenv;
+  }
+  protected hexToBase64(str:any) {
+    return btoa(String.fromCharCode.apply(null,
+      str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" "))
+    );
   }
   private stepsDetails() {
     const envs = this.allenv();
@@ -279,7 +296,8 @@ export class PipelineGraphComponent implements OnInit {
     this.fullmode = false;
   }
   loadInfo(stepName:string) {
-    const info = data.data.steps.filter(
+    const info = this.pipelineStep.filter(
+      // @ts-ignore
       function(data){ return data.name == stepName }
     );
     this.logOpen =!this.logOpen

@@ -1,0 +1,13 @@
+
+.overview-row{
+  @apply grid grid-cols-3 border-b border-dark-border-default ;
+  .overview-item{
+    @apply border-r border-dark-border-default p-6;
+    &:last-child{
+      @apply border-none;
+    }
+  }
+  &:last-child{
+    @apply border-none ;
+  }
+}
