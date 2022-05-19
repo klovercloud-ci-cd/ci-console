@@ -13,51 +13,15 @@
       <div class="flex justify-end mb-4 cursor-pointer" (click)="logClose()">
         <mat-icon>close</mat-icon>
       </div>
-      <div class="">
-        <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,'1232')">
+      <div class="" *ngFor="let foot of footMarks;let i = index ">
+        <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,foot)">
           <div class="flex gap-2">
             <mat-icon>check_circle</mat-icon>
-            process name
+            {{foot }}
           </div>
           <mat-icon> expand_more</mat-icon>
         </div>
-        <div id='1232' class="logExpansion hidden mx-6 border-dark-border-default border">
-          <div class="log-exp  bg-dark-background " [ngClass]="fullmode? 'h-full w-[900px] absolute -left-[900px] bottom-0 border-dark-border-default border' : 'h-20'">
-            <div class="w-full h-8 bg-dark-background-5 flex justify-end px-2 ">
-              <mat-icon (click)="fullMode()" class="p-1">
-                open_in_full
-              </mat-icon>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="">
-        <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,'sfdf')">
-          <div class="flex gap-2">
-            <mat-icon>check_circle</mat-icon>
-            process name
-          </div>
-          <mat-icon> expand_more</mat-icon>
-        </div>
-        <div id='12syf32' class="logExpansion hidden mx-6 border-dark-border-default border">
-          <div class="log-exp  bg-dark-background " [ngClass]="fullmode? 'h-full w-[900px] absolute -left-[900px] bottom-0 border-dark-border-default border' : 'h-20'">
-            <div class="w-full h-8 bg-dark-background-5 flex justify-end px-2 ">
-              <mat-icon (click)="fullMode()" class="p-1">
-                open_in_full
-              </mat-icon>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="">
-        <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,'dsfd')">
-          <div class="flex gap-2">
-            <mat-icon>check_circle</mat-icon>
-            process name
-          </div>
-          <mat-icon> expand_more</mat-icon>
-        </div>
-        <div id='dsfd' class="logExpansion hidden mx-6 border-dark-border-default border">
+        <div id='{{foot}}' class="logExpansion  mx-6 border-dark-border-default border" [ngClass]="i===footMarksLegth-1?'visible':'hidden'">
           <div class="log-exp  bg-dark-background " [ngClass]="fullmode? 'h-full w-[900px] absolute -left-[900px] bottom-0 border-dark-border-default border' : 'h-20'">
             <div class="w-full h-8 bg-dark-background-5 flex justify-end px-2 ">
               <mat-icon (click)="fullMode()" class="p-1">
@@ -124,9 +88,7 @@
           <mat-label>Select Process ID</mat-label>
           <mat-select class="">
             <div class="kc-node-menu">
-              <mat-option value="option1">Option 1</mat-option>
-              <mat-option value="option2">Option 2</mat-option>
-              <mat-option value="option3">Option 3</mat-option>
+              <mat-option value="option1" *ngFor="let id of processIds">{{id}}</mat-option>
             </div>
           </mat-select>
         </mat-form-field>
@@ -211,7 +173,7 @@
                         </button>
                         <button
                           mat-menu-item
-                          (click)="startBuild(step.name + '_loader')"
+                          (click)="startBuild(step.name)"
                         >
                           <mat-icon
                             aria-hidden="false"

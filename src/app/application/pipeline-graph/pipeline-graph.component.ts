@@ -26,6 +26,7 @@ export class PipelineGraphComponent implements OnInit {
   private commitLoad =false;
   fullmode = false;
   public branchs: any[]=[];
+  public footMarks: any[]=[];
   public commitList: any[]=[];
 
    encodedUrlParams = this.route.snapshot.paramMap.get('appID')
@@ -37,6 +38,9 @@ export class PipelineGraphComponent implements OnInit {
    repoUrl = 'https://github.com/shabrul2451/test-app'
 
   content:any = ApplicationListComponent;
+  public allFootMarks: any[]=[];
+  public processIds: any[]=[];
+  public footMarksLegth: number=0;
   constructor(
     private _toolbarService: ToolbarService,
     private http:HttpClient,
@@ -77,11 +81,17 @@ export class PipelineGraphComponent implements OnInit {
                 // @ts-ignore
                 this.repo.getProcess(commit.sha).subscribe(res=>{
                   // @ts-ignore
-                  console.log(res.data[0].process_id)
+                  console.log(res.data[0].process_id,'process')
+                  // @ts-ignore
+                  for (let process of res.data){
+                    this.processIds.push(process.process_id)
+                  }
+                  console.log(this.processIds,'id list')
                   // @ts-ignore
                   this.repo.getPipeLine(res.data[0].process_id).subscribe(res=>{
                     // @ts-ignore
                    this.pipelineStep=res.data.steps
+                   this.pipeline=res;
                     this.envList = this.allenv();
                     this.stepsLists = this.stepsDetails()
                     console.log(this.stepsLists)
@@ -101,10 +111,6 @@ export class PipelineGraphComponent implements OnInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      const allFootSteps = document.getElementsByClassName('logExpansion');
-
-      let lastChild =allFootSteps.length -1
-      allFootSteps[lastChild].classList.replace('hidden','visible')
 
       console.log(this.branchList)
       const svgHeight =
@@ -240,57 +246,95 @@ export class PipelineGraphComponent implements OnInit {
   }
 
   private drawLines() {
-    const svg = document.getElementById('svg');
-    const svgOfset = this.getOffset(svg);
+    setTimeout(()=>{
+      const svg = document.getElementById('svg');
+      const svgOfset = this.getOffset(svg);
 
-    for (let step of this.pipelineStep) {
-      if (step.next !== null) {
-        const startNode = document.getElementById(step.name);
-        const startNodeOfset = this.getOffset(startNode);
-        for (let next of step.next) {
-          const start = this.getOffset(document.getElementById(step.name));
-          const end = this.getOffset(document.getElementById(next));
+      for (let step of this.pipelineStep) {
+        if (step.next !== null) {
+          const startNode = document.getElementById(step.name);
+          const startNodeOfset = this.getOffset(startNode);
+          for (let next of step.next) {
+            const start = this.getOffset(document.getElementById(step.name));
+            const end = this.getOffset(document.getElementById(next));
 
-          const line = document.createElementNS(
-            'http://www.w3.org/2000/svg',
-            'line'
-          );
-          line.setAttribute('x1', String(start.x - svgOfset.x + 30));
-          line.setAttribute('y1', String(start.y - svgOfset.y + 30));
-          line.setAttribute('x2', String(end.x - svgOfset.x + 30));
-          line.setAttribute('y2', String(end.y - svgOfset.y + 30));
-          line.setAttribute('id', step.name + '-' + next);
-          if (step.status ==='completed'){
-            line.setAttribute('stroke', '#5BC4D6');
-            line.setAttribute('marker-end', 'url(#trianglesuccess)');
-          }
-          else {
-            line.setAttribute('stroke', 'gray');
-            line.setAttribute('marker-end', 'url(#trianglegray)');
-          }
-          line.setAttribute('stroke-width', '5px');
+            const line = document.createElementNS(
+              'http://www.w3.org/2000/svg',
+              'line'
+            );
+            line.setAttribute('x1', String(start.x - svgOfset.x + 30));
+            line.setAttribute('y1', String(start.y - svgOfset.y + 30));
+            line.setAttribute('x2', String(end.x - svgOfset.x + 30));
+            line.setAttribute('y2', String(end.y - svgOfset.y + 30));
+            line.setAttribute('id', step.name + '-' + next);
+            if (step.status ==='completed'){
+              line.setAttribute('stroke', '#5BC4D6');
+              line.setAttribute('marker-end', 'url(#trianglesuccess)');
+            }
+            else {
+              line.setAttribute('stroke', 'gray');
+              line.setAttribute('marker-end', 'url(#trianglegray)');
+            }
+            line.setAttribute('stroke-width', '5px');
 
-          line.addEventListener('mouseenter', e => {
-            line.setAttribute('stroke-width', '10px');
-          })
-          // @ts-ignore
-          if (svg.appendChild(line)) {
-            console.log(step.name + '-' + next);
+            line.addEventListener('mouseenter', e => {
+              line.setAttribute('stroke-width', '10px');
+            })
+            // @ts-ignore
+            if (svg.appendChild(line)) {
+              console.log(step.name + '-' + next);
+            }
           }
         }
       }
-    }
+    },1000)
   }
 
 
-  startBuild(loaderid:any) {
-    this.loadInfo(loaderid)
-    const loader = document.getElementById(loaderid);
+  startBuild(stepName:any) {
+    this.logOpen =!this.logOpen
+    this.loadInfo(stepName)
+    const processId = this.pipeline.data.process_id;
+    console.log(processId,'process id from build')
+
+    const loader = document.getElementById(stepName+'_loader');
     // @ts-ignore
     loader.classList.add('active')
+    this.stepFootMark(processId,stepName)
+    const allFootSteps = document.getElementsByClassName('logExpansion');
+    let lastChild =allFootSteps.length -1;
+    // @ts-ignore
+    const hoal = Array.prototype.slice.call( allFootSteps )
+  console.log(hoal, 'last child')
+
   }
+  stepFootMark(processId:any,stepName:any)
+  {
+    const existFootMark = this.allFootMarks.find(o => o.stepName === stepName);
+    if (existFootMark){
+      this.footMarks = existFootMark.footMark;
+      this.footMarksLegth = this.footMarks.length
+    }
+    else{
+      this.repo.getfootPrint(processId,stepName).subscribe(res=>{
+        // @ts-ignore
+        //console.log(res.data.data)
+        console.log(this.allFootMarks)
+        this.allFootMarks.push( {
+          // @ts-ignore
+          stepName:stepName,
+          // @ts-ignore
+          footMark:[...res.data.data]
+        })
+       const newFoots = this.allFootMarks.find(o => o.stepName === stepName)
+        this.footMarks = newFoots.footMark;
+        this.footMarksLegth = this.footMarks.length
 
+      })
+    }
 
+    console.log(this.footMarks, 'footmarks')
+  }
   logClose(){
     this.logOpen =false
     this.fullmode = false;
@@ -300,7 +344,7 @@ export class PipelineGraphComponent implements OnInit {
       // @ts-ignore
       function(data){ return data.name == stepName }
     );
-    this.logOpen =!this.logOpen
+
   }
 
 

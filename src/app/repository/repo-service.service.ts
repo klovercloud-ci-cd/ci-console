@@ -119,12 +119,9 @@ export class RepoServiceService {
     };
     return this.http.get(BASE_URL+'processes',HTTP_OPTIONS)
   }
-  /*getfootPrint(processId:any) {
-    HTTP_OPTIONS.params = {
-      commitId: commitId,
-    };
-    return this.http.get(BASE_URL+'processes',HTTP_OPTIONS)
-  }*/
+  getfootPrint(processId:any,stepName:any) {
+    return this.http.get(BASE_URL+'processes/'+processId+'/steps/'+stepName+'/footmarks',HTTP_OPTIONS)
+  }
   getPipeLine (processId:any){
     HTTP_OPTIONS.params = {
       action: 'get_pipeline',
