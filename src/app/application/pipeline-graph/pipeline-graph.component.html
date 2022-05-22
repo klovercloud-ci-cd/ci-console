@@ -13,20 +13,27 @@
       <div class="flex justify-end mb-4 cursor-pointer" (click)="logClose()">
         <mat-icon>close</mat-icon>
       </div>
+      <div class="border border-dark-border-default rounded bg-dark-background-1 p-6 m-6 rounded space-y-3">
+        <p>Name: {{nodeDetails.name}}</p>
+        <p>Status: {{nodeDetails.status}}</p>
+      </div>
       <div class="" *ngFor="let foot of footMarks;let i = index ">
-        <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,foot)">
+        <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,foot,nodeDetails.name)">
           <div class="flex gap-2">
-            <mat-icon>check_circle</mat-icon>
+            <mat-icon>timeline</mat-icon>
             {{foot }}
           </div>
           <mat-icon> expand_more</mat-icon>
         </div>
-        <div id='{{foot}}' class="logExpansion  mx-6 border-dark-border-default border" [ngClass]="i===footMarksLegth-1?'visible':'hidden'">
-          <div class="log-exp  bg-dark-background " [ngClass]="fullmode? 'h-full w-[900px] absolute -left-[900px] bottom-0 border-dark-border-default border' : 'h-20'">
-            <div class="w-full h-8 bg-dark-background-5 flex justify-end px-2 ">
+        <div id='{{foot}}' class="logExpansion mx-6 border-dark-border-default border" [ngClass]="i===footMarksLegth-1?'visible':'hidden'">
+          <div class="log-exp  bg-dark-background break-words " [ngClass]="fullmode? 'h-full w-[900px] absolute bottom-0  -left-[900px]  border-dark-border-default border' : 'h-52'">
+            <div class="w-full h-8 bg-dark-background-1 flex justify-end px-2 ">
               <mat-icon (click)="fullMode()" class="p-1">
                 open_in_full
               </mat-icon>
+            </div>
+            <div class="p-3 h-[calc(100%-2.2rem)] w-full overflow-y-auto space-y-1 bg-dark-background-5">
+              <p *ngFor="let log of logs">{{log}}</p>
             </div>
           </div>
         </div>

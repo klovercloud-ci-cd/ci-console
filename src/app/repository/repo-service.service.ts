@@ -128,6 +128,12 @@ export class RepoServiceService {
     };
     return this.http.get(BASE_URL+'pipelines/'+processId,HTTP_OPTIONS)
   }
+  getFootamarkLog(processId:any,stepName:any, footmarkName:any){
+    HTTP_OPTIONS.params = {
+      claims: 0,
+    };
+    return this.http.get(BASE_URL+'processes/'+processId+'/steps/'+stepName+'/footmarks/'+footmarkName+'/logs',HTTP_OPTIONS)
+  }
 }
 
 

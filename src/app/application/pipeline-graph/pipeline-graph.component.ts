@@ -1,118 +1,121 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ApplicationListComponent} from "../application-list/application-list.component";
-import {ToolbarService} from "../../shared/services/toolbar.service";
-import {HttpClient} from "@angular/common/http";
-import {ActivatedRoute} from "@angular/router";
-import {UserDataService} from "../../shared/services/user-data.service";
-import {AuthService} from "../../auth/auth.service";
-import {AppListService} from "../app-list.service";
-import {RepoServiceService} from "../../repository/repo-service.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { ApplicationListComponent } from '../application-list/application-list.component';
+import { ToolbarService } from '../../shared/services/toolbar.service';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { UserDataService } from '../../shared/services/user-data.service';
+import { AuthService } from '../../auth/auth.service';
+import { AppListService } from '../app-list.service';
+import { RepoServiceService } from '../../repository/repo-service.service';
 
 @Component({
   selector: 'kcci-pipeline-graph',
   templateUrl: './pipeline-graph.component.html',
-  styleUrls: ['./pipeline-graph.component.scss']
+  styleUrls: ['./pipeline-graph.component.scss'],
 })
 export class PipelineGraphComponent implements OnInit {
-  pipeline:any
-  pipelineStep:any;
+  pipeline: any;
+  pipelineStep: any;
   completeNodeDraw: string[] = [];
-  envList :any;
-  stepsLists :any
-  logToggle:boolean = false;
+  envList: any;
+  stepsLists: any;
+  logToggle: boolean = false;
   logOpen: boolean = false;
   expanded = false;
-  branchList:any;
-  private commitLoad =false;
+  branchList: any;
+  private commitLoad = false;
   fullmode = false;
-  public branchs: any[]=[];
-  public footMarks: any[]=[];
-  public commitList: any[]=[];
+  public branchs: any[] = [];
+  public footMarks: any[] = [];
+  public commitList: any[] = [];
 
-   encodedUrlParams = this.route.snapshot.paramMap.get('appID')
-   repoId = this.route.snapshot.paramMap.get('repoID')
-   // @ts-ignore
-    userInfo = this.auth.getUserData()
-   companyId = this.userInfo.metadata.company_id;
-   type = 'githubs'
-   repoUrl = 'https://github.com/shabrul2451/test-app'
+  encodedUrlParams = this.route.snapshot.paramMap.get('appID');
+  repoId = this.route.snapshot.paramMap.get('repoID');
+  // @ts-ignore
+  userInfo = this.auth.getUserData();
+  companyId = this.userInfo.metadata.company_id;
+  type = 'githubs';
+  repoUrl = 'https://github.com/shabrul2451/test-app';
 
-  content:any = ApplicationListComponent;
-  public allFootMarks: any[]=[];
-  public processIds: any[]=[];
-  public footMarksLegth: number=0;
+  content: any = ApplicationListComponent;
+  public allFootMarks: any[] = [];
+  public processIds: any[] = [];
+  public footMarksLegth: number = 0;
+  logs: any;
+  nodeDetails: any='';
   constructor(
     private _toolbarService: ToolbarService,
-    private http:HttpClient,
-    private route:ActivatedRoute,
+    private http: HttpClient,
+    private route: ActivatedRoute,
     private usersInfo: UserDataService,
     private auth: AuthService,
     private applist: AppListService,
-    private repo: RepoServiceService,
+    private repo: RepoServiceService
   ) {}
-  @Input()  nodeName!: number | string;
+  @Input() nodeName!: number | string;
   ngOnInit(): void {
-    let pageTitle ='';
-    console.log(this.companyId, 'company id')
-    console.log(this.repoId, 'repoId')
-    console.log(this.type, 'type')
-    console.log(this.repoUrl, 'repoUrl')
-    console.log(atob(this.hexToBase64(this.encodedUrlParams)),'url params')
-    this.repo.getBranch(this.type,this.repoId,this.repoUrl).subscribe(res=>{
-      // @ts-ignore
-      console.log(res.data)
+    let pageTitle = '';
+    console.log(this.companyId, 'company id');
+    console.log(this.repoId, 'repoId');
+    console.log(this.type, 'type');
+    console.log(this.repoUrl, 'repoUrl');
+    console.log(atob(this.hexToBase64(this.encodedUrlParams)), 'url params');
+    this.repo
+      .getBranch(this.type, this.repoId, this.repoUrl)
+      .subscribe((res) => {
+        // @ts-ignore
+        console.log(res.data);
 
-      let i=0
-      // @ts-ignore
-      for (let name of res.data){
-
-        this.branchs.push(name)
-        if (i===0){
-          this.repo.getCommit(this.type,this.repoId,this.repoUrl,name.name).subscribe(res=>{
-            // @ts-ignore
-            let i=0;
-            // @ts-ignore
-
-            for (let commit of res.data){
-              if (i==0){
-                //console.log(commit)
+        let i = 0;
+        // @ts-ignore
+        for (let name of res.data) {
+          this.branchs.push(name);
+          if (i === 0) {
+            this.repo
+              .getCommit(this.type, this.repoId, this.repoUrl, name.name)
+              .subscribe((res) => {
                 // @ts-ignore
-                console.log(commit.sha ,'commit0id o')
+                let i = 0;
                 // @ts-ignore
-                this.repo.getProcess(commit.sha).subscribe(res=>{
-                  // @ts-ignore
-                  console.log(res.data[0].process_id,'process')
-                  // @ts-ignore
-                  for (let process of res.data){
-                    this.processIds.push(process.process_id)
-                  }
-                  console.log(this.processIds,'id list')
-                  // @ts-ignore
-                  this.repo.getPipeLine(res.data[0].process_id).subscribe(res=>{
+
+                for (let commit of res.data) {
+                  if (i == 0) {
+                    //console.log(commit)
                     // @ts-ignore
-                   this.pipelineStep=res.data.steps
-                   this.pipeline=res;
-                    this.envList = this.allenv();
-                    this.stepsLists = this.stepsDetails()
-                    console.log(this.stepsLists)
-
-                  })
-                })
-
-              }
-              i++
-            }
-          })
+                    console.log(commit.sha, 'commit0id o');
+                    // @ts-ignore
+                    this.repo.getProcess(commit.sha).subscribe((res) => {
+                      // @ts-ignore
+                      console.log(res.data[0].process_id, 'process');
+                      // @ts-ignore
+                      for (let process of res.data) {
+                        this.processIds.push(process.process_id);
+                      }
+                      console.log(this.processIds, 'id list');
+                      // @ts-ignore
+                      this.repo.getPipeLine(res.data[0].process_id)
+                        .subscribe((res) => {
+                          // @ts-ignore
+                          this.pipelineStep = res.data.steps;
+                          this.pipeline = res;
+                          this.envList = this.allenv();
+                          this.stepsLists = this.stepsDetails();
+                          console.log(this.stepsLists);
+                        });
+                    });
+                  }
+                  i++;
+                }
+              });
+          }
+          i++;
         }
-        i++;
-      }
-    })
+      });
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-
-      console.log(this.branchList)
+      console.log(this.branchList);
       const svgHeight =
         this.higestNodeEnv(this.nodeByEnv())[0].steps.length * 230;
       const svgWidth = this.totalenv() * 230;
@@ -121,41 +124,46 @@ export class PipelineGraphComponent implements OnInit {
       // @ts-ignore
       document.getElementById('svg').style.width = svgWidth + 'px';
       this.drawLines();
-
     }, 3000);
   }
-  loadCommit(branchName:string){
+  loadCommit(branchName: string) {
     let index = true;
-    for (let x of this.commitList){
-      if (x.branch === branchName){
-        index = false
+    for (let x of this.commitList) {
+      if (x.branch === branchName) {
+        index = false;
       }
     }
     if (index) {
-      this.repo.getCommit(this.type,this.repoId,this.repoUrl,branchName).subscribe(res=>{
-        // @ts-ignore
-        this.commitList.push(
-          {
-            branch:branchName,
-        // @ts-ignore
-            commits:[...res.data]
-          }
-        )
-        console.log(this.commitList)
-      })
+      this.repo
+        .getCommit(this.type, this.repoId, this.repoUrl, branchName)
+        .subscribe((res) => {
+          // @ts-ignore
+          this.commitList.push({
+            branch: branchName,
+            // @ts-ignore
+            commits: [...res.data],
+          });
+          console.log(this.commitList);
+        });
     }
   }
-  expandLog(event:any,id:string) {
+  expandLog(event: any, footmarkName: string,nodeName:any) {
+    const processId = this.pipeline.data.process_id;
     const allFootSteps = document.getElementsByClassName('logExpansion');
 
-    for (let footStep of allFootSteps){
-      footStep.classList.replace('visible','hidden')
-    }
-    // @ts-ignore
-    document.getElementById(id).classList.replace('hidden','visible')
-
+    const lastFootmark = this.footMarks[this.footMarksLegth-1]
+    console.log(processId,footmarkName,lastFootmark)
+    this.repo.getFootamarkLog(processId,nodeName,footmarkName).subscribe(res=>{
+      // @ts-ignore
+      this.logs = res.data.data
+      for (let footStep of allFootSteps) {
+        footStep.classList.replace('visible', 'hidden');
+      }
+      // @ts-ignore
+      document.getElementById(footmarkName).classList.replace('hidden', 'visible');
+    })
   }
-  fullMode(){
+  fullMode() {
     this.fullmode = !this.fullmode;
   }
 
@@ -189,16 +197,23 @@ export class PipelineGraphComponent implements OnInit {
     }
     return nodeObjByenv;
   }
-  protected hexToBase64(str:any) {
-    return btoa(String.fromCharCode.apply(null,
-      str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" "))
+  protected hexToBase64(str: any) {
+    return btoa(
+      String.fromCharCode.apply(
+        null,
+        str
+          .replace(/\r|\n/g, '')
+          .replace(/([\da-fA-F]{2}) ?/g, '0x$1 ')
+          .replace(/ +$/, '')
+          .split(' ')
+      )
     );
   }
   private stepsDetails() {
     const envs = this.allenv();
     let nodList: string[] = [];
-    let stepsDetails:any[] =[];
-    let steps:any[]=[]
+    let stepsDetails: any[] = [];
+    let steps: any[] = [];
     for (let env of envs) {
       for (let step of this.pipelineStep) {
         if (step.params.env === env && !nodList.includes(step.name)) {
@@ -206,19 +221,18 @@ export class PipelineGraphComponent implements OnInit {
           steps.push({
             name: step.name,
             params: step.params,
-            status: step.status
-          })
-
+            status: step.status,
+          });
         }
       }
       stepsDetails.push({
-        envName:env,
-        steps: steps
-      })
+        envName: env,
+        steps: steps,
+      });
       nodList = [];
-      steps= [];
+      steps = [];
     }
-    console.log(stepsDetails)
+    console.log(stepsDetails);
     return stepsDetails;
   }
   private higestNodeEnv(nodeObjByenv: object) {
@@ -246,7 +260,7 @@ export class PipelineGraphComponent implements OnInit {
   }
 
   private drawLines() {
-    setTimeout(()=>{
+    setTimeout(() => {
       const svg = document.getElementById('svg');
       const svgOfset = this.getOffset(svg);
 
@@ -267,19 +281,18 @@ export class PipelineGraphComponent implements OnInit {
             line.setAttribute('x2', String(end.x - svgOfset.x + 30));
             line.setAttribute('y2', String(end.y - svgOfset.y + 30));
             line.setAttribute('id', step.name + '-' + next);
-            if (step.status ==='completed'){
+            if (step.status === 'completed') {
               line.setAttribute('stroke', '#5BC4D6');
               line.setAttribute('marker-end', 'url(#trianglesuccess)');
-            }
-            else {
+            } else {
               line.setAttribute('stroke', 'gray');
               line.setAttribute('marker-end', 'url(#trianglegray)');
             }
             line.setAttribute('stroke-width', '5px');
 
-            line.addEventListener('mouseenter', e => {
+            line.addEventListener('mouseenter', (e) => {
               line.setAttribute('stroke-width', '10px');
-            })
+            });
             // @ts-ignore
             if (svg.appendChild(line)) {
               console.log(step.name + '-' + next);
@@ -287,65 +300,69 @@ export class PipelineGraphComponent implements OnInit {
           }
         }
       }
-    },1000)
+    }, 1000);
   }
 
-
-  startBuild(stepName:any) {
-    this.logOpen =!this.logOpen
-    this.loadInfo(stepName)
+  startBuild(stepName: any) {
+    this.logOpen = !this.logOpen;
+    this.loadInfo(stepName);
     const processId = this.pipeline.data.process_id;
-    console.log(processId,'process id from build')
-
-    const loader = document.getElementById(stepName+'_loader');
+    console.log(this.pipeline.data.steps, 'this.pipeline');
+    this.pipeline.data.steps.find((hola:any)=>{
+      if (hola.name === stepName){
+        this.nodeDetails = hola
+      }
+      }
+    );
+    const loader = document.getElementById(stepName + '_loader');
     // @ts-ignore
-    loader.classList.add('active')
-    this.stepFootMark(processId,stepName)
-    const allFootSteps = document.getElementsByClassName('logExpansion');
-    let lastChild =allFootSteps.length -1;
-    // @ts-ignore
-    const hoal = Array.prototype.slice.call( allFootSteps )
-  console.log(hoal, 'last child')
+    loader.classList.add('active');
+    this.stepFootMark(processId, stepName,this.nodeDetails.status);
 
   }
-  stepFootMark(processId:any,stepName:any)
-  {
-    const existFootMark = this.allFootMarks.find(o => o.stepName === stepName);
-    if (existFootMark){
+
+
+  stepFootMark(processId: any, stepName: any, status:any) {
+    const existFootMark = this.allFootMarks.find(
+      (footMark) => footMark.stepName === stepName
+    );
+    if (existFootMark) {
       this.footMarks = existFootMark.footMark;
-      this.footMarksLegth = this.footMarks.length
-    }
-    else{
-      this.repo.getfootPrint(processId,stepName).subscribe(res=>{
+      this.footMarksLegth = this.footMarks.length;
+    } else {
+      this.repo.getfootPrint(processId, stepName).subscribe((res) => {
         // @ts-ignore
         //console.log(res.data.data)
-        console.log(this.allFootMarks)
-        this.allFootMarks.push( {
+        console.log(this.allFootMarks);
+        this.allFootMarks.push({
           // @ts-ignore
-          stepName:stepName,
+          stepName: stepName,
           // @ts-ignore
-          footMark:[...res.data.data]
-        })
-       const newFoots = this.allFootMarks.find(o => o.stepName === stepName)
+          footMark: [...res.data.data],
+        });
+        const newFoots = this.allFootMarks.find((footMark) => footMark.stepName === stepName);
         this.footMarks = newFoots.footMark;
-        this.footMarksLegth = this.footMarks.length
-
-      })
+        this.footMarksLegth = this.footMarks.length;
+        const lastFootmark = this.footMarks[this.footMarksLegth-1]
+        this.repo.getFootamarkLog(processId,stepName,lastFootmark).subscribe(res=>{
+          // @ts-ignore
+          this.logs = res.data.data
+        })
+      });
     }
 
-    console.log(this.footMarks, 'footmarks')
+    console.log(this.footMarks, 'footmarks');
   }
-  logClose(){
-    this.logOpen =false
+  logClose() {
+    this.logOpen = false;
     this.fullmode = false;
   }
-  loadInfo(stepName:string) {
+  loadInfo(stepName: string) {
     const info = this.pipelineStep.filter(
       // @ts-ignore
-      function(data){ return data.name == stepName }
+      function (data) {
+        return data.name == stepName;
+      }
     );
-
   }
-
-
 }
