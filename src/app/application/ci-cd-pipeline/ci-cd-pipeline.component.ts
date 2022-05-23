@@ -1,5 +1,6 @@
 import {
-  AfterViewInit,
+  AfterContentChecked,
+  AfterViewInit, ChangeDetectorRef,
   Component,
   ElementRef, Input,
   OnInit,
@@ -13,18 +14,20 @@ import {PipelineOverviewComponent} from "../pipeline-overview/pipeline-overview.
   templateUrl: './ci-cd-pipeline.component.html',
   styleUrls: ['./ci-cd-pipeline.component.scss'],
 })
-export class CiCdPipelineComponent implements OnInit, AfterViewInit {
+export class CiCdPipelineComponent implements OnInit, AfterViewInit,AfterContentChecked {
   content:any;
   constructor(
-    private _toolbarService: ToolbarService
-  ) {}
+    private _toolbarService: ToolbarService,
+    private cdref: ChangeDetectorRef
+  ) {
+  }
   @Input()  nodeName!: number | string;
   ngOnInit(): void {
     this.content = PipelineGraphComponent;
   }
 
-  ngAfterViewInit(): void {
-
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
   }
   goto(id:any){
     // @ts-ignore
@@ -35,5 +38,8 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit {
     if(id == 'overview'){
       this.content = PipelineOverviewComponent
     }
+  }
+
+  ngAfterViewInit(): void {
   }
 }

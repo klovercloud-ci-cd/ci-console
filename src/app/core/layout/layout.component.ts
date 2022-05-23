@@ -25,7 +25,11 @@ export class LayoutComponent implements OnInit {
     private router: Router,
     private toolbarService: ToolbarService,
     private ss: SharedLayoutService
-  ) {}
+  ) {
+    this.toolbarService.currentData.subscribe(
+      (currentData) => this.data = currentData
+    );
+  }
 
   public getScreenWidth: any;
 

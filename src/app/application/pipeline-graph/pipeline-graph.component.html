@@ -13,13 +13,15 @@
       <div class="flex justify-end mb-4 cursor-pointer" (click)="logClose()">
         <mat-icon>close</mat-icon>
       </div>
-      <div class="border border-dark-border-default rounded bg-dark-background-1 p-6 m-6 rounded space-y-3">
-        <p>Name: {{nodeDetails.name}}</p>
-        <p>Status: {{nodeDetails.status}}</p>
+      <div class="border border-dark-border-default rounded bg-dark-background-1 p-6 mb-6 rounded space-y-3 text-md">
+        <p><span class="font-bold">Name : </span>{{nodeDetails.name}}</p>
+        <p><span class="font-bold">Status :</span> {{nodeDetails.status}}</p>
       </div>
+      <p class="text-lg">Foot Mark</p>
+      <hr class="border-dark-border-default mb-3">
       <div class="" *ngFor="let foot of footMarks;let i = index ">
         <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,foot,nodeDetails.name)">
-          <div class="flex gap-2">
+          <div class="flex gap-2 text-md">
             <mat-icon>timeline</mat-icon>
             {{foot }}
           </div>
@@ -32,8 +34,12 @@
                 open_in_full
               </mat-icon>
             </div>
-            <div class="p-3 h-[calc(100%-2.2rem)] w-full overflow-y-auto space-y-1 bg-dark-background-5">
-              <p *ngFor="let log of logs">{{log}}</p>
+            <div class="p-3 h-[calc(100%-2.2rem)] w-full overflow-y-auto  bg-dark-background-5">
+              <span *ngFor="let logDetails of logs">
+                <span *ngIf="logDetails.name ===foot" class="space-y-2">
+                    <pre *ngFor="let log of logDetails.data" class="text-sm break-words">{{log}}</pre>
+                </span>
+              </span>
             </div>
           </div>
         </div>
@@ -43,8 +49,7 @@
 
   <div
     id="mainDiv"
-    [ngClass]="logToggle ? 'grid-cols-12' : 'grid-cols-8'"
-    class="grid h-[calc(100vh-170px)] mx-2 md:mx-6 mb-5 mt-3"
+    class="grid h-[calc(100vh-170px)] grid-cols-8 mx-2 md:mx-6 mb-5 mt-3"
   >
     <mat-card
       id="left"
@@ -65,9 +70,9 @@
                     {{ branch.name }} </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div *ngFor="let list of commitList">
-                  <div *ngIf="list.branch ===branch.name" >
+                  <div *ngIf="list.branch ===branch.name">
                     <div *ngFor="let msg of list.commits; let j = index">
-                      <div mat-ripple class="text-sm ml-6 p-3 flex gap-2 cursor-pointer hover:bg-dark-background-1 rounded">
+                      <div mat-ripple class="text-sm ml-6 p-3 flex gap-2 cursor-pointer hover:bg-dark-background-1 rounded" (click)="getProcess(msg.sha)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
                           <path d="M13,9.03544443 C14.6961471,9.27805926 16,10.736764 16,12.5 C16,14.263236 14.6961471,15.7219407 13,15.9645556 L13,21.5207973 C13,21.7969397 12.7761424,22.0207973 12.5,22.0207973 C12.2238576,22.0207973 12,21.7969397 12,21.5207973 L12,15.9645556 C10.3038529,15.7219407 9,14.263236 9,12.5 C9,10.736764 10.3038529,9.27805926 12,9.03544443 L12,3.5 C12,3.22385763 12.2238576,3 12.5,3 C12.7761424,3 13,3.22385763 13,3.5 L13,9.03544443 L13,9.03544443 Z M12.5,15 C13.8807119,15 15,13.8807119 15,12.5 C15,11.1192881 13.8807119,10 12.5,10 C11.1192881,10 10,11.1192881 10,12.5 C10,13.8807119 11.1192881,15 12.5,15 Z" transform="rotate(90 12.5 12.51)"/>
                         </svg>
@@ -86,8 +91,7 @@
     </mat-card>
     <mat-card
       id="mid"
-      [ngClass]="logToggle ? 'col-span-7' : 'col-span-6 mid-right-border'"
-      class="kc-card overflow-hidden kc-card-pipe-mid"
+      class="kc-card overflow-hidden kc-card-pipe-mid col-span-6 mid-right-border"
       id="holder"
     >
       <div class="absolute right-6">
@@ -95,7 +99,7 @@
           <mat-label>Select Process ID</mat-label>
           <mat-select class="">
             <div class="kc-node-menu">
-              <mat-option value="option1" *ngFor="let id of processIds">{{id}}</mat-option>
+              <mat-option value="option1" *ngFor="let id of processIds">{{id.process_id}}</mat-option>
             </div>
           </mat-select>
         </mat-form-field>

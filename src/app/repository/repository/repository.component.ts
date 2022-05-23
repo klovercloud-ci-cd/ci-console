@@ -67,19 +67,20 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     private userInfo: UserDataService,
     private auth: AuthService,
-    private dialog: MatDialog,
-  ) {}
+    private dialog: MatDialog
+  ) {
+    this._toolbarService.changeData({ title: 'Repositories' });
+  }
 
   ngOnInit(): void {
     this.repoService.refreshNeeded$.subscribe(()=>{
-this.getRepoList();  
-  })
- 
-this.getRepoList();  
-
+        this.getRepoList();
+      }
+    )
+    this.getRepoList();
   }
   getRepoList(){
-    this._toolbarService.changeData({ title: 'Repositories' });
+
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
@@ -89,7 +90,7 @@ this.getRepoList();
           this.isLoading = false;
           this.repoArray = response.data.repositories;
         });
-    }); 
+    });
   }
 
   openDialog() {
@@ -98,7 +99,7 @@ this.getRepoList();
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
       // console.log("I have Company: ",this.companyID);
-      
+
     });
 
     const dialogConfig = new MatDialogConfig();
