@@ -1,10 +1,32 @@
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  &:hover {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-dark-background-1;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-background-4;
+  border-radius: 30px;
+  &:hover {
+    @apply bg-dark-background-active;
+    width: 10px;
+    height: 10px;
+  }
+}
 .kc-attach-company {
   width: 100%;
   @apply flex justify-center items-center;
 }
 .registration-form {
   min-height: 85vh;
-  @apply w-full h-full text-dark-text mx-7;
+  @apply w-full h-full text-dark-text md:mx-7;
   background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
 }
 .form-title {
@@ -40,7 +62,7 @@ input[type="number"] {
   animation: formDown 1s;
 }
 .form-wrapper {
-  @apply w-full md:px-[20%] pb-4;
+  @apply w-full md:px-[2%] pb-4;
 }
 .kc-expansion-panel {
   background: transparent;

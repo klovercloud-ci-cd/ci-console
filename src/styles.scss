@@ -217,7 +217,7 @@ body {
 }
 .kc-dialog {
   .mat-dialog-container {
-    @apply bg-dark-background max-w-5xl;
+    @apply bg-transparent max-w-5xl;
   }
 }
 .custom-modalbox > mat-dialog-container {

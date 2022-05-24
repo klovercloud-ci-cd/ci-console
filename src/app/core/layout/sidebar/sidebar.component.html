@@ -21,4 +21,20 @@
       </div>
     </li>
   </ul>
+  <mat-tree class=" bg-transparent hover:bg-[#0f172a] hover:text-dark-slider-color text-white" [dataSource]="dataSource" [treeControl]="treeControl">
+    <mat-tree-node class=" mx-3 hover:bg-dark-container hover:text-dark-slider-color text-white" *matTreeNodeDef="let node" matRipple>
+      <a [routerLink]="[node.url]" [routerLinkActive]="'active'" class="dropdown__link flex items-center"><mat-icon class="node-icon" *ngIf="node.icon">{{node.icon}}</mat-icon> {{node.name}}</a>
+    </mat-tree-node>
+    <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matRipple>
+      <button [class.showed]="treeControl.isExpanded(node)" class="sidenav__link flex justify-between items-center hover:bg-[#0f172a] hover:text-dark-slider-color text-white" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+        <div class="flex items-center px-3 hover:text-dark-slider-color text-white">
+          <mat-icon class="node-icon" *ngIf="node.icon">{{node.icon}}</mat-icon>
+          {{node.name}}
+        </div>
+        <mat-icon class="expanded-icon ">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+      </button>
+    </mat-tree-node>
+  </mat-tree>
 </div>

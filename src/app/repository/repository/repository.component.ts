@@ -72,11 +72,9 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.repoService.refreshNeeded$.subscribe(()=>{
-this.getRepoList();  
-  })
- 
-this.getRepoList();  
-
+      this.getRepoList();  
+    })
+    this.getRepoList();  
   }
   getRepoList(){
     this._toolbarService.changeData({ title: 'Repositories' });

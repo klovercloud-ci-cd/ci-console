@@ -1,11 +1,12 @@
-<div>
+<div class="">
   <div class="kc-form kc-attach-company">
-    <mat-card class="registration-form mt-4">
-      <div class="form-wrapper form-drop">
-        <div class="text-instruction">
-          <h1 class="text-xl">Company Info</h1>
+    <mat-card class="registration-form mt-4 " mat-dialog-content>
+      <div class="form-wrapper ">
+        <div class="text-instruction flex justify-between">
+          <h1 class="text-xl">Company Info</h1>  
+          <div  class="px-2 py-1 text-xs bg-dark-background-4 border cursor-pointer hover:bg-dark-background-3 border-dark-primary rounded-md" (click)="closeAppModal()">Close</div>  
         </div>
-
+        
         <!-- Input Form -->
 
         <form
@@ -13,17 +14,6 @@
           (ngSubmit)="attachCompanyFormData()"
         >
           <div class="flex flex-col xl:flex-row gap-5">
-            <!-- <mat-form-field class="kcci-field" appearance="outline">
-              <mat-label class="text-white">ID </mat-label>
-              <input
-                type="text"
-                autocomplete="off"
-                required
-                formControlName="companyId"
-                matInput
-                placeholder="Enter ID"
-              />
-            </mat-form-field> -->
             <mat-form-field class="kcci-field" appearance="outline">
               <mat-label class="text-white">Name </mat-label>
               <input
@@ -38,8 +28,7 @@
           </div>
 
           <!-- Add Repository Section -->
-          <!-- formGroupName="address" -->
-
+          
           <mat-accordion multi="false">
             <div
               class="rounded-md form-drop bg-[#1A2C4A] border-dark-primary border-1.5 p-2 mb-4 relative"
@@ -342,7 +331,7 @@
                   Attach Company
                 </span>
                 <ng-template #before_submit>
-                  <div class="py-3 mx-auto w-52">
+                  <div class="py-3 mx-auto w-40">
                     <mat-progress-bar
                       class="green-progress kc-progress-bar"
                       mode="indeterminate"
@@ -357,4 +346,6 @@
       </div>
     </mat-card>
   </div>
+
+
 </div>
