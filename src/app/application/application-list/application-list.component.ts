@@ -137,10 +137,12 @@ export class ApplicationListComponent implements OnInit {
     private auth: AuthService,
     private repo: RepoServiceService,
     private navigateRoute: Router
-  ) {}
+  ) {
+    this._toolbarService.changeData({ title: 'Applications' });
+  }
 
   ngOnInit() {
-    this._toolbarService.changeData({ title: 'Applications' });
+
 
     //@ts-ignore
     this.repositoryId = this.route.snapshot.paramMap.get('repoID');
@@ -190,7 +192,7 @@ someRoute(e:any){
       //@ts-ignore
       const encodedString = btoa(JSON.stringify(data));
       console.log("Encoded Value: ",encodedString);
-      
+
       const decodedData = function base64ToHex(str:any) {
         for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; ++i) {
             let tmp = bin.charCodeAt(i).toString(16);
@@ -198,8 +200,8 @@ someRoute(e:any){
             hex[hex.length] = tmp;
         }
         return hex.join("");
-    } 
-    
+    }
+
   this.navigateRoute.navigate(['repository',response.data.id,'application',decodedData(encodedString)]);
 
       });
@@ -233,7 +235,6 @@ someRoute(e:any){
       .deleteApplication(data, this.companyID, this.repositoryId)
       .subscribe(
         (res) => {
- 
           console.log('Delete Application response', res);
         },
         (err) => {

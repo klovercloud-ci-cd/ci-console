@@ -25,11 +25,12 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     private _toolbarService: ToolbarService,
     private renderer: Renderer2,
     private cdref: ChangeDetectorRef
-  ) {}
+  ) {
+    this._toolbarService.changeData({ title: 'Dashboard' });
+  }
 
   ngOnInit(): void {
-    this._toolbarService.changeData({ title: 'Dashboard' });
-    this.renderer.setStyle(this.textElement, 'color', 'blue');
+    // this.renderer.setStyle(this.textElement, 'color', 'blue');
   }
   ngAfterContentChecked() {
     this.cdref.detectChanges();

@@ -1,3 +1,5 @@
+
+
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, Subject, tap, throwError } from 'rxjs';
@@ -33,20 +35,20 @@ export class RepoServiceService {
     };
     let newRepo={
       "repositories": [
-          {
-              "type": payLoad.type,
-              "token": payLoad.token,
-              "applications": [
-              //     {
-              //         "_metedata": {
-              //             "name": "SomeApplication"
-              //         },
-              //         "url": "ssssssssssssssss"
-              //     }
-              ]
-          }
+        {
+          "type": payLoad.type,
+          "token": payLoad.token,
+          "applications": [
+            //     {
+            //         "_metedata": {
+            //             "name": "SomeApplication"
+            //         },
+            //         "url": "ssssssssssssssss"
+            //     }
+          ]
+        }
       ]
-  }
+    }
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
       .put(BASE_URL + 'companies/' + companyID + '/repositories', newRepo, HTTP_OPTIONS)
@@ -69,7 +71,7 @@ export class RepoServiceService {
         })
       );
   }
-  
+
   // addRepository(companyID: any): Observable<any> {
   //   let newRepo=[
   //     {
@@ -77,9 +79,9 @@ export class RepoServiceService {
   //       type:'github'
   //     }
   //   ]
-    
+
   //   return this.http.put(BASE_URL + 'companies/' + companyID + '/repositories',newRepo, {
-  //     params: { 
+  //     params: {
   //       companyUpdateOption: 'APPEND_REPOSITORY' },
   //   });
   // }
@@ -96,14 +98,14 @@ export class RepoServiceService {
     return this.http.get(BASE_URL + 'applications/' + appId, HTTP_OPTIONS);
   }
 
-  getBranch(repoType: string, repoId: string, repoUrl: string) {
+  getBranch(repoType: string, repoId: string |null, repoUrl: string) {
     HTTP_OPTIONS.params = {
       repoId: repoId,
       url: repoUrl,
     };
     return this.http.get(BASE_URL + repoType + '/branches', HTTP_OPTIONS);
   }
-  getCommit(repoType:string,repoId:string,repoUrl:string,branceName:string){
+  getCommit(repoType:string,repoId:string |null,repoUrl:string,branceName:string){
     HTTP_OPTIONS.params = {
       repoId: repoId,
       url: repoUrl,
@@ -111,4 +113,27 @@ export class RepoServiceService {
     };
     return this.http.get(BASE_URL+repoType+'/commits',HTTP_OPTIONS)
   }
+  getProcess(commitId:any) {
+    HTTP_OPTIONS.params = {
+      commitId: commitId,
+    };
+    return this.http.get(BASE_URL+'processes',HTTP_OPTIONS)
+  }
+  getfootPrint(processId:any,stepName:any) {
+    return this.http.get(BASE_URL+'processes/'+processId+'/steps/'+stepName+'/footmarks',HTTP_OPTIONS)
+  }
+  getPipeLine (processId:any){
+    HTTP_OPTIONS.params = {
+      action: 'get_pipeline',
+    };
+    return this.http.get(BASE_URL+'pipelines/'+processId,HTTP_OPTIONS)
+  }
+  getFootamarkLog(processId:any,stepName:any, footmarkName:any){
+    HTTP_OPTIONS.params = {
+      claims: 0,
+    };
+    return this.http.get(BASE_URL+'processes/'+processId+'/steps/'+stepName+'/footmarks/'+footmarkName+'/logs',HTTP_OPTIONS)
+  }
 }
+
+

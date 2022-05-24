@@ -14,48 +14,6 @@ import { RepositoryModalComponent } from '../repository-modal/repository-modal.c
   styleUrls: ['./repository.component.scss'],
 })
 export class RepositoryComponent implements OnInit, AfterViewInit {
-  repooArray: any = [
-    {
-      name: 'KloverCloud-CICD',
-      type: 'github',
-      application: 10,
-    },
-    {
-      name: 'Circle-CI',
-      type: 'gitlab',
-      application: 8,
-    },
-    {
-      name: 'We Pro',
-      type: 'bitbucket',
-      application: 12,
-    },
-    {
-      name: 'Get Commerce',
-      type: 'github',
-      application: 10,
-    },
-    {
-      name: 'KloverCloud-Endless',
-      type: 'gitlab',
-      application: 6,
-    },
-    {
-      name: 'KloverCloud-Console',
-      type: 'bitbucket',
-      application: 7,
-    },
-    {
-      name: 'KloverCloud-Endless',
-      type: 'gitlab',
-      application: 6,
-    },
-    {
-      name: 'KloverCloud-Console',
-      type: 'bitbucket',
-      application: 7,
-    },
-  ];
   repoArray: any = [];
   user: any = this.auth.getUserData();
   companyID: any;
@@ -67,8 +25,10 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     private userInfo: UserDataService,
     private auth: AuthService,
-    private dialog: MatDialog,
-  ) {}
+    private dialog: MatDialog
+  ) {
+    this._toolbarService.changeData({ title: 'Repositories' });
+  }
 
   ngOnInit(): void {
     this.repoService.refreshNeeded$.subscribe(()=>{
@@ -77,7 +37,7 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     this.getRepoList();  
   }
   getRepoList(){
-    this._toolbarService.changeData({ title: 'Repositories' });
+
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
@@ -87,7 +47,7 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
           this.repoArray = response.data.repositories;
         });
-    }); 
+    });
   }
 
   openDialog() {
@@ -96,7 +56,7 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
       // console.log("I have Company: ",this.companyID);
-      
+
     });
 
     const dialogConfig = new MatDialogConfig();
