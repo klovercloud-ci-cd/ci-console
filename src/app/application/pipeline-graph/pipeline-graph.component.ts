@@ -76,13 +76,13 @@ export class PipelineGraphComponent implements OnInit,AfterContentChecked {
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(  async (res: any) => {
-        const commit = res.data;
+        this.commit = res.data;
         this.commitList.push({
           branch: branchName,
 
-          commits: [...commit],
+          commits: [...this.commit],
         });
-        this.getProcess(commit[0].sha)
+        this.getProcess(this.commit[0].sha)
       });
   }
   getProcess(commitId:any){
@@ -129,13 +129,19 @@ export class PipelineGraphComponent implements OnInit,AfterContentChecked {
           });
         });
     }
+    else{
+      this.repo
+        .getCommit(this.type, this.repoId, this.repoUrl, branchName)
+        .subscribe((res: any) => {
+          Object.assign(this.commitList[this.commitList.findIndex(el => el.branch === branchName)], res.data)
+          });
+
+    }
   }
 
   expandLog(event: any, footmarkName: string, nodeName: any) {
     const processId = this.pipeline.data.process_id;
     const allFootSteps = document.getElementsByClassName('logExpansion');
-
-    const lastFootmark = this.footMarks[this.footMarksLegth - 1]
 
     const findLogByName = this.logs.find((log) => log.name === footmarkName);
     if (!findLogByName) {

@@ -14,48 +14,6 @@ import { RepositoryModalComponent } from '../repository-modal/repository-modal.c
   styleUrls: ['./repository.component.scss'],
 })
 export class RepositoryComponent implements OnInit, AfterViewInit {
-  repooArray: any = [
-    {
-      name: 'KloverCloud-CICD',
-      type: 'github',
-      application: 10,
-    },
-    {
-      name: 'Circle-CI',
-      type: 'gitlab',
-      application: 8,
-    },
-    {
-      name: 'We Pro',
-      type: 'bitbucket',
-      application: 12,
-    },
-    {
-      name: 'Get Commerce',
-      type: 'github',
-      application: 10,
-    },
-    {
-      name: 'KloverCloud-Endless',
-      type: 'gitlab',
-      application: 6,
-    },
-    {
-      name: 'KloverCloud-Console',
-      type: 'bitbucket',
-      application: 7,
-    },
-    {
-      name: 'KloverCloud-Endless',
-      type: 'gitlab',
-      application: 6,
-    },
-    {
-      name: 'KloverCloud-Console',
-      type: 'bitbucket',
-      application: 7,
-    },
-  ];
   repoArray: any = [];
   user: any = this.auth.getUserData();
   companyID: any;

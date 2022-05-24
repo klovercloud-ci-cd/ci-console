@@ -99,7 +99,7 @@
           <mat-label>Select Process ID</mat-label>
           <mat-select class="">
             <div class="kc-node-menu">
-              <mat-option value="option1" *ngFor="let id of processIds">{{id.process_id}}</mat-option>
+              <mat-option value="option1" *ngFor="let id of processIds" (click)="getProcess(commit[0].sha)">{{id.process_id}}</mat-option>
             </div>
           </mat-select>
         </mat-form-field>
