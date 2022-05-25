@@ -30,13 +30,6 @@ const childrenRoutes: Routes = [
       import('./settings/settings.module').then((m) => m.SettingsModule),
   },
   {
-    path: 'user-profile',
-    loadChildren: () =>
-      import('./user-profile/user-profile.module').then(
-        (m) => m.UserProfileModule
-      ),
-  },
-  {
     path: 'test',
     component: DashboardIndexComponent,
   },
@@ -50,6 +43,14 @@ const childrenRoutes: Routes = [
     loadChildren: () =>
       import('./repository/repository.module').then((m) => m.RepositoryModule),
   },
+  {
+    path: "users",
+    loadChildren: () => import("./user/user.module").then(m => m.UserModule)
+  },
+  {
+    path: "roles",
+    loadChildren: () => import("./roles/roles.module").then( m => m.RolesModule)
+  }
 ];
 
 const routes: Routes = [

@@ -105,7 +105,7 @@ export class AppListService {
   }
 
   updateWebhook(
-    qp:any,type:string
+    qp:any
   ): Observable<any> {
     HTTP_OPTIONS.params = {
       action: qp.action,
@@ -119,9 +119,10 @@ console.log("QP:",qp);
 
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .patch(BASE_URL + '/companies/'+ qp.companyId +'/repositories/'+ qp.repoId +'/webhooks',HTTP_OPTIONS.params)
+      .patch(BASE_URL + 'companies/'+ qp.companyId +'/repositories/'+ qp.repoId +'/webhooks', "",HTTP_OPTIONS)
       .pipe(
         map((res: any) => {
+          this._refreshNeeded$.next();
           console.log('Response Log: ', res);
         }),
         catchError((error: HttpErrorResponse): Observable<any> => {

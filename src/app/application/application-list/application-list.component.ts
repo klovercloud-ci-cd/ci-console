@@ -151,20 +151,6 @@ export class ApplicationListComponent implements OnInit {
       this.getAppList()
     })
 
-    // this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
-    //   this.userPersonalInfo = res;
-    //   this.companyID = res.data.metadata.company_id;
-    //   this.service
-    //     .getRepositoryInfo(this.companyID, this.repositoryId)
-    //     .subscribe((response: any) => {
-    //       this.dataSource = new MatTableDataSource(response.data.applications);
-    //       this.dataSource.paginator = this.paginator;
-    //       this.dataSource.sort = this.matSort;
-    //       this.isLoading = false;
-    //       console.log('RepoInfo: ', response.data.type);
-    //       this.repoType = response.data.type;
-    //     });
-    // });
     this.getAppList()
 
   }
@@ -220,24 +206,7 @@ someRoute(e:any){
 
       });
   });
-    // console.log("Any:",e);
-    // const json = { "a": 1, "b": 2 }
-    // const string = JSON.stringify(json)
-    // const encodedString = btoa(string)
-    // const dec = atob('eyJhIjoxLCJiIjoyfQ==')
-    // console.log("encodedString",encodedString);
-
-  //   let data = {
-  //     "title": e._metadata.name,
-  //     "type": "",
-  //     "url": e.url,
-  //     "repoId":"",
-  //     "appId": e._metadata.id
-  //   }
-  // console.log(data);
-
-  // this.navigateRoute.navigate(['/']);
-
+  
 }
   openDialog() {
     const dialogConfig = new MatDialogConfig();
@@ -266,8 +235,7 @@ someRoute(e:any){
       .deleteApplication(data, this.companyID, this.repositoryId)
       .subscribe(
         (res) => {
-
-          console.log('Add Application response', res);
+          console.log('Delete Application response', res);
         },
         (err) => {
           // this.openSnackBarError('Authentication Error', '');
@@ -277,35 +245,29 @@ someRoute(e:any){
   }
 
   webUpdate(appId: any) {
-    this.repositoryId = this.route.snapshot.paramMap.get('repoID');
 
-    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
-      this.userPersonalInfo = res;
-      this.companyID = res.data.metadata.company_id;
-      this.service
-        .getRepositoryInfo(this.companyID, this.repositoryId)
-        .subscribe((response: any) => {
-          this.dataSource = new MatTableDataSource(response.data.applications);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.matSort;
-          this.isLoading = false;
-          console.log('RepoInfo: ', response.data.type, appId);
-          this.repoType = response.data.type;
+      this.repositoryId = this.route.snapshot.paramMap.get('repoID');
 
-          let queryPayload = {
-          action: appId._metadata.is_webhook_enabled?'enable':'disable',
-          companyId: this.companyID,
-          repoId: this.repositoryId,
-          url: appId.url,
-          webhookId: appId.webhook.id
-          }
-          this.service.updateWebhook(queryPayload,response.data.type+'s').subscribe((res:any)=>{
-            console.log("Webhook response",res);
-
-          })
-        });
-    });
-    console.log("Zumba",this.repoType);
+      this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+        this.userPersonalInfo = res;
+        this.companyID = res.data.metadata.company_id;
+            this.isLoading = false;
+            let queryPayload = {
+            action: appId._metadata.is_webhook_enabled?'enable':'disable',
+            companyId: this.companyID,
+            repoId: this.repositoryId,
+            url: appId.url,
+            webhookId: appId.webhook.id
+            }
+            this.service.updateWebhook(queryPayload).subscribe((res:any)=>{
+              console.log("Webhook response",res);
+              
+            },
+            (err) =>{
+              console.log(err);
+              
+            })
+      });    
   }
 
   clickMe() {

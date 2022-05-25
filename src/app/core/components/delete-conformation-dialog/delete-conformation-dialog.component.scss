@@ -1,0 +1,15 @@
+._content {
+  max-width: 545px;
+}
+._delete-icon {
+  $size: 60px;
+  font-size: $size;
+  line-height: $size;
+  height: $size;
+  width: $size;
+}
+::ng-deep{
+  .mat-dialog-container{
+    background-color: transparent !important;
+  }
+  }

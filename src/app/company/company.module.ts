@@ -13,9 +13,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AttachCompanyComponent } from './attach-company/attach-company.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [AddCompanyComponent],
+  declarations: [AddCompanyComponent, AttachCompanyComponent],
   imports: [
     CommonModule,
     CompanyRoutingModule,
@@ -30,6 +32,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     FlexLayoutModule,
     MatExpansionModule,
     MatTooltipModule,
+    MatDialogModule
   ],
 })
 export class CompanyModule {}

@@ -17,9 +17,9 @@ interface RepoType {
 
 export class RepositoryModalComponent implements OnInit {
   repos: RepoType[] = [
-    { value: 'bitbucket', viewValue: 'Bitbucket' },
-    { value: 'github', viewValue: 'Github' },
-    { value: 'gitlab', viewValue: 'Gitlab' },
+    { value: 'BIT_BUCKET', viewValue: 'Bitbucket' },
+    { value: 'GITHUB', viewValue: 'Github' },
+    { value: 'GITLAB', viewValue: 'Gitlab' },
   ];
   isLoading:boolean = false;
 
