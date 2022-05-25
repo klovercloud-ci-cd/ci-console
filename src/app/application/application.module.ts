@@ -23,10 +23,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatRippleModule} from "@angular/material/core";
+import { MatRippleModule } from '@angular/material/core';
 import { PipelineGraphComponent } from './pipeline-graph/pipeline-graph.component';
 import { PipelineOverviewComponent } from './pipeline-overview/pipeline-overview.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [
@@ -37,34 +38,35 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     PipelineGraphComponent,
     PipelineOverviewComponent,
   ],
-    imports: [
-        CommonModule,
-        ApplicationRoutingModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
+  imports: [
+    CommonModule,
+    ApplicationRoutingModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
 
-        MatInputModule,
-        MatTableModule,
-        MatSortModule,
-        MatPaginatorModule,
+    MatInputModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
 
-        MatProgressSpinnerModule,
-        MatCardModule,
-        MatExpansionModule,
-        MatIconModule,
-        MatSlideToggleModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatButtonToggleModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatMenuModule,
-        MatButtonModule,
-        MatSelectModule,
-        MatTabsModule,
-        MatRippleModule,
-        MatProgressBarModule
-    ],
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatButtonToggleModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatTabsModule,
+    MatRippleModule,
+    MatProgressBarModule,
+    NgxSkeletonLoaderModule,
+  ],
 })
 export class ApplicationModule {}

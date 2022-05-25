@@ -23,6 +23,7 @@ import {
 } from '@angular/material/core';
 import { SnackbarModule } from './shared/snackbar/snackbar.module';
 import { ApplicationModalComponent } from './application/application-modal/application-modal.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 const globalRippleConfig: RippleGlobalOptions = {
   animation: {
@@ -33,6 +34,7 @@ const globalRippleConfig: RippleGlobalOptions = {
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    NgxSkeletonLoaderModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

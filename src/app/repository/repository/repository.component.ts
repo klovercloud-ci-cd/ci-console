@@ -1,5 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -12,6 +17,7 @@ import { RepositoryModalComponent } from '../repository-modal/repository-modal.c
   selector: 'kcci-repository',
   templateUrl: './repository.component.html',
   styleUrls: ['./repository.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class RepositoryComponent implements OnInit, AfterViewInit {
   repoArray: any = [];
@@ -31,14 +37,12 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.repoService.refreshNeeded$.subscribe(()=>{
-        this.getRepoList();
-      }
-    )
+    this.repoService.refreshNeeded$.subscribe(() => {
+      this.getRepoList();
+    });
     this.getRepoList();
   }
-  getRepoList(){
-
+  getRepoList() {
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
@@ -52,12 +56,10 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
   }
 
   openDialog() {
-
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
       // console.log("I have Company: ",this.companyID);
-
     });
 
     const dialogConfig = new MatDialogConfig();
