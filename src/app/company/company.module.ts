@@ -32,7 +32,7 @@ import { CompanyRoutingModule } from './company-routing.module';
     FlexLayoutModule,
     MatExpansionModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
   ],
 })
 export class CompanyModule {}

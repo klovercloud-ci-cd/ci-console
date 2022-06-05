@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
-import type { Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { Error404Component } from './error/error404/error404.component';
-import { AuthGuard } from './shared/guard/auth.guard';
 import { DashboardIndexComponent } from './dashboard/dashboard-index/dashboard-index.component';
 import { AppCustomPreloader } from './app-custom-preloader';
 
@@ -45,13 +44,14 @@ const childrenRoutes: Routes = [
       import('./repository/repository.module').then((m) => m.RepositoryModule),
   },
   {
-    path: "users",
-    loadChildren: () => import("./user/user.module").then(m => m.UserModule)
+    path: 'users',
+    loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
   },
   {
-    path: "roles",
-    loadChildren: () => import("./roles/roles.module").then( m => m.RolesModule)
-  }
+    path: 'roles',
+    loadChildren: () =>
+      import('./roles/roles.module').then((m) => m.RolesModule),
+  },
 ];
 
 const routes: Routes = [

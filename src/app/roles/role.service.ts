@@ -1,14 +1,12 @@
-import  { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import  { Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as endpoints from './role.endpoints';
 
 @Injectable()
-
 export class RoleService {
-
   constructor(private http: HttpClient) {}
 
   getRoles(): Observable<any> {

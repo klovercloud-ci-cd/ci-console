@@ -1,12 +1,12 @@
-import  { OnInit } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
-import  { FormBuilder, FormGroup} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import  { Router } from '@angular/router';
-import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import  { AuthService } from '../../auth/auth.service';
-import  { UserDataService } from '../../shared/services/user-data.service';
-import  { SharedSnackbarService } from '../../shared/snackbar/shared-snackbar.service';
+import { Router } from '@angular/router';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import { AuthService } from '../../auth/auth.service';
+import { UserDataService } from '../../shared/services/user-data.service';
+import { SharedSnackbarService } from '../../shared/snackbar/shared-snackbar.service';
 
 @Component({
   selector: 'kcci-change-password',

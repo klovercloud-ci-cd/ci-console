@@ -1,16 +1,14 @@
-import  {
+import {
   AfterContentChecked,
   ChangeDetectorRef,
   ElementRef,
   OnInit,
-  Renderer2} from '@angular/core';
-import {
-  Component,
-  ViewChild,
+  Renderer2,
 } from '@angular/core';
-import  { MatDialog } from '@angular/material/dialog';
-import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import  { AuthService } from '../../auth/auth.service';
+import { Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'kcci-dashboard-index',
@@ -22,23 +20,21 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
   private closeSubject: any;
 
-  test:any =1
+  test: any = 1;
 
   constructor(
     private dialog: MatDialog,
     private authService: AuthService,
     private _toolbarService: ToolbarService,
     private renderer: Renderer2,
-    private cdref: ChangeDetectorRef,
+    private cdref: ChangeDetectorRef
   ) {
     this._toolbarService.changeData({ title: 'Dashboard' });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterContentChecked() {
-
     this.cdref.detectChanges();
   }
 }

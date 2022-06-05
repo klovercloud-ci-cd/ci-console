@@ -2,24 +2,24 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 interface TitleInterface {
-  title: string
+  title: string;
 }
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToolbarService {
-
-  private data = new BehaviorSubject<TitleInterface>({title: ''});
+  private data = new BehaviorSubject<TitleInterface>({ title: '' });
 
   currentData = this.data.asObservable();
-  // public appOnboardSource = new BehaviorSubject(false);
 
-  constructor() { }
+  constructor() {}
 
   changeData(data: TitleInterface) {
     this.data.next(data);
   }
-/*  changeIfAppOnBord(data: boolean) {
+
+  /*  changeIfAppOnBord(data: boolean) {
     this.appOnboardSource.next(data);
   } */
 }

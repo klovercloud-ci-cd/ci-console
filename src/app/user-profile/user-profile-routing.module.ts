@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import  { Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';

@@ -5,16 +5,14 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { ProgressBarComponent } from './progress-bar.component';
 
-
 @NgModule({
   declarations: [ProgressBarComponent],
   imports: [
     CommonModule,
     MatProgressBarModule,
     LoadingBarModule,
-    LoadingBarRouterModule
+    LoadingBarRouterModule,
   ],
-  exports: [ProgressBarComponent]
+  exports: [ProgressBarComponent],
 })
-export class ProgressBarModule {
-}
+export class ProgressBarModule {}

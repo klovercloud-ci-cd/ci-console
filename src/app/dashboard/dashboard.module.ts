@@ -11,17 +11,17 @@ import { DashboardIndexComponent } from './dashboard-index/dashboard-index.compo
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
 @NgModule({
-  declarations: [ DashboardIndexComponent],
-    imports: [
-        CommonModule,
-        DashboardRoutingModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatExpansionModule,
-        FlexLayoutModule,
-    ],
+  declarations: [DashboardIndexComponent],
+  imports: [
+    CommonModule,
+    DashboardRoutingModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatExpansionModule,
+    FlexLayoutModule,
+  ],
   exports: [],
 })
 export class DashboardModule {}

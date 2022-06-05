@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -20,12 +19,8 @@ import { RoleFormComponent } from './role-form/role-form.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { RolesRoutingModule } from './roles-routing.module';
 
-
 @NgModule({
-  declarations: [
-    RoleListComponent,
-    RoleFormComponent
-  ],
+  declarations: [RoleListComponent, RoleFormComponent],
   imports: [
     CommonModule,
     RolesRoutingModule,
@@ -41,8 +36,8 @@ import { RolesRoutingModule } from './roles-routing.module';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatDialogModule
+    MatDialogModule,
   ],
-  providers: [RoleService]
+  providers: [RoleService],
 })
-export class RolesModule { }
+export class RolesModule {}

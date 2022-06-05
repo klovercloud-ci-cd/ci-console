@@ -58,7 +58,7 @@
                   <pre
                     *ngFor="let log of logDetails.data"
                     class="text-sm break-words"
-                    >{{ log }}</pre
+                  >{{ log }}</pre
                   >
                 </span>
               </span>
@@ -89,8 +89,8 @@
                   id="{{ branch.name }} "
                   (click)="loadCommit(branch.name)"
                 >
-                  <mat-panel-title class="flex gap-2 text-md"
-                    ><svg
+                  <mat-panel-title class="flex gap-2 text-md">
+                    <svg
                       height="20px"
                       fill="white"
                       id="Flat"
@@ -162,7 +162,7 @@
                 value="option1"
                 *ngFor="let id of processIds"
                 (click)="getProcess(commit[0].sha)"
-                >{{ id.process_id }}</mat-option
+              >{{ id.process_id }}</mat-option
               >
             </div>
           </mat-select>
@@ -207,8 +207,9 @@
                 class="my-6 text-xl font-bold border border-dark-border-default bg-dark-info text-white rounded border border-dark-border-default env-name flex justify-center items-center gap-1"
               >
                 <mat-icon aria-hidden="false" aria-label="Example home icon"
-                  >public</mat-icon
-                >{{ env }}
+                >public
+                </mat-icon>
+                {{ env }}
               </div>
               <div>
                 <div *ngFor="let nodeEnv of stepsLists" class="">
@@ -244,15 +245,17 @@
                           <mat-icon
                             aria-hidden="false"
                             aria-label="Example home icon"
-                            >info </mat-icon
-                          >Info
+                          >info
+                          </mat-icon>
+                          Info
                         </button>
                         <button mat-menu-item (click)="startBuild(step.name)">
                           <mat-icon
                             aria-hidden="false"
                             aria-label="Example home icon"
-                            >start </mat-icon
-                          >Build
+                          >start
+                          </mat-icon>
+                          Build
                         </button>
                       </mat-menu>
                       <svg

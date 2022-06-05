@@ -20,11 +20,11 @@ const routes: Routes = [
     path: ':id/update',
     component: UserFormComponent,
     // canActivate: [AuthGuard]
-  }
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UserRoutingModule { }
+export class UserRoutingModule {}

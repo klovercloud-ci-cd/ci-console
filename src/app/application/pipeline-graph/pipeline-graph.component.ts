@@ -1,21 +1,15 @@
-import  {
-  AfterContentChecked,
-  ChangeDetectorRef,
-  OnInit} from '@angular/core';
-import {
-  Component,
-  Input
-} from '@angular/core';
-import  { HttpClient } from '@angular/common/http';
-import  { ActivatedRoute } from '@angular/router';
+import { AfterContentChecked, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { ApplicationListComponent } from '../application-list/application-list.component';
-import  { ToolbarService } from '../../shared/services/toolbar.service';
-import  { UserDataService } from '../../shared/services/user-data.service';
-import  { AuthService } from '../../auth/auth.service';
-import  { AppListService } from '../app-list.service';
-import  { RepoServiceService } from '../../repository/repo-service.service';
-import  { PipelineService } from '../pipeline.service';
-import  {TokenService} from "../../auth/token.service";
+import { ToolbarService } from '../../shared/services/toolbar.service';
+import { UserDataService } from '../../shared/services/user-data.service';
+import { AuthService } from '../../auth/auth.service';
+import { AppListService } from '../app-list.service';
+import { RepoServiceService } from '../../repository/repo-service.service';
+import { PipelineService } from '../pipeline.service';
+import { TokenService } from '../../auth/token.service';
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -33,7 +27,7 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
 
   logOpen = false;
 
-  connectedToWebSocket=false;
+  connectedToWebSocket = false;
 
   fullmode = false;
 
@@ -80,7 +74,7 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
 
   stompClient: any;
 
-  sendWS:any
+  sendWS: any;
 
   constructor(
     private _toolbarService: ToolbarService,
@@ -92,7 +86,7 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
     private repo: RepoServiceService,
     private cdref: ChangeDetectorRef,
     private pipelineService: PipelineService,
-    private token:TokenService
+    private token: TokenService
   ) {
     this._toolbarService.changeData({ title: this.urlParams.title });
   }
@@ -101,15 +95,15 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
 
   ngOnInit() {
     const socket = this.pipelineService.connectToSocket();
-    socket.onmessage=(e)=>{
-      if (e.data !=='null'){
-        const res = JSON.parse(e.data)
+    socket.onmessage = (e) => {
+      if (e.data !== 'null') {
+        const res = JSON.parse(e.data);
       }
-    }
-    this.sendWS = setInterval(()=>{
-      socket.send(' ')
-    },300)
-    this.type = `${this.urlParams.type.toLowerCase()  }s`;
+    };
+    this.sendWS = setInterval(() => {
+      socket.send(' ');
+    }, 300);
+    this.type = `${this.urlParams.type.toLowerCase()}s`;
     this.repoUrl = this.urlParams.url;
     this.pipelineService
       .getBranch(this.type, this.repoId, this.repoUrl)
@@ -117,7 +111,6 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
         this.branchs = res.data;
         this.getCommit(this.branchs[0].name);
       });
-
   }
 
   ngOnDestroy() {
@@ -127,10 +120,8 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked() {
-
     this.cdref.detectChanges();
-    setInterval(()=>{
-    },1000)
+    setInterval(() => {}, 1000);
   }
 
   getCommit(branchName: any) {
@@ -166,11 +157,9 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
         this.pipeline = res;
         this.envList = this.allenv();
         this.stepsLists = this.stepsDetails();
-        this.connectToWebSocket(this,this.companyId)
+        this.connectToWebSocket(this, this.companyId);
         this.initSvgArrow();
         this.drawLines();
-
-
       });
     });
   }
@@ -181,9 +170,9 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
     const svgWidth = this.totalenv() * 230;
 
     // @ts-ignore
-    document.getElementById('svg').style.height = `${svgHeight  }px`;
+    document.getElementById('svg').style.height = `${svgHeight}px`;
     // @ts-ignore
-    document.getElementById('svg').style.width = `${svgWidth  }px`;
+    document.getElementById('svg').style.width = `${svgWidth}px`;
   }
 
   loadCommit(branchName: string) {
@@ -368,7 +357,7 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
             line.setAttribute('y1', String(start.y - svgOfset.y + 30));
             line.setAttribute('x2', String(end.x - svgOfset.x + 30));
             line.setAttribute('y2', String(end.y - svgOfset.y + 30));
-            line.setAttribute('id', `${step.name  }-${  next}`);
+            line.setAttribute('id', `${step.name}-${next}`);
             if (step.status === 'completed') {
               line.setAttribute('stroke', '#36C678');
               line.setAttribute('marker-end', 'url(#trianglesuccess)');
@@ -383,7 +372,6 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
           }
         }
       }
-
     });
   }
 
@@ -396,7 +384,7 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
         this.nodeDetails = hola;
       }
     });
-    const loader: any = document.getElementById(`${stepName  }_loader`);
+    const loader: any = document.getElementById(`${stepName}_loader`);
 
     loader.classList.add('active');
     this.stepFootMark(processId, stepName, this.nodeDetails.status);
@@ -420,7 +408,7 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
           (footMark) => footMark.stepName === stepName
         );
         this.footMarks = newFoots.footMark;
-        console.log(this.footMarks,'footmarks' )
+        console.log(this.footMarks, 'footmarks');
         this.footMarksLegth = this.footMarks.length;
         const lastFootmark = this.footMarks[this.footMarksLegth - 1];
 
@@ -451,20 +439,19 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
     const info = this.pipelineStep.filter((data: any) => data.name == stepName);
   }
 
-  connectToWebSocket(thatArg:any,companyId:any) {
+  connectToWebSocket(thatArg: any, companyId: any) {
     // console.log('STOMP: Trying to connect',);
 
     const that = thatArg;
     const token = that.token.getAccessToken();
-    console.log(token)
+    console.log(token);
     // @ts-ignore
-
   }
 
-  processLog(log:any) {
+  processLog(log: any) {
     if (log) {
       if (log.includes('Status: SUCCESS')) {
-        this.databaseStatus = 'RUNNING'
+        this.databaseStatus = 'RUNNING';
       }
       const match = /\r|\n/.exec(log);
       if (match) {
@@ -477,10 +464,22 @@ export class PipelineGraphComponent implements OnInit, AfterContentChecked {
       log = log.replace(/[\x00-\x09\x0b-\x1F]/g, ' ');
 
       log = log.replace(/INFO/g, '<span class="text-primary">INFO</span>');
-      log = log.replace(/BUILD SUCCESSFUL/g, '<span class="text-success">BUILD SUCCESSFUL</span>');
-      log = log.replace(/BUILD SUCCESS/g, '<span class="text-success">BUILD SUCCESS</span>');
-      log = log.replace(/SUCCESSFUL/g, '<span class="text-success">SUCCESSFUL</span>');
-      log = log.replace(/SUCCESS/g, '<span class="text-success">SUCCESS</span>');
+      log = log.replace(
+        /BUILD SUCCESSFUL/g,
+        '<span class="text-success">BUILD SUCCESSFUL</span>'
+      );
+      log = log.replace(
+        /BUILD SUCCESS/g,
+        '<span class="text-success">BUILD SUCCESS</span>'
+      );
+      log = log.replace(
+        /SUCCESSFUL/g,
+        '<span class="text-success">SUCCESSFUL</span>'
+      );
+      log = log.replace(
+        /SUCCESS/g,
+        '<span class="text-success">SUCCESS</span>'
+      );
       log = log.replace(/WARN /g, '<span class="text-warn"> WARN </span>');
       log = log.replace(/WARNING /g, '<span class="text-warn">WARNING </span>');
       log = log.replace(/ERROR/g, '<span class="text-error">ERROR</span>');

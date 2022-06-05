@@ -1,17 +1,12 @@
-import  { HttpClient } from '@angular/common/http';
-import  {
-  AfterViewInit,
-  OnInit} from '@angular/core';
-import {
-  Component,
-  ViewEncapsulation,
-} from '@angular/core';
-import  { MatDialog} from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDialogConfig } from '@angular/material/dialog';
-import  { AuthService } from 'src/app/auth/auth.service';
-import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import  { UserDataService } from 'src/app/shared/services/user-data.service';
-import  { RepoServiceService } from '../repo-service.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import { UserDataService } from 'src/app/shared/services/user-data.service';
+import { RepoServiceService } from '../repo-service.service';
 import { RepositoryModalComponent } from '../repository-modal/repository-modal.component';
 
 @Component({

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -20,10 +19,7 @@ import { UserRoutingModule } from './user-routing.module';
 import { RoleService } from '../roles/role.service';
 
 @NgModule({
-  declarations: [
-    UserListComponent,
-    UserFormComponent,
-  ],
+  declarations: [UserListComponent, UserFormComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -37,8 +33,8 @@ import { RoleService } from '../roles/role.service';
     MatInputModule,
     MatSelectModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
-  providers: [UserService, RoleService]
+  providers: [UserService, RoleService],
 })
-export class UserModule { }
+export class UserModule {}

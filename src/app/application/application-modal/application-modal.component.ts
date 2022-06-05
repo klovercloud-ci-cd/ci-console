@@ -1,14 +1,14 @@
-import  { OnInit } from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Component, Inject } from '@angular/core';
-import  { FormBuilder} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import  { MatDialogRef} from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import  { ActivatedRoute } from '@angular/router';
-import  { AuthService } from 'src/app/auth/auth.service';
-import  { UserDataService } from 'src/app/shared/services/user-data.service';
-import  { AppListService } from '../app-list.service';
-import  { ApplicationListComponent } from '../application-list/application-list.component';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserDataService } from 'src/app/shared/services/user-data.service';
+import { AppListService } from '../app-list.service';
+import { ApplicationListComponent } from '../application-list/application-list.component';
 
 @Component({
   selector: 'kcci-application-modal',
@@ -69,7 +69,7 @@ export class ApplicationModalComponent implements OnInit {
       .addApplication(data, this.companyID, this.repositoryId)
       .subscribe(
         (res) => {
-          this.isLoading = false
+          this.isLoading = false;
           console.log('Add Application response', res);
           this.dialogRef.close();
           // console.log(this.authService.getUserData(), 'USER');

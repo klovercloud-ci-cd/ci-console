@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import  { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
-import  { Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { environment } from '../../environments/environment';
 
 const HTTP_OPTIONS = {
@@ -12,6 +12,7 @@ const HTTP_OPTIONS = {
 };
 const BASE_URL = environment.v1ApiEndPoint;
 const BASE_URL_WS = environment.v1ApiEndPointWS;
+
 @Injectable({
   providedIn: 'root',
 })

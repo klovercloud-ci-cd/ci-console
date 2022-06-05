@@ -1,11 +1,7 @@
-import  {
-  HttpClient,
-  HttpErrorResponse} from '@angular/common/http';
-import {
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import  { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, of, Subject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -31,7 +27,7 @@ export class AppListService {
   }
 
   getRepositoryInfo(companyID: any, repoId: any): Observable<any> {
-    return this.http.get(`${BASE_URL  }repositories/${  repoId}`, {
+    return this.http.get(`${BASE_URL}repositories/${repoId}`, {
       params: {
         companyId: companyID,
         loadApplications: true,
@@ -51,7 +47,7 @@ export class AppListService {
     };
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .post(`${BASE_URL  }applications`, appPayload, HTTP_OPTIONS)
+      .post(`${BASE_URL}applications`, appPayload, HTTP_OPTIONS)
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
@@ -86,7 +82,7 @@ export class AppListService {
 
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .post(`${BASE_URL  }applications`, appPayload, HTTP_OPTIONS)
+      .post(`${BASE_URL}applications`, appPayload, HTTP_OPTIONS)
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
@@ -118,12 +114,7 @@ export class AppListService {
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
       .patch(
-        `${BASE_URL
-          }companies/${
-          qp.companyId
-          }/repositories/${
-          qp.repoId
-          }/webhooks`,
+        `${BASE_URL}companies/${qp.companyId}/repositories/${qp.repoId}/webhooks`,
         '',
         HTTP_OPTIONS
       )

@@ -1,16 +1,16 @@
-import  { OnInit} from '@angular/core';
+import { OnInit } from '@angular/core';
 import { Component, ViewChild } from '@angular/core';
-import  { MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDialogConfig } from '@angular/material/dialog';
-import  { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import  { ActivatedRoute, Router } from '@angular/router';
-import  { AuthService } from 'src/app/auth/auth.service';
-import  { RepoServiceService } from 'src/app/repository/repo-service.service';
-import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import  { UserDataService } from 'src/app/shared/services/user-data.service';
-import  { AppListService } from '../app-list.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
+import { RepoServiceService } from 'src/app/repository/repo-service.service';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import { UserDataService } from 'src/app/shared/services/user-data.service';
+import { AppListService } from '../app-list.service';
 import { ApplicationModalComponent } from '../application-modal/application-modal.component';
 
 @Component({
@@ -120,7 +120,7 @@ export class ApplicationListComponent implements OnInit {
               ++i
             ) {
               let tmp = bin.charCodeAt(i).toString(16);
-              if (tmp.length === 1) tmp = `0${  tmp}`;
+              if (tmp.length === 1) tmp = `0${tmp}`;
               hex[hex.length] = tmp;
             }
             return hex.join('');
