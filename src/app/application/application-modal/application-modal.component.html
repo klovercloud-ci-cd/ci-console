@@ -4,7 +4,8 @@
   <h1 class="pt-3 pb-4">Add New Application</h1>
   <div class="example-container">
     <form [formGroup]="addApplication" (ngSubmit)="addApplicationFormData()">
-      <div class="flex gap-x-2">
+
+      <div *ngIf="stepper==1 ; else nextPage" class="flex gap-x-2">
         <mat-form-field class="kcci-field w-1/2" appearance="outline">
           <mat-label class="text-white">Name </mat-label>
           <input
@@ -24,35 +25,50 @@
           />
         </mat-form-field>
       </div>
+
+      <ng-template #nextPage>
+        Next Content
+      </ng-template>
+      
       <div mat-dialog-actions class="flex justify-between">
         <div></div>
-        <!-- <button
-          type="submit"
-          mat-button
-          class="px-4 py-2 bg-dark-primary rounded-md"
+
+        <div *ngIf="stepper==1 ; else nextButton" >
+          <span
+          class="kc-button-primary kc-register block px-3 py-2 rounded-md cursor-pointer"
+          (click)="gotoNext(2)"
         >
-          Submit
-          <div class="py-3 mx-auto w-52">
-            <mat-progress-bar
-              class="green-progress kc-progress-bar"
-              mode="indeterminate"
-            >
-            </mat-progress-bar>
-          </div>
-        </button> -->
-        <div *ngIf="!addApplication.valid; else other_content" class="mb-2">
+        Next >
+        </span>
+        </div>
+        <ng-template #nextButton>
+        <div *ngIf="!addApplication.valid; else other_content" class="mb-2 flex gap-3">
+          <span
+          class="kc-button-primary kc-register block px-3 py-2 rounded-md cursor-pointer"
+          (click)="gotoNext(1)"
+        >
+       < Back
+        </span>
           <button
-            class="bg-slate-500 kc-register block px-4 py-3 rounded-md"
+            class="bg-slate-500 kc-register block px-3 py-2 rounded-md"
             type="submit"
             [disabled]="!addApplication.valid"
           >
-            Disable
+          Submit
           </button>
         </div>
+
+
         <ng-template #other_content>
-          <div class="mb-2">
+          <div class="mb-2 flex gap-3">
+            <span
+            class="kc-button-primary kc-register block px-3 py-2 rounded-md cursor-pointer"
+            (click)="gotoNext(1)"
+          >
+          < Back
+          </span>
           <button
-            class="kc-button-primary kc-register block px-4 py-3 rounded-md "
+            class="kc-button-primary kc-register block px-3 py-2 rounded-md "
             type="submit"
             [disabled]="!addApplication.valid"
           >
@@ -71,6 +87,7 @@
           </button>
         </div>
         </ng-template>
+      </ng-template>
       </div>
     </form>
   </div>

@@ -4,8 +4,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
+import YamlValidator from 'yaml-validator';
 import { AppListService } from '../app-list.service';
 import { ApplicationListComponent } from '../application-list/application-list.component';
+
 
 @Component({
   selector: 'kcci-application-modal',
@@ -18,6 +20,20 @@ export class ApplicationModalComponent implements OnInit {
   companyID: any;
   repositoryId: any;
   isLoading: boolean = false;
+  stepper: number = 1;
+  options:any = {
+    log: false,
+    structure: false,
+    onWarning: null,
+    writeJson: false
+  };
+  
+  files:any = [
+    //'file paths',
+    'that exists',
+    'somewhere',
+    'and are Yaml files'
+  ];
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ApplicationModalComponent>,
@@ -26,7 +42,9 @@ export class ApplicationModalComponent implements OnInit {
     private service: AppListService,
     private route: ActivatedRoute,
     @Inject(MAT_DIALOG_DATA) public data: ApplicationListComponent
-  ) {}
+  ) {
+
+  }
 
   ngOnInit(): void {
     //@ts-ignore
@@ -40,6 +58,9 @@ export class ApplicationModalComponent implements OnInit {
       //     console.log('ModalData: ', response.data.applications);
       //   });
     });
+    const validator = new YamlValidator(this.options);
+    
+    console.log("Validator: ",validator.validate(this.files),validator.report());
   }
   
   addApplication = this.fb.group({
@@ -47,9 +68,13 @@ export class ApplicationModalComponent implements OnInit {
     url: ['', Validators.required],
   });
 
+  gotoNext(e:number){
+    this.stepper = e;
+    console.log("E: ",e);
+  }
+
   addApplicationFormData() {
     this.isLoading = true;
-
     let data = {
       applications: [
         {

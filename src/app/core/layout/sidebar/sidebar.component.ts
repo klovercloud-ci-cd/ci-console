@@ -1,6 +1,9 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from '@angular/material/tree';
 import { NavItem, NavItemNode } from './Sidenav';
 
 @Component({
@@ -9,7 +12,6 @@ import { NavItem, NavItemNode } from './Sidenav';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-
   @ViewChild('tree') tree: any;
   navItems: NavItem[] = [];
   // Cloud Provider
@@ -25,9 +27,9 @@ export class SidebarComponent implements OnInit {
       title: 'Repository',
       icon: 'widgets',
       route: '/repository',
-    }
+    },
   ];
-  
+
   constructor() {}
   private _transformer = (node: NavItem, level: number) => {
     return {
@@ -37,16 +39,22 @@ export class SidebarComponent implements OnInit {
       icon: node.icon,
       level,
     };
-  }
+  };
   // nav
   treeControl = new FlatTreeControl<NavItemNode>(
-    node => node.level, node => node.expandable);
-  treeFlattener: any = new MatTreeFlattener (
-    this._transformer, node => node.level, node => node.expandable, node => node.children);
+    (node) => node.level,
+    (node) => node.expandable
+  );
+  treeFlattener: any = new MatTreeFlattener(
+    this._transformer,
+    (node) => node.level,
+    (node) => node.expandable,
+    (node) => node.children
+  );
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   hasChild = (_: number, node: NavItemNode) => node.expandable;
-  
+
   ngOnInit(): void {
     this.navItems = [
       {
@@ -55,8 +63,8 @@ export class SidebarComponent implements OnInit {
         isExpanded: true,
         children: [
           { name: 'User', icon: 'people', url: '/users' },
-          { name: 'Role', icon: 'supervisor_account', url: '/roles'},
-        ]
+          { name: 'Role', icon: 'supervisor_account', url: '/roles' },
+        ],
       },
     ];
     this.dataSource.data = this.navItems;

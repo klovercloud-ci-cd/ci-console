@@ -44,13 +44,14 @@ const childrenRoutes: Routes = [
       import('./repository/repository.module').then((m) => m.RepositoryModule),
   },
   {
-    path: "users",
-    loadChildren: () => import("./user/user.module").then(m => m.UserModule)
+    path: 'users',
+    loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
   },
   {
-    path: "roles",
-    loadChildren: () => import("./roles/roles.module").then( m => m.RolesModule)
-  }
+    path: 'roles',
+    loadChildren: () =>
+      import('./roles/roles.module').then((m) => m.RolesModule),
+  },
 ];
 
 const routes: Routes = [
@@ -65,7 +66,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    /*canActivate: [AuthGuard],*/
+    canActivate: [AuthGuard],
   },
   {
     path: '**',
