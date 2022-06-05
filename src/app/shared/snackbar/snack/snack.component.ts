@@ -1,5 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import  { OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import  { MatSnackBar} from '@angular/material/snack-bar';
+import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'kcci-snack',
@@ -7,10 +9,11 @@ import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
   styleUrls: ['./snack.component.scss']
 })
 export class SnackComponent implements OnInit {
-  closeBtnClass: string = '';
+  closeBtnClass = '';
+
   constructor(
     private snackBar: MatSnackBar,@Inject(MAT_SNACK_BAR_DATA) public data: any) {
-      //console.log(data);
+      // console.log(data);
 
      }
 
@@ -32,6 +35,7 @@ export class SnackComponent implements OnInit {
 
     }
   }
+
   closeSnackbar() {
     this.snackBar.dismiss()
   }

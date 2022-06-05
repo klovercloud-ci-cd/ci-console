@@ -1,8 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { RoleService } from '../role.service';
+import  { OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import  { FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import { Validators } from '@angular/forms';
+import  { MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import  { MatSnackBar } from '@angular/material/snack-bar';
+import  { RoleService } from '../role.service';
 
 @Component({
   selector: 'kc-role-form',
@@ -11,11 +14,11 @@ import { RoleService } from '../role.service';
 })
 export class RoleFormComponent implements OnInit {
   isSubmitting!: boolean;
-  
+
   roleForm!: FormGroup;
-  
+
   permissionList!: any[];
-  
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
@@ -24,7 +27,7 @@ export class RoleFormComponent implements OnInit {
     private dialogRef: MatDialogRef<RoleFormComponent>
   ) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.getPermissions()
     this.roleForm = this.fb.group({
       name: ['', Validators.required],
@@ -40,20 +43,18 @@ export class RoleFormComponent implements OnInit {
       this.roleForm.get('name')?.disable();
     }
   }
-  
+
   // Permissions Array
   get permissionsArray(): FormArray {
     return this.roleForm.get('permissions') as FormArray
   }
-  
+
   // Form Submit
   onSubmit(): void {
-    
+
     const _formData = this.roleForm.getRawValue();
     console.log("Form Value:", this.roleForm.value,_formData);
-    const permissions = _formData?.permissions?.map((role: any) => {
-      return {name: role}
-    })
+    const permissions = _formData?.permissions?.map((role: any) => ({name: role}))
     const payload = {
       permissions,
       name: _formData?.name?.toUpperCase()
@@ -65,7 +66,7 @@ export class RoleFormComponent implements OnInit {
         })
         this.dialogRef.close(true);
       }, (err) => {
-        
+
         this.snackBar.open(err?.error?.message, 'Close', {
           duration: 6000
         })
@@ -85,7 +86,7 @@ export class RoleFormComponent implements OnInit {
       })
     }
   }
-  
+
   // Dependencies resources
   getPermissions(): void {
     this._roleService.getPermissions().subscribe(res => {

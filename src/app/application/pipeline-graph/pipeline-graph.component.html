@@ -152,7 +152,6 @@
     <mat-card
       id="mid"
       class="kc-card overflow-hidden kc-card-pipe-mid col-span-6 mid-right-border"
-      id="holder"
     >
       <div class="absolute right-6">
         <mat-form-field>
@@ -197,14 +196,15 @@
             markerHeight="4"
             orient="auto"
           >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#5BC4D6" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#36C678" />
           </marker>
         </svg>
         <div class="absolute flex gap-28 justify-center">
           <div class="flex gap-28 justify-center">
             <div *ngFor="let env of envList" class="flex flex-col items-center">
               <div
-                class="my-6 text-xl font-bold border border-dark-border-default bg-dark-primary text-white rounded border border-dark-border-default env-name flex justify-center items-center gap-1"
+                class="my-6 text-xl font-bold border border-dark-border-default bg-dark-info text-white rounded border border-dark-border-default env-name flex justify-center items-center gap-1"
+                class="my-6 text-xl font-bold border border-dark-border-default bg-dark-info text-white rounded border border-dark-border-default env-name flex justify-center items-center gap-1"
               >
                 <mat-icon aria-hidden="false" aria-label="Example home icon"
                   >public</mat-icon
@@ -290,30 +290,131 @@
         </div>
       </div>
 
-      <div *ngIf="isLoading.graph" class="relative pt-[100px]">
-        <div class="flex gap-0 justify-center">
+      <div *ngIf="isLoading.graph" class="relative top-16 left-6">
+        <div class="grid grid-cols-2 w-[25rem]">
+          <div>
+            <ngx-skeleton-loader
+              class=""
+              count="1"
+              [theme]="{
+                height: '40px',
+                'border-radius': '5px',
+                width: '100px',
+                'z-index': 100,
+                'background-color': '#1A2C4A'
+              }"
+              animation="progress-dark"
+            ></ngx-skeleton-loader>
+          </div>
+          <div>
+            <ngx-skeleton-loader
+              class=""
+              count="1"
+              [theme]="{
+                height: '40px',
+                'border-radius': '5px',
+                width: '100px',
+                'z-index': 100,
+                'background-color': '#1A2C4A'
+              }"
+              animation="progress-dark"
+            ></ngx-skeleton-loader>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 w-[25rem]">
+          <div class="">
+            <div class="flex flex-col space-y-[120px]">
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="">
+            <div class="flex flex-col space-y-[120px]">
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+            </div>
+          </div>
+        </div>
+        <!--<div class="flex gap-0 justify-center">
           <ngx-skeleton-loader
             class=""
             count="1"
             [theme]="{
-              height: '100px',
+              height: '60px',
+              width: '60px',
               'z-index': 100,
-              width: '100px',
-              'background-color': '#263b5e'
+              'background-color': '#1A2C4A'
             }"
             animation="progress-dark"
             appearance="circle"
           ></ngx-skeleton-loader>
         </div>
-        <div class="flex gap-0 justify-center h-[200px]">
+        <div class="flex gap-0 justify-center h-[150px]">
           <ngx-skeleton-loader
             class=""
             count="1"
             [theme]="{
               'border-radius': '5px',
-              width: '200px',
+              width: '150px',
+              height: '5px',
               transform: 'rotate(-30deg)',
-              'background-color': '#263b5e'
+              'background-color': '#1A2C4A'
             }"
             animation="progress-dark"
             appearance="line"
@@ -323,22 +424,23 @@
             count="1"
             [theme]="{
               'border-radius': '5px',
-              width: '200px',
+              width: '150px',
+              height: '5px',
               transform: 'rotate(30deg)',
-              'background-color': '#263b5e'
+              'background-color': '#1A2C4A'
             }"
             animation="progress-dark"
             appearance="line"
           ></ngx-skeleton-loader>
         </div>
-        <div class="flex gap-[200px] justify-center -mt-[200px]">
+        <div class="flex gap-[150px] justify-center -mt-[150px]">
           <ngx-skeleton-loader
             class=""
             count="1"
             [theme]="{
-              height: '100px',
-              width: '100px',
-              'background-color': '#263b5e'
+              height: '60px',
+              width: '60px',
+              'background-color': '#1A2C4A'
             }"
             animation="progress-dark"
             appearance="circle"
@@ -347,14 +449,14 @@
             class=""
             count="1"
             [theme]="{
-              height: '100px',
-              width: '100px',
-              'background-color': '#263b5e'
+              height: '60px',
+              width: '60px',
+              'background-color': '#1A2C4A'
             }"
             animation="progress-dark"
             appearance="circle"
           ></ngx-skeleton-loader>
-        </div>
+        </div>-->
       </div>
     </mat-card>
   </div>

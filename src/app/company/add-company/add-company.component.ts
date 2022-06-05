@@ -1,16 +1,18 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import {
+import  { OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import  {
   FormArray,
   FormBuilder,
+  FormGroup} from '@angular/forms';
+import {
   FormControl,
-  FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { AuthService } from 'src/app/auth/auth.service';
-import { TokenService } from 'src/app/auth/token.service';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import { AttachCompanyService } from '../attach-company.service';
+import  { MatDialogRef } from '@angular/material/dialog';
+import  { AuthService } from 'src/app/auth/auth.service';
+import  { TokenService } from 'src/app/auth/token.service';
+import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import  { AttachCompanyService } from '../attach-company.service';
 
 interface RepoType {
   value: string;
@@ -23,10 +25,13 @@ interface RepoType {
   styleUrls: ['./add-company.component.scss'],
 })
 export class AddCompanyComponent implements OnInit {
-  selectedValue: string = '';
-  selectedCar: string = '';
+  selectedValue = '';
+
+  selectedCar = '';
+
   panelOpenState = true;
-  tooltipMsg: string =
+
+  tooltipMsg =
     "Click on 'Generate Here' to generate the token and paste that in the input field.";
 
   repos: RepoType[] = [
@@ -34,8 +39,11 @@ export class AddCompanyComponent implements OnInit {
     { value: 'GITHUB', viewValue: 'Github' },
     { value: 'GITLAB', viewValue: 'Gitlab' },
   ];
+
   isLoading = false;
+
   showAddApp = false;
+
   showAddRepo = false;
 
   constructor(
@@ -54,6 +62,7 @@ export class AddCompanyComponent implements OnInit {
   // ----------------- Attach Company Form -----------------
 
   formDataFormat: any;
+
   repoData: any = [];
 
   attachCompanyForm = this.fb.group({
@@ -64,6 +73,7 @@ export class AddCompanyComponent implements OnInit {
 
   // Application
   applicaitonVal!: string;
+
   applicaitonVal1!: string;
 
   // Form Repo
@@ -123,16 +133,14 @@ export class AddCompanyComponent implements OnInit {
   attachCompanyFormData() {
     this.isLoading = true;
     console.log(this.attachCompanyForm.value);
-    let {  name, repositories } = this.attachCompanyForm.value;
+    const {  name, repositories } = this.attachCompanyForm.value;
 
     repositories.map((item: any, index: number) => {
-      const app = item.applications.map((app: any) => {
-        return { _metadata: { name: app.name }, url: app.url };
-      });
+      const app = item.applications.map((app: any) => ({ _metadata: { name: app.name }, url: app.url }));
       item.applications = app;
       return item;
     });
-    let companyData = {
+    const companyData = {
       name,
       repositories,
     };
@@ -157,9 +165,11 @@ export class AddCompanyComponent implements OnInit {
         }
       );
   }
+
   refresh(): void {
     window.location.reload();
 }
+
   closeAppModal() {
     this.dialogRef.close();
   }

@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import {
+import  {
   HttpClient,
-  HttpErrorResponse,
+  HttpErrorResponse} from '@angular/common/http';
+import {
   HttpHeaders,
 } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import  { Observable} from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { tap, switchMap } from 'rxjs/operators';
-import { TokenService } from './token.service';
+import  { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
+import  { TokenService } from './token.service';
 import * as endpoints from './auth.endpoint';
 import { environment } from '../../environments/environment';
-import { Router } from '@angular/router';
-import jwt_decode from 'jwt-decode';
-import {SharedSnackbarService} from "../shared/snackbar/shared-snackbar.service";
+import  {SharedSnackbarService} from "../shared/snackbar/shared-snackbar.service";
 
 const BASE_URL = environment.v1AuthEndpoint;
 const HTTP_OPTIONS = {
@@ -26,6 +28,7 @@ const HTTP_OPTIONS = {
 })
 export class AuthService {
   redirectUrl = '';
+
   refreshTokenInterval: any;
 
   constructor(
@@ -34,15 +37,16 @@ export class AuthService {
     private tokenService: TokenService,
     private router: Router,
   ) {}
+
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       // @ts-ignore
       return throwError('An Error occurred: ', error.error.message);
-    } else {
-      return throwError(`${error.error.message}`);
     }
+      return throwError(`${error.error.message}`);
 
-    //return throwError('Internal server error!');
+
+    // return throwError('Internal server error!');
   }
 
   static log(message: string): any {
@@ -83,7 +87,7 @@ export class AuthService {
         this.tokenService.removeRefreshToken();
         this.tokenService.saveAccessToken(event.data.access_token);
         this.tokenService.saveRefreshToken(event.data.refresh_token);
-        //return event;
+        // return event;
 
       }),
       catchError(this.handleError)
@@ -131,18 +135,20 @@ export class AuthService {
     if (this.tokenService.getRefreshToken() &&
       !this.isAccessTokenExpired(this.tokenService.getRefreshToken())) {
       return true;
-    } else {
-      return false;
     }
+      return false;
+
   }
+
   forgotPassData(media:string){
 
     HTTP_OPTIONS.params = {
       action: 'forgot_password',
-      media: media
+      media
     };
     return this.http.put(BASE_URL+ endpoints.FORGOT_PASSWORD , '', HTTP_OPTIONS)
   }
+
   chnagePasword(payload:any):Observable<any>{
 
     HTTP_OPTIONS.params = {

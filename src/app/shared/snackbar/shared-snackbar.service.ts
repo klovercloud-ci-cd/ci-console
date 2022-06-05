@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import  { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackComponent } from './snack/snack.component';
 
 @Injectable({
@@ -7,18 +7,13 @@ import { SnackComponent } from './snack/snack.component';
 })
 
 export class SharedSnackbarService {
-
-  //format should be: openSnackBar('message', '', duration , 'snackbar-type? panelClass')
-
-  //panelClass: ['success-snackbar','warn-snackbar','notification-snackbar','error-snackbar'],
-
   constructor(private snackBar: MatSnackBar) { }
 
     openSnackBar(title:string,message:string,
       panelClass:string) {
       this.snackBar.openFromComponent(SnackComponent, {
         duration: 5000,
-        data: { title: title , message: message, snackType: 'warn', panelClass: panelClass},
+        data: { title , message, snackType: 'warn', panelClass},
         panelClass: [panelClass],
       });
     }

@@ -58,7 +58,7 @@
                   <mat-icon class="text-xl">widgets</mat-icon>
                   <span
                     class="mt-1"
-                    *ngIf="repo.applications.length > 0; else applist"
+                    *ngIf="repo?.applications?.length > 0; else applist"
                   >
                     Applications({{ repo.applications.length }})
                   </span>

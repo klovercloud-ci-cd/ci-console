@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/auth/auth.service';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import { UserDataService } from 'src/app/shared/services/user-data.service';
+import  { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import  { AuthService } from 'src/app/auth/auth.service';
+import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import  { UserDataService } from 'src/app/shared/services/user-data.service';
 
 @Component({
   selector: 'kcci-profile',
@@ -10,6 +11,7 @@ import { UserDataService } from 'src/app/shared/services/user-data.service';
 })
 export class ProfileComponent implements OnInit {
   user: any = this.auth.getUserData();
+
   userInfo: any;
 
   constructor(

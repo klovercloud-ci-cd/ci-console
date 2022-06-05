@@ -1,14 +1,16 @@
-import {
+import  {
   AfterContentChecked,
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectorRef,
+  OnInit} from '@angular/core';
+import {
   Component,
-  ElementRef, Input,
-  OnInit,
-  ViewChild,
+  Input
 } from '@angular/core';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import {PipelineGraphComponent} from "../pipeline-graph/pipeline-graph.component";
 import {PipelineOverviewComponent} from "../pipeline-overview/pipeline-overview.component";
+
 @Component({
   selector: 'kcci-ci-cd-pipeline',
   templateUrl: './ci-cd-pipeline.component.html',
@@ -16,12 +18,15 @@ import {PipelineOverviewComponent} from "../pipeline-overview/pipeline-overview.
 })
 export class CiCdPipelineComponent implements OnInit, AfterViewInit,AfterContentChecked {
   content:any;
+
   constructor(
     private _toolbarService: ToolbarService,
     private cdref: ChangeDetectorRef
   ) {
   }
+
   @Input()  nodeName!: number | string;
+
   ngOnInit(): void {
     this.content = PipelineGraphComponent;
   }
@@ -29,6 +34,7 @@ export class CiCdPipelineComponent implements OnInit, AfterViewInit,AfterContent
   ngAfterContentChecked() {
     this.cdref.detectChanges();
   }
+
   goto(id:any){
     // @ts-ignore
     document.getElementById('pipeline').classList.add('active')

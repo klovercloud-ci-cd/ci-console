@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SharedLayoutService } from '../shared-layout.service';
+import  { OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import  { SharedLayoutService } from '../shared-layout.service';
 
 @Component({
   selector: 'kcci-collapsed-sidebar',
@@ -7,7 +8,7 @@ import { SharedLayoutService } from '../shared-layout.service';
   styleUrls: ['./collapsed-sidebar.component.scss'],
 })
 export class CollapsedSidebarComponent implements OnInit {
-  openCollapsedBar: boolean = false;
+  openCollapsedBar = false;
 
   menuItem: any = [
     {
@@ -36,6 +37,7 @@ export class CollapsedSidebarComponent implements OnInit {
       route: '/attach-company',
     },
   ];
+
   constructor(private ss: SharedLayoutService) {}
 
   ngOnInit(): void {}

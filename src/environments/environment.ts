@@ -7,11 +7,10 @@ const webappUrl = 'http://localhost:2022';
 export const environment = {
   appUrl: webappUrl,
   production: false,
-  v1AuthEndpoint: 'http://192.168.68.114:4200/api/v1/',
-  v1ApiEndPoint: 'http://192.168.68.114:4200/api/v1/',
-  // config: {
-  //   ...getConfig(CONFIG)
-  // },
+  v1AuthEndpoint: 'http://192.168.68.139:4200/api/v1/',
+  v1ApiEndPoint: 'http://192.168.68.139:4202/api/v1/',
+  v1ApiEndPointWS: 'ws://192.168.68.138:8080/api/v1/',
+
 };
 
 // export const environment = {
@@ -25,7 +24,7 @@ export const environment = {
 
 // const webappUrl = 'http://localhost:2022';
 
-/*const CONFIG = {
+/* const CONFIG = {
   host: 'http://192.168.68.140:3000/api/v1',
   //host: 'http://localhost:8080',
   port: '',
@@ -34,7 +33,7 @@ export const environment = {
   get apiEndPoint() {
     return `${this.host}${this.port}${this.postfix}`;
   }
-};*/
+}; */
 
 /*
  * For easier debugging in development mode, you can import the following file

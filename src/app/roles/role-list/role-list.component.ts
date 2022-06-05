@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'src/app/auth/auth.service';
+import  { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import  { MatDialog} from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
+import  { MatSnackBar } from '@angular/material/snack-bar';
+import  { AuthService } from 'src/app/auth/auth.service';
 import { AddCompanyComponent } from 'src/app/company/add-company/add-company.component';
 import { DeleteConformationDialogComponent } from 'src/app/core/components/delete-conformation-dialog/delete-conformation-dialog.component';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { RoleFormComponent } from '../role-form/role-form.component';
-import { RoleService } from '../role.service';
+import  { RoleService } from '../role.service';
 
 @Component({
   selector: 'kc-role-list',
@@ -14,10 +16,13 @@ import { RoleService } from '../role.service';
   styleUrls: ['./role-list.component.scss']
 })
 export class RoleListComponent implements OnInit {
-  
+
   isLoading!: boolean;
+
   hasCompany!: boolean ;
+
   displayedColumns: string[] = ['name', 'permission', 'actions'];
+
   dataSource: any[] = [];
 
   currentUser: any;
@@ -42,20 +47,20 @@ export class RoleListComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.width = '45%';
     dialogConfig.panelClass = 'custom-modalbox';
-    
+
     // dialogConfig.data = {
     //   companyID: this.companyID,
     // };
     this.dialog.open(AddCompanyComponent, dialogConfig);
   }
-  
+
   getRoles(): void {
     this.isLoading = true;
     this._roleService.getRoles().subscribe(res => {
       this.dataSource = res?.data;
       this.isLoading = false;
       console.log("res?.data:",res?.data);
-      
+
     }, (err) => {
       this.isLoading = false;
       this.snackBar.open(err?.error?.message, 'Close', {
@@ -63,7 +68,7 @@ export class RoleListComponent implements OnInit {
       })
     })
   }
-  
+
   onDelete(role: any): void {
     const dialogRef = this.dialog.open(DeleteConformationDialogComponent, {
       data:{
@@ -81,7 +86,7 @@ export class RoleListComponent implements OnInit {
       }
     });
   }
-  
+
   createRole(): void {
     const dialogRef = this.dialog.open(RoleFormComponent, {
       disableClose: true,
@@ -94,7 +99,7 @@ export class RoleListComponent implements OnInit {
       }
     });
   }
-  
+
   updateRole(role: any): void {
     const dialogRef = this.dialog.open(RoleFormComponent, {
       disableClose: true,

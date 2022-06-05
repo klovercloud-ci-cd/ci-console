@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PipelineGraphComponent } from './pipeline-graph.component';
 
@@ -8,9 +9,8 @@ describe('PipelineGraphComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PipelineGraphComponent ]
-    })
-    .compileComponents();
+      declarations: [PipelineGraphComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -15,20 +15,20 @@ import { UserService } from '../user.service';
 export class UserFormComponent implements OnInit {
   userId!: string;
   userData: any;
-  
+
   userForm!: FormGroup;
   resourceList!: any[];
   roleList!: any[];
-  
+
   isUserLoading!: boolean;
   isResourcesLoaded!: boolean;
   isRolesLoaded!: boolean;
   isSubmitting!: boolean;
-  
+
   showPasswordField: boolean = true;
-  
+
   constructor(private fb: FormBuilder, private _userService: UserService, private snackBar: MatSnackBar,
-    private route: ActivatedRoute,private _toolbarService: ToolbarService, private router: Router, private _roleService: RoleService) {
+              private route: ActivatedRoute,private _toolbarService: ToolbarService, private router: Router, private _roleService: RoleService) {
     this.userId = route.snapshot.params['id']
   }
 
@@ -53,14 +53,14 @@ export class UserFormComponent implements OnInit {
     }, {
       validators: ConfirmPasswordMatch('password', 'conformationPassword')
     });
-    
+
     if (!this.userId) {
       this.addResourcesGroup();
     } else {
       this.removePasswordControl();
     }
   }
-  
+
   // Resource Form Array
   resourceGroup(data?: any): FormGroup {
     const _formGroup = this.fb.group({
@@ -75,15 +75,15 @@ export class UserFormComponent implements OnInit {
   get resourcesFormArray(): FormArray {
     return this.userForm?.get('resource_permission')?.get('resources') as FormArray
   }
-  
+
   addResourcesGroup(data?: any): void {
     this.resourcesFormArray.push(this.resourceGroup(data))
   }
-  
+
   removeResourcesGroup(index: number): void {
     this.resourcesFormArray.removeAt(index)
   }
-  
+
   // Patch Form
   patchForm(userData: any): void {
     console.log('patch userData', userData)
@@ -107,13 +107,13 @@ export class UserFormComponent implements OnInit {
       })
     }
   }
-  
+
   // Form Submit
   onSubmit(): void {
     this.isSubmitting = true;
     const _formData = this.userForm.value;
     console.log("_formData: ",_formData);
-    
+
     const resourceData = this.resourcesFormArray.value;
     const resources = resourceData.map((resource: any) => {
       const roles = resource.roles.map((role: any) => {
@@ -150,7 +150,7 @@ export class UserFormComponent implements OnInit {
       })
     }
   }
-  
+
   // Update Form Dependencies
   getUser(id: string): void {
     this.isUserLoading = true;
@@ -187,11 +187,11 @@ export class UserFormComponent implements OnInit {
       })
     })
   }
-  
+
   // Password
   togglePasswordControl(): void {
     if (this.showPasswordField) {
-       this.removePasswordControl()
+      this.removePasswordControl()
     } else {
       this.addPasswordControl()
     }

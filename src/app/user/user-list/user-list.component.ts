@@ -1,11 +1,13 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'src/app/auth/auth.service';
+import  { OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import  { MatDialog} from '@angular/material/dialog';
+import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import  { MatSnackBar } from '@angular/material/snack-bar';
+import  { AuthService } from 'src/app/auth/auth.service';
 import { AddCompanyComponent } from 'src/app/company/add-company/add-company.component';
 import { DeleteConformationDialogComponent } from 'src/app/core/components/delete-conformation-dialog/delete-conformation-dialog.component';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import { UserService } from '../user.service';
+import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import  { UserService } from '../user.service';
 
 @Component({
   selector: 'kc-user-list',
@@ -14,13 +16,18 @@ import { UserService } from '../user.service';
 })
 export class UserListComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
-  isAlive: boolean = true;
-  isLoading: boolean = false;
-  listLoading: boolean = true;
+  isAlive = true;
+
+  isLoading = false;
+
+  listLoading = true;
+
   hasCompany: any;
+
   queryParams = {
     status: 'active'
   }
+
   userList:any = [{
     "metadata": {
         "company_id": "f25a2224-b1b2-46f0-9d57-52947d9052b3",
@@ -111,19 +118,23 @@ export class UserListComponent implements OnInit, OnDestroy {
       ]
   }
 }]
+
   // Table
   displayedColumns: string[] = ['email', 'name', 'number', 'status', 'created', 'actions'];
+
   dataSource: any[] = [];
-  
+
   currentUser: any;
+
   dialogWidth:any;
-  
+
   constructor(private _userService: UserService,private _toolbarService: ToolbarService, private snackBar: MatSnackBar, private dialog: MatDialog, private authService: AuthService,
     ) {
-    this.currentUser = this.authService.getUserData();    
+    this.currentUser = this.authService.getUserData();
   }
 
   public getScreenWidth: any;
+
   ngOnInit(): void {
     this.getScreenWidth = window.innerWidth;
     this._toolbarService.changeData({ title: 'Settings' });
@@ -140,49 +151,50 @@ export class UserListComponent implements OnInit, OnDestroy {
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
     console.log("this.getScreenWidth",this.getScreenWidth);
-    
+
     if (this.getScreenWidth < 1400) {
       this.dialogWidth = '70%';
     } else {
       this.dialogWidth = '45%';
     }
   }
+
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     // dialogConfig.width = '45%';
     dialogConfig.panelClass = 'custom-modalbox';
-    
+
     // dialogConfig.data = {
     //   companyID: this.companyID,
     // };
     this.dialog.open(AddCompanyComponent, dialogConfig);
   }
-  
 
-  
+
+
   ngOnDestroy(): void {
     this.isAlive = false;
   }
-  
+
   getUsers(): void {
     this.isLoading = true;
     this._userService.getUsers(this.queryParams).subscribe((res) => {
       this.isLoading = false;
       this.dataSource = res?.data;
       console.log("res?.data: ",res?.data);
-      
+
     }, (err) => {
       this.isLoading = false;
       console.log(err)
       this.snackBar.open(err?.error?.message || "Can't fetch users")
     })
   }
-  
+
   onDelete(user: any): void {
     console.log('user:',user);
-    
+
     const dialogRef = this.dialog.open(DeleteConformationDialogComponent, {
       data:{
         message: `Are you sure! You want to delete "${user?.email}" user?`,

@@ -1,11 +1,14 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
-import { UserDataService } from 'src/app/shared/services/user-data.service';
-import { AppListService } from '../app-list.service';
-import { ApplicationListComponent } from '../application-list/application-list.component';
+import  { OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import  { FormBuilder} from '@angular/forms';
+import { Validators } from '@angular/forms';
+import  { MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import  { ActivatedRoute } from '@angular/router';
+import  { AuthService } from 'src/app/auth/auth.service';
+import  { UserDataService } from 'src/app/shared/services/user-data.service';
+import  { AppListService } from '../app-list.service';
+import  { ApplicationListComponent } from '../application-list/application-list.component';
 
 @Component({
   selector: 'kcci-application-modal',
@@ -14,10 +17,15 @@ import { ApplicationListComponent } from '../application-list/application-list.c
 })
 export class ApplicationModalComponent implements OnInit {
   userPersonalInfo: any;
+
   user: any = this.auth.getUserData();
+
   companyID: any;
+
   repositoryId: any;
-  isLoading: boolean = false;
+
+  isLoading = false;
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ApplicationModalComponent>,
@@ -29,19 +37,14 @@ export class ApplicationModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //@ts-ignore
+    // @ts-ignore
     this.repositoryId = this.data.repositoryId;
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
-      // this.service
-      //   .getRepositoryInfo(this.companyID, repositoryId)
-      //   .subscribe((response: any) => {
-      //     console.log('ModalData: ', response.data.applications);
-      //   });
     });
   }
-  
+
   addApplication = this.fb.group({
     name: ['', Validators.required],
     url: ['', Validators.required],
@@ -50,7 +53,7 @@ export class ApplicationModalComponent implements OnInit {
   addApplicationFormData() {
     this.isLoading = true;
 
-    let data = {
+    const data = {
       applications: [
         {
           _metadata: {
@@ -77,6 +80,7 @@ export class ApplicationModalComponent implements OnInit {
         }
       );
   }
+
   closeAppModal() {
     this.dialogRef.close();
   }

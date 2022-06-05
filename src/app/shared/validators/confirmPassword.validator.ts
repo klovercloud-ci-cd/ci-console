@@ -1,10 +1,10 @@
-import { FormGroup } from '@angular/forms';
+import  { FormGroup } from '@angular/forms';
 
 export function ConfirmPasswordMatch(controlName: string, matchingControlName: string) {
   return (formGroup: FormGroup) => {
     const control = formGroup.controls[controlName];
     const matchingControl = formGroup.controls[matchingControlName];
-//@ts-ignore
+// @ts-ignore
     if (matchingControl.errors && !matchingControl.errors.mustMatch) {
       return;
     }

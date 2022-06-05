@@ -1,8 +1,14 @@
-<div class=" relative ">
+<div class="relative flex flex-col gap-5">
+  <div>
     <div class="tracking-wider">
-        <h2 class="text-lg font-bold ">{{data.title}}</h2>
-    <h2 class="text-sm">{{data.message}}</h2>
- 
-</div>
-<button (click)="closeSnackbar()" class="cursor-pointer absolute -top-2 -right-2"><mat-icon [ngClass]="closeBtnClass" >cancel</mat-icon></button>
+      <h2 class="text-lg font-bold">{{ data.title }}</h2>
+      <h2 class="text-sm">{{ data.message }}</h2>
+    </div>
+    <button
+      (click)="closeSnackbar()"
+      class="cursor-pointer absolute -top-2 -right-2"
+    >
+      <mat-icon [ngClass]="closeBtnClass">cancel</mat-icon>
+    </button>
+  </div>
 </div>
