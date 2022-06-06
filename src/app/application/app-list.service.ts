@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError, of, Subject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { TokenService } from '../auth/token.service';
 
 const BASE_URL = environment.v1ApiEndPoint;
 const HTTP_OPTIONS = {
@@ -18,7 +19,7 @@ const HTTP_OPTIONS = {
   providedIn: 'root',
 })
 export class AppListService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private token: TokenService) {}
 
   private _refreshNeeded$ = new Subject<void>();
 
@@ -110,8 +111,6 @@ export class AppListService {
       // companyUpdateOption: 'DELETE_APPLICATION',
     };
     console.log('QP:', qp);
-
-    // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
       .patch(
         `${BASE_URL}companies/${qp.companyId}/repositories/${qp.repoId}/webhooks`,
@@ -133,5 +132,15 @@ export class AppListService {
           return throwError(error);
         })
       );
+  }
+  getProcessDetails(processId: any) {
+    return this.http.get(`${BASE_URL}processes/${processId}`, HTTP_OPTIONS);
+  }
+
+  getAppDetails(repoId: any, appId: any) {
+    HTTP_OPTIONS.params = {
+      repositoryId: repoId,
+    };
+    return this.http.get(`${BASE_URL}applications/${appId}`, HTTP_OPTIONS);
   }
 }
