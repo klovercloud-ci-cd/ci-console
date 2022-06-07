@@ -40,7 +40,7 @@ export class ApplicationModalComponent implements OnInit {
                 "accepts":"*",
                 "message":"",
                 "name":"name",
-                "valid":"false",
+                "valid":"true",
                 "value":"build"
              },
              "type":{
@@ -137,7 +137,7 @@ export class ApplicationModalComponent implements OnInit {
                 "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
                 "message":"",
                 "name":"type",
-                "valid":"true",
+                "valid":"false",
                 "value":"INTERMEDIARY"
              },
              "trigger":{
@@ -317,7 +317,7 @@ export class ApplicationModalComponent implements OnInit {
                 "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
                 "message":"",
                 "name":"type",
-                "valid":"false",
+                "valid":"true",
                 "value":"JENKINS_JOB"
              },
              "trigger":{
@@ -362,7 +362,7 @@ export class ApplicationModalComponent implements OnInit {
                   "accepts":"build, interstep, deployDev, jenkinsJob",
                   "message":"",
                   "name":"next",
-                  "valid":"true",
+                  "valid":"false",
                   "value":"jenkinsJob"
                },
                {
@@ -397,7 +397,7 @@ export class ApplicationModalComponent implements OnInit {
     onWarning: null,
     writeJson: false
   };
-
+  
   files:any = [
     'file paths',
     'that exists',
@@ -429,7 +429,7 @@ export class ApplicationModalComponent implements OnInit {
     this.validity = this.appStep.data.steps.map((items:any, index:number)=>{
       let next_val:any = null;
       let params_val:any = null;
-
+      
       // <----------Checking Next Array---------->
        if(items?.next !== null){
           const nextValue = items?.next?.map((item:any)=>{
@@ -458,8 +458,8 @@ export class ApplicationModalComponent implements OnInit {
 
 
    // <-----------Data in Key Value Pair----------->
-
-   this.appStep.data.steps.map((_item: any)=>{
+   
+   this.appStep.data.steps.map((_item: any, index:number)=>{
 
       const nextVal = _item.next.map((nextValue:any)=>{
          return nextValue.value;
@@ -477,14 +477,44 @@ export class ApplicationModalComponent implements OnInit {
          params: paramVal,
          next: nextVal,
       }
+
+      let next_val:any = null;
+      let params_val:any = null;
+      
+      // <----------Checking Next Array---------->
+       if(_item?.next !== null){
+          const nextValue = _item?.next?.map((item:any)=>{
+          return item.valid;
+       })
+       next_val = !nextValue.includes('false')
+      }
+
+      // <----------Checking Param Array---------->
+      if(_item?.params !== null){
+         const paramsValue = _item?.params?.map((item:any)=>{
+         return item.valid;
+      })
+      params_val = !paramsValue.includes('false')
+     }
       // this.arrayData.push(_obj);
 
-      console.log("_item?.name?.value: ",_item.name.valid);
+      let error;
+      console.log("_item?.name?.value:-",_item.name.valid);
 
-      let error = null;
-      console.log("Error:",error);
-
-      this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:4})
+      
+      if(_item.name.valid=='false'){
+         error = 1;
+      }else if(_item.type.valid=='false'){
+         error = 2;
+      }else if(_item.trigger.valid=='false'){
+         error = 3;
+      }else if(params_val==false){
+         error = 4;
+      }else if(next_val==false){
+         error = 5 + _item?.params.length;
+      }
+      
+      this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error})
    })
   }
 
@@ -552,4 +582,4 @@ export class ApplicationModalComponent implements OnInit {
       // }else if(_item?.next.length !==0){
       //    error = _item?.params.length + 3;
       // }
-      //
+      // 
