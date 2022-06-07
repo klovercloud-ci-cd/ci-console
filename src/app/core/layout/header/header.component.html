@@ -3,18 +3,17 @@
     <mat-icon
       (click)="testClick()"
       matBadge="15"
-      [matMenuTriggerFor]="notifications"
       matBadgeColor="warn"
       >notifications</mat-icon
     >
-    <mat-menu
-      #notifications="matMenu"
-      xPosition="before"
-      class="text-white kc-menu p-6"
-    >
-    </mat-menu>
   </div>
-
+  <mat-menu
+    xPosition="before"
+    class="text-white kc-menu"
+  >
+    <button mat-menu-item>Item 1</button>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
   <div class="flex gap-x-6 cursor-pointer">
     <button
       mat-button
@@ -105,4 +104,3 @@
     </mat-menu>
   </div>
 </div>
-<div class="absolute border z-50 flex flex-col gap-5"></div>
