@@ -453,6 +453,8 @@ export class ApplicationModalComponent implements OnInit {
       }
     })
 
+   //  let output = this.appStep?.data?.steps.filter((items:any) => this.validity.find((items2:any) => (items2?.name?.value == items?.name?.value)));
+   //  console.log("output: ",this.validity, output);
 
 
    // <-----------Data in Key Value Pair----------->
@@ -475,9 +477,12 @@ export class ApplicationModalComponent implements OnInit {
          params: paramVal,
          next: nextVal,
       }
-      this.arrayData.push(_obj);
+      // this.arrayData.push(_obj);
 
-      console.log("_item?.name?.value: ",_item);
+      console.log("_item?.name?.value: ",_item.name.valid);
+
+      let error = null;
+      console.log("Error:",error);
       
       this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:4})
    })
@@ -506,12 +511,15 @@ export class ApplicationModalComponent implements OnInit {
       ],
     };
 
+    // this.service.addApplication(data, this.repositoryId, this.companyID);
     this.service
       .addApplication(data, this.companyID, this.repositoryId)
       .subscribe(
         (res) => {
           this.isLoading = false;
+         //  console.log('Add Application response', res);
           this.dialogRef.close();
+          // console.log(this.authService.getUserData(), 'USER');
         },
         (err) => {
           // this.openSnackBarError('Authentication Error', '');
@@ -524,3 +532,24 @@ export class ApplicationModalComponent implements OnInit {
     this.dialogRef.close();
   }
 }
+
+
+
+
+
+      // if(_item?.name?.valid){
+      //       error = 1;
+      //    }
+      // if(!_item?.name?.valid){
+      //    error = 1;
+      // }else{
+      //    error = 2;
+      // }
+      // else if(!_item?.trigger?.valid){
+      //    error = 3;
+      // }else if(_item?.params.length !==0){
+      //    error = 4;
+      // }else if(_item?.next.length !==0){
+      //    error = _item?.params.length + 3;
+      // }
+      // 
