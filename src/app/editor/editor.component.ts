@@ -10,7 +10,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Ace, edit, Range } from 'ace-builds';
+import {Ace, edit, Range} from 'ace-builds';
 import 'ace-builds';
 import 'ace-builds/src-noconflict/theme-dracula';
 
@@ -40,16 +40,21 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     fontSize: 14,
     fontFamily: '\'Roboto Mono Regular\', monospace',
   };
-  constructor() {}
 
-  ngOnInit(): void { }
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
 
   ngAfterViewInit(): void {
     this.initEditor_();
   }
+
   onTextChange(text: string): void {
     this.textChange.emit(text);
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.editor) {
       return;
@@ -75,57 +80,68 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     this.editor.setValue(this.text, -1);
     this.editor.setReadOnly(this.readOnly);
     this.editor.setTheme('ace/theme/dracula');
-    console.log("this.errorLine: ",this.errorLine);
-    
+    // console.log("this.errorLine: ", this.errorLine);
+
     this.setEditorMode_();
     this.editor.session.setUseWorker(false);
     this.editor.on('change', () => this.onEditorTextChange_());
-   
-    
-    const some = document.querySelectorAll('.ace_gutter > .ace_layer > .ace_error');
-    //@ts-ignore
-    console.log(some);
-    
-    // some.addEventListener('click', (event) => {
-    //   console.log('Hi!');
-    // });
 
     this.editor.getSession().setAnnotations([{
-      row: this.errorLine -1,
+      row: this.errorLine - 1,
       column: undefined,
-      text: "Error occurred in this line.", // Or the Json reply from the parser 
+      text: "Error occurred in this line!", // Or the Json reply from the parser
       type: "error", // also "warning" and "information"
-      
+
     }]);
-    // this.editor.session.addMarker(new Range(1, 0, 1, 1), 'ace_highlight-marker', 'fullLine',true);
+    const that = this;
+    this.editor.getSession().getAnnotations().map((x:any) => {
+      if((x?.row + 1)  > 0) {
+        const errorList = document.getElementsByClassName('ace_error');
+        setTimeout(() => {
+          if(errorList.length > 0) {
+
+            for(var i = 0; i < errorList.length; i++) {
+              (function(index) {
+                if(errorList[index].innerHTML.includes(x?.row + 1)) {
+                  errorList[index].addEventListener("click", function(e: any) {
+                    that.handleEvent(e);
+                  })
+                }
+              })(i);
+            }
+          }
+        }, 500);
+      }
+
+    })
+
   }
+
+  handleEvent(event: any) {
+    console.log(event.target)
+    // TODO: Type Your Codes Here!
+  }
+
+
   private onExternalUpdate_(): void {
     const point = this.editor.getCursorPosition();
     this.editor.setValue(this.text, -1);
     this.editor.moveCursorToPosition(point);
   }
+
   private onEditorTextChange_(): void {
     this.text = this.editor.getValue();
     this.onTextChange(this.text);
   }
+
   private onEditorModeChange_(): void {
     this.setEditorMode_();
   }
+
   private setEditorMode_(): void {
     this.editor.getSession().setMode(`ace/mode/${this.mode}`);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 // import {
@@ -207,7 +223,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
 //       // console.log("nextValue",paramValue);
 //       const param = `${paramValue.name} : ${paramValue.value}`
 //       return param;
-//    })   
+//    })
 //     const _obj:any = {};
 //       _obj.steps = {
 //          name: newData.name.value,
@@ -217,19 +233,19 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
 //          next: nextVal
 //       }
 //       console.log("_obj",_obj);
-      
+
 //     this.editor.setValue(this.text, -1);
 //     // this.editor.setReadOnly(this.readOnly);
 //     this.editor.setTheme('ace/theme/textmate');
 //     this.setEditorMode_();
 //     this.editor.session.setUseWorker(false);
-    
+
 //     // console.log("this.text", JSON.parse(this.text));
 //     this.editor.on('change', () => this.onEditorTextChange_());
 //   }
 //   private onExternalUpdate_(): void {
 //     const point = this.editor.getCursorPosition();
-    
+
 //     this.editor.setValue(this.text, -1);
 //     this.editor.moveCursorToPosition(point);
 //   }
