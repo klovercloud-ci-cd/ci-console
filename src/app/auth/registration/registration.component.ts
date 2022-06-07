@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
+import  { HttpClient } from '@angular/common/http';
+import  { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import  { FormBuilder} from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
+import  { Router } from '@angular/router';
+import  { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
 import { ConfirmPasswordMatch } from 'src/app/shared/validators/confirmPassword.validator';
+import  { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-registration',
@@ -29,6 +31,7 @@ export class RegistrationComponent implements OnInit {
       validator: ConfirmPasswordMatch('password', 'c_password'),
     }
   );
+
   isLoading = false;
 
   constructor(
@@ -44,9 +47,9 @@ export class RegistrationComponent implements OnInit {
   registrationFormData() {
     this.isLoading = true;
     const formData = this.registrationForm.value;
-    delete formData['c_password'];
-    delete formData['checked'];
-    formData['phone'] = formData.phone.toString();
+    delete formData.c_password;
+    delete formData.checked;
+    formData.phone = formData.phone.toString();
 
     this.authService.signUp(formData).subscribe(
       (res) => {

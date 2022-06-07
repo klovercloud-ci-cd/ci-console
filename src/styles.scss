@@ -54,10 +54,11 @@ body {
 * {
   font-family: Popins, sans-serif;
 }
-
+.ace_error{
+  cursor: pointer;
+  // margin-top: 25px;
+}
 .sb-success {
-  // background: #3c4c72;
-  // color: white;
   @apply bg-dark-background-4 mx-auto text-white;
   .mat-simple-snack-bar-content {
     @apply py-8 px-9 text-xl;
@@ -169,9 +170,6 @@ body {
 .kc-button-primary {
   @apply bg-dark-primary px-4 text-white;
 }
-.kc-button-primary {
-  @apply bg-dark-primary px-4 text-white;
-}
 .kc-button-info {
   @apply bg-dark-info px-4 text-white;
 }
@@ -223,3 +221,4 @@ body {
 .custom-modalbox > mat-dialog-container {
   background-color: transparent !important;
 }
+@import "~ngx-toastr/toastr";

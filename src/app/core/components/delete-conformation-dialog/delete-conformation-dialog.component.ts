@@ -1,5 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import  { OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import  { MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'kc-delete-conformation-dialog',
@@ -8,7 +10,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class DeleteConformationDialogComponent implements OnInit {
 
-  message: string = "Are you sure?"
+  message = "Are you sure?"
+
   constructor (
     @Inject(MAT_DIALOG_DATA) private data: any,
     private dialogRef: MatDialogRef<DeleteConformationDialogComponent>) {
@@ -16,6 +19,7 @@ export class DeleteConformationDialogComponent implements OnInit {
         this.message = data.message || this.message;
       }
     }
+
   ngOnInit(): void {}
 
   onConfirmClick(): void {

@@ -1,4 +1,4 @@
-<div class="relative overflow-x-hidden ">
+<div class="relative overflow-x-hidden">
   <div class="log-card relative">
     <div
       id="log-wrapper"
@@ -7,37 +7,59 @@
       [ngClass]="logOpen ? 'opacity-30 z-50' : 'hidden opacity-0 '"
     ></div>
     <div
-      class="log-card absolute  h-[calc(100vh-170px)] top-[.78rem] z-50 w-2/6 bg-dark-background p-6 rounded-l opacity-100"
+      class="log-card absolute h-[calc(100vh-170px)] top-[.78rem] z-50 w-2/6 bg-dark-background p-6 rounded-l opacity-100"
       [ngClass]="logOpen ? 'visible right-0 ' : ' -right-3/4'"
     >
       <div class="flex justify-end mb-4 cursor-pointer" (click)="logClose()">
         <mat-icon>close</mat-icon>
       </div>
-      <div class="border border-dark-border-default rounded bg-dark-background-1 p-6 mb-6 rounded space-y-3 text-md">
-        <p><span class="font-bold">Name : </span>{{nodeDetails.name}}</p>
-        <p><span class="font-bold">Status :</span> {{nodeDetails.status}}</p>
+      <div
+        class="border border-dark-border-default rounded bg-dark-background-1 p-6 mb-6 rounded space-y-3 text-md"
+      >
+        <p><span class="font-bold">Name : </span>{{ nodeDetails.name }}</p>
+        <p><span class="font-bold">Status :</span> {{ nodeDetails.status }}</p>
       </div>
       <p class="text-lg">Foot Mark</p>
-      <hr class="border-dark-border-default mb-3">
-      <div class="" *ngFor="let foot of footMarks;let i = index ">
-        <div class="flex justify-between mx-3 p-3 cursor-pointer" (click)="expandLog($event,foot,nodeDetails.name)">
+      <hr class="border-dark-border-default mb-3" />
+      <div class="" *ngFor="let foot of footMarks; let i = index">
+        <div
+          class="flex justify-between mx-3 p-3 cursor-pointer"
+          (click)="expandLog($event, foot, nodeDetails.name)"
+        >
           <div class="flex gap-2 text-md">
             <mat-icon>timeline</mat-icon>
-            {{foot }}
+            {{ foot }}
           </div>
           <mat-icon> expand_more</mat-icon>
         </div>
-        <div id='{{foot}}' class="logExpansion mx-6 border-dark-border-default border" [ngClass]="i===footMarksLegth-1?'visible':'hidden'">
-          <div class="log-exp  bg-dark-background break-words " [ngClass]="fullmode? 'h-full w-[900px] absolute bottom-0  -left-[900px]  border-dark-border-default border' : 'h-52'">
-            <div class="w-full h-8 bg-dark-background-1 flex justify-end px-2 ">
+        <div
+          id="{{ foot }}"
+          class="logExpansion mx-6 border-dark-border-default border"
+          [ngClass]="i === footMarksLegth - 1 ? 'visible' : 'hidden'"
+        >
+          <div
+            class="log-exp bg-dark-background break-words"
+            [ngClass]="
+              fullmode
+                ? 'h-full w-[900px] absolute bottom-0  -left-[900px]  border-dark-border-default border'
+                : 'h-52'
+            "
+          >
+            <div class="w-full h-8 bg-dark-background-1 flex justify-end px-2">
               <mat-icon (click)="fullMode()" class="p-1">
                 open_in_full
               </mat-icon>
             </div>
-            <div class="p-3 h-[calc(100%-2.2rem)] w-full overflow-y-auto  bg-dark-background-5">
+            <div
+              class="p-3 h-[calc(100%-2.2rem)] w-full overflow-y-auto bg-dark-background-5"
+            >
               <span *ngFor="let logDetails of logs">
-                <span *ngIf="logDetails.name ===foot" class="space-y-2">
-                    <pre *ngFor="let log of logDetails.data" class="text-sm break-words">{{log}}</pre>
+                <span *ngIf="logDetails.name === foot" class="space-y-2">
+                  <pre
+                    *ngFor="let log of logDetails.data"
+                    class="text-sm break-words"
+                  >{{ log }}</pre
+                  >
                 </span>
               </span>
             </div>
@@ -59,31 +81,69 @@
         <mat-accordion>
           <div class="expansion bg-dark-background-5">
             <div *ngFor="let branch of branchs; let i = index">
-              <mat-expansion-panel class="kc-expansion-panel">
-                <mat-expansion-panel-header id="{{ branch.name }} " (click)="loadCommit(branch.name)">
-                  <mat-panel-title class="flex gap-2 text-md"><svg height="20px" fill="white" id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-                    <g opacity="0.2">
-                      <circle cx="188" cy="67.99756" r="28"/>
-                    </g>
-                    <path d="M224,67.99756a36,36,0,1,0-44,35.09289v.9076a16.01844,16.01844,0,0,1-15.999,16L92,119.99951a31.80288,31.80288,0,0,0-16,4.29492v-21.204a36,36,0,1,0-16,0V152.9071a36,36,0,1,0,16,0v-.90759a16.01865,16.01865,0,0,1,16-16l72.001-.00146a32.03646,32.03646,0,0,0,31.999-32v-.9076A36.05514,36.05514,0,0,0,224,67.99756Zm-176,0a20,20,0,1,1,20,20A20.0226,20.0226,0,0,1,48,67.99756ZM88,188a20,20,0,1,1-20-20A20.0226,20.0226,0,0,1,88,188ZM188,87.99756a20,20,0,1,1,20-20A20.0226,20.0226,0,0,1,188,87.99756Z"/>
-                  </svg>
-                    {{ branch.name }} </mat-panel-title>
+              <mat-expansion-panel
+                *ngIf="!isLoading.commit"
+                class="kc-expansion-panel"
+              >
+                <mat-expansion-panel-header
+                  id="{{ branch.name }} "
+                  (click)="loadCommit(branch.name)"
+                >
+                  <mat-panel-title class="flex gap-2 text-md">
+                    <svg
+                      height="20px"
+                      fill="white"
+                      id="Flat"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 256 256"
+                    >
+                      <g opacity="0.2">
+                        <circle cx="188" cy="67.99756" r="28" />
+                      </g>
+                      <path
+                        d="M224,67.99756a36,36,0,1,0-44,35.09289v.9076a16.01844,16.01844,0,0,1-15.999,16L92,119.99951a31.80288,31.80288,0,0,0-16,4.29492v-21.204a36,36,0,1,0-16,0V152.9071a36,36,0,1,0,16,0v-.90759a16.01865,16.01865,0,0,1,16-16l72.001-.00146a32.03646,32.03646,0,0,0,31.999-32v-.9076A36.05514,36.05514,0,0,0,224,67.99756Zm-176,0a20,20,0,1,1,20,20A20.0226,20.0226,0,0,1,48,67.99756ZM88,188a20,20,0,1,1-20-20A20.0226,20.0226,0,0,1,88,188ZM188,87.99756a20,20,0,1,1,20-20A20.0226,20.0226,0,0,1,188,87.99756Z"
+                      />
+                    </svg>
+                    {{ branch.name }}
+                  </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div *ngFor="let list of commitList">
-                  <div *ngIf="list.branch ===branch.name">
+                  <div *ngIf="list.branch === branch.name">
                     <div *ngFor="let msg of list.commits; let j = index">
-                      <div mat-ripple class="text-sm ml-6 p-3 flex gap-2 cursor-pointer hover:bg-dark-background-1 rounded" (click)="getProcess(msg.sha)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
-                          <path d="M13,9.03544443 C14.6961471,9.27805926 16,10.736764 16,12.5 C16,14.263236 14.6961471,15.7219407 13,15.9645556 L13,21.5207973 C13,21.7969397 12.7761424,22.0207973 12.5,22.0207973 C12.2238576,22.0207973 12,21.7969397 12,21.5207973 L12,15.9645556 C10.3038529,15.7219407 9,14.263236 9,12.5 C9,10.736764 10.3038529,9.27805926 12,9.03544443 L12,3.5 C12,3.22385763 12.2238576,3 12.5,3 C12.7761424,3 13,3.22385763 13,3.5 L13,9.03544443 L13,9.03544443 Z M12.5,15 C13.8807119,15 15,13.8807119 15,12.5 C15,11.1192881 13.8807119,10 12.5,10 C11.1192881,10 10,11.1192881 10,12.5 C10,13.8807119 11.1192881,15 12.5,15 Z" transform="rotate(90 12.5 12.51)"/>
+                      <div
+                        mat-ripple
+                        class="text-sm ml-6 p-3 flex gap-2 cursor-pointer hover:bg-dark-background-1 rounded"
+                        (click)="getProcess(msg.sha)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="white"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M13,9.03544443 C14.6961471,9.27805926 16,10.736764 16,12.5 C16,14.263236 14.6961471,15.7219407 13,15.9645556 L13,21.5207973 C13,21.7969397 12.7761424,22.0207973 12.5,22.0207973 C12.2238576,22.0207973 12,21.7969397 12,21.5207973 L12,15.9645556 C10.3038529,15.7219407 9,14.263236 9,12.5 C9,10.736764 10.3038529,9.27805926 12,9.03544443 L12,3.5 C12,3.22385763 12.2238576,3 12.5,3 C12.7761424,3 13,3.22385763 13,3.5 L13,9.03544443 L13,9.03544443 Z M12.5,15 C13.8807119,15 15,13.8807119 15,12.5 C15,11.1192881 13.8807119,10 12.5,10 C11.1192881,10 10,11.1192881 10,12.5 C10,13.8807119 11.1192881,15 12.5,15 Z"
+                            transform="rotate(90 12.5 12.51)"
+                          />
                         </svg>
-                        {{msg.commit.message}}
+                        {{ msg.commit.message }}
                       </div>
                     </div>
                   </div>
-
-
                 </div>
               </mat-expansion-panel>
+              <ngx-skeleton-loader
+                *ngIf="isLoading.commit"
+                class="mt-3"
+                count="6"
+                [theme]="{
+                  'border-radius': '5px',
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="line"
+              ></ngx-skeleton-loader>
             </div>
           </div>
         </mat-accordion>
@@ -92,23 +152,27 @@
     <mat-card
       id="mid"
       class="kc-card overflow-hidden kc-card-pipe-mid col-span-6 mid-right-border"
-      id="holder"
     >
       <div class="absolute right-6">
         <mat-form-field>
           <mat-label>Select Process ID</mat-label>
           <mat-select class="">
             <div class="kc-node-menu">
-              <mat-option value="option1" *ngFor="let id of processIds" (click)="getProcess(commit[0].sha)">{{id.process_id}}</mat-option>
+              <mat-option
+                value="option1"
+                *ngFor="let id of processIds"
+                (click)="getProcess(commit[0].sha)"
+              >{{ id.process_id }}</mat-option
+              >
             </div>
           </mat-select>
         </mat-form-field>
       </div>
 
       <div
+        *ngIf="!isLoading.graph"
         class="h-[calc(100%-3.5rem)] overflow-scroll relative flex px-6 top-[2.8rem]"
       >
-
         <svg class="absolute top-10" overflow="auto" id="svg">
           <marker
             id="trianglegray"
@@ -132,18 +196,20 @@
             markerHeight="4"
             orient="auto"
           >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#5BC4D6" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#36C678" />
           </marker>
         </svg>
         <div class="absolute flex gap-28 justify-center">
           <div class="flex gap-28 justify-center">
             <div *ngFor="let env of envList" class="flex flex-col items-center">
               <div
-                class="my-6 text-xl font-bold border border-dark-border-default bg-dark-primary text-white rounded border border-dark-border-default env-name flex justify-center items-center gap-1"
+                class="my-6 text-xl font-bold border border-dark-border-default bg-dark-info text-white rounded border border-dark-border-default env-name flex justify-center items-center gap-1"
+                class="my-6 text-xl font-bold border border-dark-border-default bg-dark-info text-white rounded border border-dark-border-default env-name flex justify-center items-center gap-1"
               >
                 <mat-icon aria-hidden="false" aria-label="Example home icon"
-                >public</mat-icon
-                >{{ env }}
+                >public
+                </mat-icon>
+                {{ env }}
               </div>
               <div>
                 <div *ngFor="let nodeEnv of stepsLists" class="">
@@ -179,18 +245,17 @@
                           <mat-icon
                             aria-hidden="false"
                             aria-label="Example home icon"
-                          >info </mat-icon
-                          >Info
+                          >info
+                          </mat-icon>
+                          Info
                         </button>
-                        <button
-                          mat-menu-item
-                          (click)="startBuild(step.name)"
-                        >
+                        <button mat-menu-item (click)="startBuild(step.name)">
                           <mat-icon
                             aria-hidden="false"
                             aria-label="Example home icon"
-                          >start </mat-icon
-                          >Build
+                          >start
+                          </mat-icon>
+                          Build
                         </button>
                       </mat-menu>
                       <svg
@@ -226,6 +291,175 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div *ngIf="isLoading.graph" class="relative top-16 left-6">
+        <div class="grid grid-cols-2 w-[25rem]">
+          <div>
+            <ngx-skeleton-loader
+              class=""
+              count="1"
+              [theme]="{
+                height: '40px',
+                'border-radius': '5px',
+                width: '100px',
+                'z-index': 100,
+                'background-color': '#1A2C4A'
+              }"
+              animation="progress-dark"
+            ></ngx-skeleton-loader>
+          </div>
+          <div>
+            <ngx-skeleton-loader
+              class=""
+              count="1"
+              [theme]="{
+                height: '40px',
+                'border-radius': '5px',
+                width: '100px',
+                'z-index': 100,
+                'background-color': '#1A2C4A'
+              }"
+              animation="progress-dark"
+            ></ngx-skeleton-loader>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 w-[25rem]">
+          <div class="">
+            <div class="flex flex-col space-y-[120px]">
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+            </div>
+          </div>
+          <div class="">
+            <div class="flex flex-col space-y-[120px]">
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+              <ngx-skeleton-loader
+                class=""
+                count="1"
+                [theme]="{
+                  height: '60px',
+                  width: '60px',
+                  'z-index': 100,
+                  'background-color': '#1A2C4A'
+                }"
+                animation="progress-dark"
+                appearance="circle"
+              ></ngx-skeleton-loader>
+            </div>
+          </div>
+        </div>
+        <!--<div class="flex gap-0 justify-center">
+          <ngx-skeleton-loader
+            class=""
+            count="1"
+            [theme]="{
+              height: '60px',
+              width: '60px',
+              'z-index': 100,
+              'background-color': '#1A2C4A'
+            }"
+            animation="progress-dark"
+            appearance="circle"
+          ></ngx-skeleton-loader>
+        </div>
+        <div class="flex gap-0 justify-center h-[150px]">
+          <ngx-skeleton-loader
+            class=""
+            count="1"
+            [theme]="{
+              'border-radius': '5px',
+              width: '150px',
+              height: '5px',
+              transform: 'rotate(-30deg)',
+              'background-color': '#1A2C4A'
+            }"
+            animation="progress-dark"
+            appearance="line"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class=""
+            count="1"
+            [theme]="{
+              'border-radius': '5px',
+              width: '150px',
+              height: '5px',
+              transform: 'rotate(30deg)',
+              'background-color': '#1A2C4A'
+            }"
+            animation="progress-dark"
+            appearance="line"
+          ></ngx-skeleton-loader>
+        </div>
+        <div class="flex gap-[150px] justify-center -mt-[150px]">
+          <ngx-skeleton-loader
+            class=""
+            count="1"
+            [theme]="{
+              height: '60px',
+              width: '60px',
+              'background-color': '#1A2C4A'
+            }"
+            animation="progress-dark"
+            appearance="circle"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            class=""
+            count="1"
+            [theme]="{
+              height: '60px',
+              width: '60px',
+              'background-color': '#1A2C4A'
+            }"
+            animation="progress-dark"
+            appearance="circle"
+          ></ngx-skeleton-loader>
+        </div>-->
       </div>
     </mat-card>
   </div>

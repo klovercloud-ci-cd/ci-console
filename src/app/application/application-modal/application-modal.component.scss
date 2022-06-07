@@ -1,0 +1,30 @@
+.kc-expansion-panel {
+  background: transparent;
+  margin-top: 0;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+
+  &:hover {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-dark-background-1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #307fa9;
+  border-radius: 30px;
+
+  &:hover {
+    background: #555;
+    width: 10px;
+    height: 10px;
+  }
+}

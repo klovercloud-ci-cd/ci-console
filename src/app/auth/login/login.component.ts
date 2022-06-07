@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { TokenService } from '../token.service';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
+import type { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import  { FormBuilder} from '@angular/forms';
+import { Validators } from '@angular/forms';
+import  { Router } from '@angular/router';
+import  { MatSnackBar } from '@angular/material/snack-bar';
+import  { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.service';
+import  { TokenService } from '../token.service';
+import  { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +14,10 @@ import { SharedSnackbarService } from 'src/app/shared/snackbar/shared-snackbar.s
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  isLoading:boolean = false;
+  isLoading = false;
+
   passwordHide = true;
+
   constructor(
     private authService: AuthService,
     private snack: SharedSnackbarService,
@@ -29,10 +33,12 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['']);
     }
   }
+
   loginForm: any = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
     password: ['', Validators.required],
   });
+
   logIn(): void {
 
     this.isLoading =true
@@ -54,6 +60,7 @@ export class LoginComponent implements OnInit {
         this.isLoading =false;
       });
   }
+
   logout(): void {
     this.authService.logOut();
   }

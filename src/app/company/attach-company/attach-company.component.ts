@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import  { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import  { MatDialog} from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { AddCompanyComponent } from '../add-company/add-company.component';
 
 @Component({
@@ -22,12 +24,12 @@ export class AttachCompanyComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.width = '45%';
     dialogConfig.panelClass = 'custom-modalbox';
-    
+
     // dialogConfig.data = {
     //   companyID: this.companyID,
     // };
     this.dialog.open(AddCompanyComponent, dialogConfig);
   }
-  
+
 
 }

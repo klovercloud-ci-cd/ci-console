@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { AuthService } from '../../auth/auth.service';
 import { UserDataService } from '../../shared/services/user-data.service';
-import { Router } from '@angular/router';
 import { SharedSnackbarService } from '../../shared/snackbar/shared-snackbar.service';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 
 @Component({
   selector: 'kcci-change-password',
@@ -12,7 +14,8 @@ import { ToolbarService } from 'src/app/shared/services/toolbar.service';
   styleUrls: ['./change-password.component.scss'],
 })
 export class ChangePasswordComponent implements OnInit {
-  isLoading: boolean = false;
+  isLoading = false;
+
   setNewPassword = this.fb.group(
     {
       oldpass: ['', [Validators.required]],
@@ -25,9 +28,13 @@ export class ChangePasswordComponent implements OnInit {
   );
 
   user: any = this.auth.getUserData();
+
   userPersonalInfo: any;
-  userEmail: string = '';
+
+  userEmail = '';
+
   otpForm = true;
+
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -36,6 +43,7 @@ export class ChangePasswordComponent implements OnInit {
     private snackBar: SharedSnackbarService,
     private _toolbarService: ToolbarService
   ) {}
+
   confirmPasswordMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
@@ -48,6 +56,7 @@ export class ChangePasswordComponent implements OnInit {
       }
     };
   }
+
   ngOnInit(): void {
     this._toolbarService.changeData({ title: 'Settings' });
     this.userData.getUserInfo(this.user.user_id).subscribe((res) => {

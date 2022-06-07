@@ -1,7 +1,8 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import { SharedLayoutService } from './shared-layout.service';
+import  { OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import  { Router } from '@angular/router';
+import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import  { SharedLayoutService } from './shared-layout.service';
 
 @Component({
   selector: 'app-layout',
@@ -10,16 +11,23 @@ import { SharedLayoutService } from './shared-layout.service';
 })
 export class LayoutComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
-  isOpen: boolean = true;
+  isOpen = true;
+
   showFiller = true;
-  pageTitle: string = '';
-  isCollapsed: boolean = true;
+
+  pageTitle = '';
+
+  isCollapsed = true;
+
   public innerWidth: any;
+
   data: any = {
     title: 'KloverCloud',
   };
-  collapsed: boolean = false;
-  openCollapsedBar: boolean = false;
+
+  collapsed = false;
+
+  openCollapsedBar = false;
 
   constructor(
     private router: Router,
@@ -54,6 +62,7 @@ export class LayoutComponent implements OnInit {
       this.isOpen = true;
     }
   }
+
   toggleCollapse() {
     this.collapsed = !this.collapsed;
     this.openCollapsedBar = !this.openCollapsedBar;

@@ -1,75 +1,94 @@
-<div class="p-page">  
-  <div class="bg-dark-background-5 h-[87vh] w-full rounded-md" *ngIf="!hasCompany; else company">
-    <h1 class="text-center pt-[2%] text-2xl text-yellow-500">Please Attach Company First</h1>
+<div class="p-page">
+  <div
+    class="bg-dark-background-5 h-[87vh] w-full rounded-md"
+    *ngIf="!hasCompany; else company"
+  >
+    <h1 class="text-center pt-[2%] text-2xl text-yellow-500">
+      Please Attach Company First
+    </h1>
   </div>
-<ng-template #company>
-  <div class="bg-dark-background-5 overflow-x-auto">
-    <div class=" px-6 py-5">
-    <div class="flex items-center justify-between">
-      <h3 class="font-semibold text-xl">Roles</h3>
-      <div class="flex items-center gap-3">
-        <button (click)="createRole()" class="w-36 ml-auto " >
-          
-          <span class="block kc-create-button text-center cursor-pointer"><mat-icon class="mr-2">add_circle</mat-icon>New Role</span>
-        </button>
+  <ng-template #company>
+    <div class="bg-dark-background-5 overflow-x-auto">
+      <div class="px-6 py-5">
+        <div class="flex items-center justify-between">
+          <h3 class="font-semibold text-xl">Roles</h3>
+          <div class="flex items-center gap-3">
+            <button (click)="createRole()" class="w-36 ml-auto">
+              <span class="block kc-create-button text-center cursor-pointer"
+              ><mat-icon class="mr-2">add_circle</mat-icon>New Role</span
+              >
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  </div>
-  <div class="page__content">
-    <div *ngIf="isLoading" class="p-4">
-      <mat-progress-spinner strokeWidth="2" diameter="40" mode="indeterminate"></mat-progress-spinner>
-      <p class="mt-4">Loading roles</p>
-    </div>
-    <table mat-table [dataSource]="dataSource" class="w-full" *ngIf="!isLoading">
-    
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef width="35%"> Name </th>
-        <td mat-cell *matCellDef="let role"> {{role?.name}}</td>
-      </ng-container>
-    
-      <!-- permission Column -->
-      <ng-container matColumnDef="permission">
-        <th mat-header-cell *matHeaderCellDef> Permissions </th>
-        <td mat-cell *matCellDef="let role">
-          <mat-chip-list>
-            <mat-chip
-              class="_chip_custom"
-              *ngFor="let permission of role.permissions" 
-              color="primary"
-              [ngClass]="'_chip_' + permission?.name | lowercase"
-            >{{permission?.name}}</mat-chip>
-          </mat-chip-list>
-        </td>
-      </ng-container>
-      
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef width="9%"> Actions </th>
-        <td mat-cell *matCellDef="let role" >
-          <button [disabled]="role?.name === 'ADMIN'" mat-icon-button [matMenuTriggerFor]="menu" class="float-end">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          
-          <mat-menu #menu="matMenu">
-            <!-- <button mat-menu-item (click)="updateRole(role)">
+    <div class="page__content">
+      <div *ngIf="isLoading" class="p-4">
+        <mat-progress-spinner
+          strokeWidth="2"
+          diameter="40"
+          mode="indeterminate"
+        ></mat-progress-spinner>
+        <p class="mt-4">Loading roles</p>
+      </div>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="w-full"
+        *ngIf="!isLoading"
+      >
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef width="35%">Name</th>
+          <td mat-cell *matCellDef="let role">{{ role?.name }}</td>
+        </ng-container>
+
+        <!-- permission Column -->
+        <ng-container matColumnDef="permission">
+          <th mat-header-cell *matHeaderCellDef>Permissions</th>
+          <td mat-cell *matCellDef="let role">
+            <mat-chip-list>
+              <mat-chip
+                class="_chip_custom"
+                *ngFor="let permission of role.permissions"
+                color="primary"
+                [ngClass]="'_chip_' + permission?.name | lowercase"
+              >{{ permission?.name }}</mat-chip
+              >
+            </mat-chip-list>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef width="9%">Actions</th>
+          <td mat-cell *matCellDef="let role">
+            <button
+              [disabled]="role?.name === 'ADMIN'"
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              class="float-end"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <!-- <button mat-menu-item (click)="updateRole(role)">
               <mat-icon>edit</mat-icon>
               <span>Edit</span>
             </button> -->
-            
-            <button mat-menu-item (click)="onDelete(role)">
-              <mat-icon>delete</mat-icon>
-              <span>Delete</span>
-            </button>
-          </mat-menu>
-        </td>
-      </ng-container>
-      
-    
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </div>
-</ng-template>
+
+              <button mat-menu-item (click)="onDelete(role)">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </ng-template>
 </div>

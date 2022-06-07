@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { RolesRoutingModule } from './roles-routing.module';
-import { RoleListComponent } from './role-list/role-list.component';
-import { RoleFormComponent } from './role-form/role-form.component';
-
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,15 +13,14 @@ import { RouterModule } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
-import { RoleService } from './role.service';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { RoleService } from './role.service';
+import { RoleFormComponent } from './role-form/role-form.component';
+import { RoleListComponent } from './role-list/role-list.component';
+import { RolesRoutingModule } from './roles-routing.module';
 
 @NgModule({
-  declarations: [
-    RoleListComponent,
-    RoleFormComponent
-  ],
+  declarations: [RoleListComponent, RoleFormComponent],
   imports: [
     CommonModule,
     RolesRoutingModule,
@@ -41,8 +36,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatDialogModule
+    MatDialogModule,
   ],
-  providers: [RoleService]
+  providers: [RoleService],
 })
-export class RolesModule { }
+export class RolesModule {}

@@ -1,6 +1,7 @@
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
+
   &:hover {
     width: 10px;
     height: 10px;
@@ -11,9 +12,11 @@
 ::-webkit-scrollbar-track {
   @apply bg-dark-background-1;
 }
+
 ::-webkit-scrollbar-thumb {
   @apply bg-dark-background-4;
   border-radius: 30px;
+
   &:hover {
     @apply bg-dark-background-active;
     width: 10px;
@@ -21,13 +24,15 @@
   }
 }
 
-.page__content{
+.page__content {
   @apply bg-dark-background-5 p-6 rounded-md;
 }
+
 .resource_custom_form_btn {
   line-height: 52px;
   margin-top: 4px;
 }
+
 ._submit__btn {
   line-height: 50px;
   height: 50px;
@@ -37,8 +42,9 @@
   //   }
   // }
 }
-::ng-deep{
-  .mat-select-panel{
+
+::ng-deep {
+  .mat-select-panel {
     @apply bg-dark-background-4 ml-2;
   }
 }

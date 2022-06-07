@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { Error404Component } from './error/error404/error404.component';
-import { AuthGuard } from './shared/guard/auth.guard';
 import { DashboardIndexComponent } from './dashboard/dashboard-index/dashboard-index.component';
 import { AppCustomPreloader } from './app-custom-preloader';
+import { AuthGuard } from './shared/guard/auth.guard';
 
 const childrenRoutes: Routes = [
   {
@@ -66,7 +67,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: childrenRoutes,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: '**',

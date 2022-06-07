@@ -1,15 +1,12 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { catchError, Observable, of, Subject, tap, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
+import { catchError, of, Subject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
-const BASE_URL = 'http://192.168.68.114:4202/api/v1/';
+const BASE_URL = environment.v1ApiEndPoint;
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -25,13 +22,12 @@ export class AppListService {
 
   private _refreshNeeded$ = new Subject<void>();
 
-  get refreshNeeded$(){
+  get refreshNeeded$() {
     return this._refreshNeeded$;
   }
 
   getRepositoryInfo(companyID: any, repoId: any): Observable<any> {
-    
-    return this.http.get(BASE_URL + 'repositories/' + repoId, {
+    return this.http.get(`${BASE_URL}repositories/${repoId}`, {
       params: {
         companyId: companyID,
         loadApplications: true,
@@ -51,7 +47,7 @@ export class AppListService {
     };
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS)
+      .post(`${BASE_URL}applications`, appPayload, HTTP_OPTIONS)
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
@@ -86,7 +82,7 @@ export class AppListService {
 
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS)
+      .post(`${BASE_URL}applications`, appPayload, HTTP_OPTIONS)
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
@@ -104,9 +100,7 @@ export class AppListService {
       );
   }
 
-  updateWebhook(
-    qp:any
-  ): Observable<any> {
+  updateWebhook(qp: any): Observable<any> {
     HTTP_OPTIONS.params = {
       action: qp.action,
       // companyId: qp.companyId,
@@ -115,11 +109,15 @@ export class AppListService {
       webhookId: qp.webhookId,
       // companyUpdateOption: 'DELETE_APPLICATION',
     };
-console.log("QP:",qp);
+    console.log('QP:', qp);
 
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .patch(BASE_URL + 'companies/'+ qp.companyId +'/repositories/'+ qp.repoId +'/webhooks', "",HTTP_OPTIONS)
+      .patch(
+        `${BASE_URL}companies/${qp.companyId}/repositories/${qp.repoId}/webhooks`,
+        '',
+        HTTP_OPTIONS
+      )
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();

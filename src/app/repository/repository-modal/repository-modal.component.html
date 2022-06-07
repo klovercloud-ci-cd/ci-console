@@ -1,192 +1,183 @@
 <div
   class="bg-dark-container border border-dark-primary rounded-lg p-5 relative"
 >
-<form [formGroup]="repoFormGroup" (ngSubmit)="subsub()" class="pt-5">
+  <form [formGroup]="repoFormGroup" (ngSubmit)="subsub()" class="pt-5">
+    <div class="flex flex-col xl:flex-row gap-5">
+      <mat-form-field
+        class="kcci-field kc-select-container text-white"
+        appearance="outline"
+      >
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type" name="repo">
+          <mat-option
+            class="kc-select-type"
+            *ngFor="let repo of repos"
+            [value]="repo.value"
+          >
+            {{ repo.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-  <div class="flex flex-col xl:flex-row gap-5">
-  <mat-form-field class="kcci-field kc-select-container text-white"
-                      appearance="outline"
+      <mat-form-field class="kcci-field" appearance="outline">
+        <mat-label class="text-white">Token</mat-label>
+        <input
+          formControlName="token"
+          required
+          type="text"
+          autocomplete="off"
+          matInput
+        />
+      </mat-form-field>
+    </div>
+    <div class="">
+      <h1 class="text-right">
+        <span class="cursor-pointer">
+          <div [ngSwitch]="repoFormGroup.value.type">
+            <div *ngSwitchCase="'github'">
+              <div class="flex justify-end gap-1">
+                <span class="example-container" cdkScrollable>
+                  <div
+                    #tooltip="matTooltip"
+                    [matTooltip]="tooltipMsg"
+                    [matTooltipPosition]="'left'"
+                    matTooltipClass="my-tooltip"
+                    matTooltipHideDelay="500"
+                    matTooltipShowDelay="100"
+                  >
+                    <mat-icon
+                      class="text-yellow-500"
+                      aria-hidden="false"
+                      aria-label="Example home icon"
+                    >help_outline</mat-icon
                     >
-                      <mat-label>Type</mat-label>
-                      <mat-select formControlName="type" name="repo">
-                        <mat-option
-                          class="kc-select-type"
-                          *ngFor="let repo of repos"
-                          [value]="repo.value"
-                        >
-                          {{ repo.viewValue }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field class="kcci-field" appearance="outline">
-                      <mat-label class="text-white">Token </mat-label>
-                      <input
-                        formControlName="token"
-                        required
-                        type="text"
-                        autocomplete="off"
-                        matInput
-                      />
-                    </mat-form-field>
-  </div>
-  <div class="">
-    <h1 class="text-right">
-      <span class="cursor-pointer">
-        <div
-          [ngSwitch]="
-          repoFormGroup.value.type
-          "
-        >
-          <div *ngSwitchCase="'github'">
-            <div class="flex justify-end gap-1">
-              <span class="example-container" cdkScrollable>
-                <div
-                  #tooltip="matTooltip"
-                  [matTooltip]="tooltipMsg"
-                  [matTooltipPosition]="'left'"
-                  matTooltipClass="my-tooltip"
-                  matTooltipHideDelay="500"
-                  matTooltipShowDelay="100"
-                >
-                  <mat-icon
-                    class="text-yellow-500"
-                    aria-hidden="false"
-                    aria-label="Example home icon"
-                    >help_outline</mat-icon
-                  >
-                </div>
-              </span>
-              <a
-                href="https://github.com/settings/tokens"
-                target="_blank"
-              >
-                <h1>Generate token</h1>
-              </a>
+                  </div>
+                </span>
+                <a href="https://github.com/settings/tokens" target="_blank">
+                  <h1>Generate token</h1>
+                </a>
+              </div>
             </div>
-          </div>
-          <div *ngSwitchCase="'gitlab'">
-            <div class="flex justify-end gap-1">
-              <span class="example-container" cdkScrollable>
-                <div
-                  #tooltip="matTooltip"
-                  [matTooltip]="tooltipMsg"
-                  [matTooltipPosition]="'left'"
-                  matTooltipClass="my-tooltip"
-                  matTooltipHideDelay="500"
-                  matTooltipShowDelay="100"
-                >
-                  <mat-icon
-                    class="text-yellow-500"
-                    aria-hidden="false"
-                    aria-label="Example home icon"
-                    >help_outline</mat-icon
+            <div *ngSwitchCase="'gitlab'">
+              <div class="flex justify-end gap-1">
+                <span class="example-container" cdkScrollable>
+                  <div
+                    #tooltip="matTooltip"
+                    [matTooltip]="tooltipMsg"
+                    [matTooltipPosition]="'left'"
+                    matTooltipClass="my-tooltip"
+                    matTooltipHideDelay="500"
+                    matTooltipShowDelay="100"
                   >
-                </div>
-              </span>
-              <a
-                href="https://gitlab.com/-/profile/personal_access_tokens"
-                target="_blank"
-              >
-                <h1>Generate token</h1>
-              </a>
+                    <mat-icon
+                      class="text-yellow-500"
+                      aria-hidden="false"
+                      aria-label="Example home icon"
+                    >help_outline</mat-icon
+                    >
+                  </div>
+                </span>
+                <a
+                  href="https://gitlab.com/-/profile/personal_access_tokens"
+                  target="_blank"
+                >
+                  <h1>Generate token</h1>
+                </a>
+              </div>
             </div>
-          </div>
-          <div *ngSwitchCase="'bitbucket'">
-            <div class="flex justify-end gap-1">
-              <span class="example-container" cdkScrollable>
-                <div
-                  #tooltip="matTooltip"
-                  [matTooltip]="tooltipMsg"
-                  [matTooltipPosition]="'left'"
-                  matTooltipClass="my-tooltip "
-                  matTooltipHideDelay="500"
-                  matTooltipShowDelay="100"
-                >
-                  <mat-icon
-                    class="text-yellow-500"
-                    aria-hidden="false"
-                    aria-label="Example home icon"
-                    >help_outline</mat-icon
+            <div *ngSwitchCase="'bitbucket'">
+              <div class="flex justify-end gap-1">
+                <span class="example-container" cdkScrollable>
+                  <div
+                    #tooltip="matTooltip"
+                    [matTooltip]="tooltipMsg"
+                    [matTooltipPosition]="'left'"
+                    matTooltipClass="my-tooltip "
+                    matTooltipHideDelay="500"
+                    matTooltipShowDelay="100"
                   >
-                </div>
-              </span>
-              <a
-                href="https://bitbucket.org/account/settings/app-passwords/"
-                target="_blank"
-              >
+                    <mat-icon
+                      class="text-yellow-500"
+                      aria-hidden="false"
+                      aria-label="Example home icon"
+                    >help_outline</mat-icon
+                    >
+                  </div>
+                </span>
+                <a
+                  href="https://bitbucket.org/account/settings/app-passwords/"
+                  target="_blank"
+                >
+                  <span>Generate token</span>
+                </a>
+              </div>
+            </div>
+            <div *ngSwitchDefault="">
+              <div class="flex justify-end gap-1">
+                <span class="example-container" cdkScrollable>
+                  <div
+                    #tooltip="matTooltip"
+                    [matTooltip]="tooltipMsg"
+                    [matTooltipPosition]="'left'"
+                    matTooltipClass="my-tooltip"
+                    matTooltipHideDelay="500"
+                    matTooltipShowDelay="100"
+                  >
+                    <mat-icon
+                      class="text-yellow-500"
+                      aria-hidden="false"
+                      aria-label="Example home icon"
+                    >help_outline</mat-icon
+                    >
+                  </div>
+                </span>
                 <span>Generate token</span>
-              </a>
+              </div>
             </div>
           </div>
-          <div *ngSwitchDefault="">
-            <div class="flex justify-end gap-1">
-              <span class="example-container" cdkScrollable>
-                <div
-                  #tooltip="matTooltip"
-                  [matTooltip]="tooltipMsg"
-                  [matTooltipPosition]="'left'"
-                  matTooltipClass="my-tooltip"
-                  matTooltipHideDelay="500"
-                  matTooltipShowDelay="100"
-                >
-                  <mat-icon
-                    class="text-yellow-500"
-                    aria-hidden="false"
-                    aria-label="Example home icon"
-                    >help_outline</mat-icon
-                  >
-                </div>
-              </span>
-              <span>Generate token</span>
-            </div>
-          </div>
-        </div>
-      </span>
-    </h1>
-  </div>
-  <div mat-dialog-actions class="flex justify-between">
-    <div></div>
-    <!-- <button
+        </span>
+      </h1>
+    </div>
+    <div mat-dialog-actions class="flex justify-between">
+      <div></div>
+      <!-- <button
       type="submit"
       mat-button
       class="px-4 py-2 bg-dark-primary rounded-md"
     >
       Submit
     </button> -->
-    <div *ngIf="!repoFormGroup.valid; else other_content" class="mb-2">
-      <button
-        class="bg-slate-500 kc-register block px-4 py-3 rounded-md"
-        type="submit"
-        [disabled]="!repoFormGroup.valid"
-      >
-        Submit
-      </button>
-    </div>
-    <ng-template #other_content>
-      <div class="mb-2">
-      <button
-        class="kc-button-primary kc-register block px-4 py-3 rounded-md "
-        type="submit"
-        [disabled]="!repoFormGroup.valid"
-      >
-        <span *ngIf="!isLoading; else before_submit">
+      <div *ngIf="!repoFormGroup.valid; else other_content" class="mb-2">
+        <button
+          class="bg-slate-500 kc-register block px-4 py-3 rounded-md"
+          type="submit"
+          [disabled]="!repoFormGroup.valid"
+        >
           Submit
-        </span>
-        <ng-template #before_submit>
-          <div class="py-[10px] mx-auto w-[57px]">
-            <mat-progress-bar
-              class="green-progress kc-progress-bar"
-              mode="indeterminate"
-            >
-            </mat-progress-bar>
-          </div>
-        </ng-template>
-      </button>
+        </button>
+      </div>
+      <ng-template #other_content>
+        <div class="mb-2">
+          <button
+            class="kc-button-primary kc-register block px-4 py-3 rounded-md"
+            type="submit"
+            [disabled]="!repoFormGroup.valid"
+          >
+            <span *ngIf="!isLoading; else before_submit"> Submit </span>
+            <ng-template #before_submit>
+              <div class="py-[10px] mx-auto w-[57px]">
+                <mat-progress-bar
+                  class="green-progress kc-progress-bar"
+                  mode="indeterminate"
+                >
+                </mat-progress-bar>
+              </div>
+            </ng-template>
+          </button>
+        </div>
+      </ng-template>
     </div>
-    </ng-template>
-  </div>
-</form>
+  </form>
   <!-- <div class="example-container">
 
       <div mat-dialog-actio ns class="flex justify-between">

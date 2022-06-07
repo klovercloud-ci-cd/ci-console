@@ -1,4 +1,5 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture} from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { ProgressBarComponent } from './progress-bar.component';
 

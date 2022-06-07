@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LayoutModule } from './layout/layout.module';
 import { RouterModule } from '@angular/router';
-import { DeleteConformationDialogComponent } from './components/delete-conformation-dialog/delete-conformation-dialog.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { LayoutModule } from './layout/layout.module';
+import { DeleteConformationDialogComponent } from './components/delete-conformation-dialog/delete-conformation-dialog.component';
 import { DeleteConformationDialogModule } from './components/delete-conformation-dialog/delete-conformation-dialog.module';
 
 @NgModule({

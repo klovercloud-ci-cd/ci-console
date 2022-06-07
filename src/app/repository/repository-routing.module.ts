@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CiCdPipelineComponent } from '../application/ci-cd-pipeline/ci-cd-pipeline.component';
 import { RepositoryComponent } from './repository/repository.component';
 

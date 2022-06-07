@@ -6,7 +6,7 @@
           Add New
         </button>
       </div>
-      <div class=" pt-4">
+      <div class="pt-4">
         <div
           class="w-full h-full"
           gdColumns="1fr 1fr 1fr 1fr"
@@ -18,7 +18,7 @@
         >
           <div *ngFor="let repo of repoArray; let i = index">
             <div
-              class=" cluster-card cursor-pointer transition duration-1000"
+              class="cluster-card cursor-pointer transition duration-1000"
               [routerLink]="['/repository', repo.id]"
             >
               <span class="flex justify-between">
@@ -56,9 +56,11 @@
                   class="px-2 py-[5px] rounded bg-dark-container text-xs cursor-pointer flex items-center justify-center gap-1"
                 >
                   <mat-icon class="text-xl">widgets</mat-icon>
-                  <span class="mt-1" *ngIf="repo?.applications?.length>0; else applist"
-                    >
-                    Applications({{ repo?.applications?.length}})
+                  <span
+                    class="mt-1"
+                    *ngIf="repo?.applications?.length > 0; else applist"
+                  >
+                    Applications({{ repo.applications.length }})
                   </span>
                   <ng-template #applist>
                     <span class="mt-1">No Application added</span>
@@ -69,9 +71,22 @@
           </div>
         </div>
       </div>
-      <div *ngIf="isLoading" class="uploader-status p-5">
+      <ngx-skeleton-loader
+        *ngIf="isLoading"
+        count="6"
+        [theme]="{
+          'border-radius': '5px',
+          height: '150px',
+          'margin-right': '16px',
+          width: '350px',
+          'background-color': '#1A2C4A'
+        }"
+        animation="progress-dark"
+      ></ngx-skeleton-loader>
+
+      <!--<div *ngIf="isLoading" class="uploader-status p-5">
         <mat-spinner [diameter]="50"></mat-spinner>
-      </div>
+      </div>-->
     </mat-card>
   </div>
 </div>
