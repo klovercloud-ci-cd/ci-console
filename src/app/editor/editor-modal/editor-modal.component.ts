@@ -11,7 +11,6 @@ export class EditorModalComponent implements OnInit {
   mainValue: any;
   message: any;
   key: any;
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: EditorModalComponent,
     public dialogRef: MatDialogRef<EditorModalComponent>,

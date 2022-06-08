@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
 import YamlValidator from 'yaml-validator';
@@ -17,6 +17,7 @@ import 'ace-builds/src-noconflict/mode-typescript';
 import 'ace-builds/src-noconflict/mode-scss';
 import {dump as toYaml, load as fromYaml} from 'js-yaml';
 import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
+import {Location} from "@angular/common";
 
 
 @Component({
@@ -25,7 +26,8 @@ import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.compo
   styleUrls: ['./application-modal.component.scss'],
 })
 export class ApplicationModalComponent implements OnInit {
-
+  public href: string = "";
+  url: string = "asdf";
   yamlInputData = '';
   showFiller = false;
   panelOpenState = false;
@@ -413,7 +415,9 @@ export class ApplicationModalComponent implements OnInit {
     private service: AppListService,
     private route: ActivatedRoute,
     @Inject(MAT_DIALOG_DATA) public data: ApplicationListComponent,
-    private editorDialogRef: MatDialogRef<EditorModalComponent>
+    private editorDialogRef: MatDialogRef<EditorModalComponent>,
+    private router: Router,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -530,7 +534,14 @@ export class ApplicationModalComponent implements OnInit {
   });
 
   gotoNext(e:number){
+    const {name,url} = this.addApplication.value;
+    this.href = this.router.url;
+    console.log("PATH: ",this.location.path());
+
     this.stepper = e;
+    // console.log("this.href:",this.href)
+    // console.log("Next Page",this.addApplication.value);
+    // this.router.navigate(['repository/ksgdksb/name/url']);
   }
 
   addApplicationFormData() {

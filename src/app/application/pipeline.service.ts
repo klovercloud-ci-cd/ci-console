@@ -34,7 +34,7 @@ export class PipelineService {
     );
     socket.onopen = (e: any) => {
       console.log('Connected');
-      console.log(this.location.path());
+      // console.log(this.location.path());
     };
     return socket;
   }
