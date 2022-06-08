@@ -130,7 +130,7 @@ export class ApplicationModalComponent implements OnInit {
           },
           {
              "name":{
-                "accepts":"*",
+                "accepts":"step1,step2,step3",
                 "message":"",
                 "name":"name",
                 "valid":"false",

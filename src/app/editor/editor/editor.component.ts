@@ -426,7 +426,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
-
   private initEditor_(): void {
     this.editor = edit(this.editorRef.nativeElement);
     this.editor.setOptions(this.options);
@@ -499,25 +498,24 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     let mainValue:any;
     // @ts-ignore
     for (const [k, v] of Object.entries(data)) {
-      // console.log("Trig: ",key, v);
+       console.log("Trig: ",key, v);
       // stepName = v;
       // console.log(v);
       if(k === key) {
         mainKey = k;
         mainValue = v;
-        // console.log("Trig-2: ",`${k}: ${v}`);
+         // console.log("Trig-2: ",`${k}: ${v}`);
       }
     }
 
     console.log("InputData-----: ", mainKey);
+    console.log("accepts-----: ", this.InputData.name.accepts);
     console.log("InputData-----: ",this.InputData, mainKey);
 
     switch(mainKey) {
       case 'name':
-        if(this.InputData.name.accepts=='*' && this.InputData.name.valid !== "true") {
-          // this.InputData.name.valid = true;
-
-          this.openDialog(mainKey,'Type any name')
+        if(this.InputData.name.valid !== "true") {
+          this.openDialog(this.InputData.name.value,mainKey,this.InputData[mainKey].accepts)
           console.log("Valid All");
         }
         break;
@@ -559,7 +557,9 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     // this.dialog.open(EditorModalComponent, dialogConfig);
   }
 
-    openDialog(key:string,msg:string) {
+    openDialog(step:string,key:string,msg:string) {
+      let accepts = msg.split(",")
+console.log(" step name:",step)
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
@@ -567,12 +567,15 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
       dialogConfig.panelClass = 'custom-modalbox';
       dialogConfig.data = {
         key:key,
-        message: msg,
+        stepname:step,
+        message: accepts,
       };
       this.dialog.open(EditorModalComponent, dialogConfig);
     }
 
-
+  // refactorField(step:string,key:string,value:string){
+  //   console.log("step:", step," key: ",key, " value: ",value)
+  // }
   private onExternalUpdate_(): void {
     const point = this.editor.getCursorPosition();
     this.editor.setValue(this.text, -1);

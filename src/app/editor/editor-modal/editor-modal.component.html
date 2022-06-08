@@ -1,7 +1,11 @@
 <div
   class="bg-dark-background-5 border border-dark-primary rounded-lg p-5 relative min-h-[250px]"
 >
-  <h1 class="pt-3 pb-4">{{data.key}}: {{data.message}}</h1>
+  <h1 class="pt-3 pb-4">{{data.stepname}} {{data.key}}</h1>
+
+  <span *ngFor="let msg of data.message">
+    <span (click)="Edit(msg)">{{msg}}</span>
+  </span>
   <div class="example-container">
 
   </div>
