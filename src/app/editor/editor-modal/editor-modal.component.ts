@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-
+import { Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'kcci-editor-modal',
   templateUrl: './editor-modal.component.html',
@@ -11,12 +11,14 @@ export class EditorModalComponent implements OnInit {
   mainValue: any;
   message: any;
   key: any;
+  stepname: any
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: EditorModalComponent,
     public dialogRef: MatDialogRef<EditorModalComponent>,
     ) {
     message:data.message;
+    stepname: data.stepname
   }
 
   ngOnInit(): void {
@@ -31,4 +33,7 @@ export class EditorModalComponent implements OnInit {
     this.dialogRef.close(data);
   }
 
+  Edit(value:string): void {
+    console.log("value: ",value)
+  }
 }
