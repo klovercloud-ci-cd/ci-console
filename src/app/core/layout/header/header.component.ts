@@ -105,9 +105,9 @@ export class HeaderComponent implements OnInit {
         }
       }
     };
-    this.sendWS = setInterval(() => {
-      socket.send(' ');
-    }, 300);
+    // this.sendWS = setInterval(() => {
+    //   socket.send(' ');
+    // }, 300);
   }
 
   ngOnDestroy() {

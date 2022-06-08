@@ -16,6 +16,7 @@ import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/mode-typescript';
 import 'ace-builds/src-noconflict/mode-scss';
 import {dump as toYaml, load as fromYaml} from 'js-yaml';
+import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
 
 
 @Component({
@@ -54,7 +55,7 @@ export class ApplicationModalComponent implements OnInit {
                 "accepts":"AUTO, MANUAL",
                 "message":"",
                 "name":"trigger",
-                "valid":"true",
+                "valid":"false",
                 "value":"AUTO"
              },
              "params":[
@@ -130,14 +131,14 @@ export class ApplicationModalComponent implements OnInit {
                 "accepts":"*",
                 "message":"",
                 "name":"name",
-                "valid":"true",
+                "valid":"false",
                 "value":"interstep"
              },
              "type":{
                 "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
                 "message":"",
                 "name":"type",
-                "valid":"false",
+                "valid":"true",
                 "value":"INTERMEDIARY"
              },
              "trigger":{
@@ -362,7 +363,7 @@ export class ApplicationModalComponent implements OnInit {
                   "accepts":"build, interstep, deployDev, jenkinsJob",
                   "message":"",
                   "name":"next",
-                  "valid":"false",
+                  "valid":"true",
                   "value":"jenkinsJob"
                },
                {
@@ -379,7 +380,7 @@ export class ApplicationModalComponent implements OnInit {
     "status":"success",
     "message":"Successful"
  };
- stepAsMap = new Map()
+  stepAsMap = new Map()
 
   userPersonalInfo: any;
 
@@ -397,7 +398,7 @@ export class ApplicationModalComponent implements OnInit {
     onWarning: null,
     writeJson: false
   };
-  
+
   files:any = [
     'file paths',
     'that exists',
@@ -411,10 +412,9 @@ export class ApplicationModalComponent implements OnInit {
     private auth: AuthService,
     private service: AppListService,
     private route: ActivatedRoute,
-    @Inject(MAT_DIALOG_DATA) public data: ApplicationListComponent
-  ) {
-
-  }
+    @Inject(MAT_DIALOG_DATA) public data: ApplicationListComponent,
+    private editorDialogRef: MatDialogRef<EditorModalComponent>
+  ) { }
 
   ngOnInit(): void {
     // @ts-ignore
@@ -429,7 +429,7 @@ export class ApplicationModalComponent implements OnInit {
     this.validity = this.appStep.data.steps.map((items:any, index:number)=>{
       let next_val:any = null;
       let params_val:any = null;
-      
+
       // <----------Checking Next Array---------->
        if(items?.next !== null){
           const nextValue = items?.next?.map((item:any)=>{
@@ -458,7 +458,7 @@ export class ApplicationModalComponent implements OnInit {
 
 
    // <-----------Data in Key Value Pair----------->
-   
+
    this.appStep.data.steps.map((_item: any, index:number)=>{
 
       const nextVal = _item.next.map((nextValue:any)=>{
@@ -480,7 +480,7 @@ export class ApplicationModalComponent implements OnInit {
 
       let next_val:any = null;
       let params_val:any = null;
-      
+
       // <----------Checking Next Array---------->
        if(_item?.next !== null){
           const nextValue = _item?.next?.map((item:any)=>{
@@ -501,7 +501,7 @@ export class ApplicationModalComponent implements OnInit {
       let error;
       console.log("_item?.name?.value:-",_item.name.valid);
 
-      
+
       if(_item.name.valid=='false'){
          error = 1;
       }else if(_item.type.valid=='false'){
@@ -513,9 +513,15 @@ export class ApplicationModalComponent implements OnInit {
       }else if(next_val==false){
          error = 5 + _item?.params.length;
       }
-      
-      this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error})
+     // console.log("_ITEM: ",_item)
+      this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
    })
+
+    console.log("editorDialogRef", this.editorDialogRef)
+
+    this.editorDialogRef.afterClosed().subscribe((data) => {
+      console.log("Editor Model Data", data)
+    })
   }
 
   addApplication = this.fb.group({
@@ -561,6 +567,7 @@ export class ApplicationModalComponent implements OnInit {
   closeAppModal() {
     this.dialogRef.close();
   }
+
 }
 
 
@@ -582,4 +589,4 @@ export class ApplicationModalComponent implements OnInit {
       // }else if(_item?.next.length !==0){
       //    error = _item?.params.length + 3;
       // }
-      // 
+      //
