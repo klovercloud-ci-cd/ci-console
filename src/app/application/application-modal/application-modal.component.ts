@@ -33,6 +33,9 @@ export class ApplicationModalComponent implements OnInit {
   panelOpenState = false;
   isValid:any;
   arrayData:any = [];
+  totalError:any=0;
+  hasPipeline:boolean = false;
+
   appStep: any = {
     "_metadata":null,
     "data":{
@@ -57,7 +60,7 @@ export class ApplicationModalComponent implements OnInit {
                 "accepts":"AUTO, MANUAL",
                 "message":"",
                 "name":"trigger",
-                "valid":"false",
+                "valid":"true",
                 "value":"AUTO"
              },
              "params":[
@@ -125,12 +128,26 @@ export class ApplicationModalComponent implements OnInit {
                    "name":"next",
                    "valid":"true",
                    "value":"interstep"
-                }
+                },
+               {
+                 "accepts":"jenkinsJob, build, interstep, deployDev",
+                 "message":"",
+                 "name":"next",
+                 "valid":"true",
+                 "value":"interstep"
+               },
+               {
+                 "accepts":"jenkinsJob, build, interstep, deployDev",
+                 "message":"",
+                 "name":"next",
+                 "valid":"true",
+                 "value":"interstep"
+               }
              ]
           },
           {
              "name":{
-                "accepts":"step1,step2,step3",
+                "accepts":"step-1,step-2,step-3",
                 "message":"",
                 "name":"name",
                 "valid":"false",
@@ -213,14 +230,14 @@ export class ApplicationModalComponent implements OnInit {
                    "accepts":"deployDev, jenkinsJob, build, interstep",
                    "message":"",
                    "name":"next",
-                   "valid":"true",
+                   "valid":"false",
                    "value":"deployDev"
                 },
                 {
                   "accepts":"deployDev, jenkinsJob, build, interstep",
                   "message":"",
                   "name":"next",
-                  "valid":"true",
+                  "valid":"false",
                   "value":"deployDev"
                }
              ]
@@ -383,9 +400,7 @@ export class ApplicationModalComponent implements OnInit {
     "message":"Successful"
  };
   stepAsMap = new Map()
-
   userPersonalInfo: any;
-
   user: any = this.auth.getUserData();
 
   companyID: any;
@@ -422,6 +437,9 @@ export class ApplicationModalComponent implements OnInit {
 
   ngOnInit(): void {
     // @ts-ignore
+    if (this.appStep.data.steps.length>0){
+      this.hasPipeline=true;
+    }
 
    // <----------Fetching User Info---------->
     this.repositoryId = this.data.repositoryId;
@@ -430,103 +448,178 @@ export class ApplicationModalComponent implements OnInit {
       this.companyID = res.data.metadata.company_id;
     });
 
-    this.validity = this.appStep.data.steps.map((items:any, index:number)=>{
+    this.validity = this.checkValidity(this.appStep.data.steps);
+
+    this.getDataKeyValue(this.appStep.data.steps);
+
+    this.getTotalError(this.appStep.data.steps);
+
+    //  let output = this.appStep?.data?.steps.filter((items:any) => this.validity.find((items2:any) => (items2?.name?.value == items?.name?.value)));
+    //  console.log("output: ",this.validity, output);
+    // this.editorDialogRef.afterClosed().subscribe((data) => {
+    //   console.log("Editor Model Data", data)
+    // })
+  }
+
+
+// <-----------Check Validity of Steps----------->
+
+  checkValidity(allSteps:any){
+    allSteps.map((items:any, index:number)=>{
       let next_val:any = null;
       let params_val:any = null;
 
       // <----------Checking Next Array---------->
-       if(items?.next !== null){
-          const nextValue = items?.next?.map((item:any)=>{
+      if(items?.next !== null){
+        const nextValue = items?.next?.map((item:any)=>{
           return item.valid;
-       })
-       next_val = !nextValue.includes('false')
+        })
+        next_val = !nextValue.includes('false')
       }
 
       // <----------Checking Param Array---------->
       if(items?.params !== null){
-         const paramsValue = items?.params?.map((item:any)=>{
-         return item.valid;
-      })
-      params_val = !paramsValue.includes('false')
-     }
-       if(items.name.valid=='true' && next_val==true && params_val==true && items.trigger.valid=='true' && items.type.valid=='true'){
-         return items.isValid = true;
+        const paramsValue = items?.params?.map((item:any)=>{
+          return item.valid;
+        })
+        params_val = !paramsValue.includes('false')
+      }
+      if(items.name.valid=='true' && next_val==true && params_val==true && items.trigger.valid=='true' && items.type.valid=='true'){
+        return items.isValid = true;
       }
       else{
-         return items.isValid = false;
+        return items.isValid = false;
       }
     })
+  }
 
-   //  let output = this.appStep?.data?.steps.filter((items:any) => this.validity.find((items2:any) => (items2?.name?.value == items?.name?.value)));
-   //  console.log("output: ",this.validity, output);
+// <-----------Data in Key Value Pair----------->
+  private p: any;
 
-
-   // <-----------Data in Key Value Pair----------->
-
-   this.appStep.data.steps.map((_item: any, index:number)=>{
+  getDataKeyValue(allSteps:any){
+    allSteps.map((_item: any, index:number)=>{
 
       const nextVal = _item.next.map((nextValue:any)=>{
-         return nextValue.value;
+        return nextValue.value;
       })
 
       const paramVal = _item.params.map((paramValue:any)=>{
-         const param = `${paramValue.name} : ${paramValue.value}`
-         return param;
+        const param = `${paramValue.name} : ${paramValue.value}`
+        return param;
       })
 
       const _obj:any = {
-         name: _item.name.value,
-         type: _item.type.value,
-         trigger: _item.trigger.value,
-         params: paramVal,
-         next: nextVal,
+        name: _item.name.value,
+        type: _item.type.value,
+        trigger: _item.trigger.value,
+        params: paramVal,
+        next: nextVal,
       }
 
       let next_val:any = null;
       let params_val:any = null;
 
       // <----------Checking Next Array---------->
-       if(_item?.next !== null){
-          const nextValue = _item?.next?.map((item:any)=>{
+      if(_item?.next !== null){
+        const nextValue = _item?.next?.map((item:any)=>{
           return item.valid;
-       })
-       next_val = !nextValue.includes('false')
+        })
+        next_val = !nextValue.includes('false')
       }
 
       // <----------Checking Param Array---------->
       if(_item?.params !== null){
-         const paramsValue = _item?.params?.map((item:any)=>{
-         return item.valid;
-      })
-      params_val = !paramsValue.includes('false')
-     }
+        const paramsValue = _item?.params?.map((item:any)=>{
+          return item.valid;
+        })
+        params_val = !paramsValue.includes('false')
+      }
       // this.arrayData.push(_obj);
 
       let error;
-      console.log("_item?.name?.value:-",_item.name.valid);
+      // console.log("_item?.name?.value:-",_item.name.valid);
 
 
       if(_item.name.valid=='false'){
-         error = 1;
+        error = 1;
       }else if(_item.type.valid=='false'){
-         error = 2;
+        error = 2;
       }else if(_item.trigger.valid=='false'){
-         error = 3;
+        error = 3;
       }else if(params_val==false){
-         error = 4;
+        error = 4;
       }else if(next_val==false){
-         error = 5 + _item?.params.length;
+        error = 5 + _item?.params.length;
       }
-     // console.log("_ITEM: ",_item)
+      // console.log("_ITEM: ",_item)
       this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
-   })
-
-    console.log("editorDialogRef", this.editorDialogRef)
-
-    this.editorDialogRef.afterClosed().subscribe((data) => {
-      console.log("Editor Model Data", data)
     })
   }
+
+  getTotalError(appSteps:any){
+    const v_val=appSteps.map((p:any)=>{
+
+        const obj={
+          n_val:p.name.valid ==='true'?true:false ,
+          ty_val:p.type.valid === 'true'?true:false,
+          t_val:p?.trigger?.valid === 'true'?true:false,
+          nx_val:p.next !==null ? !p.next.map((p:any) => p.valid).includes('false'):null,
+        }
+        return obj
+      }
+    )
+
+    console.log("v_val:",v_val)
+
+    const count = v_val.filter((obj:any) => obj.n_val === false).length;
+    const count2 = v_val.filter((obj:any) => obj.ty_val === false).length;
+    const count3 = v_val.filter((obj:any) => obj.t_val === false).length;
+    const count4 = v_val.filter((obj:any) => obj.nx_val === false).length;
+    console.log(count,count2,count3,count4)
+    const sum=count+count2+count3+count4;
+    console.log("SUM:",sum)
+  }
+
+  // getTotalError(appSteps:any){
+  //   console.log("appSteps:",appSteps);
+  //   let errors:any = [];
+  //   appSteps.map((items:any, index:number)=>{
+  //     let next_val:any = null;
+  //     let params_val:any = null;
+  //
+  //     if(items.name.valid=='false' || items.type.valid=='false' || items.trigger.valid=='false'){
+  //       this.totalError = this.totalError+1;
+  //     }
+  //     // else if(items.type.valid=='false'){
+  //     //   errors.push('error');
+  //     // }else if(items.trigger.valid=='false'){
+  //     //   errors.push('error');
+  //     // }
+  //     // console.log("this.totalError: -",this.totalError)
+  //     // <----------Checking Next Array---------->
+  //     if(items?.next !== null){
+  //       const nextValue = items?.next?.map((item:any)=>{
+  //         return item.valid;
+  //       })
+  //       next_val = !nextValue.includes('false')
+  //     }
+  //
+  //     // <----------Checking Param Array---------->
+  //     if(items?.params !== null){
+  //       const paramsValue = items?.params?.map((item:any)=>{
+  //         return item.valid;
+  //       })
+  //       params_val = !paramsValue.includes('false')
+  //     }
+  //     if(items.name.valid=='true' && next_val==true && params_val==true && items.trigger.valid=='true' && items.type.valid=='true'){
+  //       return items.isValid = true;
+  //     }
+  //     else{
+  //       return items.isValid = false;
+  //     }
+  //   })
+  //   console.log("this.totalError:::: -",this.totalError)
+  // }
 
   addApplication = this.fb.group({
     name: ['', Validators.required],
@@ -536,12 +629,10 @@ export class ApplicationModalComponent implements OnInit {
   gotoNext(e:number){
     const {name,url} = this.addApplication.value;
     this.href = this.router.url;
-    console.log("PATH: ",this.location.path());
+    // console.log("PATH: ",this.location.path());
 
     this.stepper = e;
-    // console.log("this.href:",this.href)
-    // console.log("Next Page",this.addApplication.value);
-    // this.router.navigate(['repository/ksgdksb/name/url']);
+
   }
 
   addApplicationFormData() {
@@ -558,7 +649,6 @@ export class ApplicationModalComponent implements OnInit {
       ],
     };
 
-    // this.service.addApplication(data, this.repositoryId, this.companyID);
     this.service
       .addApplication(data, this.companyID, this.repositoryId)
       .subscribe(
@@ -579,25 +669,46 @@ export class ApplicationModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  editorPropsFix(data: any): void {
+    console.log("Get Update Data", data)
+  //  Update Editor item
+  //   key: "name" replaceValue: "step1" stepname: "interstep"
+    const stepName= data?.stepname;
+    const itemValue = this.stepAsMap.get(stepName)
+    const newStepName= data?.replaceValue;
+    console.log(itemValue)
+    const _item = itemValue?.stepData;
+
+    const nextVal = _item?.next?.map((nextValue:any)=>{
+      return nextValue.value;
+    })
+
+    const paramVal = _item?.params?.map((paramValue:any)=>{
+      const param = `${paramValue.name} : ${paramValue.value}`
+      return param;
+    })
+    const _obj:any = {
+      name: newStepName,
+      type: _item.type.value,
+      trigger: _item.trigger.value,
+      params: paramVal,
+      next: nextVal,
+    }
+    const newKeyValue = {isValid: _item.isValid, data: toYaml(_obj),  stepData:_item}
+    this.stepAsMap = this.mapReplace(this.stepAsMap, stepName, newStepName, newKeyValue)
+  }
+
+  mapReplace(map: any, prevKey: string, newKey: string, newKeyValue: any): any {
+    const x = new Map()
+    for (const [key, value] of this.stepAsMap) {
+      console.log("key val", newKey, key)
+      if (prevKey === key) {
+        x.set(newKey, newKeyValue)
+        continue
+      }
+      x.set(key, value)
+    }
+    console.log("x", x)
+    return x
+  }
 }
-
-
-
-
-
-      // if(_item?.name?.valid){
-      //       error = 1;
-      //    }
-      // if(!_item?.name?.valid){
-      //    error = 1;
-      // }else{
-      //    error = 2;
-      // }
-      // else if(!_item?.trigger?.valid){
-      //    error = 3;
-      // }else if(_item?.params.length !==0){
-      //    error = 4;
-      // }else if(_item?.next.length !==0){
-      //    error = _item?.params.length + 3;
-      // }
-      //

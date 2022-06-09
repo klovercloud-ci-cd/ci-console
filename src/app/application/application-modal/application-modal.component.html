@@ -1,7 +1,7 @@
 <div
   class="bg-dark-container border border-dark-primary rounded-lg p-5 relative min-h-[250px]"
 >
-  <h1 class="pt-3 pb-4">Add New Application</h1>
+  <h1 class="pt-3 pb-4" >Add New Application</h1>
   <div class="example-container">
     <form [formGroup]="addApplication" (ngSubmit)="addApplicationFormData()">
 
@@ -29,7 +29,8 @@
       <!-- YAML Section -->
 
       <ng-template #nextPage>
-        <mat-accordion>
+        <div *ngIf="!hasPipeline" class="text-center mt-10"><h1 class=" flex justify-center items-center gap-1 lg:gap-3 text-dark-warn text-lg lg:text-2xl"><mat-icon>error</mat-icon> Please Create Pipeline</h1></div>
+        <mat-accordion  *ngIf="hasPipeline">
           <mat-expansion-panel hideToggle
           class="kc-expansion-panel" *ngFor="let item of stepAsMap | keyvalue" [expanded]="!item.value?.isValid">
 
@@ -44,9 +45,9 @@
             </mat-expansion-panel-header>
             <div class="overflow-y-auto max-h-[500px] mt-5 bg-dark-background-5 p-3 rounded-md">
                <!-- Some:  {{item.value.name}} -->
-
+<!--              {{item.value.stepData.name.value | json}}-->
               <div class="text-white">
-                <kcci-editor [(text)]="item.value.data" [InputData]="item.value?.stepData" [errorLine]="!item.value?.isValid ? item.value.error : 0" mode="yaml"></kcci-editor>
+                <kcci-editor (fixProp)="editorPropsFix($event)" [(text)]="item.value.data" [InputData]="item.value.stepData" [errorLine]="!item.value?.isValid ? item.value.error : 0" mode="yaml"></kcci-editor>
                 <!-- yamlInputData -->
               </div>
                 </div>
@@ -96,13 +97,13 @@
           </mat-expansion-panel> -->
 
       </ng-template>
-
-      <div mat-dialog-actions class="flex justify-between">
+<!--      class="absolute right-5 bottom-7 flex justify-between"-->
+      <div mat-dialog-actions class=" flex justify-between">
         <div></div>
 
         <div *ngIf="stepper==1 ; else nextButton" >
           <span
-          class="kc-button-primary kc-register block absolute bottom-5 right-5 px-3 py-2 rounded-md cursor-pointer"
+          class="kc-button-primary kc-register block  px-3 py-2 rounded-md cursor-pointer"
           (click)="gotoNext(2)"
         >
         Next >
@@ -120,14 +121,15 @@
             class="bg-slate-500 kc-register block px-3 py-2 rounded-md"
             type="submit"
             [disabled]="!addApplication.valid"
+            *ngIf="hasPipeline"
           >
-          Submit
+          OK
           </button>
         </div>
 
 
         <ng-template #other_content>
-          <div class="mb-2 flex gap-3">
+          <div class="mb-2 flex gap-3 pt-5">
             <span
             class="kc-button-primary kc-register block px-3 py-2 rounded-md cursor-pointer"
             (click)="gotoNext(1)"
@@ -139,8 +141,8 @@
             type="submit"
             [disabled]="!addApplication.valid"
           >
-            <span *ngIf="!isLoading; else before_submit">
-              Submit
+            <span *ngIf="!isLoading && hasPipeline; else before_submit">
+              OK
             </span>
             <ng-template #before_submit>
               <div class="py-[10px] mx-auto w-[57px]">

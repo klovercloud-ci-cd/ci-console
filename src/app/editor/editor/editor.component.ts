@@ -14,9 +14,12 @@ import {Ace, edit, Range} from 'ace-builds';
 import 'ace-builds';
 import 'ace-builds/src-noconflict/theme-dracula';
 import {dump as toYaml, load as fromYaml} from 'js-yaml';
-import {MatDialogConfig} from "@angular/material/dialog";
+import {MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
 import { MatDialog } from '@angular/material/dialog';
 import {EditorModalComponent} from "../editor-modal/editor-modal.component";
+import { Router, Event, NavigationStart, NavigationEnd, NavigationError} from '@angular/router';
+import {EditorService} from "../../shared/services/editor.service";
+// import {Router} from "@angular/router";
 
 @Component({
   selector: 'kcci-editor',
@@ -26,362 +29,17 @@ import {EditorModalComponent} from "../editor-modal/editor-modal.component";
 export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('editor') editorRef!: ElementRef;
   @Output() textChange = new EventEmitter<string>();
+  @Output() dataChange = new EventEmitter<string>();
+  @Output() fixProp = new EventEmitter<any>()
   @Input() text!: string;
   @Input() errorLine: any;
   @Input() InputData: any;
   @Input() readOnly: boolean = false;
   @Input() mode: string = 'yaml';
   @Input() prettify: boolean = true;
+
   editor!: Ace.Editor;
-  appStep: any = {
-    "_metadata":null,
-    "data":{
-      "name":"test",
-      "steps":[
-        {
-          "name":{
-            "accepts":"*",
-            "message":"",
-            "name":"name",
-            "valid":"true",
-            "value":"build"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"true",
-            "value":"BUILD"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"false",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"service_account",
-              "valid":"true",
-              "value":"test-sa"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"storage",
-              "valid":"true",
-              "value":"500Mi"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"access_mode",
-              "valid":"true",
-              "value":"ReadWriteOnce"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"args",
-              "valid":"true",
-              "value":"key3:value1,key4:value2"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"args_from_configmaps",
-              "valid":"true",
-              "value":"tekton/cm-test"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"images",
-              "valid":"true",
-              "value":"shabrul2451/test-dev,shabrul2451/test-pro"
-            },
-            {
-              "accepts":"git",
-              "message":"",
-              "name":"repository_type",
-              "valid":"true",
-              "value":"git"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"revision",
-              "valid":"true",
-              "value":"master"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"jenkinsJob, build, interstep, deployDev",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"interstep"
-            }
-          ]
-        },
-        {
-          "name":{
-            "accepts":"*",
-            "message":"",
-            "name":"name",
-            "valid":"true",
-            "value":"interstep"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"false",
-            "value":"INTERMEDIARY"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"true",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"command",
-              "valid":"true",
-              "value":"echo"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"command_args",
-              "valid":"true",
-              "value":"Hello World"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"envs",
-              "valid":"true",
-              "value":"key3:value1,key4:value2"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"envs_from_configmaps",
-              "valid":"true",
-              "value":"tekton/cm-test"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"envs_from_secrets",
-              "valid":"true",
-              "value":"tekton/cm-test"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"images",
-              "valid":"true",
-              "value":"ubuntu"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"revision",
-              "valid":"true",
-              "value":"latest"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"service_account",
-              "valid":"true",
-              "value":"test-sa"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"deployDev, jenkinsJob, build, interstep",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"deployDev"
-            },
-            {
-              "accepts":"deployDev, jenkinsJob, build, interstep",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"deployDev"
-            }
-          ]
-        },
-        {
-          "name":{
-            "accepts":"*",
-            "message":"",
-            "name":"name",
-            "valid":"true",
-            "value":"deployDev"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"true",
-            "value":"DEPLOY"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"true",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"name",
-              "valid":"true",
-              "value":"ubuntu"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"namespace",
-              "valid":"true",
-              "value":"default"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"revision",
-              "valid":"true",
-              "value":"master"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"type",
-              "valid":"true",
-              "value":"deployment"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"agent",
-              "valid":"true",
-              "value":"local_agent"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"env",
-              "valid":"true",
-              "value":"dev"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"images",
-              "valid":"true",
-              "value":"shabrul2451/test-dev"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"build, interstep, deployDev, jenkinsJob",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"jenkinsJob"
-            }
-          ]
-        },
-        {
-          "name":{
-            "accepts":"*",
-            "message":"",
-            "name":"name",
-            "valid":"true",
-            "value":"jenkinsJob"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"true",
-            "value":"JENKINS_JOB"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"true",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"job",
-              "valid":"true",
-              "value":"new"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"params",
-              "valid":"true",
-              "value":"id:123,verbosity:high"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"secret",
-              "valid":"true",
-              "value":"jenkins-credentials"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"url",
-              "valid":"true",
-              "value":"http://jenkins.default.svc:8080"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"build, interstep, deployDev, jenkinsJob",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"jenkinsJob"
-            },
-            {
-              "accepts":"build, interstep, deployDev, jenkinsJob",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"jenkinsJob"
-            }
-          ]
-        },
-      ]
-    },
-    "status":"success",
-    "message":"Successful"
-  };
+
   // All possible options can be found at:
   // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
   options = {
@@ -393,19 +51,109 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     fontFamily: '\'Roboto Mono Regular\', monospace',
   };
 
-  constructor(private dialog: MatDialog) {
+  title = 'detect-route-change';
+  currentRoute: string;
+  private data: string | undefined;
+
+  constructor
+    (
+    private dialog: MatDialog,private router: Router,
+    private editorService: EditorService,
+    public editorDialogRef: MatDialogRef<EditorModalComponent>){
+
+    this.currentRoute = "";
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationStart) {
+        // Show loading indicator
+        console.log('Route change detected',this.currentRoute);
+      }
+      if (event instanceof NavigationEnd) {
+        // Hide loading indicator
+        this.currentRoute = event.url;
+        console.log("this.currentRoute:",this.currentRoute,event);
+      }
+      if (event instanceof NavigationError) {
+        // Hide loading indicator
+
+        // Present error to user
+        console.log(event.error);
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.editor
+    // console.log("The DATA: ",fromYaml(this.text))
+
+    this.editorDialogRef.afterClosed().subscribe((data) => {
+      console.log("Editor M v.2: ", data)
+    })
+    console.log("UpD Route: ");
+
+    // @ts-ignore
+    this.editorService.toggleState$.subscribe((res:any) => {
+      console.log("Response: ",res)
+      // if(res.stepname == this.InputData.value?.stepData?.name?.value){
+      //   switch(res.key) {
+      //     case 'name':
+      //       this.InputData.name.value = res.replaceValue;
+      //       this.InputData.name.valid = true;
+      //       break;
+      //     case 'type':
+      //       this.InputData.type.value = res.replaceValue;
+      //       console.log("-----Type-2: ",this.InputData.type.value , res.replaceValue)
+      //       break;
+      //     case 'trigger':
+      //       this.InputData.trigger.value = res.replaceValue;
+      //       console.log("-----Trigger")
+      //       break;
+      //     // case 'params':
+      //     //   console.log("-----Params")
+      //     //   break;
+      //     // case 'next':
+      //     //   console.log("-----Next")
+      //     //   break;
+      //     default:
+      //       console.log("-----nothing match found")
+      //   }
+      //
+      //   // this.InputData.name.value = res.replaceValue;
+      //   // console.log("ToYAML: ",toYaml(this.InputData));
+      //   this.text = toYaml(this.InputData);
+      // }
+      // else if(res.stepname == this.InputData.type.value){
+      //
+      //   this.InputData.type.value = res.replaceValue;
+      // }
+
+      // console.log("ToYAML: ",this.text);
+
+      console.log("All Data:", this.InputData);
+      this.fixProp.emit(res)
+    });
+
+    // this.editorService
+    //   .getKey()
+    //   .subscribe(
+    //     (res) => {
+    //       console.log("Get Key: ",res);
+    //     },
+    //     (err) => {
+    //       console.log('err', err);
+    //     }
+    //   );
   }
 
   ngAfterViewInit(): void {
     this.initEditor_();
+    // @ts-ignore
+
   }
 
   onTextChange(text: string): void {
     this.textChange.emit(text);
+  }
+  onDataChange(data:any):void{
+    this.dataChange.emit(data);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -426,17 +174,19 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
   }
+
   private initEditor_(): void {
     this.editor = edit(this.editorRef.nativeElement);
     this.editor.setOptions(this.options);
     this.editor.setValue(this.text, -1);
     this.editor.setReadOnly(this.readOnly);
     this.editor.setTheme('ace/theme/dracula');
-    // console.log("this.errorLine: ", this.errorLine);
+    console.log("Total Text: ",typeof this.text);
 
     this.setEditorMode_();
     this.editor.session.setUseWorker(false);
     this.editor.on('change', () => this.onEditorTextChange_());
+    this.editor.on('change', () => this.onEditorDataChange_());
 
     // <-----------Multiple Error Showing----------->
 
@@ -456,6 +206,8 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     //
     // this.editor.getSession().setAnnotations(jsonErrorArray);
 
+
+    // <-----------Error Line Showing----------->
 
     this.editor.getSession().setAnnotations([{
       row: this.errorLine - 1,
@@ -498,7 +250,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     let mainValue:any;
     // @ts-ignore
     for (const [k, v] of Object.entries(data)) {
-       console.log("Trig: ",key, v);
+       // console.log("Trig: ",key, v);
       // stepName = v;
       // console.log(v);
       if(k === key) {
@@ -508,18 +260,16 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
       }
     }
 
-    console.log("InputData-----: ", mainKey);
-    console.log("accepts-----: ", this.InputData.name.accepts);
-    console.log("InputData-----: ",this.InputData, mainKey);
-
     switch(mainKey) {
       case 'name':
         if(this.InputData.name.valid !== "true") {
-          this.openDialog(this.InputData.name.value,mainKey,this.InputData[mainKey].accepts)
-          console.log("Valid All");
+          this.openDialog(this.InputData.name.value,mainKey,this.InputData[mainKey].accepts);
         }
         break;
       case 'type':
+        if (this.InputData.type.valid !== "true"){
+          this.openDialog(this.InputData.type.value.toLowerCase(),mainKey,this.InputData[mainKey].accepts);
+        }
         console.log("-----Type")
         break;
       case 'trigger':
@@ -536,34 +286,16 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
 
-    // if(mainKey == 'name'){
-    //   if(this.InputData.name.accepts=='*')
-    //   console.log("Valid All")
-    // }else{
-    //   console.log("InValid")
-    // }
 
-    // <------------Mat Dialog------------>
-
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.autoFocus = true;
-    // dialogConfig.width = '30%';
-    // dialogConfig.panelClass = 'custom-modalbox';
-    // dialogConfig.data = {
-    //   mainKey: mainKey,
-    //   mainValue: mainValue
-    // };
-    // this.dialog.open(EditorModalComponent, dialogConfig);
   }
 
     openDialog(step:string,key:string,msg:string) {
       let accepts = msg.split(",")
-console.log(" step name:",step)
+      // console.log(" step name:",step)
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
-      dialogConfig.width = '30%';
+      dialogConfig.width = '20%';
       dialogConfig.panelClass = 'custom-modalbox';
       dialogConfig.data = {
         key:key,
@@ -571,6 +303,12 @@ console.log(" step name:",step)
         message: accepts,
       };
       this.dialog.open(EditorModalComponent, dialogConfig);
+
+      // this.dialog.afterClosed().subscribe(result => {
+      //   console.log('The dialog was closed');
+      //   // reference the closeMessage property here
+      //   console.log("Results:",result);
+      // });
     }
 
   // refactorField(step:string,key:string,value:string){
@@ -585,6 +323,12 @@ console.log(" step name:",step)
   private onEditorTextChange_(): void {
     this.text = this.editor.getValue();
     this.onTextChange(this.text);
+    console.log("On text : ",this.text)
+  }
+  private onEditorDataChange_(): void {
+    this.data = this.editor.getValue();
+    this.onDataChange(this.data);
+    console.log("On Data : ",this.data)
   }
 
   private onEditorModeChange_(): void {
@@ -595,121 +339,3 @@ console.log(" step name:",step)
     this.editor.getSession().setMode(`ace/mode/${this.mode}`);
   }
 }
-
-
-// import {
-//   AfterViewInit,
-//   Component,
-//   ElementRef,
-//   EventEmitter,
-//   Input,
-//   OnChanges,
-//   OnInit,
-//   Output,
-//   SimpleChanges,
-//   ViewChild,
-// } from '@angular/core';
-// import { Ace, edit } from 'ace-builds';
-// import 'ace-builds';
-// import 'ace-builds/src-noconflict/theme-dracula';
-
-// @Component({
-//   selector: 'kcci-editor',
-//   templateUrl: './editor.component.html',
-//   styleUrls: ['./editor.component.scss']
-// })
-// export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
-//   @ViewChild('editor') editorRef!: ElementRef;
-//   @Output() textChange = new EventEmitter<string>();
-//   @Input() text!: string;
-//   @Input() readOnly: boolean = false;
-//   @Input() mode: string = 'json';
-//   @Input() prettify: boolean = true;
-//   editor!: Ace.Editor;
-//   // All possible options can be found at:
-//   // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
-//   options = {
-//     showPrintMargin: false,
-//     highlightActiveLine: true,
-//     tabSize: 2,
-//     wrap: true,
-//     fontSize: 14,
-//     fontFamily: '\'Roboto Mono Regular\', monospace',
-//   };
-//   constructor() {}
-//   ngOnInit(): void { }
-//   ngAfterViewInit(): void {
-//     this.initEditor_();
-//   }
-//   onTextChange(text: string): void {
-//     this.textChange.emit(text);
-//   }
-//   ngOnChanges(changes: SimpleChanges): void {
-//     if (!this.editor) {
-//       return;
-//     }
-//     for (const propName in changes) {
-//       if (changes.hasOwnProperty(propName)) {
-//         switch (propName) {
-//           case 'text':
-//             this.onExternalUpdate_();
-//             break;
-//           case 'mode':
-//             this.onEditorModeChange_();
-//             break;
-//           default:
-//         }
-//       }
-//     }
-//   }
-//   private initEditor_(): void {
-//     this.editor = edit(this.editorRef.nativeElement);
-//     this.editor.setOptions(this.options);
-
-//     const newData = JSON.parse(this.text);
-//     const nextVal = newData.next.map((nextValue:any)=>{
-//       // console.log("nextValue",nextValue);
-//       return nextValue.value;
-//    })
-
-//    const paramVal = newData.params.map((paramValue:any)=>{
-//       // console.log("nextValue",paramValue);
-//       const param = `${paramValue.name} : ${paramValue.value}`
-//       return param;
-//    })
-//     const _obj:any = {};
-//       _obj.steps = {
-//          name: newData.name.value,
-//          type: newData.type.value,
-//          trigger: newData.trigger.value,
-//          params: paramVal,
-//          next: nextVal
-//       }
-//       console.log("_obj",_obj);
-
-//     this.editor.setValue(this.text, -1);
-//     // this.editor.setReadOnly(this.readOnly);
-//     this.editor.setTheme('ace/theme/textmate');
-//     this.setEditorMode_();
-//     this.editor.session.setUseWorker(false);
-
-//     // console.log("this.text", JSON.parse(this.text));
-//     this.editor.on('change', () => this.onEditorTextChange_());
-//   }
-//   private onExternalUpdate_(): void {
-//     const point = this.editor.getCursorPosition();
-
-//     this.editor.setValue(this.text, -1);
-//     this.editor.moveCursorToPosition(point);
-//   }
-//   private onEditorTextChange_(): void {
-//     this.text = this.editor.getValue();
-//     this.onTextChange(this.text);
-//   }
-//   private onEditorModeChange_(): void {
-//     this.setEditorMode_();
-//   }
-//   private setEditorMode_(): void {
-//     this.editor.getSession().setMode(`ace/mode/${this.mode}`);
-//   }
-// }
