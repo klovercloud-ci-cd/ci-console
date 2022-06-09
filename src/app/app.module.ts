@@ -22,6 +22,7 @@ import { CoreModule } from './core/core.module';
 import { ApiCallInterceptor } from './shared/interceptors/api-call.interceptor';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { EditorModule } from './editor/editor.module';
 
 const globalRippleConfig: RippleGlobalOptions = {
   animation: {
@@ -50,6 +51,7 @@ const globalRippleConfig: RippleGlobalOptions = {
     CompanyModule,
     LoadingBarModule,
     SnackbarModule,
+    EditorModule
   ],
   providers: [
     {

@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { DeleteConformationDialogComponent } from 'src/app/core/components/delete-conformation-dialog/delete-conformation-dialog.component';
 import { RepoServiceService } from 'src/app/repository/repo-service.service';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
@@ -149,7 +150,7 @@ export class ApplicationListComponent implements OnInit {
   }
 
   deleteApp(e: any) {
-    console.log('Delete:', e);
+    console.log('Delete:', e._metadata.name);
     const data = {
       applications: [
         {
@@ -159,6 +160,14 @@ export class ApplicationListComponent implements OnInit {
         },
       ],
     };
+    const dialogRef = this.dialog.open(DeleteConformationDialogComponent, {
+      data: {
+        message: `Are you sure! You want to delete "${e._metadata.name}"?`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
     this.service
       .deleteApplication(data, this.companyID, this.repositoryId)
       .subscribe(
@@ -169,7 +178,9 @@ export class ApplicationListComponent implements OnInit {
           // this.openSnackBarError('Authentication Error', '');
           console.log('err', err);
         }
-      );
+      )
+      }
+    });
   }
 
   webUpdate(appId: any) {

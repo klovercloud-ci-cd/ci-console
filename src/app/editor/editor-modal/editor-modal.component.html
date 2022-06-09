@@ -1,0 +1,13 @@
+
+<div class=" bg-dark-background-5 border border-dark-primary rounded-lg p-5 relative min-h-[140px]">
+  <h1 class="pt-3 pb-4">{{data.stepname | titlecase}} {{data.key | titlecase}}</h1>
+  <div class="flex gap-3">
+    <div *ngFor="let msg of data.message"  >
+      <h1 (click)="Edit(data.stepname,data.key,msg)" class="w-full cursor-pointer hover:text-green-700">{{msg}}</h1>
+    </div>
+  </div>
+  <div class="absolute top-2 right-2 cursor-pointer" (click)="closeAppModal()">
+    <mat-icon>highlight_off</mat-icon>
+  </div>
+</div>
+<div></div>

@@ -134,10 +134,11 @@ body {
 * {
   font-family: Popins, sans-serif;
 }
-
+.ace_error{
+  cursor: pointer;
+  // margin-top: 25px;
+}
 .sb-success {
-  // background: #3c4c72;
-  // color: white;
   @apply bg-dark-background-4 mx-auto text-white;
   .mat-simple-snack-bar-content {
     @apply py-8 px-9 text-xl;

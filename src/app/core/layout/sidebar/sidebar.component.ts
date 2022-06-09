@@ -10,7 +10,6 @@ import  { NavItem, NavItemNode } from './Sidenav';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-
   @ViewChild('tree') tree: any;
 
   navItems: NavItem[] = [];
@@ -30,7 +29,7 @@ export class SidebarComponent implements OnInit {
       title: 'Repository',
       icon: 'widgets',
       route: '/repository',
-    }
+    },
   ];
 
   constructor() {}
@@ -62,8 +61,8 @@ export class SidebarComponent implements OnInit {
         isExpanded: true,
         children: [
           { name: 'User', icon: 'people', url: '/users' },
-          { name: 'Role', icon: 'supervisor_account', url: '/roles'},
-        ]
+          { name: 'Role', icon: 'supervisor_account', url: '/roles' },
+        ],
       },
     ];
     this.dataSource.data = this.navItems;

@@ -27,6 +27,8 @@ import { ApplicationModalComponent } from './application-modal/application-modal
 import { CiCdPipelineComponent } from './ci-cd-pipeline/ci-cd-pipeline.component';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ApplicationRoutingModule } from './application-routing.module';
+import { EditorModule } from '../editor/editor.module';
+
 
 @NgModule({
   declarations: [
@@ -64,6 +66,7 @@ import { ApplicationRoutingModule } from './application-routing.module';
     MatRippleModule,
     MatProgressBarModule,
     NgxSkeletonLoaderModule,
+    EditorModule
   ],
 })
 export class ApplicationModule {}
