@@ -1,7 +1,7 @@
 <kc-progress-bar></kc-progress-bar>
 
 <mat-sidenav-container
-  class="example-container w-full h-full bg-dark-background-5"
+  class="example-container w-full h-full bg-light"
 >
   <mat-sidenav
     #drawer
@@ -45,7 +45,7 @@
         </button>
         <div *ngIf="getScreenWidth > 1280; else something">
           <div
-            class="capitalize text-2xl font-medium tracking-wide transition ease-in-out duration-500 pl-5"
+            class="capitalize text-dark text-2xl font-medium tracking-wide transition ease-in-out duration-500 pl-5"
             [ngClass]="isOpen ? 'pl-2' : 'pl-5'"
           >
             {{ data.title }}
@@ -75,12 +75,12 @@
             <kcci-collapsed-sidebar></kcci-collapsed-sidebar>
           </div>
 
-          <div class="flex items-center">
+          <div class="flex items-center text-dark">
             <button class="" (click)="toggleCollapse()">
               <mat-icon>menu</mat-icon>
             </button>
             <div
-              class="capitalize text-2xl font-medium tracking-wide transition ease-in-out duration-500 pl-5"
+              class="capitalize text-2xl font-medium tracking-wide transition ease-in-out duration-500 pl-5 text-dark"
             >
               {{ data.title }}
             </div>

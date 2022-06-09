@@ -25,7 +25,7 @@
   }
 }
 
-@keyframes pulse {
+@keyframes pulses {
   0% {
     transform: scale(0.1);
     opacity: 0;
@@ -38,8 +38,7 @@
     opacity: 0;
   }
 }
-
-.loader-inner {
+.loader-step {
   opacity: 0;
   @apply bg-dark-background-2;
   border-radius: 50%;
@@ -49,15 +48,13 @@
   height: 60px;
 
   div:nth-child(1) {
-    animation: pulse 2s infinite;
+    animation: pulses 2s infinite;
   }
-
   div:nth-child(2) {
-    animation: pulse 2s infinite 0.3s;
+    animation: pulses 2s infinite 0.3s;
   }
-
   div:nth-child(3) {
-    animation: pulse 2s infinite 0.6s;
+    animation: pulses 2s infinite 0.6s;
   }
 
   div:nth-child(4) {
@@ -70,8 +67,7 @@
     height: 80px;
   }
 }
-
-.active {
+.loader-step.active {
   opacity: 100;
 }
 
@@ -178,4 +174,15 @@
 
 .log-exp {
   transition: all 0.1s ease-in-out;
+}
+.logPanel {
+
+  /* Control snap from here */
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+}
+
+.logPanel pre:last-child {
+  scroll-snap-align: start;
 }

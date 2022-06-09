@@ -1,15 +1,15 @@
-import  { OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Component, HostListener } from '@angular/core';
-import  { Router } from '@angular/router';
-import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import  { SharedLayoutService } from './shared-layout.service';
+import { Router } from '@angular/router';
+import { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import { SharedLayoutService } from './shared-layout.service';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, AfterContentChecked {
   @HostListener('window:resize', ['$event'])
   isOpen = true;
 
@@ -32,11 +32,16 @@ export class LayoutComponent implements OnInit {
   constructor(
     private router: Router,
     private toolbarService: ToolbarService,
-    private ss: SharedLayoutService
+    private ss: SharedLayoutService,
+    private ref: ChangeDetectorRef
   ) {
     this.toolbarService.currentData.subscribe(
-      (currentData) => this.data = currentData
+      (currentData) => (this.data = currentData)
     );
+  }
+
+  ngAfterContentChecked(): void {
+    this.ref.detectChanges();
   }
 
   public getScreenWidth: any;

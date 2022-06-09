@@ -27,14 +27,13 @@ export class PipelineService {
   socket: any;
 
   connectToSocket(id?: any) {
-    const companyId = id;
     const BASE_URL_WS = environment.v1ApiEndPointWS;
     const socket = new WebSocket(
       `${BASE_URL_WS}pipelines/ws?token=${this.token.getAccessToken()}`
     );
+
     socket.onopen = (e: any) => {
       console.log('Connected');
-      console.log(this.location.path());
     };
     return socket;
   }

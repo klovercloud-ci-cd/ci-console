@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
-import type { RippleGlobalOptions } from '@angular/material/core';
+import { RippleGlobalOptions } from '@angular/material/core';
 import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { CompanyModule } from './company/company.module';
