@@ -2,6 +2,9 @@ module.exports = {
   content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
+      boxShadow: {
+        'card': '0px 0px 30px rgba(0, 0, 0, 0.08)',
+      },
       fontWeight: {
         light: 300,
         regular: 400,

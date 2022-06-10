@@ -211,7 +211,19 @@ body {
     @apply bg-primary-300 text-dark-500;
   }
 }
+.kc-button-danger {
+  @apply bg-danger hover:bg-danger-700 border-1.5 py-2 px-3 text-white text-button-sm rounded-md gap-[8px];
+  &:disabled{
+    @apply border-primary-300 text-primary-300;
+  }
+}
 
+.kc-button-danger-sm-outline {
+  @apply border-danger hover:border-danger-700 hover:text-danger-1000 border-1.5 py-4 px-6 text-danger text-button rounded-md gap-[8px];
+  &:disabled{
+    @apply  border-primary-300 text-dark-500;
+  }
+}
 
 .kc-button-danger-light {
   @apply bg-danger-300 hover:bg-danger-400 py-4 px-6 text-dark text-button rounded-md gap-[8px] focus:bg-danger-400;
@@ -219,36 +231,16 @@ body {
     @apply bg-primary-300 text-dark-500;
   }
 }
+
+
 /*
 *Buttons end
 */
 .kc-card {
-  @apply bg-light-500 border-1.5 border-kc-bdr-card text-dark-text;
+  @apply bg-light-500 border-1.5 border-kc-bdr-card rounded-md p-12;
 }
-.kc-button-info {
-  @apply bg-dark-info px-4 text-white;
-}
-.kc-button-danger {
-  @apply bg-dark-danger px-4 text-white;
-}
-.kc-button-warn {
-  @apply bg-dark-warn px-4 text-white;
-}
-.kc-form {
-  .mat-form-field-outline {
-    @apply bg-dark-background;
-  }
-}
-.mat-option-text {
-  @apply text-white;
-}
-.mat-form-field-flex {
-  // @apply bg-dark-container;
-}
-.kc-form {
-  .md-input-focused {
-    -webkit-box-shadow: none;
-  }
+.kc-form-field {
+  @apply w-full;
 }
 
 .kc-progress-bar {
@@ -275,6 +267,20 @@ body {
 }
 .custom-modalbox > mat-dialog-container {
   background-color: transparent !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #24252C;
+  -webkit-box-shadow: none !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 @import "~ngx-toastr/toastr";
