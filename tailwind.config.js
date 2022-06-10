@@ -18,7 +18,8 @@ module.exports = {
         'sub-title': '21px',
         'paragraph': '16px',
         'caption': '12px',
-        'button': '18px'
+        'button': '18px',
+        'button-sm': '14px',
       },
       colors: {
         'kc-bdr':{
@@ -37,6 +38,7 @@ module.exports = {
           '1000':"#0a101c",
         },
         'info':{
+          '50':"#eff5ff",
           '100':"#d6e6fe",
           '200':"#a5c8fc",
           '300':"#74aafa",
@@ -50,6 +52,7 @@ module.exports = {
 
         },
         'danger':{
+          '50':"#ffedf0",
           '100':"#ffd4db",
           '200':"#ffa1b0",
           '300':"#ff6e85",
@@ -75,6 +78,7 @@ module.exports = {
 
         },
         'light':{
+          '50':"#fbfcfe",
           '100':"#f7f9fd",
           '200':"#eff4fa",
           DEFAULT:"#e7eef8",
@@ -87,6 +91,7 @@ module.exports = {
           '1000':"#b0c7e8",
         },
         'warn':{
+          '50':"#fefbf7",
           '100':"#fdf1df",
           '200':"#fbddae",
           '300':"#f8c87e",
