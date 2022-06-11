@@ -3,8 +3,7 @@
   color: white;
 }
 .example-sidenav {
-  background-color: #131d35;
-  @apply xl:border-r-[1px] xl:border-[#495c7d] w-[260px];
+  @apply bg-light-400 xl:border-r-[1px] xl:border-[#495c7d] w-[260px];
 }
 
 .content-body {
