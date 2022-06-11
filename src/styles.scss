@@ -67,7 +67,7 @@ $kc-primary: (
     900: white,
   )
 );
-$kc-info: (
+$kc-success: (
   50:#f5fcf7,
   100:#ccf2d8,
   200:#a3e8b9,
@@ -92,9 +92,7 @@ $kc-info: (
   )
 );
 $ci-console-primary: mat.define-palette($kc-primary);
-$ci-console-accent: mat.define-palette($kc-info);
-
-
+$ci-console-accent: mat.define-palette($kc-success);
 
 // The warn palette is optional (defaults to red).
 $ci-console-warn: mat.define-palette($kc-denger);
@@ -124,159 +122,125 @@ $ci-console-theme: mat.define-light-theme(
   font-family: Popins;
   src: url(./assets/fonts/Poppins-Regular.ttf);
 }
+@font-face {
+  font-family: Manrope;
+  src: url(./assets/fonts/Manrope-Regular.ttf);
+}
 html,
 body {
   margin: 0;
-  font-family: Popins, sans-serif;
+  font-family: Manrope, sans-serif;
   height: 100%;
-  @apply font-regular bg-light text-dark;
+  @apply font-regular bg-light text-dark text-paragraph tracking-wide;
 }
 * {
-  font-family: Popins, sans-serif;
+  font-family: Manrope, sans-serif;
+  @apply font-regular text-dark text-paragraph tracking-wide;
 }
 .ace_error{
   cursor: pointer;
   // margin-top: 25px;
 }
+
+/*
+*snack bar start
+*/
 .sb-success {
-  @apply bg-dark-background-4 mx-auto text-white;
-  .mat-simple-snack-bar-content {
-    @apply py-8 px-9 text-xl;
-  }
+  @apply bg-success-100 shadow-md shadow-danger-200 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px];
   transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
-  box-shadow: 0 0 10px 5px rgba(240, 241, 243, 0.878);
-  background: #293f65; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  border-radius: 4px;
-  color: white;
   position: relative;
-  margin-top: 8px;
-  padding: 27px;
-  min-height: 100px;
-  min-width: 344px;
 }
 
 .sb-warn {
-  @apply bg-dark-warn text-dark-container pl-10 shadow-2xl;
-  .mat-simple-snack-bar-content {
-    @apply py-8 px-14 text-xl font-bold;
-  }
+  @apply bg-warn-50 shadow-md shadow-warn-100 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px];
   transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
-  box-shadow: 0 0 10px 5px rgba(219, 219, 68, 0.878);
-  background: #293f65;
-  background: -webkit-linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  border-radius: 4px;
-  color: white;
   position: relative;
-  margin-top: 8px;
-  padding: 27px;
-  min-height: 100px;
-  min-width: 344px;
 }
 .sb-notification {
-  @apply bg-dark-warn text-dark-container pl-10 shadow-2xl;
-  .mat-simple-snack-bar-content {
-    @apply py-8 px-14 text-xl font-bold;
-  }
+  @apply bg-info-50 shadow-md shadow-info-100 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px];
   transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
-  box-shadow: 0 0 10px 5px rgba(240, 241, 243, 0.878);
-  background: #293f65; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  border-radius: 4px;
-  color: white;
   position: relative;
-  margin-top: 8px;
-  padding: 27px;
-  min-height: 100px;
-  min-width: 344px;
 }
 .sb-error {
-  @apply bg-dark-warn text-dark-container pl-10 shadow-2xl;
-  .mat-simple-snack-bar-content {
-    @apply py-8 px-14 text-xl font-bold;
-  }
+  @apply bg-danger-50 shadow-md shadow-danger-100 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px];
   transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
-  box-shadow: 0 0 10px 5px rgba(216, 49, 49, 0.878);
-  background: #293f65; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #293f65,
-    #293f65
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  border-radius: 4px;
-  color: white;
   position: relative;
-  margin-top: 8px;
-  padding: 27px;
-  min-height: 100px;
-  min-width: 344px;
 }
+/*
+*snack bar end
+*/
 
-.kc-card {
-  @apply bg-dark-background-5 border-1.5 border-dark-border-default text-dark-text;
-}
+/*
+*Buttons start
+*/
 .kc-button-primary {
-  @apply bg-primary px-4 text-white text-button;
+  @apply bg-primary hover:bg-primary-1000 py-4 px-6 text-white text-button rounded-md gap-[8px] focus:bg-primary-1000;
+  &:disabled{
+    @apply bg-primary-300 text-dark-500;
+  }
 }
-.kc-button-primary-disable {
-  @apply bg-primary-300 px-4 text-dark-500 text-button;
+.kc-button-primary-light {
+  @apply bg-primary-500 hover:bg-primary-600 py-4 px-6 text-white text-button rounded-md gap-[8px] focus:bg-primary-700;
+  &:disabled{
+    @apply bg-primary-300 text-dark-500;
+  }
 }
-.kc-button-info {
-  @apply bg-dark-info px-4 text-white;
+.kc-button-primary-outline {
+  @apply border-primary hover:border-primary-1000 hover:text-primary-1000 border-1.5 py-4 px-6 text-primary text-button rounded-md gap-[8px];
+  &:disabled{
+    @apply border-primary-300 text-primary-300;
+  }
+}
+.kc-button-primary-sm {
+  @apply bg-primary hover:bg-primary-1000 focus:bg-primary-1000 py-2 px-3 text-white text-button-sm rounded-md gap-[8px];
+  &:disabled{
+    @apply bg-primary-300 text-dark-500;
+  }
+}
+.kc-button-primary-sm-outline {
+  @apply border-primary hover:border-primary-1000 hover:text-primary-1000 border-1.5 py-2 px-3 text-primary text-button-sm rounded-md gap-[8px];
+  &:disabled{
+    @apply border-primary-300 text-primary-300;
+  }
+}
+/**/
+
+.kc-button-success-light {
+  @apply bg-success-300 hover:bg-success-400 py-4 px-6 text-dark text-button rounded-md gap-[8px] focus:bg-success-400;
+  &:disabled{
+    @apply bg-primary-300 text-dark-500;
+  }
 }
 .kc-button-danger {
-  @apply bg-dark-danger px-4 text-white;
-}
-.kc-button-warn {
-  @apply bg-dark-warn px-4 text-white;
-}
-.kc-form {
-  .mat-form-field-outline {
-    @apply bg-dark-background;
+  @apply bg-danger hover:bg-danger-700 border-1.5 py-2 px-3 text-white text-button-sm rounded-md gap-[8px];
+  &:disabled{
+    @apply border-primary-300 text-primary-300;
   }
 }
-.mat-option-text {
-  @apply text-white;
-}
-.mat-form-field-flex {
-  // @apply bg-dark-container;
-}
-.kc-form {
-  .md-input-focused {
-    -webkit-box-shadow: none;
+
+.kc-button-danger-sm-outline {
+  @apply border-danger hover:border-danger-700 hover:text-danger-1000 border-1.5 py-4 px-6 text-danger text-button rounded-md gap-[8px];
+  &:disabled{
+    @apply  border-primary-300 text-dark-500;
   }
+}
+
+.kc-button-danger-light {
+  @apply bg-danger-300 hover:bg-danger-400 py-4 px-6 text-dark text-button rounded-md gap-[8px] focus:bg-danger-400;
+  &:disabled{
+    @apply bg-primary-300 text-dark-500;
+  }
+}
+
+
+/*
+*Buttons end
+*/
+.kc-card {
+  @apply bg-light-500 border-1.5 border-kc-bdr-card rounded-md p-12;
+}
+.kc-form-field {
+  @apply w-full;
 }
 
 .kc-progress-bar {
@@ -304,4 +268,19 @@ body {
 .custom-modalbox > mat-dialog-container {
   background-color: transparent !important;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #24252C;
+  -webkit-box-shadow: none !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 @import "~ngx-toastr/toastr";
