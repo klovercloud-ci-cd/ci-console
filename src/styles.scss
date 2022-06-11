@@ -212,14 +212,14 @@ body {
   }
 }
 .kc-button-danger {
-  @apply bg-danger hover:bg-danger-700 border-1.5 py-2 px-3 text-white text-button-sm rounded-md gap-[8px];
+  @apply bg-danger hover:bg-danger-700 border-1.5 py-4 px-6 text-white text-button-sm rounded-md gap-[8px];
   &:disabled{
     @apply border-primary-300 text-primary-300;
   }
 }
 
 .kc-button-danger-sm-outline {
-  @apply border-danger hover:border-danger-700 hover:text-danger-1000 border-1.5 py-4 px-6 text-danger text-button rounded-md gap-[8px];
+  @apply border-danger hover:border-danger-700 hover:text-danger-1000 border-1.5 py-2 px-3 text-danger text-button rounded-md gap-[8px];
   &:disabled{
     @apply  border-primary-300 text-dark-500;
   }
@@ -231,8 +231,18 @@ body {
     @apply bg-primary-300 text-dark-500;
   }
 }
-
-
+.kc-button-transparent {
+  @apply  py-4 px-6 text-white text-button rounded-md gap-[8px];
+  &:disabled{
+    @apply text-dark-500;
+  }
+}
+.kc-button-transparent-sm {
+  @apply  py-2 px-3 text-white text-button rounded-md gap-[8px] flex justify-center items-center;
+  &:disabled{
+    @apply text-dark-500;
+  }
+}
 /*
 *Buttons end
 */
@@ -268,6 +278,7 @@ body {
 .custom-modalbox > mat-dialog-container {
   background-color: transparent !important;
 }
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
