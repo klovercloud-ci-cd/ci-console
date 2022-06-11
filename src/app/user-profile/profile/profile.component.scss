@@ -1,51 +1,22 @@
-.kc-attach-company {
+.my__profile {
   width: 100%;
   @apply flex justify-center items-center;
 }
-.registration-form {
+.edit__profile {
   min-height: 85vh;
-  @apply w-full h-full text-dark-text mx-7;
-  background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
+  @apply w-full h-full text-dark-text mx-7 bg-light-400;
 }
 
-.container {
-  width: 100%;
-}
-.inner-container {
-  min-height: 80vh;
-  @apply w-full h-full text-dark-text;
-  background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
+.profile_card {
+  @apply bg-light-400 border border-kc-bdr-card rounded-md text-dark p-[5px];
+
 }
 
-.kc-bg-banner {
-  background-image: url("../../../assets/images/bg/bg-banner.png");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  min-height: 47vh;
-  border-radius: 53px;
-  overflow: hidden;
-}
-.kc-create-button {
-  @apply bg-dark-primary hover:text-dark-primary hover:bg-white transition duration-500 w-full py-3 mx-auto rounded-[50px] text-sm md:text-base font-semibold tracking-wider;
-}
 .cluster-card {
-  @apply bg-[#1A2C4A] border rounded-md;
-  border: 1.5px solid #495c7d;
-  padding: 8px 5px;
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
-}
+  @apply bg-light-400 border border-kc-bdr-card rounded-md text-dark;
+  padding: 5px;
 
-.object {
-  animation: MoveUpDown 10s linear infinite;
-}
-@keyframes MoveUpDown {
-  0%,
-  100% {
-    transform: translateY(70px);
-  }
-  50% {
-    transform: translateY(10px);
+  div {
+    @apply py-4;
   }
 }

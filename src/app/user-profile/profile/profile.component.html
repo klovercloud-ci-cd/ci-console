@@ -1,7 +1,7 @@
-<div class="kc-form kc-attach-company">
-  <mat-card class="registration-form">
+<div class=" my__profile">
+  <div class="edit__profile">
     <div>
-      <h1 class="text-lg m-8 text-white tracking-wider font-semibold">
+      <h1 class="text-sub-title m-8 text-dark tracking-wider font-semibold">
         My Profile
       </h1>
     </div>
@@ -15,43 +15,43 @@
         gdColumns.lt-xs="1fr"
         gdGap="20px"
       >
-        <div class="cluster-card">
+        <div class="profile_card">
           <div class="flex gap-5 items-center pl-3 py-1">
             <div class="flex flex-col gap-1">
               <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
                 First Name
               </h1>
               <h1 class="text-base tracking-wider">
-                {{ userInfo.data.first_name }}
+                {{ userInfo?.data?.first_name }}
               </h1>
             </div>
           </div>
         </div>
-        <div class="cluster-card">
+        <div class="profile_card">
           <div class="flex gap-5 items-center pl-3 py-1">
             <div class="flex flex-col gap-1">
               <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
                 Last Name
               </h1>
               <h1 class="text-base tracking-wider">
-                {{ userInfo.data.last_name }}
+                {{ userInfo?.data?.last_name }}
               </h1>
             </div>
           </div>
         </div>
-        <div class="cluster-card">
+        <div class="profile_card">
           <div class="flex gap-5 items-center pl-3 py-1">
             <div class="flex flex-col gap-1">
               <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
                 Email
               </h1>
               <h1 class="text-base tracking-wider">
-                {{ userInfo.data.email }}
+                {{ userInfo?.data?.email }}
               </h1>
             </div>
           </div>
         </div>
-        <div class="cluster-card">
+        <div class="profile_card">
           <div class="flex gap-5 items-center pl-3 py-1">
             <div class="flex flex-col gap-1">
               <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
@@ -61,14 +61,14 @@
             </div>
           </div>
         </div>
-        <div class="cluster-card">
+        <div class="profile_card">
           <div class="flex gap-5 items-center pl-3 py-1">
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1 pb-5">
               <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
                 Phone Number
               </h1>
               <h1 class="text-base tracking-wider">
-                {{ userInfo.data.phone }}
+                {{ userInfo?.data?.phone }}
               </h1>
             </div>
           </div>
@@ -76,12 +76,14 @@
       </div>
     </div>
     <div class="ml-0 sm:ml-7 full flex justify-center sm:block">
-      <button
-        class="px-7 py-3 bg-dark-background-5 border-[1px] hover:bg-[#1A2C4A] transition duration-300 border-[#495c7d] rounded-md"
-        routerLink="/user-profile/reset-password"
-      >
-        Change Password
-      </button>
+      <div class="w-52 sm:w-56 md:w-60 lg:w-52">
+        <button
+          routerLink="/user-profile/reset-password"
+          class="kc-button-primary block text-button rounded-md"
+        >
+          Change Password
+        </button>
+      </div>
     </div>
-  </mat-card>
+  </div>
 </div>
