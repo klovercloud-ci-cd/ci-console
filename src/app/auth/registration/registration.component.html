@@ -1,6 +1,6 @@
 <div class="main-container">
-  <div class="wrapper-grid">
-    <div class="left-content">
+  <div class="wrapper-grid shadow-md">
+    <div class="left-content bg-light-400 ">
       <img
         src="../../../assets/images/bg/registration-ls-illustration.svg"
         alt=""
@@ -9,18 +9,26 @@
     </div>
     <div class="boom">
       <div class="right-content">
-        <div class="kc-form bg-shape">
-          <mat-card class="registration-form">
-            <div class="form-wrapper">
-              <h1 class="form-logo">
-                <img src="../../../assets/images/logos/logo.png" alt="" />
-              </h1>
-              <div class="text-instruction">
-                <h1 class="text-xl font-[600]">Register for an account</h1>
-                <h1 class="text-lg font-[400]">
-                  Simply fill out the form below
-                </h1>
-              </div>
+        <div class="bg-light">
+          <div class="relative">
+            <div>
+                <div class="absolute -left-20 top-4"><img src="assets/img/illustrations/signIn-illustrations/Rectangle%2064.png" alt=""></div>
+                <div class="absolute -left-16 top-24"><img src="assets/img/illustrations/signIn-illustrations/Rectangle%2068.png" alt=""></div>
+                <div class="absolute -left-16 -bottom-10"><img src="assets/img/illustrations/signIn-illustrations/Rectangle%2067.png" alt=""></div>
+                <div class="absolute  right-4 -top-16"><img src="assets/img/illustrations/signIn-illustrations/Rectangle%2065.png" alt=""></div>
+                <div class="absolute -right-12 top-28"><img src="assets/img/illustrations/signIn-illustrations/Rectangle%2065.png" alt=""></div>
+                <div class="absolute -right-16 bottom-28 -rotate-6"><img src="assets/img/illustrations/signIn-illustrations/Rectangle%2066.png" alt=""></div>
+            </div>
+          <div class="kc-card shadow-card relative space-y-8">
+            <div class="flex justify-center items-center">
+              <img src="assets/images/logos/logo.png" alt="" class="" />
+            </div>
+            <div class="text-paragraph">
+              <p class="font-bold">Register for an account</p>
+              <p>
+                Simply fill out the form below
+              </p>
+            </div>
 
               <!-- Input Form -->
 
@@ -31,8 +39,8 @@
                     (ngSubmit)="registrationFormData()"
                   >
                     <div class="two-input">
-                      <mat-form-field appearance="outline">
-                        <mat-label class="text-white">First Name</mat-label>
+                      <mat-form-field appearance="outline"  class="kc-form-field">
+                        <mat-label >First Name</mat-label>
                         <input
                           formControlName="first_name"
                           type="text"
@@ -50,8 +58,8 @@
                           >15 letters or less</mat-error
                         >
                       </mat-form-field>
-                      <mat-form-field appearance="outline">
-                        <mat-label class="text-white">Last Name </mat-label>
+                      <mat-form-field appearance="outline"  class="kc-form-field">
+                        <mat-label >Last Name </mat-label>
                         <input
                           formControlName="last_name"
                           required
@@ -70,8 +78,8 @@
                         >
                       </mat-form-field>
                     </div>
-                    <mat-form-field class="kcci-field-2" appearance="outline">
-                      <mat-label class="text-white">Email </mat-label>
+                    <mat-form-field class="kc-form-field" appearance="outline">
+                      <mat-label >Email </mat-label>
                       <input
                         required
                         formControlName="email"
@@ -93,8 +101,8 @@
                         >Email is not valid</mat-error
                       >
                     </mat-form-field>
-                    <mat-form-field class="kcci-field-2" appearance="outline">
-                      <mat-label class="text-white">Phone </mat-label>
+                    <mat-form-field class="kc-form-field" appearance="outline">
+                      <mat-label >Phone </mat-label>
                       <input
                         formControlName="phone"
                         required
@@ -103,8 +111,8 @@
                       />
                     </mat-form-field>
                     <div class="two-input">
-                      <mat-form-field appearance="outline">
-                        <mat-label class="text-white">Password </mat-label>
+                      <mat-form-field appearance="outline" class="kc-form-field">
+                        <mat-label >Password </mat-label>
                         <input
                           formControlName="password"
                           required
@@ -115,8 +123,8 @@
                           We need a password to log you in!
                         </mat-error>
                       </mat-form-field>
-                      <mat-form-field appearance="outline">
-                        <mat-label class="text-white"
+                      <mat-form-field appearance="outline" class="kc-form-field">
+                        <mat-label
                           >Confirm Password
                         </mat-label>
                         <input
@@ -131,53 +139,42 @@
                 </mat-error>
                       </mat-form-field>
                     </div>
-                  
+
                     <div class="kc-radio-btn">
                       <mat-checkbox
                         formControlName="checked"
                         matInput
-                        class="custom-frame"
+                        class="kc-form-field"
                         >I accept the terms and conditions</mat-checkbox
                       >
                     </div>
-                    <div *ngIf="!registrationForm.valid; else other_content">
-                      <button
-                        class="bg-slate-500 kc-register block"
-                        type="submit"
-                        [disabled]="!registrationForm.valid"
-                      >
-                        Create an Account
-                      </button>
-                    </div>
-                    <ng-template #other_content>
-                      <button
-                        class="kc-button-primary kc-register block"
-                        type="submit"
-                        [disabled]="!registrationForm.valid"
-                      >
-                        <span *ngIf="!isLoading; else before_submit">
-                          Create an Account
-                        </span>
-                        <ng-template #before_submit>
-                          <div class="py-3 mx-auto w-52">
-                            <mat-progress-bar
-                              class="green-progress kc-progress-bar"
-                              mode="indeterminate"
-                            >
-                            </mat-progress-bar>
-                          </div>
-                        </ng-template>
-                      </button>
-                    </ng-template>
+                    <button
+                      class="kc-button-primary  block w-full"
+                      type="submit"
+                      [disabled]="!registrationForm.valid"
+                    >
+                      <span class="text-white text-button" *ngIf="!isLoading; else progressbar">Create an Account</span>
+                      <ng-template #progressbar class="">
+                        <div class="w-52 mx-auto p-3">
+                          <mat-progress-bar
+                            class="kc-progress-bar"
+                            mode="indeterminate"
+                          >
+                          </mat-progress-bar>
+                        </div>
+                      </ng-template>
+                    </button>
                   </form>
                 </div>
               </div>
-              <div class="text-center py-5">
-                <h1 class="text-lg">Already have an account?</h1>
-                <a class="signup-btn" routerLink="/auth/login">Sign in here</a>
+              <div class="flex justify-center text-center ">
+                <div class="text-lg space-y-1.5">
+                  <h1 class="text-lg">Already have an account?</h1>
+                  <a class="signup-btn" routerLink="/auth/login">Sign in here</a>
+                </div>
               </div>
-            </div>
-          </mat-card>
+          </div>
+          </div>
         </div>
       </div>
     </div>
