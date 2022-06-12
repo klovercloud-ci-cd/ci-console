@@ -247,7 +247,7 @@ body {
 *Buttons end
 */
 .kc-card {
-  @apply bg-light-500 border-1.5 border-kc-bdr-card rounded-md p-12;
+  @apply bg-light-500 border-1.5 border-kc-bdr-card rounded-md;
 }
 .kc-form-field {
   @apply w-full;
@@ -272,7 +272,7 @@ body {
 }
 .kc-dialog {
   .mat-dialog-container {
-    @apply bg-transparent max-w-5xl;
+    @apply bg-light-500 max-w-5xl;
   }
 }
 .custom-modalbox > mat-dialog-container {

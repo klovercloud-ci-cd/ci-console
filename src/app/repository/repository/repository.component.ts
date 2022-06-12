@@ -65,10 +65,9 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     });
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
+    dialogConfig.disableClose = true; // its a problem when a http error will throw
     dialogConfig.width = '40%';
-    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.panelClass = 'kc-dialog';
     dialogConfig.data = {
       companyID: this.companyID,
     };
