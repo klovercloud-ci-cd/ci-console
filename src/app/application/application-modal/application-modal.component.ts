@@ -556,27 +556,28 @@ export class ApplicationModalComponent implements OnInit {
   }
 
   getTotalError(appSteps:any){
+
     const v_val=appSteps.map((p:any)=>{
 
         const obj={
-          n_val:p.name.valid ==='true'?true:false ,
-          ty_val:p.type.valid === 'true'?true:false,
-          t_val:p?.trigger?.valid === 'true'?true:false,
-          nx_val:p.next !==null ? !p.next.map((p:any) => p.valid).includes('false'):null,
+          n_val:p.name.valid ==='true'?0:1 ,
+          ty_val:p.type.valid === 'true'?0:1,
+          t_val:p?.trigger?.valid === 'true'?0:1,
+          nx_val:p.next.filter((obj:any) => obj.valid === "false").length,
+          params:p.params.filter((obj:any) => obj.valid === "false").length
+
         }
+
         return obj
+
       }
     )
 
-    console.log("v_val:",v_val)
+    const fCount = v_val.reduce((accumulator:any, object:any) => {
+      return accumulator + object.n_val+object.ty_val+object.t_val+object.nx_val+object.params;
+    }, 0);
 
-    const count = v_val.filter((obj:any) => obj.n_val === false).length;
-    const count2 = v_val.filter((obj:any) => obj.ty_val === false).length;
-    const count3 = v_val.filter((obj:any) => obj.t_val === false).length;
-    const count4 = v_val.filter((obj:any) => obj.nx_val === false).length;
-    console.log(count,count2,count3,count4)
-    const sum=count+count2+count3+count4;
-    console.log("SUM:",sum)
+    console.log("fCount: ",fCount)
   }
 
   // getTotalError(appSteps:any){
