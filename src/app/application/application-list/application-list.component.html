@@ -1,6 +1,6 @@
 <div>
   <div class="w-full overflow-x-auto mx-auto">
-    <div class="mx-2 md:mx-7 my-5 bg-dark-background-5">
+    <div class="mx-2 md:mx-7 my-5 bg-light">
       <div
         class="search-container w-full flex items-center justify-between px-6 py-5"
       >
@@ -11,7 +11,7 @@
         </div>
         <div class="flex items-center gap-3">
           <div class="w-32 ml-auto" (click)="openDialog()">
-            <button class="kc-create-button text-center cursor-pointer">
+            <button class="kc-button-primary rounded-[.75rem] text-center cursor-pointer">
               Add New
             </button>
           </div>
@@ -79,7 +79,7 @@
             <td mat-cell *matCellDef="let element">
               <button mat-button [matMenuTriggerFor]="menu"><mat-icon>expand_more</mat-icon></button>
               <mat-menu #menu="matMenu" classList="customize">
-                <button mat-menu-item><span><mat-icon class="cursor-pointer hover:text-green-500">preview</mat-icon></span>Preview</button>
+                <button mat-menu-item (click)="openAppEditor()"><span><mat-icon class="cursor-pointer hover:text-green-500">preview</mat-icon></span>Preview</button>
                 <button mat-menu-item (click)="deleteApp(element)"><span ><mat-icon class="cursor-pointer hover:text-red-500">delete</mat-icon>Delete</span></button>
               </mat-menu>
             </td>
@@ -89,7 +89,7 @@
           <tr
             mat-row
             *matRowDef="let row; columns: displayedColumns"
-            class="hover:bg-[#1A2C4A] transition duration-100"
+            class="hover:bg-light-600 transition duration-100"
           ></tr>
         </table>
       </div>

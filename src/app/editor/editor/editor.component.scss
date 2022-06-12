@@ -1,10 +1,15 @@
 .app-ace-editor {
-    width: 100%;
-    min-height: 400px;
-    background: transparent;
-    font-size: 20px;
-    color: white;
+  @apply w-full min-h-[300px] bg-light-800 text-[20px] text-light;
+    //width: 100%;
+    //min-height: 400px;
+    //background: transparent;
+    //font-size: 20px;
+    //color: white;
   }
+.ace_layer .ace_gutter-layer .ace_folding-enabled{
+  @apply bg-info;
+}
+
   .ace_gutter-cell.ace_error{
     background-image: url("https://cdn.icon-icons.com/icons2/2596/PNG/512/check_one_icon_155665.png") !important;
   }

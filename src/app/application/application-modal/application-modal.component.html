@@ -1,13 +1,17 @@
 <div
-  class="bg-dark-container border border-dark-primary rounded-lg p-5 relative min-h-[250px]"
+  class="kc-card shadow-card  rounded-lg p-5 relative min-h-[250px]"
 >
+  <div class="flex justify-between items-center">
   <h1 class="pt-3 pb-4" >Add New Application</h1>
+
+  <h1 *ngIf="stepper==2">Total <span class="text-red-500">{{totalError}} errors</span> in this pipeline</h1>
+  </div>
   <div class="example-container">
     <form [formGroup]="addApplication" (ngSubmit)="addApplicationFormData()">
 
       <div *ngIf="stepper==1 ; else nextPage" class="flex gap-x-2">
         <mat-form-field class="kcci-field w-1/2" appearance="outline">
-          <mat-label class="text-white">Name</mat-label>
+          <mat-label class="text-dark">Name</mat-label>
           <input
             formControlName="name"
             type="text"
@@ -16,7 +20,7 @@
           />
         </mat-form-field>
         <mat-form-field class="kcci-field w-1/2" appearance="outline">
-          <mat-label class="text-white">URL</mat-label>
+          <mat-label class="text-dark">URL</mat-label>
           <input
             formControlName="url"
             type="text"
@@ -43,7 +47,7 @@
               </div>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <div class="overflow-y-auto max-h-[500px] mt-5 bg-dark-background-5 p-3 rounded-md">
+            <div class="overflow-y-auto max-h-[500px] mt-5 bg-light-900 p-3 rounded-md">
                <!-- Some:  {{item.value.name}} -->
 <!--              {{item.value.stepData.name.value | json}}-->
               <div class="text-white">
@@ -54,69 +58,21 @@
           </mat-expansion-panel>
         </mat-accordion>
 
-
-          <!-- <mat-expansion-panel hideToggle
-          class="kc-expansion-panel" *ngFor="let item of stepAsMap | keyvalue" [expanded]="!isValidStep(item.value)">
-
-            <mat-expansion-panel-header >
-              <mat-panel-title >
-                <div class="w-full flex justify-between">
-                  <h1>{{item.key| uppercase}} </h1>
-                  <mat-icon *ngIf="isValidStep(item.value)" class="text-green-500">check_circle</mat-icon>
-                  <mat-icon *ngIf="!isValidStep(item.value)" class="text-red-500">cancel</mat-icon>
-              </div>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="overflow-y-auto max-h-[500px] mt-5 bg-dark-background-5 p-3 rounded-md">
-               Some:  {{item.value.name}}
-
-              <div class="text-white">
-                <kcci-editor [(text)]="item.value" mode="json"></kcci-editor>
-                yamlInputData
-              </div>
-                </div>
-          </mat-expansion-panel> -->
-          <!-- <mat-expansion-panel hideToggle
-          class="kc-expansion-panel" *ngFor="let item of appStep.data.steps" >
-
-            <mat-expansion-panel-header >
-              <mat-panel-title >
-                <div class="w-full flex justify-between">
-                  <h1>{{item.name.value}} </h1>
-                  <mat-icon *ngIf="item.isValid" class="text-green-500">check_circle</mat-icon>
-                  <mat-icon *ngIf="!item.isValid" class="text-red-500">cancel</mat-icon>
-              </div>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="overflow-y-auto max-h-[500px] mt-5 bg-dark-background-5 p-3 rounded-md">
-
-              <div>
-                <kcci-editor [(text)]="item.name.value" mode="yaml"></kcci-editor>
-              </div>
-                </div>
-          </mat-expansion-panel> -->
-
       </ng-template>
-<!--      class="absolute right-5 bottom-7 flex justify-between"-->
+
       <div mat-dialog-actions class=" flex justify-between">
         <div></div>
 
         <div *ngIf="stepper==1 ; else nextButton" >
           <span
-          class="kc-button-primary kc-register block  px-3 py-2 rounded-md cursor-pointer"
+          class="kc-button-primary-sm-outline kc-register block px-3 py-2 rounded-md cursor-pointer"
           (click)="gotoNext(2)"
         >
         Next >
         </span>
         </div>
         <ng-template #nextButton>
-        <div *ngIf="!addApplication.valid; else other_content" class="mb-2 flex gap-3 pt-5">
-          <span
-          class="kc-button-primary kc-register block px-3 py-2 rounded-md cursor-pointer"
-          (click)="gotoNext(1)"
-        >
-       < Back
-        </span>
+        <div *ngIf="!addApplication.valid && totalError<1" class="mb-2 flex gap-3 pt-5">
           <button
             class="bg-slate-500 kc-register block px-3 py-2 rounded-md"
             type="submit"
@@ -126,36 +82,32 @@
           OK
           </button>
         </div>
+          <p class="text-yellow-600">*Please edit your pipeline and add the application</p>
 
 
-        <ng-template #other_content>
-          <div class="mb-2 flex gap-3 pt-5">
-            <span
-            class="kc-button-primary kc-register block px-3 py-2 rounded-md cursor-pointer"
-            (click)="gotoNext(1)"
-          >
-          < Back
-          </span>
-          <button
-            class="kc-button-primary kc-register block px-3 py-2 rounded-md "
-            type="submit"
-            [disabled]="!addApplication.valid"
-          >
-            <span *ngIf="!isLoading && hasPipeline; else before_submit">
-              OK
-            </span>
-            <ng-template #before_submit>
-              <div class="py-[10px] mx-auto w-[57px]">
-                <mat-progress-bar
-                  class="green-progress kc-progress-bar"
-                  mode="indeterminate"
-                >
-                </mat-progress-bar>
-              </div>
-            </ng-template>
-          </button>
-        </div>
-        </ng-template>
+<!--        <ng-template #other_content>-->
+<!--          <div class="mb-2 flex gap-3 pt-5">-->
+
+<!--          <button-->
+<!--            class="kc-button-primary kc-register block px-3 py-2 rounded-md "-->
+<!--            type="submit"-->
+<!--            [disabled]="!addApplication.valid"-->
+<!--          >-->
+<!--            <span *ngIf="!isLoading && hasPipeline; else before_submit">-->
+<!--              OK-->
+<!--            </span>-->
+<!--            <ng-template #before_submit>-->
+<!--              <div class="py-[10px] mx-auto w-[57px]">-->
+<!--                <mat-progress-bar-->
+<!--                  class="green-progress kc-progress-bar"-->
+<!--                  mode="indeterminate"-->
+<!--                >-->
+<!--                </mat-progress-bar>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--        </ng-template>-->
       </ng-template>
       </div>
     </form>

@@ -81,14 +81,14 @@ export class ApplicationModalComponent implements OnInit {
                    "accepts":"*",
                    "message":"",
                    "name":"access_mode",
-                   "valid":"true",
+                   "valid":"false",
                    "value":"ReadWriteOnce"
                 },
                 {
                    "accepts":"*",
                    "message":"",
                    "name":"args",
-                   "valid":"true",
+                   "valid":"false",
                    "value":"key3:value1,key4:value2"
                 },
                 {
@@ -576,7 +576,7 @@ export class ApplicationModalComponent implements OnInit {
     const fCount = v_val.reduce((accumulator:any, object:any) => {
       return accumulator + object.n_val+object.ty_val+object.t_val+object.nx_val+object.params;
     }, 0);
-
+    this.totalError = fCount;
     console.log("fCount: ",fCount)
   }
 

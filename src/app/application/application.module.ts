@@ -28,6 +28,7 @@ import { CiCdPipelineComponent } from './ci-cd-pipeline/ci-cd-pipeline.component
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ApplicationRoutingModule } from './application-routing.module';
 import { EditorModule } from '../editor/editor.module';
+import { AppEditorModalComponent } from './app-editor-modal/app-editor-modal.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { EditorModule } from '../editor/editor.module';
     ApplicationModalComponent,
     PipelineGraphComponent,
     PipelineOverviewComponent,
+    AppEditorModalComponent,
   ],
   imports: [
     CommonModule,

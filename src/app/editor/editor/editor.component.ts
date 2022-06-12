@@ -34,7 +34,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() text!: string;
   @Input() errorLine: any;
   @Input() InputData: any;
-  @Input() readOnly: boolean = false;
+  @Input() readOnly: boolean = true;
   @Input() mode: string = 'yaml';
   @Input() prettify: boolean = true;
 
@@ -240,50 +240,50 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   handleEvent(event: any, row: any) {
-    const key = this.editor.getValue().split('\n')[row - 1].split(':')[0];
-    //console.log(this.editor.getValue().split('\n'))
-    const data = fromYaml(this.editor.getValue());
-    // @ts-ignore
-    // console.log(key);
-    let stepName:any;
-    let mainKey:any;
-    let mainValue:any;
-    // @ts-ignore
-    for (const [k, v] of Object.entries(data)) {
-       // console.log("Trig: ",key, v);
-      // stepName = v;
-      // console.log(v);
-      if(k === key) {
-        mainKey = k;
-        mainValue = v;
-         // console.log("Trig-2: ",`${k}: ${v}`);
-      }
-    }
-
-    switch(mainKey) {
-      case 'name':
-        if(this.InputData.name.valid !== "true") {
-          this.openDialog(this.InputData.name.value,mainKey,this.InputData[mainKey].accepts);
-        }
-        break;
-      case 'type':
-        if (this.InputData.type.valid !== "true"){
-          this.openDialog(this.InputData.type.value.toLowerCase(),mainKey,this.InputData[mainKey].accepts);
-        }
-        console.log("-----Type")
-        break;
-      case 'trigger':
-        console.log("-----Trigger")
-        break;
-      case 'params':
-        console.log("-----Params")
-        break;
-      case 'next':
-        console.log("-----Next")
-        break;
-      default:
-        console.log("-----nothing match found")
-    }
+    // const key = this.editor.getValue().split('\n')[row - 1].split(':')[0];
+    // //console.log(this.editor.getValue().split('\n'))
+    // const data = fromYaml(this.editor.getValue());
+    // // @ts-ignore
+    // // console.log(key);
+    // let stepName:any;
+    // let mainKey:any;
+    // let mainValue:any;
+    // // @ts-ignore
+    // for (const [k, v] of Object.entries(data)) {
+    //    // console.log("Trig: ",key, v);
+    //   // stepName = v;
+    //   // console.log(v);
+    //   if(k === key) {
+    //     mainKey = k;
+    //     mainValue = v;
+    //      // console.log("Trig-2: ",`${k}: ${v}`);
+    //   }
+    // }
+    //
+    // switch(mainKey) {
+    //   case 'name':
+    //     if(this.InputData.name.valid !== "true") {
+    //       this.openDialog(this.InputData.name.value,mainKey,this.InputData[mainKey].accepts);
+    //     }
+    //     break;
+    //   case 'type':
+    //     if (this.InputData.type.valid !== "true"){
+    //       this.openDialog(this.InputData.type.value.toLowerCase(),mainKey,this.InputData[mainKey].accepts);
+    //     }
+    //     console.log("-----Type")
+    //     break;
+    //   case 'trigger':
+    //     console.log("-----Trigger")
+    //     break;
+    //   case 'params':
+    //     console.log("-----Params")
+    //     break;
+    //   case 'next':
+    //     console.log("-----Next")
+    //     break;
+    //   default:
+    //     console.log("-----nothing match found")
+    // }
 
 
 

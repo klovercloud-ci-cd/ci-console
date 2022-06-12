@@ -9,7 +9,7 @@ export const environment = {
   production: false,
   // v1AuthEndpoint: 'http://192.168.68.114:4200/api/v1/',
   // v1ApiEndPoint: 'http://192.168.68.114:4202/api/v1/',
-  v1AuthEndpoint: 'http://192.168.0.105:4200/api/v1/',
-  v1ApiEndPoint: 'http://192.168.0.105:4202/api/v1/',
+  v1AuthEndpoint: 'http://192.168.68.114:4200/api/v1/',
+  v1ApiEndPoint: 'http://192.168.68.114:4202/api/v1/',
   v1ApiEndPointWS: 'ws://192.168.0.105:4200/api/v1/',
 };

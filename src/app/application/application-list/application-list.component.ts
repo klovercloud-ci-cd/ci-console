@@ -13,6 +13,7 @@ import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { AppListService } from '../app-list.service';
 import { ApplicationModalComponent } from '../application-modal/application-modal.component';
+import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
 
 @Component({
   selector: 'kcci-application-list',
@@ -135,6 +136,18 @@ export class ApplicationListComponent implements OnInit {
           ]);
         });
     });
+  }
+
+  openAppEditor() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '40%';
+    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.data = {
+      repositoryId: this.repositoryId,
+    };
+    this.dialog.open(AppEditorModalComponent, dialogConfig);
   }
 
   openDialog() {
