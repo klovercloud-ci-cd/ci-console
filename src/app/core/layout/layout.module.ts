@@ -19,6 +19,7 @@ import { CollapsedSidebarComponent } from './collapsed-sidebar/collapsed-sidebar
 import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { HeaderComponent } from './header/header.component';
     CollapsedSidebarComponent,
   ],
     imports: [
-      ToastrModule.forRoot(),
+        ToastrModule.forRoot(),
         AppRoutingModule,
         CommonModule,
         RouterModule,
@@ -43,6 +44,7 @@ import { HeaderComponent } from './header/header.component';
         MatRippleModule,
         ProgressBarModule,
         MatBadgeModule,
+        MatDividerModule,
     ],
   exports: [LayoutComponent, HeaderComponent, SidebarComponent],
 })
