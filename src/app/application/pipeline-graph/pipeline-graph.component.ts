@@ -4,7 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnInit,
+  OnInit, ViewEncapsulation,
 } from '@angular/core';
 import { ApplicationListComponent } from '../application-list/application-list.component';
 import { ToolbarService } from '../../shared/services/toolbar.service';
@@ -20,10 +20,30 @@ import { PipelineService } from '../pipeline.service';
   selector: 'kcci-pipeline-graph',
   templateUrl: './pipeline-graph.component.html',
   styleUrls: ['./pipeline-graph.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PipelineGraphComponent
   implements OnInit, AfterContentChecked, AfterContentInit
 {
+  openBranch = 0;
+  openFootMark= 0
+  public singleLogDetails: { footmark: any; index: number }={footmark:'',index:0};
+
+  setOpenBranch(index: number) {
+    this.openBranch = index;
+  }
+  setActiveFootMark(index: number) {
+    this.openFootMark = index;
+  }
+
+  nextStep() {
+    this.openBranch++;
+  }
+
+  prevStep() {
+    this.openBranch--;
+  }
+  branchPanelOpen: boolean | undefined;
   pipeline: any;
   pipelineStep: any;
   envList: any;
@@ -90,7 +110,7 @@ export class PipelineGraphComponent
         status: 'INITIALIZING',
         step: 'build',
       },
-      {
+      /*{
         claim: 0,
         company_id: 'ca32b354-457b-495c-88bd-3b4b52305f9e',
         process_id: '7e6c31a1-0f94-4417-8bb5-79b43648be76',
@@ -190,51 +210,54 @@ export class PipelineGraphComponent
         reason: 'n/a',
         status: 'PROCESSING',
         step: 'build',
-      },
-
+      },*/
     ];
-    let i= 0
-    this.footMarks.push('init_build_job1')
+    let i = 0;
     setInterval(() => {
-      let socketRes:any;
-      if ((i === 0)) {
-        socketRes = data[0]
+      let socketRes: any;
+      if (i === 0) {
+        socketRes = data[0];
       } else {
-        socketRes= data[Math.floor(Math.random() * 10)+1];
-
-        console.log(socketRes,Math.floor(Math.random() * 10))
+        socketRes = data[Math.floor(Math.random() * 10) + 1];
       }
-      this.footMarks.push(socketRes.footmark)
-      i++
-
-      ////------------------
-      if (this.logOpen) {
-        const scrollArea: any = document.getElementById(
-          'scrollArea' + socketRes.footmark
-        );
-        if (!scrollArea.classList.contains('logPanel')) {
-          scrollArea.classList.add('logPanel');
+      let found = false;
+      for (let x of this.footMarks){
+        if (x == socketRes.footmark){
+          found = true
         }
       }
+      for (let y  of this.allFootMarks){
+        if(y.stepName === socketRes.step){
+          console.log('ok');
+        }
+      }
+      if (!found){ // need to fix duplicate indexing for step
+        console.log(this.nodeDetails)
+        this.footMarks.push(socketRes.footmark)
+        this.openFootMark = this.footMarks.length-1
+      }
+      i++;
 
-
-      setTimeout(()=>{
-        this.expandLog(socketRes.footmark,socketRes.step)
-      },300)
+      ////------------------
+      setTimeout(() => {
+        this.expandLog(socketRes.footmark, socketRes.step);
+      }, 300);
 
       if (
         (socketRes.status === 'INITIALIZING' &&
           this.activeStep != socketRes.step) ||
         (socketRes.status === 'PROCESSING' && this.activeStep != socketRes.step)
       ) {
-        if (socketRes.status === 'INITIALIZING'){
+        if (socketRes.status === 'INITIALIZING') {
           localStorage.setItem('isFailed', 'false');
           this.activeStep = socketRes.step;
           this.getPipelineWithStartBuild(socketRes.process_id);
 
         }
-        if (socketRes.status === 'PROCESSING' && localStorage.getItem('isFailed') ==='false'){
-
+        if (
+          socketRes.status === 'PROCESSING' &&
+          localStorage.getItem('isFailed') === 'false'
+        ) {
           this.activeStep = socketRes.step;
           this.getPipelineWithStartBuild(socketRes.process_id);
         }
@@ -261,15 +284,15 @@ export class PipelineGraphComponent
               this.drawLines();
               this.logClose();
               this.startBuild(this.activeStep);
-              this.activeStep = '';
 
+              this.activeStep = '';
             }, 500);
           });
         });
       }
       if (socketRes.status === 'SUCCESSFUL') {
       }
-    },3000);
+    }, 3000);
     /*socket.onmessage = (e) => {
       if (e.data !== 'null') {
         const socketRes = JSON.parse(e.data);
@@ -355,6 +378,7 @@ export class PipelineGraphComponent
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(async (res: any) => {
         this.commit = res.data;
+        console.log(this.commit)
         this.commitList.push({
           branch: branchName,
 
@@ -456,7 +480,14 @@ export class PipelineGraphComponent
         });
     }
   }
-  getLogs(processId:string,nodeName:string,footmarkName:string,page:number,limit:number,skip:number){
+  getLogs(
+    processId: string,
+    nodeName: string,
+    footmarkName: string,
+    page: number,
+    limit: number,
+    skip: number
+  ) {
     this.repo
       .getFootamarkLog(processId, nodeName, footmarkName)
       .subscribe((res: any) => {
@@ -480,29 +511,23 @@ export class PipelineGraphComponent
           }
         );
         observer.observe(intObj);
-        // @ts-ignore
-        for (let footStep of allFootSteps) {
-          footStep.classList.replace('visible', 'hidden');
-        }
-
-        document
-          .getElementById(footmarkName)
-          ?.classList.replace('hidden', 'visible');
-
         this.logs.push({
           name: footmarkName,
 
           data: res.data,
         });
+        if(res.data.length<10){
+          const skip =10-res.data.length
+        }
       });
   }
-  expandLog( footmarkName: string, nodeName: any) {
+  expandLog(footmarkName: string, nodeName: any) {
     const processId = this.pipeline.data.process_id;
     const allFootSteps = document.getElementsByClassName('logExpansion');
 
     const findLogByName = this.logs.find((log) => log.name === footmarkName);
     if (!findLogByName) {
-      this.getLogs(processId, nodeName, footmarkName,0,10,0)
+      this.getLogs(processId, nodeName, footmarkName, 0, 10, 0);
     } else {
       for (let footStep of allFootSteps) {
         footStep.classList.replace('visible', 'hidden');
@@ -642,7 +667,7 @@ export class PipelineGraphComponent
               line.setAttribute('stroke', 'gray');
               line.setAttribute('marker-end', 'url(#trianglegray)');
             }
-            line.setAttribute('stroke-width', '5px');
+            line.setAttribute('stroke-width', '4px');
 
             if (svg.appendChild(line)) {
             }
@@ -654,6 +679,7 @@ export class PipelineGraphComponent
 
   startBuild(stepName: any) {
     this.logOpen = !this.logOpen;
+
     this.loadInfo(stepName);
     const processId = this.pipeline.data.process_id;
     this.pipeline.data.steps.find((hola: any) => {
@@ -662,6 +688,7 @@ export class PipelineGraphComponent
       }
     });
     this.stepFootMark(processId, stepName, this.nodeDetails.status);
+
   }
 
   stepFootMark(processId: any, stepName: any, status: any) {
@@ -673,6 +700,7 @@ export class PipelineGraphComponent
       this.footMarksLegth = this.footMarks.length;
     } else {
       this.repo.getfootPrint(processId, stepName).subscribe((res: any) => {
+        console.log(res.data,'FOOT-MARK')
         if (res.data) {
           this.allFootMarks.push({
             stepName: stepName,
@@ -683,6 +711,7 @@ export class PipelineGraphComponent
             (footMark) => footMark.stepName === stepName
           );
           this.footMarks = newFoots.footMark;
+          this.openFootMark = this.footMarks.length-1
           this.footMarksLegth = this.footMarks.length;
           const lastFootmark = this.footMarks[this.footMarksLegth - 1];
           const findLogByName = this.logs.find(
@@ -739,5 +768,17 @@ export class PipelineGraphComponent
         this.initSvgArrow();
       });
     });
+  }
+
+  expandLog2(footMarkIndex:number,foot:any) {
+    this.fullmode =true
+    this.singleLogDetails={
+      index:footMarkIndex,
+      footmark:foot,
+    }
+  }
+
+  logClose2() {
+    this.fullmode =false
   }
 }

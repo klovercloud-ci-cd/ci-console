@@ -308,5 +308,31 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: none !important;
   transition: background-color 5000s ease-in-out 0s;
 }
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+
+  &:hover {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-light;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #939393;
+  border-radius: 30px;
+
+  &:hover {
+    background: #555;
+    width: 10px;
+    height: 10px;
+  }
+}
 
 @import "~ngx-toastr/toastr";
