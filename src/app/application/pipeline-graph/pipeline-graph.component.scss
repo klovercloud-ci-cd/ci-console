@@ -1,29 +1,3 @@
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-
-  &:hover {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  @apply bg-dark-background-1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #939393;
-  border-radius: 30px;
-
-  &:hover {
-    background: #555;
-    width: 10px;
-    height: 10px;
-  }
-}
 
 @keyframes pulses {
   0% {
@@ -77,30 +51,34 @@
 }
 
 ::ng-deep .kc-node-menu {
-  @apply bg-dark-background-1 border border-dark-border-default;
+  @apply bg-light-500 border border-kc-bdr-card;
 }
 
 .kc-card-pipe-left {
   border-right: none;
   border-radius: 6px 0 0 6px;
   transition: all 1s ease-in-out;
-  @apply bg-dark-background-5 py-6;
+  @apply bg-light-500 py-6;
 }
 
 .kc-card-pipe-right {
   border-left: none;
   border-radius: 0 6px 6px 0;
   transition: all 1s ease-in-out;
-  @apply bg-dark-background-5 p-0;
+  @apply bg-light-500 p-0;
 }
 
 .mid-right-border {
   border-radius: 0 6px 6px 0 !important;
 }
+.bg-doted{
+  background-image: radial-gradient(#3b3d48 1px, transparent 0);
+  background-size: 30px 40px;
+}
 
 .kc-card-pipe-mid {
   border-radius: 0 0 0 0;
-  @apply bg-dark-background-5 p-0 pr-3;
+  @apply bg-light-500 p-0 pr-3;
 }
 
 .log-clip {
@@ -114,7 +92,7 @@
     border-bottom: solid 1px var(--border);
 
     .header-title {
-      color: var(--text-color);
+      @apply text-dark;
       font-weight: bold;
     }
   }
@@ -132,11 +110,11 @@
 }
 
 .kc-expansion-panel {
-  @apply bg-dark-background-5;
+  @apply bg-light-500 text-dark;
   margin-top: 0;
   word-wrap: break-word;
 
-  .log {
+ /* .log {
     ::ng-deep {
       .mat-expansion-panel-body {
         max-height: 100px;
@@ -148,12 +126,12 @@
         height: 8px;
       }
 
-      /* Track */
+      !* Track *!
       ::-webkit-scrollbar-track {
         @apply bg-dark-background-1;
       }
 
-      /* Handle */
+      !* Handle *!
       ::-webkit-scrollbar-thumb {
         background: #939393;
         border-radius: 30px;
@@ -165,7 +143,7 @@
         }
       }
     }
-  }
+  }*/
 }
 
 .log-card {
@@ -186,3 +164,4 @@
 .logPanel pre:last-child {
   scroll-snap-align: start;
 }
+

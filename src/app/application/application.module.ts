@@ -28,6 +28,7 @@ import { CiCdPipelineComponent } from './ci-cd-pipeline/ci-cd-pipeline.component
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { ApplicationRoutingModule } from './application-routing.module';
 import { EditorModule } from '../editor/editor.module';
+import {MatDividerModule} from "@angular/material/divider";
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { EditorModule } from '../editor/editor.module';
     MatRippleModule,
     MatProgressBarModule,
     NgxSkeletonLoaderModule,
-    EditorModule
+    EditorModule,
+    MatDividerModule,
   ],
 })
 export class ApplicationModule {}
