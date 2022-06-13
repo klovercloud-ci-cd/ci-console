@@ -8,6 +8,7 @@ import { AddCompanyComponent } from 'src/app/company/add-company/add-company.com
 import { DeleteConformationDialogComponent } from 'src/app/core/components/delete-conformation-dialog/delete-conformation-dialog.component';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserService } from '../user.service';
+import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
 
 @Component({
   selector: 'kc-user-list',
@@ -142,7 +143,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     private _toolbarService: ToolbarService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    public resource: ResourcePermissionService
   ) {
     this.currentUser = this.authService.getUserData();
   }
@@ -201,7 +203,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       (err) => {
         this.isLoading = false;
         console.log(err);
-        this.snackBar.open(err?.error?.message || "Can't fetch users");
+        // this.snackBar.open(err?.error?.message || "Can't fetch users");
       }
     );
   }
@@ -218,11 +220,11 @@ export class UserListComponent implements OnInit, OnDestroy {
       if (confirmed) {
         this._userService.deleteUser(user).subscribe(
           (res) => {
-            this.snackBar.open('Delete initiated', 'close', { duration: 5000 });
+            // this.snackBar.open('Delete initiated', 'close', { duration: 5000 });
           },
           (err) => {
             console.log(err);
-            this.snackBar.open(err.error.message, 'close', { duration: 5000 });
+            // this.snackBar.open(err.error.message, 'close', { duration: 5000 });
           }
         );
       }

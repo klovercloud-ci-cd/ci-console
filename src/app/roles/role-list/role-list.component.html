@@ -1,6 +1,6 @@
 <div class="p-page">
   <div
-    class="bg-dark-background-5 h-[87vh] w-full rounded-md"
+    class="bg-light-400 h-[87vh] w-full rounded-md"
     *ngIf="!hasCompany; else company"
   >
     <h1 class="text-center pt-[2%] text-2xl text-yellow-500">
@@ -8,15 +8,21 @@
     </h1>
   </div>
   <ng-template #company>
-    <div class="bg-dark-background-5 overflow-x-auto">
-      <div class="px-6 py-5">
+    <div class=" overflow-x-auto">
+      <div class=" py-5">
         <div class="flex items-center justify-between">
-          <h3 class="font-semibold text-xl">Roles</h3>
+          <h3 class="text-base text-dark font-semibold tracking-wide">Roles</h3>
           <div class="flex items-center gap-3">
-            <button (click)="createRole()" class="w-36 ml-auto">
-              <span class="block kc-create-button text-center cursor-pointer"
-              ><mat-icon class="mr-2">add_circle</mat-icon>New Role</span
-              >
+<!--            <button (click)="createRole()" class="w-36 ml-auto">-->
+<!--              <span class="block kc-create-button text-center cursor-pointer"-->
+<!--              ><mat-icon class="mr-2">add_circle</mat-icon>New Role</span-->
+<!--              >-->
+<!--            </button>-->
+            <button
+              (click)="createRole()"
+              class="kc-button-primary-sm"
+            >
+              Add new
             </button>
           </div>
         </div>

@@ -1,13 +1,17 @@
+*{
+  color: white !important;
+}
 .app-ace-editor {
-  @apply w-full min-h-[300px] bg-light-800 text-[20px] text-light;
+  @apply w-full min-h-[300px] bg-dark text-[20px] text-light;
     //width: 100%;
     //min-height: 400px;
     //background: transparent;
     //font-size: 20px;
-    //color: white;
+    color: white !important;
   }
 .ace_layer .ace_gutter-layer .ace_folding-enabled{
-  @apply bg-info;
+  //@apply bg-info;
+  color: white !important;
 }
 
   .ace_gutter-cell.ace_error{

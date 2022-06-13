@@ -19,6 +19,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { RepositoryModalComponent } from './repository-modal/repository-modal.component';
 import { RepositoryComponent } from './repository/repository.component';
 import { RepositoryRoutingModule } from './repository-routing.module';
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [RepositoryComponent, RepositoryModalComponent],
@@ -53,6 +54,7 @@ import { RepositoryRoutingModule } from './repository-routing.module';
     MatRippleModule,
     MatProgressBarModule,
     NgxSkeletonLoaderModule,
+    MatDividerModule,
   ],
 })
 export class RepositoryModule {}

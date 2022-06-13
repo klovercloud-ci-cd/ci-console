@@ -65,29 +65,29 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
         // Show loading indicator
-        console.log('Route change detected',this.currentRoute);
+        // console.log('Route change detected',this.currentRoute);
       }
       if (event instanceof NavigationEnd) {
         // Hide loading indicator
         this.currentRoute = event.url;
-        console.log("this.currentRoute:",this.currentRoute,event);
+        // console.log("this.currentRoute:",this.currentRoute,event);
       }
       if (event instanceof NavigationError) {
         // Hide loading indicator
 
         // Present error to user
-        console.log(event.error);
+        // console.log(event.error);
       }
     });
   }
 
   ngOnInit(): void {
-    // console.log("The DATA: ",fromYaml(this.text))
+    // console.log("The DATA: ",(this.InputData));
 
     this.editorDialogRef.afterClosed().subscribe((data) => {
-      console.log("Editor M v.2: ", data)
+      // console.log("Editor M v.2: ", data)
     })
-    console.log("UpD Route: ");
+    // console.log("UpD Route: ");
 
     // @ts-ignore
     this.editorService.toggleState$.subscribe((res:any) => {
@@ -127,7 +127,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
 
       // console.log("ToYAML: ",this.text);
 
-      console.log("All Data:", this.InputData);
+      // console.log("All Data:", this.InputData);
       this.fixProp.emit(res)
     });
 
@@ -175,13 +175,37 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  getErrorMessageAndSuggestion(line:Number, data:any){
+
+    // 4
+    //  -0
+    //  -1
+    //  -2
+    // next:
+    //  -0
+    //  -1
+
+    if (line==1){
+        return {message:data.name.message,suggestions:data.name.accepts}
+    }else if (line==2){
+      return {message:data.type.message,suggestions:data.type.accepts}
+    }else if (line==3){
+      return {message:data.trigger.message,suggestions:data.trigger.accepts}
+    }else if (line<=data.params.length+4 && line >4){
+      return {message:data.params[Number(line)-5].message,suggestions:data.params[Number(line)-5].accepts}
+    }else{
+      return {message:data.params[Number(line)-(data.params.length+1)].message,suggestions:data.params[Number(line)-(data.params.length+1)].accepts}
+    }
+
+  }
   private initEditor_(): void {
+
     this.editor = edit(this.editorRef.nativeElement);
     this.editor.setOptions(this.options);
     this.editor.setValue(this.text, -1);
     this.editor.setReadOnly(this.readOnly);
     this.editor.setTheme('ace/theme/dracula');
-    console.log("Total Text: ",typeof this.text);
+    // console.log("Total Text: ",typeof this.text);
 
     this.setEditorMode_();
     this.editor.session.setUseWorker(false);
@@ -191,30 +215,51 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     // <-----------Multiple Error Showing----------->
 
     // this.editor.getSession().setAnnotations(jsonErrorArray[currentFileName]);
-    // let jsonErrorArray:any = [];
-    // let fileNamesArray:any = [];
-    // this.errorLine = [2,3];
-    // for(let i=0; i<this.errorLine.length; i++){
-    //   jsonErrorArray.push({
-    //     row: this.errorLine[i] - 1,
-    //     column: undefined,
-    //     text: "Error occurred in this line!", // Or the Json reply from the parser
-    //     type: "error"
-    //   })
-    // }
+    let jsonErrorArray:any = [];
+    let fileNamesArray:any = [];
+
+    console.log("this.errorLine-this.text:",this.errorLine,this.InputData);
+
+
+
+    for(let i=0; i<this.errorLine.length; i++){
+      let value=this.getErrorMessageAndSuggestion(this.errorLine[i],this.InputData)
+      let hasSuggestionMessage,noSuggestionMessage;
+      if(!value.message){
+        jsonErrorArray.push({
+          row: this.errorLine[i] - 1,
+          column: undefined,
+          text: `Error occurred in line: ` + this.errorLine[i]+" \nNo error message available.\nSuggestions: "+value.suggestions,
+          type: "error"
+        })
+      }else {jsonErrorArray.push({
+        row: this.errorLine[i] - 1,
+        column: undefined,
+        text: `Error occurred in line: ` + this.errorLine[i]+" \n[ERROR]: "+value.message+ ".\nSuggestions: "+value.suggestions,
+        type: "error"
+      })
+      }
+      // jsonErrorArray.push({
+      //   row: this.errorLine[i] - 1,
+      //   column: undefined,
+      //   text: `Error occurred in this line! \n `+ this.errorLine[i]+". [ERROR]: "+value.message+ ". Suggestions:"+value.suggestions,
+      //   type: "error"
+      // })
+    }
+
     // console.log("jsonErrorArray: ",jsonErrorArray)
-    //
-    // this.editor.getSession().setAnnotations(jsonErrorArray);
+
+    this.editor.getSession().setAnnotations(jsonErrorArray);
 
 
     // <-----------Error Line Showing----------->
 
-    this.editor.getSession().setAnnotations([{
-      row: this.errorLine - 1,
-      column: undefined,
-      text: "Error occurred in this line!", // Or the Json reply from the parser
-      type: "error", // also "warning" and "information"
-    }]);
+    // this.editor.getSession().setAnnotations([{
+    //   row: this.errorLine - 1,
+    //   column: undefined,
+    //   text: "Error occurred in this line! \n Error occurred in this line!", // Or the Json reply from the parser
+    //   type: "error", // also "warning" and "information"
+    // }]);
 
     const that = this;
     this.editor.getSession().getAnnotations().map((x: any) => {
@@ -284,9 +329,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     //   default:
     //     console.log("-----nothing match found")
     // }
-
-
-
   }
 
     openDialog(step:string,key:string,msg:string) {
@@ -323,12 +365,12 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   private onEditorTextChange_(): void {
     this.text = this.editor.getValue();
     this.onTextChange(this.text);
-    console.log("On text : ",this.text)
+    // console.log("On text : ",this.text)
   }
   private onEditorDataChange_(): void {
     this.data = this.editor.getValue();
     this.onDataChange(this.data);
-    console.log("On Data : ",this.data)
+    // console.log("On Data : ",this.data)
   }
 
   private onEditorModeChange_(): void {

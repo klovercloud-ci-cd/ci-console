@@ -8,6 +8,7 @@ import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { RepoServiceService } from '../repo-service.service';
 import { RepositoryModalComponent } from '../repository-modal/repository-modal.component';
+import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
 
 @Component({
   selector: 'kcci-repository',
@@ -32,7 +33,8 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     private userInfo: UserDataService,
     private auth: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public resource: ResourcePermissionService
   ) {
     this._toolbarService.changeData({ title: 'Repositories' });
   }
@@ -65,10 +67,9 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     });
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
+    dialogConfig.disableClose = true; // its a problem when a http error will throw
     dialogConfig.width = '40%';
-    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.panelClass = 'kc-dialog';
     dialogConfig.data = {
       companyID: this.companyID,
     };

@@ -580,46 +580,6 @@ export class ApplicationModalComponent implements OnInit {
     console.log("fCount: ",fCount)
   }
 
-  // getTotalError(appSteps:any){
-  //   console.log("appSteps:",appSteps);
-  //   let errors:any = [];
-  //   appSteps.map((items:any, index:number)=>{
-  //     let next_val:any = null;
-  //     let params_val:any = null;
-  //
-  //     if(items.name.valid=='false' || items.type.valid=='false' || items.trigger.valid=='false'){
-  //       this.totalError = this.totalError+1;
-  //     }
-  //     // else if(items.type.valid=='false'){
-  //     //   errors.push('error');
-  //     // }else if(items.trigger.valid=='false'){
-  //     //   errors.push('error');
-  //     // }
-  //     // console.log("this.totalError: -",this.totalError)
-  //     // <----------Checking Next Array---------->
-  //     if(items?.next !== null){
-  //       const nextValue = items?.next?.map((item:any)=>{
-  //         return item.valid;
-  //       })
-  //       next_val = !nextValue.includes('false')
-  //     }
-  //
-  //     // <----------Checking Param Array---------->
-  //     if(items?.params !== null){
-  //       const paramsValue = items?.params?.map((item:any)=>{
-  //         return item.valid;
-  //       })
-  //       params_val = !paramsValue.includes('false')
-  //     }
-  //     if(items.name.valid=='true' && next_val==true && params_val==true && items.trigger.valid=='true' && items.type.valid=='true'){
-  //       return items.isValid = true;
-  //     }
-  //     else{
-  //       return items.isValid = false;
-  //     }
-  //   })
-  //   console.log("this.totalError:::: -",this.totalError)
-  // }
 
   addApplication = this.fb.group({
     name: ['', Validators.required],

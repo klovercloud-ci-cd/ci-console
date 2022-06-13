@@ -70,9 +70,9 @@ export class RoleListComponent implements OnInit {
       },
       (err) => {
         this.isLoading = false;
-        this.snackBar.open(err?.error?.message, 'Close', {
-          duration: 5000,
-        });
+        // this.snackBar.open(err?.error?.message, 'Close', {
+        //   duration: 5000,
+        // });
       }
     );
   }
@@ -87,13 +87,13 @@ export class RoleListComponent implements OnInit {
       if (confirmed) {
         this._roleService.deleteRole(role).subscribe(
           (_) => {
-            this.snackBar.open('Success! Role deleted', 'close', {
-              duration: 5000,
-            });
+            // this.snackBar.open('Success! Role deleted', 'close', {
+            //   duration: 5000,
+            // });
             this.getRoles();
           },
           (err) => {
-            this.snackBar.open(err.error.message, 'close', { duration: 5000 });
+            // this.snackBar.open(err.error.message, 'close', { duration: 5000 });
           }
         );
       }

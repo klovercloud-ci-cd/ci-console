@@ -139,32 +139,32 @@ export class UserFormComponent implements OnInit {
     if (this.userData) {
       this._userService.updateUser(this.userId, _formData).subscribe(
         (_) => {
-          this.snackBar.open('Success! User updated.', 'Close', {
-            duration: 10000,
-          });
+          // this.snackBar.open('Success! User updated.', 'Close', {
+          //   duration: 10000,
+          // });
           this.router.navigate(['/users']);
           this.isSubmitting = false;
         },
         (err) => {
           this.isSubmitting = false;
-          this.snackBar.open(err?.error?.message, 'Close', {
-            duration: 10000,
-          });
+          // this.snackBar.open(err?.error?.message, 'Close', {
+          //   duration: 10000,
+          // });
         }
       );
     } else {
       this._userService.createUser(_formData).subscribe(
         (_) => {
-          this.snackBar.open('Success! User created.', 'Close', {
-            duration: 10000,
-          });
+          // this.snackBar.open('Success! User created.', 'Close', {
+          //   duration: 10000,
+          // });
           this.router.navigate(['/users']);
         },
         (err) => {
           this.isSubmitting = false;
-          this.snackBar.open(err?.error?.message, 'Close', {
-            duration: 10000,
-          });
+          // this.snackBar.open(err?.error?.message, 'Close', {
+          //   duration: 10000,
+          // });
         }
       );
     }
@@ -181,9 +181,9 @@ export class UserFormComponent implements OnInit {
       },
       (err) => {
         this.isUserLoading = false;
-        this.snackBar.open(err?.error?.message, 'Close', {
-          duration: 5000,
-        });
+        // this.snackBar.open(err?.error?.message, 'Close', {
+        //   duration: 5000,
+        // });
         this.router.navigate(['/users']);
       }
     );
@@ -197,9 +197,9 @@ export class UserFormComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        this.snackBar.open(err?.error?.message, 'Close', {
-          duration: 5000,
-        });
+        // this.snackBar.open(err?.error?.message, 'Close', {
+        //   duration: 5000,
+        // });
       }
     );
   }
@@ -211,9 +211,9 @@ export class UserFormComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        this.snackBar.open(err?.error?.message, 'Close', {
-          duration: 5000,
-        });
+        // this.snackBar.open(err?.error?.message, 'Close', {
+        //   duration: 5000,
+        // });
       }
     );
   }

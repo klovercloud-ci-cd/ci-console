@@ -1,92 +1,94 @@
-<div>
-  <div class="kc-repository">
-    <mat-card class="repo-container mt-4">
-      <div class="w-32 ml-auto" (click)="openDialog()">
-        <button class="kc-button-primary rounded-[.75rem] text-center cursor-pointer">
-          Add New
-        </button>
-      </div>
-      <div class="pt-4">
-        <div
-          class="w-full h-full"
-          gdColumns="1fr 1fr 1fr 1fr"
-          gdColumns.md="1fr 1fr 1fr"
-          gdColumns.lt-md="1fr 1fr"
-          gdColumns.lt-sm="1fr"
-          gdColumns.lt-xs="1fr"
-          gdGap="16px"
-        >
-          <div *ngFor="let repo of repoArray; let i = index">
-            <div
-              class="cluster-card cursor-pointer transition duration-1000"
-              [routerLink]="['/repository', repo.id]"
-            >
-              <span class="flex justify-between">
-                <div class="flex gap-3 pl-3">
-                  <img
-                    class="w-10 h-10"
-                    src="../../../assets/images/logos/repo.svg"
-                    alt=""
-                  />
-                  <h1 class="text-sm font-semibold tracking-wider pt-1">
+<div class="kc-card m-6 p-6">
+  <div class="flex justify-between pb-4">
+    <div></div>
+    <button *ngIf="resource.authorizedUser('repository','CREATE')" class="kc-button-primary-sm" (click)="openDialog()">
+      Add New
+    </button>
+  </div>
+  <div class="">
+    <mat-divider></mat-divider>
+  </div>
+  <div class="pt-6">
+    <div
+      class="w-full h-full"
+      gdColumns="1fr 1fr 1fr 1fr"
+      gdColumns.md="1fr 1fr 1fr"
+      gdColumns.lt-md="1fr 1fr"
+      gdColumns.lt-sm="1fr"
+      gdColumns.lt-xs="1fr"
+      gdGap="16px"
+    >
+      <div mat-ripple *ngFor="let repo of repoArray; let i = index"
+           class="kc-card  shadow-card h-full cursor-pointer p-6"
+           [routerLink]="['/repository', repo.id]"
+      >
+        <div class="space-y-3">
+
+              <span class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                  <svg width="28" height="28" viewBox="0 0 28 28"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <mask id="mask0_6135_3620" style="mask-type:alpha" maskUnits="userSpaceOnUse"
+                          x="0" y="0" width="24" height="24">
+                      <rect width="24" height="24" fill="#838699" />
+                    </mask>
+                    <g mask="url(#mask0_6135_3620)">
+                      <path
+                        d="M20 13H4C3.45 13 3 13.45 3 14V20C3 20.55 3.45 21 4 21H20C20.55 21 21 20.55 21 20V14C21 13.45 20.55 13 20 13ZM7 19C5.9 19 5 18.1 5 17C5 15.9 5.9 15 7 15C8.1 15 9 15.9 9 17C9 18.1 8.1 19 7 19ZM20 3H4C3.45 3 3 3.45 3 4V10C3 10.55 3.45 11 4 11H20C20.55 11 21 10.55 21 10V4C21 3.45 20.55 3 20 3ZM7 9C5.9 9 5 8.1 5 7C5 5.9 5.9 5 7 5C8.1 5 9 5.9 9 7C9 8.1 8.1 9 7 9Z"
+                        fill="#838699" />
+                    </g>
+                  </svg>
+                  <h1 class="text-sub-title font-semi-bold">
                     Repository- {{ i + 1 }}
                   </h1>
                 </div>
                 <img
                   *ngIf="repo.type.toLowerCase() == 'github'"
-                  class="w-7 h-7 mt-3 mr-2"
+                  class="w-7 h-7 "
                   src="../../../assets/images/logos/github.svg"
                   alt=""
                 />
                 <img
                   *ngIf="repo.type.toLowerCase() == 'gitlab'"
-                  class="w-7 h-7 mt-3 mr-2"
+                  class="w-7 h-7"
                   src="../../../assets/images/logos/gitlab.svg"
                   alt=""
                 />
                 <img
                   *ngIf="repo.type.toLowerCase() == 'bit_bucket'"
-                  class="w-7 h-7 mt-3 mr-2"
+                  class="w-7 h-7 "
                   src="../../../assets/images/logos/bitbucket.svg"
                   alt=""
                 />
               </span>
-              <div class="ml-3">
-                <button
-                  class="px-2 py-[5px] rounded bg-dark-container text-xs cursor-pointer flex items-center justify-center gap-1"
-                >
-                  <mat-icon class="text-xl">widgets</mat-icon>
-                  <span
-                    class="mt-1"
-                    *ngIf="repo?.applications?.length > 0; else applist"
-                  >
+          <button
+            class="flex items-center gap-2 "
+          >
+            <mat-icon class="text-dark-500">widgets</mat-icon>
+            <span
+              class=""
+              *ngIf="repo?.applications?.length > 0; else applist"
+            >
                     Applications({{ repo.applications.length }})
                   </span>
-                  <ng-template #applist>
-                    <span class="mt-1">No Application added</span>
-                  </ng-template>
-                </button>
-              </div>
-            </div>
-          </div>
+            <ng-template #applist>
+              <span class="">No Application added</span>
+            </ng-template>
+          </button>
         </div>
       </div>
-      <ngx-skeleton-loader
-        *ngIf="isLoading"
-        count="6"
-        [theme]="{
-          'border-radius': '5px',
-          height: '150px',
+    </div>
+  </div>
+  <ngx-skeleton-loader
+    *ngIf="isLoading"
+    count="6"
+    [theme]="{
+          'border-radius': '3px',
+          height: '100px',
           'margin-right': '16px',
           width: '350px',
-          'background-color': '#1A2C4A'
+          'background-color': '#bbbcc7'
         }"
-        animation="progress-dark"
-      ></ngx-skeleton-loader>
-
-      <!--<div *ngIf="isLoading" class="uploader-status p-5">
-        <mat-spinner [diameter]="50"></mat-spinner>
-      </div>-->
-    </mat-card>
-  </div>
+    animation="progress"
+  ></ngx-skeleton-loader>
 </div>

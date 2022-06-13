@@ -65,30 +65,30 @@ export class RoleFormComponent implements OnInit {
     if (this.data) {
       this._roleService.updateRole(this?.data?.name, payload).subscribe(
         (_) => {
-          this.snackBar.open('Success! Role created.', 'Close', {
-            duration: 4000,
-          });
+          // this.snackBar.open('Success! Role created.', 'Close', {
+          //   duration: 4000,
+          // });
           this.dialogRef.close(true);
         },
         (err) => {
-          this.snackBar.open(err?.error?.message, 'Close', {
-            duration: 6000,
-          });
+          // this.snackBar.open(err?.error?.message, 'Close', {
+          //   duration: 6000,
+          // });
         }
       );
     } else {
       this._roleService.createRole(payload).subscribe(
         (_) => {
-          this.snackBar.open('Success! Role created.', 'Close', {
-            duration: 4000,
-          });
+          // this.snackBar.open('Success! Role created.', 'Close', {
+          //   duration: 4000,
+          // });
           this.dialogRef.close(true);
         },
         (err) => {
           console.log('Error:', err?.error);
-          this.snackBar.open(err?.error?.message, 'Close', {
-            duration: 6000,
-          });
+          // this.snackBar.open(err?.error?.message, 'Close', {
+          //   duration: 6000,
+          // });
         }
       );
     }
@@ -101,9 +101,9 @@ export class RoleFormComponent implements OnInit {
         this.permissionList = res?.data;
       },
       (err) => {
-        this.snackBar.open(err?.error?.message, 'Close', {
-          duration: 5000,
-        });
+        // this.snackBar.open(err?.error?.message, 'Close', {
+        //   duration: 5000,
+        // });
       }
     );
   }

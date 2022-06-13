@@ -1,9 +1,23 @@
-.kc-bg-banner {
-  //background-image: url("../../../assets/images/bg/bg-banner.png");
-  @apply bg-light-400 rounded-md text-dark border border-kc-bdr-card;
-  min-height: 47vh;
-}
+//.kc-bg-banner {
+//  //background-image: url("../../../assets/images/bg/bg-banner.png");
+//  @apply bg-light-400 rounded-md text-dark border border-kc-bdr-card;
+//  min-height: 47vh;
+//}
+@use "sass:color";
+.chart-card{
+  //@apply bg-light-700 border-1.5 border-kc-bdr-card;
+  @apply bg-light-400 border border-kc-bdr-card rounded-md text-dark;
+  padding: 5px;
 
+  div {
+    @apply py-1;
+  }
+}
+.divChart{
+  display: block;
+  width: 400px;
+  height: 400px;
+}
 .kc-create-button {
   @apply hover:text-dark-primary hover:bg-white transition duration-500 w-full py-3 mx-auto rounded-[50px] text-sm md:text-base font-semibold tracking-wider;
 }

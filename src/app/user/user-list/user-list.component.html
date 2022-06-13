@@ -1,19 +1,15 @@
 <div class="p-page">
   <div *ngIf="hasCompany; else company">
     <div class="bg-light overflow-x-auto">
-      <div class="pr-6 py-5">
+      <div class=" py-5">
         <div class="flex items-center justify-between">
           <h3 class="text-base text-dark font-semibold tracking-wide">Users</h3>
-          <div class="flex items-center gap-3">
-            <div class="w-36 ml-auto">
-              <span
-                [routerLink]="'add-new'"
-                class="kc-create-button text-center cursor-pointer"
-              >
-                <mat-icon class="mr-2">add_circle</mat-icon> New User
-              </span>
-            </div>
-          </div>
+          <button *ngIf="resource.authorizedUser('user','CREATE')"
+            [routerLink]="'add-new'"
+            class="kc-button-primary-sm"
+          >
+            Add new
+          </button>
         </div>
       </div>
       <div class="page__content">
@@ -29,7 +25,7 @@
           mat-table
           [dataSource]="dataSource"
           class="w-full"
-          *ngIf="!isLoading"
+          *ngIf="!isLoading && resource.authorizedUser('user','READ')"
         >
           <!-- Email Column -->
           <ng-container matColumnDef="email">
@@ -83,7 +79,7 @@
                 class="float-end"
                 [disabled]="currentUser?.userData?.user_id === user?.id"
               >
-                <mat-icon>more_vert</mat-icon>
+                <mat-icon>expand_more</mat-icon>
               </button>
 
               <mat-menu #menu="matMenu">
@@ -91,9 +87,9 @@
               <mat-icon>edit</mat-icon>
               <span>Edit</span>
             </a> -->
-                <button mat-menu-item (click)="onDelete(user)">
+                <button mat-menu-item *ngIf="resource.authorizedUser('user','DELETE')" (click)="onDelete(user)">
                   <mat-icon>delete</mat-icon>
-                  <span>Delete</span>
+                  <span >Delete</span>
                 </button>
               </mat-menu>
             </td>

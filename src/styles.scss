@@ -247,7 +247,7 @@ body {
 *Buttons end
 */
 .kc-card {
-  @apply bg-light-500 border-1.5 border-kc-bdr-card rounded-md p-12;
+  @apply bg-light-500 border-1.5 border-kc-bdr-card rounded-md;
 }
 .kc-form-field {
   @apply w-full;
@@ -272,21 +272,28 @@ body {
 }
 .kc-dialog {
   .mat-dialog-container {
-    @apply bg-transparent max-w-5xl;
+    @apply bg-light-500 max-w-5xl;
   }
 }
 .custom-modalbox > mat-dialog-container {
   background-color: transparent !important;
   padding: 0px !important;
 }
+
+.ace_scroller{
+  div {
+    color: white !important;
+  }
+}
 .ace_gutter{
-  background-color: lightsteelblue !important;
+  div {
+    color: white !important;
+  }
 }
 .mat-dialog-container{
   padding: 0px !important;
   @apply bg-light-700;
 }
-
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

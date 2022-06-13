@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
           this.tokenService.saveAccessToken(res.data.access_token);
           this.tokenService.saveRefreshToken(res.data.refresh_token);
           this.router.navigate(['']);
+          this.cacheUserResourcePermission(res.data.access_token)
         }
       },error => {
         this.snack.openSnackBar('Error!',error,'sb-error')
@@ -64,4 +65,19 @@ export class LoginComponent implements OnInit {
   logout(): void {
     this.authService.logOut();
   }
+  cacheUserResourcePermission(token: string){
+    let obj =  JSON.parse(atob(token.split('.')[1]))
+    let resourcePermissions= new  Map( );
+    for (let i = 0; i <  obj.data.resources.length; i++) {
+      let permission=new Set();
+      for (let j = 0; j <  obj.data.resources[i]["roles"].length; j++) {
+        for (let k=0;k<obj.data.resources[i]["roles"][j]["permissions"].length;k++){
+          permission.add(obj.data.resources[i]["roles"][j]["permissions"][k]["name"])
+        }
+      }
+      resourcePermissions.set(obj.data.resources[i]["name"], [...permission])
+    }
+    localStorage.setItem('resourceWisePermissions', JSON.stringify(Array.from(resourcePermissions.entries())));
+  }
 }
+

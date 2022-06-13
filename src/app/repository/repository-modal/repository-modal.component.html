@@ -1,10 +1,11 @@
-<div
-  class="bg-dark-container border border-dark-primary rounded-lg p-5 relative"
->
-  <form [formGroup]="repoFormGroup" (ngSubmit)="subsub()" class="pt-5">
-    <div class="flex flex-col xl:flex-row gap-5">
+<div class=" relative ">
+  <div class="absolute -right-2 -top-2" (click)="closeAppModal()">
+    <mat-icon class="text-dark-500 hover:text-dark cursor-pointer">close</mat-icon>
+  </div>
+  <form [formGroup]="repoFormGroup" (ngSubmit)="subsub()" class=" relative p-6">
+    <div class="flex flex-col xl:flex-row gap-6 ">
       <mat-form-field
-        class="kcci-field kc-select-container text-white"
+        class="kc-form-field"
         appearance="outline"
       >
         <mat-label>Type</mat-label>
@@ -19,8 +20,8 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="kcci-field" appearance="outline">
-        <mat-label class="text-white">Token</mat-label>
+      <mat-form-field class="kc-form-field" appearance="outline">
+        <mat-label>Token</mat-label>
         <input
           formControlName="token"
           required
@@ -112,7 +113,7 @@
                 </a>
               </div>
             </div>
-            <div *ngSwitchDefault="">
+            <div *ngSwitchDefault>
               <div class="flex justify-end gap-1">
                 <span class="example-container" cdkScrollable>
                   <div
@@ -138,61 +139,24 @@
         </span>
       </h1>
     </div>
-    <div mat-dialog-actions class="flex justify-between">
-      <div></div>
-      <!-- <button
-      type="submit"
-      mat-button
-      class="px-4 py-2 bg-dark-primary rounded-md"
-    >
-      Submit
-    </button> -->
-      <div *ngIf="!repoFormGroup.valid; else other_content" class="mb-2">
-        <button
-          class="bg-slate-500 kc-register block px-4 py-3 rounded-md"
-          type="submit"
-          [disabled]="!repoFormGroup.valid"
-        >
-          Submit
-        </button>
-      </div>
-      <ng-template #other_content>
-        <div class="mb-2">
-          <button
-            class="kc-button-primary kc-register block px-4 py-3 rounded-md"
-            type="submit"
-            [disabled]="!repoFormGroup.valid"
-          >
-            <span *ngIf="!isLoading; else before_submit"> Submit </span>
-            <ng-template #before_submit>
-              <div class="py-[10px] mx-auto w-[57px]">
-                <mat-progress-bar
-                  class="green-progress kc-progress-bar"
-                  mode="indeterminate"
-                >
-                </mat-progress-bar>
-              </div>
-            </ng-template>
-          </button>
-        </div>
-      </ng-template>
+    <div mat-dialog-actions class="flex justify-end">
+      <button
+        class="kc-button-primary"
+        type="submit"
+        [disabled]="!repoFormGroup.valid"
+      >
+        <span class="text-button text-white" *ngIf="!isLoading; else before_submit"> Submit </span>
+        <ng-template #before_submit>
+          <div class="py-[10px] mx-auto w-[57px]">
+            <mat-progress-bar
+              class="green-progress kc-progress-bar"
+              mode="indeterminate"
+            >
+            </mat-progress-bar>
+          </div>
+        </ng-template>
+      </button>
     </div>
   </form>
-  <!-- <div class="example-container">
 
-      <div mat-dialog-actio ns class="flex justify-between">
-        <div></div>
-        <button
-          type="submit"
-          mat-button
-          (click)="subsub()"
-          class="px-4 py-2 bg-dark-primary rounded-md"
-        >
-          Submit
-        </button>
-      </div>
-  </div> -->
-  <div class="absolute top-2 right-2 cursor-pointer" (click)="closeAppModal()">
-    <mat-icon>highlight_off</mat-icon>
-  </div>
 </div>

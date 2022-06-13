@@ -9,6 +9,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DashboardIndexComponent } from './dashboard-index/dashboard-index.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [DashboardIndexComponent],
@@ -21,6 +22,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     MatIconModule,
     MatExpansionModule,
     FlexLayoutModule,
+    ChartsModule
   ],
   exports: [],
 })

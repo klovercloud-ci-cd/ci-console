@@ -31,6 +31,8 @@
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-loading-bar/router": "^6.0.2",
     "ace-builds": "^1.5.3",
+    "chart.js": "^2.9.3",
+    "ng2-charts": "^2.3.0",
     "js-yaml": "^4.1.0",
     "jwt-decode": "^3.1.2",
     "ngx-skeleton-loader": "^5.0.0",

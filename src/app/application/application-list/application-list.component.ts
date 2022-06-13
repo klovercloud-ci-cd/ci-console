@@ -14,6 +14,7 @@ import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { AppListService } from '../app-list.service';
 import { ApplicationModalComponent } from '../application-modal/application-modal.component';
 import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
+import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
 
 @Component({
   selector: 'kcci-application-list',
@@ -61,7 +62,8 @@ export class ApplicationListComponent implements OnInit {
     private userInfo: UserDataService,
     private auth: AuthService,
     private repo: RepoServiceService,
-    private navigateRoute: Router
+    private navigateRoute: Router,
+    public resource: ResourcePermissionService
   ) {
     this._toolbarService.changeData({ title: 'Applications' });
   }

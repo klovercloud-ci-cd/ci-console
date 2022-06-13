@@ -23,6 +23,8 @@ import { ApiCallInterceptor } from './shared/interceptors/api-call.interceptor';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { EditorModule } from './editor/editor.module';
+import { ChartsModule } from 'ng2-charts';
+
 
 const globalRippleConfig: RippleGlobalOptions = {
   animation: {
@@ -51,7 +53,8 @@ const globalRippleConfig: RippleGlobalOptions = {
     CompanyModule,
     LoadingBarModule,
     SnackbarModule,
-    EditorModule
+    EditorModule,
+    ChartsModule
   ],
   providers: [
     {

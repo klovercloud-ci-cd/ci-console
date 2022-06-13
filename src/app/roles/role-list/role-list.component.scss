@@ -52,9 +52,8 @@
   @apply text-sm w-1/5;
 }
 
-th,
-td {
-  @apply bg-dark-border-form text-sm font-semibold;
+th{
+  @apply bg-light-800 text-sm font-semibold;
 }
 
 .mat-table {

@@ -76,10 +76,10 @@ export class AppEditorModalComponent implements OnInit {
           },
           "params":[
             {
-              "accepts":"*",
-              "message":"",
+              "accepts":" SA, Sa, Service Account",
+              "message":" Service account not allowed!",
               "name":"service_account",
-              "valid":"true",
+              "valid":"false",
               "value":"test-sa"
             },
             {
@@ -137,8 +137,8 @@ export class AppEditorModalComponent implements OnInit {
               "accepts":"jenkinsJob, build, interstep, deployDev",
               "message":"",
               "name":"next",
-              "valid":"true",
-              "value":"interstep"
+              "valid":"false",
+              "value":"intersteps"
             },
             {
               "accepts":"jenkinsJob, build, interstep, deployDev",
@@ -197,7 +197,7 @@ export class AppEditorModalComponent implements OnInit {
               "accepts":"*",
               "message":"",
               "name":"envs",
-              "valid":"true",
+              "valid":"false",
               "value":"key3:value1,key4:value2"
             },
             {
@@ -241,7 +241,7 @@ export class AppEditorModalComponent implements OnInit {
               "accepts":"deployDev, jenkinsJob, build, interstep",
               "message":"",
               "name":"next",
-              "valid":"false",
+              "valid":"true",
               "value":"deployDev"
             },
             {
@@ -280,14 +280,14 @@ export class AppEditorModalComponent implements OnInit {
               "accepts":"*",
               "message":"",
               "name":"name",
-              "valid":"true",
+              "valid":"false",
               "value":"ubuntu"
             },
             {
               "accepts":"*",
               "message":"",
               "name":"namespace",
-              "valid":"true",
+              "valid":"false",
               "value":"default"
             },
             {
@@ -514,10 +514,34 @@ export class AppEditorModalComponent implements OnInit {
         return nextValue.value;
       })
 
+
+      // count:=0
       const paramVal = _item.params.map((paramValue:any)=>{
+        // paramIndexMap[`${paramValue.name} : ${paramValue.value}`]=
         const param = `${paramValue.name} : ${paramValue.value}`
         return param;
       })
+      // let paramIndexMap = new Map<string, number>();
+      let paramErrorIndexes=[]
+
+      for (var i in _item.params) {
+        if (_item.params[i].valid=='false'){
+          paramErrorIndexes.push(Number(i)+5)
+        }
+      }
+      let nextErrorIndexes=[]
+      for (var i in _item.next) {
+
+        if (_item.next[i].valid=='false'){
+          if (paramErrorIndexes.length>0){
+            nextErrorIndexes.push(Number(i)+6+Number(paramErrorIndexes[paramErrorIndexes.length-1]))
+          }else{
+            nextErrorIndexes.push(Number(i)+6)
+          }
+          // console.log(_item.next[i].value,": ",_item.next[i].valid, " ", Number(i)," ",6," ",length)
+
+        }
+      }
 
       const _obj:any = {
         name: _item.name.value,
@@ -530,14 +554,16 @@ export class AppEditorModalComponent implements OnInit {
       let next_val:any = null;
       let params_val:any = null;
 
+
       // <----------Checking Next Array---------->
       if(_item?.next !== null){
         const nextValue = _item?.next?.map((item:any)=>{
+
           return item.valid;
         })
         next_val = !nextValue.includes('false')
       }
-
+// console.log("keyAndvalue",keyAndvalue)
       // <----------Checking Param Array---------->
       if(_item?.params !== null){
         const paramsValue = _item?.params?.map((item:any)=>{
@@ -547,22 +573,21 @@ export class AppEditorModalComponent implements OnInit {
       }
       // this.arrayData.push(_obj);
 
-      let error;
-      // console.log("_item?.name?.value:-",_item.name.valid);
+      let error=new Array();
+       console.log("indexes:",nextErrorIndexes);
 
-
+      //
       if(_item.name.valid=='false'){
-        error = 1;
+        error.push( 1);
       }else if(_item.type.valid=='false'){
-        error = 2;
+        error.push( 2);
       }else if(_item.trigger.valid=='false'){
-        error = 3;
-      }else if(params_val==false){
-        error = 4;
-      }else if(next_val==false){
-        error = 5 + _item?.params.length;
+        error.push(3);
       }
-      // console.log("_ITEM: ",_item)
+        error.push(...paramErrorIndexes)
+
+      error.push(nextErrorIndexes)
+       console.log("errors: ", nextErrorIndexes)
       this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
     })
   }
@@ -591,47 +616,6 @@ export class AppEditorModalComponent implements OnInit {
     this.totalError = fCount;
     console.log("fCount: ",fCount)
   }
-
-  // getTotalError(appSteps:any){
-  //   console.log("appSteps:",appSteps);
-  //   let errors:any = [];
-  //   appSteps.map((items:any, index:number)=>{
-  //     let next_val:any = null;
-  //     let params_val:any = null;
-  //
-  //     if(items.name.valid=='false' || items.type.valid=='false' || items.trigger.valid=='false'){
-  //       this.totalError = this.totalError+1;
-  //     }
-  //     // else if(items.type.valid=='false'){
-  //     //   errors.push('error');
-  //     // }else if(items.trigger.valid=='false'){
-  //     //   errors.push('error');
-  //     // }
-  //     // console.log("this.totalError: -",this.totalError)
-  //     // <----------Checking Next Array---------->
-  //     if(items?.next !== null){
-  //       const nextValue = items?.next?.map((item:any)=>{
-  //         return item.valid;
-  //       })
-  //       next_val = !nextValue.includes('false')
-  //     }
-  //
-  //     // <----------Checking Param Array---------->
-  //     if(items?.params !== null){
-  //       const paramsValue = items?.params?.map((item:any)=>{
-  //         return item.valid;
-  //       })
-  //       params_val = !paramsValue.includes('false')
-  //     }
-  //     if(items.name.valid=='true' && next_val==true && params_val==true && items.trigger.valid=='true' && items.type.valid=='true'){
-  //       return items.isValid = true;
-  //     }
-  //     else{
-  //       return items.isValid = false;
-  //     }
-  //   })
-  //   console.log("this.totalError:::: -",this.totalError)
-  // }
 
   addApplication = this.fb.group({
     name: ['', Validators.required],
