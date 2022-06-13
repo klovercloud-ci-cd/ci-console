@@ -133,7 +133,7 @@
                 <div *ngIf="list.branch === branch.name">
                   <div *ngFor="let msg of list.commits; let j = index" class="">
                     <div mat-ripple class="kc-card p-3 mb-3 cursor-pointer"
-                            (click)="getProcess(msg.sha)"
+                         (click)="getProcess(msg.sha)"
                     >
                       <div class="flex justify-between items-center break-words space-y-2">
                         <div class="font-semi-bold">

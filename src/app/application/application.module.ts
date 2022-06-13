@@ -30,6 +30,8 @@ import { ApplicationRoutingModule } from './application-routing.module';
 import { EditorModule } from '../editor/editor.module';
 import { AppEditorModalComponent } from './app-editor-modal/app-editor-modal.component';
 
+import {MatDividerModule} from "@angular/material/divider";
+
 
 @NgModule({
   declarations: [
@@ -68,7 +70,8 @@ import { AppEditorModalComponent } from './app-editor-modal/app-editor-modal.com
     MatRippleModule,
     MatProgressBarModule,
     NgxSkeletonLoaderModule,
-    EditorModule
+    EditorModule,
+    MatDividerModule
   ],
 })
 export class ApplicationModule {}

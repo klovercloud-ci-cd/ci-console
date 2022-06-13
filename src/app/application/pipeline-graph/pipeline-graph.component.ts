@@ -474,7 +474,7 @@ export class PipelineGraphComponent
           Object.assign(
             this.commitList[
               this.commitList.findIndex((el) => el.branch === branchName)
-            ],
+              ],
             res.data
           );
         });
