@@ -1,7 +1,7 @@
-<div class="pipe-nav border w-fit mx-6 rounded-[6px] border-dark-border-default">
+<div class="pipe-nav border w-fit mx-6 rounded-md border-light-500">
   <div class="flex justify-start items-center">
-    <div id="pipeline" class="flex-item active" (click)="goto('pipeline')">CI/CD Pipeline</div>
-    <div id="overview" class="flex-item" (click)="goto('overview')">Overview</div>
+    <div mat-ripple id="pipeline" class="flex-item" (click)="goto('pipeline')">CI/CD Pipeline</div>
+    <div mat-ripple id="overview" class="flex-item" (click)="goto('overview')">Overview</div>
   </div>
 </div>
 <ng-container *ngComponentOutlet="content"></ng-container>

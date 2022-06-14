@@ -1,8 +1,8 @@
 
 .overview-row{
-  @apply grid grid-cols-3 border-b border-dark-border-default ;
+  @apply grid grid-cols-3 border-b border-kc-bdr-card ;
   .overview-item{
-    @apply border-r border-dark-border-default p-6;
+    @apply border-r border-kc-bdr-card p-6;
     &:last-child{
       @apply border-none;
     }

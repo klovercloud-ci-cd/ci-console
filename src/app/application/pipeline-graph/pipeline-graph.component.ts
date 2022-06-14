@@ -4,7 +4,8 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnInit, ViewEncapsulation,
+  OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ApplicationListComponent } from '../application-list/application-list.component';
 import { ToolbarService } from '../../shared/services/toolbar.service';
@@ -26,15 +27,18 @@ export class PipelineGraphComponent
   implements OnInit, AfterContentChecked, AfterContentInit
 {
   openBranch = 0;
-  openFootMark= 0
-  public singleLogDetails: { footmark: any; index: number }={footmark:'',index:0};
+  openFootMark = 0;
+
+  public singleLogDetails: { footmark: any; index: number } = {
+    footmark: '',
+    index: 0,
+  };
 
   setOpenBranch(index: number) {
     this.openBranch = index;
   }
-  setActiveFootMark(index: number) {
-    this.openFootMark = index;
-  }
+
+  setActiveFootMark(index: number) {}
 
   nextStep() {
     this.openBranch++;
@@ -43,6 +47,8 @@ export class PipelineGraphComponent
   prevStep() {
     this.openBranch--;
   }
+
+  newLogs: any[] = [];
   branchPanelOpen: boolean | undefined;
   pipeline: any;
   pipelineStep: any;
@@ -70,6 +76,10 @@ export class PipelineGraphComponent
   public processIds: any[] = [];
   public footMarksLegth: number = 0;
   logs: any[] = [];
+  prevStepName: string = '';
+  page: number = 0;
+  limit: number = 0;
+  prev_logs_size: number = 0;
   nodeDetails: any = '';
   activeStep: any = '';
 
@@ -78,6 +88,7 @@ export class PipelineGraphComponent
   _processIds: any;
   isLoading = { graph: true, commit: true };
   socket: any;
+  isObjerving: boolean = false;
 
   constructor(
     private _toolbarService: ToolbarService,
@@ -221,76 +232,84 @@ export class PipelineGraphComponent
         socketRes = data[Math.floor(Math.random() * 10) + 1];
       }
       let found = false;
-      for (let x of this.footMarks){
-        if (x == socketRes.footmark){
-          found = true
+
+      if (socketRes && socketRes.footmark) {
+        for (let x of this.footMarks) {
+          if (x == socketRes.footmark) {
+            found = true;
+          }
         }
       }
-      for (let y  of this.allFootMarks){
-        if(y.stepName === socketRes.step){
-          console.log('ok');
+      if (socketRes && socketRes.footmark) {
+        for (let y of this.allFootMarks) {
+          if (y.stepName === socketRes.step) {
+            console.log('ok');
+          }
         }
       }
-      if (!found){ // need to fix duplicate indexing for step
-        console.log(this.nodeDetails)
-        this.footMarks.push(socketRes.footmark)
-        this.openFootMark = this.footMarks.length-1
+      if (!found) {
+        // need to fix duplicate indexing for step
+        if (socketRes && socketRes.footmark) {
+          this.footMarks.push(socketRes.footmark);
+          this.openFootMark = this.footMarks.length - 1;
+        }
       }
       i++;
 
       ////------------------
-      setTimeout(() => {
-        this.expandLog(socketRes.footmark, socketRes.step);
-      }, 300);
-
-      if (
-        (socketRes.status === 'INITIALIZING' &&
-          this.activeStep != socketRes.step) ||
-        (socketRes.status === 'PROCESSING' && this.activeStep != socketRes.step)
-      ) {
-        if (socketRes.status === 'INITIALIZING') {
-          localStorage.setItem('isFailed', 'false');
-          this.activeStep = socketRes.step;
-          this.getPipelineWithStartBuild(socketRes.process_id);
-
-        }
+      /* setTimeout(() => {
+         this.expandLog(socketRes.footmark, socketRes.step);
+       }, 300);*/
+      if (socketRes && socketRes.footmark) {
         if (
-          socketRes.status === 'PROCESSING' &&
-          localStorage.getItem('isFailed') === 'false'
+          (socketRes.status === 'INITIALIZING' &&
+            this.activeStep != socketRes.step) ||
+          (socketRes.status === 'PROCESSING' &&
+            this.activeStep != socketRes.step)
         ) {
-          this.activeStep = socketRes.step;
-          this.getPipelineWithStartBuild(socketRes.process_id);
+          if (socketRes.status === 'INITIALIZING') {
+            localStorage.setItem('isFailed', 'false');
+            this.activeStep = socketRes.step;
+            this.getPipelineWithStartBuild(socketRes.process_id);
+          }
+          if (
+            socketRes.status === 'PROCESSING' &&
+            localStorage.getItem('isFailed') === 'false'
+          ) {
+            this.activeStep = socketRes.step;
+            this.getPipelineWithStartBuild(socketRes.process_id);
+          }
         }
-      }
-      if (this.activeStep === '') {
-        this.activeStep = socketRes.step;
-      }
-      console.log(socketRes);
-      if (socketRes.status === 'FAILED' || socketRes.status === 'ERROR') {
-        localStorage.setItem('isFailed', 'true');
-        this.repo.getPipeLine(socketRes.process_id).subscribe((res: any) => {
-          setTimeout(() => {
-            this.pipelineStep = res.data.steps;
-            this.pipeline = res;
-            this.envList = this.allenv();
-            this.stepsLists = this.stepsDetails();
-
+        if (this.activeStep === '') {
+          this.activeStep = socketRes.step;
+        }
+        console.log(socketRes);
+        if (socketRes.status === 'FAILED' || socketRes.status === 'ERROR') {
+          localStorage.setItem('isFailed', 'true');
+          this.repo.getPipeLine(socketRes.process_id).subscribe((res: any) => {
             setTimeout(() => {
-              const loadeClass = document.getElementsByClassName('loadbase');
-              for (let x of loadeClass) {
-                x.classList.remove('active');
-              }
-              this.initSvgArrow();
-              this.drawLines();
-              this.logClose();
-              this.startBuild(this.activeStep);
+              this.pipelineStep = res.data.steps;
+              this.pipeline = res;
+              this.envList = this.allenv();
+              this.stepsLists = this.stepsDetails();
 
-              this.activeStep = '';
-            }, 500);
+              setTimeout(() => {
+                const loadeClass = document.getElementsByClassName('loadbase');
+                for (let x of loadeClass) {
+                  x.classList.remove('active');
+                }
+                this.initSvgArrow();
+                this.drawLines();
+                this.logClose();
+                this.startBuild(this.activeStep);
+
+                this.activeStep = '';
+              }, 500);
+            });
           });
-        });
-      }
-      if (socketRes.status === 'SUCCESSFUL') {
+        }
+        if (socketRes.status === 'SUCCESSFUL') {
+        }
       }
     }, 3000);
     /*socket.onmessage = (e) => {
@@ -378,7 +397,7 @@ export class PipelineGraphComponent
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(async (res: any) => {
         this.commit = res.data;
-        console.log(this.commit)
+        console.log(this.commit);
         this.commitList.push({
           branch: branchName,
 
@@ -480,7 +499,105 @@ export class PipelineGraphComponent
         });
     }
   }
-  getLogs(
+
+  sleep(milliseconds: number) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+  }
+
+  getPaginatedLogs(
+    processId: string,
+    nodeName: string,
+    footmarkName: string,
+    page: number,
+    limit: number,
+    skip: number
+  ) {
+    if (this.prev_logs_size == 0) {
+      this.repo
+        .getFootamarkLog(processId, nodeName, footmarkName, page, limit)
+        .subscribe((res: any) => {
+          if (res.data !=null){
+            const logs:any[] = res.data;
+            this.prev_logs_size = logs?.length;
+            if (this.prev_logs_size == 0) {
+              console.log("going to sleep.")
+              this.sleep(300);
+            } else {
+              this.logs.push({
+                name:footmarkName,
+                data:[...logs]
+              });
+              if (this.prev_logs_size == limit) {
+                this.page = this.page + 1;
+              }
+            }
+          }
+        });
+    } else if (this.prev_logs_size < limit) {
+      this.sleep(300);
+      this.repo
+        .getFootamarkLog(processId, nodeName, footmarkName, this.page, limit)
+        .subscribe((res: any) => {
+          if (res.data !=null){
+            const logs:any[] = res.data;
+
+            if (this.prev_logs_size < logs?.length) {
+              const findLogByfootMarkName = this.logs.find(
+                (log) => log.name === footmarkName
+              );
+              if (findLogByfootMarkName){
+                findLogByfootMarkName.data = [...logs?.slice(this.prev_logs_size, logs.length)];
+              }
+              else{
+                this.logs.push({
+                  name:footmarkName,
+                  data:[...logs.slice(this.prev_logs_size, logs?.length)]
+                });
+              }
+              if (logs.length == limit) {
+                this.page = this.page + 1;
+                this.prev_logs_size = 0;
+              } else {
+                this.prev_logs_size = logs?.length;
+              }
+            } else if (logs?.length == this.prev_logs_size) {
+              return;
+              // this.logs =[...logs.slice(this.prev_logs_size, this.logs.length)]
+            }
+          }
+
+        });
+    } else {
+      this.page = this.page + 1;
+      this.repo
+        .getFootamarkLog(processId, nodeName, footmarkName, this.page, limit)
+        .subscribe((res: any) => {
+          if(res.data !=null){
+            console.log(res.data)
+            const logs: any[] = res.data;
+            const findLogByfootMarkName = this.logs.find(
+              (log) => log.name === footmarkName
+            );
+            if (findLogByfootMarkName){
+              findLogByfootMarkName.data = [...logs];
+            } else{
+              this.logs.push({
+                name:footmarkName,
+                data:[...logs]
+              });
+            }
+            this.prev_logs_size = 0;
+          }
+        });
+    }
+
+  }
+
+  makeApiCallForLogs(
     processId: string,
     nodeName: string,
     footmarkName: string,
@@ -489,58 +606,124 @@ export class PipelineGraphComponent
     skip: number
   ) {
     this.repo
-      .getFootamarkLog(processId, nodeName, footmarkName)
+      .getFootamarkLog(processId, nodeName, footmarkName, page, limit)
       .subscribe((res: any) => {
-        console.log(res, 'footmarkslog');
-        let isObjerving: boolean = false;
-        const intObj: any = document.getElementById('intObj' + footmarkName);
-        const observer = new IntersectionObserver(
-          (entry: any) => {
-            if (entry[0].isIntersecting) {
-              isObjerving = true;
-              console.log(entry[0].isIntersecting);
-            } else {
-              isObjerving = false;
-              console.log(entry[0].isIntersecting);
-            }
-          },
-          {
-            root: document.getElementById('scrollArea' + footmarkName),
-            rootMargin: '5px',
-            threshold: 1.0,
-          }
-        );
-        observer.observe(intObj);
-        this.logs.push({
-          name: footmarkName,
-
-          data: res.data,
-        });
-        if(res.data.length<10){
-          const skip =10-res.data.length
-        }
+        console.log(res.data);
+        return res.data;
       });
   }
-  expandLog(footmarkName: string, nodeName: any) {
-    const processId = this.pipeline.data.process_id;
-    const allFootSteps = document.getElementsByClassName('logExpansion');
 
-    const findLogByName = this.logs.find((log) => log.name === footmarkName);
-    if (!findLogByName) {
-      this.getLogs(processId, nodeName, footmarkName, 0, 10, 0);
-    } else {
-      for (let footStep of allFootSteps) {
-        footStep.classList.replace('visible', 'hidden');
+  getLogs(
+    processId: string,
+    nodeName: string,
+    footmarkName: string,
+    page: number,
+    limit: number,
+    skip: number
+  ) {
+    const intObj: any = document.getElementById('intObj' + footmarkName);
+
+    const observer = new IntersectionObserver(
+      (entry: any) => {
+        if (entry[0].isIntersecting) {
+          console.log(entry[0].isIntersecting);
+
+          if (this.prevStepName == '' || this.prevStepName != footmarkName) {
+            this.prevStepName = footmarkName;
+          }
+          /*this.getPaginatedLogs(
+            processId,
+            nodeName,
+            footmarkName,
+            page,
+            limit,
+            skip
+          );*/
+          // this.makeApiCallForLogs(processId,nodeName,footmarkName,page,limit,skip)
+        }
+      },
+      {
+        root: document.getElementById('scrollArea' + footmarkName),
+        rootMargin: '10px',
+        threshold: 0.5,
       }
+    );
+    observer.observe(intObj);
+    /*this.repo
+      .getFootamarkLog(processId, nodeName, footmarkName,page,limit)
+      .subscribe((res: any) => {
 
-      document
-        .getElementById(footmarkName)
-        ?.classList.replace('hidden', 'visible');
-    }
+
+
+        const log = res.data
+        console.log(log,'this is log response')
+        if (log.length !== 0){
+          if (skip != 0){
+            for (let i=skip-1; i<=log.length;i++){
+              this.newLogs.push(log[i])
+            }
+          }
+          else {
+            this.newLogs=[...log]
+          }
+          console.log(this.newLogs,'new logsssss , can be empty')
+          const findLogByfootMarkName = this.logs.find(
+            (log) => log.name === footmarkName
+          );
+          if (findLogByfootMarkName){
+            findLogByfootMarkName.data =[...this.newLogs]
+          }
+          else {
+            this.logs.push({
+              name:footmarkName,
+              data:[...this.newLogs]
+            })
+          }
+          const observer = new IntersectionObserver(
+            (entry: any) => {
+              if (entry[0].isIntersecting) {
+                this.isObjerving =true;
+              } else {
+                this.isObjerving =false;
+              }
+            },
+            {
+              root: document.getElementById('scrollArea' + footmarkName),
+              rootMargin: '10px',
+              threshold: .5,
+            }
+          );
+          observer.observe(intObj);
+          setTimeout(()=>{
+            if (this.isObjerving){
+              console.log('observing')
+              let totalSkip = 10-res.data.length
+              let nextPage:number=page
+              if (totalSkip === 0 ){
+                nextPage = page+1;
+              }
+              if (!log && page !=0){
+                nextPage = page-1;
+              }
+              //console.log(processId, nodeName, footmarkName, nextPage, 10, totalSkip)
+              this.getLogs(processId, nodeName, footmarkName, nextPage, 10, totalSkip)
+            }
+          },2000)
+        }
+
+      });*/
   }
 
-  fullMode() {
-    this.fullmode = !this.fullmode;
+  fullMode(footMarkIndex: any, foot: any) {
+    this.fullmode = true;
+    this.singleLogDetails = {
+      index: footMarkIndex,
+      footmark: foot,
+    };
+  }
+
+  fullModeClose() {
+    this.fullmode = false;
   }
 
   private totalenv() {
@@ -700,7 +883,7 @@ export class PipelineGraphComponent
       this.footMarksLegth = this.footMarks.length;
     } else {
       this.repo.getfootPrint(processId, stepName).subscribe((res: any) => {
-        console.log(res.data,'FOOT-MARK')
+        console.log(res.data, 'FOOT-MARK');
         if (res.data) {
           this.allFootMarks.push({
             stepName: stepName,
@@ -711,23 +894,16 @@ export class PipelineGraphComponent
             (footMark) => footMark.stepName === stepName
           );
           this.footMarks = newFoots.footMark;
-          this.openFootMark = this.footMarks.length-1
+          this.openFootMark = this.footMarks.length - 1;
           this.footMarksLegth = this.footMarks.length;
           const lastFootmark = this.footMarks[this.footMarksLegth - 1];
           const findLogByName = this.logs.find(
             (log) => log.name === lastFootmark
           );
           if (!findLogByName) {
-            this.repo
-              .getFootamarkLog(processId, stepName, lastFootmark)
-              .subscribe((res: any) => {
-                this.logs.push({
-                  name: lastFootmark,
-
-                  data: res.data,
-                });
-              });
           }
+          this.getLogs(processId, stepName, lastFootmark, 0, 10, 0);
+          this.getPaginatedLogs(processId, stepName, lastFootmark, 0, 10, 0)
         }
       });
     }
@@ -770,15 +946,17 @@ export class PipelineGraphComponent
     });
   }
 
-  expandLog2(footMarkIndex:number,foot:any) {
-    this.fullmode =true
-    this.singleLogDetails={
-      index:footMarkIndex,
-      footmark:foot,
-    }
-  }
-
-  logClose2() {
-    this.fullmode =false
+  expandLog(footMarkIndex: number, foot: any, nodeName: string) {
+    this.openFootMark = footMarkIndex;
+    this.newLogs = [];
+    this.prevStepName = '';
+    this.page = 0;
+    this.limit = 0;
+    this.prev_logs_size = 0;
+    this.logs=[]
+    const processId = this.pipeline.data.process_id;
+    const findLogByName = this.logs.find((log) => log.name === foot);
+    this.getPaginatedLogs(processId, nodeName, foot, 0, 10, 0)
+    this.getLogs(processId, nodeName, foot, 0, 10, 0);
   }
 }
