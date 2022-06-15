@@ -1,10 +1,10 @@
 
 .flex-item {
   position: relative;
-  @apply px-8 py-4 bg-dark-background-5;
+  @apply px-8 py-4 bg-light-500;
   &:after {
     content: "";
-    @apply mx-[31px] bg-dark-border-default;
+    @apply mx-[31px] bg-light-500;
     position: absolute;
     width: 1px;
     height: 100%;
@@ -12,7 +12,7 @@
     transform: translateY(-50%);
   }
   &:hover {
-    @apply bg-dark-background-1;
+    @apply bg-light-600;
   }
 
   &:last-child {
@@ -27,6 +27,6 @@
 }
 .pipe-nav {
   .active {
-    background-color: #22375b !important;
+    background-color: #c7d8ef !important;
   }
 }

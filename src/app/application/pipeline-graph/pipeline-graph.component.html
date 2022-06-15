@@ -5,7 +5,7 @@
 
     <div [ngClass]="fullmode?'':'hidden'"
          class="absolute right-0 h-[calc(100vh-170px)] top-[.78rem] z-50 w-[calc(100%-1.5rem)] bg-black">
-      <div (click)="logClose2()" class="flex items-center justify-end cursor-pointer w-full h-10 bg-primary-800 px-3">
+      <div (click)="fullModeClose()" class="flex items-center justify-end cursor-pointer w-full h-10 bg-primary-800 px-3">
         <mat-icon class="text-white">fullscreen_exit</mat-icon>
       </div>
       <div>
@@ -38,8 +38,16 @@
         <div class=" w-full  flex justify-center gap-4 items-center">
           <div class="text-sub-title font-semi-bold uppercase">{{nodeDetails.name}}</div>
           <div class="text-paragraph font-semi-bold ">
-            <!--<mat-icon class="text-success">run_circle</mat-icon>-->
-            <mat-spinner [diameter]="20"></mat-spinner>
+            <div *ngFor="let x of pipelineStep">
+              <div *ngIf="x.name ===nodeDetails.name">
+                <mat-icon *ngIf="x.status ==='completed'" class="text-success">check_circle</mat-icon>
+                <mat-icon *ngIf="x.status ==='failed'" class="text-danger">cancel</mat-icon>
+                <mat-icon *ngIf="x.status ==='non_initialized'" class="text-dark-500">not_accessible</mat-icon>
+                <mat-icon *ngIf="x.status ==='paused'" class="text-dark-500">motion_photos_paused</mat-icon>
+                <mat-spinner *ngIf="x.status ==='active'" [diameter]="20"></mat-spinner>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +56,7 @@
       <div class="h-[calc(100vh-320px)] overflow-y-auto " id="footmarkDiv">
         <div *ngFor="let foot of footMarks; let i = index;let last = last" class=" ">
           <mat-accordion class="example-headers-align">
-            <mat-expansion-panel [expanded]="openFootMark === i" (opened)="setActiveFootMark(i)"
+            <mat-expansion-panel [expanded]="openFootMark === i" (opened)="expandLog(i,foot,nodeDetails.name)"
                                  hideToggle
                                  *ngIf="!isLoading.commit"
                                  class="bg-light-400"
@@ -62,20 +70,23 @@
               <!--log panel start-->
               <div class=" h-80 bg-dark flex flex-col relative">
                 <div class="h-8 bg-primary-800 flex justify-end items-center px-2">
-                  <mat-icon class="text-white cursor-pointer" (click)="expandLog2(i,foot)">
+                  <mat-icon class="text-white cursor-pointer" (click)="fullMode(i,foot)">
                     fullscreen
                   </mat-icon>
                 </div>
-                <div class="p-3 overflow-auto h-full w-full logPanel" id="{{'scrollArea'+foot}}">
-                     <span *ngFor="let logDetails of logs">
+                //logPanel
+                <div class="px-3 overflow-auto h-full w-full " id="{{'scrollArea'+foot}}" [ngClass]="socketres.step === foot?'logPanel':''">
+                     <div class="h-full">
+                       <span *ngFor="let logDetails of logs">
                       <span *ngIf="logDetails.name === foot" class="space-y-2">
                         <pre
                           *ngFor="let log of logDetails.data"
-                          class=" text-white text-sm break-words flex"
+                          class=" text-white text-sm break-words flexp"
                         >{{ log }}</pre>
                       </span>
-                      </span>
-                  <div class="h-5" id="{{'intObj'+foot}}"></div>
+                     </span>
+                     </div>
+                  <div class="my-3 h-5" id="{{'intObj'+foot}}"></div>
                 </div>
               </div>
 
@@ -160,7 +171,7 @@
             *ngIf="isLoading.commit"
             [theme]="{
                   'border-radius': '5px',
-                  'background-color': '#1A2C4A'
+                  'background-color': '#bbbcc7'
                 }"
             animation="progress"
             appearance="line"
@@ -262,14 +273,6 @@
                       <mat-menu #menu="matMenu" class="kc-node-menu">
                         <p class="mx-4 py-3 uppercase font-semi-bold">{{step.name}}</p>
                         <mat-divider></mat-divider>
-                        <button mat-menu-item>
-                          <mat-icon
-                            aria-hidden="false"
-                            aria-label="Example home icon"
-                          >info
-                          </mat-icon>
-                          Info
-                        </button>
                         <button (click)="startBuild(step.name)" mat-menu-item>
                           <mat-icon
                             aria-hidden="false"
@@ -323,7 +326,7 @@
                 'border-radius': '5px',
                 width: '100px',
                 'z-index': 100,
-                'background-color': '#1A2C4A'
+                'background-color': '#bbbcc7'
               }"
               animation="progress-dark"
               class=""
@@ -337,7 +340,7 @@
                 'border-radius': '5px',
                 width: '100px',
                 'z-index': 100,
-                'background-color': '#1A2C4A'
+                'background-color': '#bbbcc7'
               }"
               animation="progress-dark"
               class=""
@@ -353,7 +356,7 @@
                   height: '60px',
                   width: '60px',
                   'z-index': 100,
-                  'background-color': '#1A2C4A'
+                  'background-color': '#bbbcc7'
                 }"
                 animation="progress-dark"
                 appearance="circle"
@@ -365,7 +368,7 @@
                   height: '60px',
                   width: '60px',
                   'z-index': 100,
-                  'background-color': '#1A2C4A'
+                  'background-color': '#bbbcc7'
                 }"
                 animation="progress-dark"
                 appearance="circle"
@@ -377,7 +380,7 @@
                   height: '60px',
                   width: '60px',
                   'z-index': 100,
-                  'background-color': '#1A2C4A'
+                  'background-color': '#bbbcc7'
                 }"
                 animation="progress-dark"
                 appearance="circle"
@@ -393,7 +396,7 @@
                   height: '60px',
                   width: '60px',
                   'z-index': 100,
-                  'background-color': '#1A2C4A'
+                  'background-color': '#bbbcc7'
                 }"
                 animation="progress-dark"
                 appearance="circle"
@@ -405,7 +408,7 @@
                   height: '60px',
                   width: '60px',
                   'z-index': 100,
-                  'background-color': '#1A2C4A'
+                  'background-color': '#bbbcc7'
                 }"
                 animation="progress-dark"
                 appearance="circle"
@@ -423,7 +426,7 @@
               height: '60px',
               width: '60px',
               'z-index': 100,
-              'background-color': '#1A2C4A'
+              'background-color': '#bbbcc7'
             }"
             animation="progress-dark"
             appearance="circle"
@@ -438,7 +441,7 @@
               width: '150px',
               height: '5px',
               transform: 'rotate(-30deg)',
-              'background-color': '#1A2C4A'
+              'background-color': '#bbbcc7'
             }"
             animation="progress-dark"
             appearance="line"
@@ -451,7 +454,7 @@
               width: '150px',
               height: '5px',
               transform: 'rotate(30deg)',
-              'background-color': '#1A2C4A'
+              'background-color': '#bbbcc7'
             }"
             animation="progress-dark"
             appearance="line"
@@ -464,7 +467,7 @@
             [theme]="{
               height: '60px',
               width: '60px',
-              'background-color': '#1A2C4A'
+              'background-color': '#bbbcc7'
             }"
             animation="progress-dark"
             appearance="circle"
@@ -475,7 +478,7 @@
             [theme]="{
               height: '60px',
               width: '60px',
-              'background-color': '#1A2C4A'
+              'background-color': '#bbbcc7'
             }"
             animation="progress-dark"
             appearance="circle"

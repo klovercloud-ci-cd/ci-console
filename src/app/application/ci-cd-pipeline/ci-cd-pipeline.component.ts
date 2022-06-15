@@ -36,11 +36,22 @@ export class CiCdPipelineComponent
 
   goto(id: any) {
     // @ts-ignore
-    document.getElementById('pipeline').classList.add('active');
+
+
+
+
     if (id == 'pipeline') {
+      // @ts-ignore
+      document.getElementById('pipeline').classList.add('active');
+      // @ts-ignore
+      document.getElementById('overview').classList.remove('active');
       this.content = PipelineGraphComponent;
     }
     if (id == 'overview') {
+      // @ts-ignore
+      document.getElementById('pipeline').classList.remove('active');
+      // @ts-ignore
+      document.getElementById('overview').classList.add('active');
       this.content = PipelineOverviewComponent;
     }
   }
