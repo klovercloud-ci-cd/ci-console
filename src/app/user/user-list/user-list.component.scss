@@ -19,11 +19,10 @@ th {
 
 
 //
-//.mat-table {
-//  overflow: auto;
-//  max-height: 500px;
-//  background: transparent;
-//}
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
 //
 .mat-spinner circle {
   @apply stroke-dark-text-label h-5 w-5;

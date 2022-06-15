@@ -8,17 +8,14 @@
     </h1>
   </div>
   <ng-template #company>
-    <div class=" overflow-x-auto">
+    <div class=" overflow-x-auto" *ngIf="resource.authorizedUser('application','READ')">
       <div class=" py-5">
         <div class="flex items-center justify-between">
           <h3 class="text-base text-dark font-semibold tracking-wide">Roles</h3>
           <div class="flex items-center gap-3">
-<!--            <button (click)="createRole()" class="w-36 ml-auto">-->
-<!--              <span class="block kc-create-button text-center cursor-pointer"-->
-<!--              ><mat-icon class="mr-2">add_circle</mat-icon>New Role</span-->
-<!--              >-->
-<!--            </button>-->
+
             <button
+              *ngIf="resource.authorizedUser('role','CREATE')"
               (click)="createRole()"
               class="kc-button-primary-sm"
             >
@@ -28,15 +25,20 @@
         </div>
       </div>
     </div>
-    <div class="page__content">
-      <div *ngIf="isLoading" class="p-4">
-        <mat-progress-spinner
-          strokeWidth="2"
-          diameter="40"
-          mode="indeterminate"
-        ></mat-progress-spinner>
-        <p class="mt-4">Loading roles</p>
-      </div>
+
+    <div class="page__content"  *ngIf="resource.authorizedUser('application','READ'); else notAuthorized">
+      <ngx-skeleton-loader
+        *ngIf="isLoading"
+        count="5"
+        [theme]="{
+          'border-radius': '1px',
+          height: '48px',
+          'margin-right': '16px',
+          width: 'full',
+          'background-color': '#bbbcc7'
+        }"
+        animation="progress"
+      ></ngx-skeleton-loader>
       <table
         mat-table
         [dataSource]="dataSource"
@@ -70,7 +72,6 @@
           <th mat-header-cell *matHeaderCellDef width="9%">Actions</th>
           <td mat-cell *matCellDef="let role">
             <button
-              [disabled]="role?.name === 'ADMIN'"
               mat-icon-button
               [matMenuTriggerFor]="menu"
               class="float-end"
@@ -84,7 +85,8 @@
               <span>Edit</span>
             </button> -->
 
-              <button mat-menu-item (click)="onDelete(role)">
+              <button mat-menu-item (click)="onDelete(role)"
+                      [disabled]="!resource.authorizedUser('role','DELETE')">
                 <mat-icon>delete</mat-icon>
                 <span>Delete</span>
               </button>
@@ -96,5 +98,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
+  </ng-template>
+  <ng-template #notAuthorized>
+    <h1 *ngIf="!isLoading" class="flex py-[5%] justify-center items-center text-title">Not authorized</h1>
   </ng-template>
 </div>

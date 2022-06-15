@@ -1,11 +1,13 @@
 <div
   class="kc-card shadow-card  rounded-lg p-5 relative min-h-[250px]"
 >
-
-  <div class="flex justify-end items-center py-3">
-    <h1>Total <span class="text-red-500">{{totalError}} errors</span> in this pipeline</h1>
+  <div class="flex justify-end items-center py-3" *ngIf="hasPipeline">
+    <h1 *ngIf="totalError>0">Total <span class="text-red-500">{{totalError}} errors</span> in this pipeline</h1>
   </div>
-<div *ngIf="!hasPipeline" class="text-center mt-10"><h1 class=" flex justify-center items-center gap-1 lg:gap-3 text-dark-warn text-lg lg:text-2xl"><mat-icon>error</mat-icon> Please Create Pipeline</h1></div>
+<div *ngIf="!hasPipeline && totalError" class=" py-auto flex flex-col justify-center items-center gap-8">
+  <h1 class="gap-1 lg:gap-3 text-[#5C638B] text-lg lg:text-2xl"><mat-icon>error</mat-icon> Please follow the <a [href]="'https://github.com/klovercloud-ci-cd/documentation/blob/master/cocepts.md#pipeline'" target="_blank" class="text-lg lg:text-2xl text-dark-info">Guideline</a> to create pipeline</h1>
+
+</div>
 <mat-accordion  *ngIf="hasPipeline">
   <mat-expansion-panel hideToggle
                        class="kc-expansion-panel" *ngFor="let item of stepAsMap | keyvalue" [expanded]="!item.value?.isValid">
@@ -14,8 +16,8 @@
       <mat-panel-title >
         <div class="w-full flex justify-between">
           <h1>{{item.key}} </h1>
-          <mat-icon *ngIf="item.value?.isValid" class="text-green-500">check_circle</mat-icon>
-          <mat-icon *ngIf="!item.value?.isValid" class="text-red-500">cancel</mat-icon>
+          <mat-icon *ngIf="!totalError" class="text-green-500">check_circle</mat-icon>
+          <mat-icon *ngIf="totalError" class="text-red-500">cancel</mat-icon>
         </div>
       </mat-panel-title>
     </mat-expansion-panel-header>
@@ -23,14 +25,31 @@
       <!-- Some:  {{item.value.name}} -->
       <!--              {{item.value.stepData.name.value | json}}-->
       <div class="text-white">
+<!--        {{item?.value['next']|json}}-->
         <kcci-editor (fixProp)="editorPropsFix($event)" [(text)]="item.value.data" [InputData]="item.value.stepData" [errorLine]="!item.value?.isValid ? item.value.error : 0" mode="yaml"></kcci-editor>
         <!-- yamlInputData -->
       </div>
     </div>
   </mat-expansion-panel>
 </mat-accordion>
-  <div class="absolute top-2 right-2 cursor-pointer" (click)="closeAppModal()">
+  <div class="absolute top-2 right-2 cursor-pointer" *ngIf="hasPipeline" (click)="closeAppModal()">
     <mat-icon>highlight_off</mat-icon>
   </div>
-<p class="text-yellow-600 text-right py-3">*Please edit your pipeline and add the application</p>
+  <div *ngIf="appUrlDatas?.showOk">
+    <p *ngIf="hasPipeline && totalError>0" class="text-yellow-600 text-right py-3">*Please edit your pipeline and add the application</p>
+
+    <button *ngIf="hasPipeline && !totalError" class="kc-button-primary-sm ml-auto block mt-5" (click)="applicationAdd()">OK</button>
+  </div>
+  <ngx-skeleton-loader
+    *ngIf="!hasPipeline"
+    count="1"
+    [theme]="{
+          'border-radius': '1px',
+          height: '225px',
+          'margin-right': '16px',
+          width: 'full',
+          'background-color': '#bbbcc7'
+        }"
+    animation="progress"
+  ></ngx-skeleton-loader>
 </div>

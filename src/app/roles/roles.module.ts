@@ -18,6 +18,7 @@ import { RoleService } from './role.service';
 import { RoleFormComponent } from './role-form/role-form.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { RolesRoutingModule } from './roles-routing.module';
+import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 
 @NgModule({
   declarations: [RoleListComponent, RoleFormComponent],
@@ -37,6 +38,7 @@ import { RolesRoutingModule } from './roles-routing.module';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatDialogModule,
+    NgxSkeletonLoaderModule
   ],
   providers: [RoleService],
 })

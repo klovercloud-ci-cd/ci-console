@@ -139,7 +139,7 @@
       <mat-form-field class="block mt-2 w-full" appearance="outline">
         <mat-label>Phone number</mat-label>
         <input
-          type="number"
+          type="text"
           formControlName="phone"
           matInput
           placeholder="Phone number"
@@ -223,7 +223,7 @@
             </div>
             <button
               type="button"
-              mat-flat-button
+              class="kc-button-primary-sm"
               color="accent"
               (click)="addResourcesGroup()"
               [disabled]="resourcesFormArray.invalid"
@@ -236,18 +236,16 @@
       <div class="text-center mt-6">
         <button
           [disabled]="userForm.invalid || isSubmitting"
-          class="w-44 _submit__btn text-xl"
-          [ngClass]="{ is_submitting: isSubmitting }"
+          class="kc-button-primary block w-full"
           type="submit"
-          mat-flat-button
-          color="primary"
         >
-          <span *ngIf="!isSubmitting">{{ userId ? "Update" : "Create" }}</span>
-          <div *ngIf="isSubmitting" class="leading-6">
+          <span class="text-white text-button" *ngIf="!isSubmitting">{{ userId ? "Update" : "Create" }}</span>
+          <div *ngIf="isSubmitting" class="w-52 mx-auto p-3">
             <mat-progress-bar
-              color="accent"
+              class="kc-progress-bar"
               mode="indeterminate"
-            ></mat-progress-bar>
+            >
+            </mat-progress-bar>
           </div>
         </button>
       </div>

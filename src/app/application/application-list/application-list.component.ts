@@ -140,14 +140,15 @@ export class ApplicationListComponent implements OnInit {
     });
   }
 
-  openAppEditor() {
+  openAppEditor(element:any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = '40%';
-    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.width = '100%';
+    dialogConfig.maxWidth = '600px'
     dialogConfig.data = {
       repositoryId: this.repositoryId,
+      applicationURL: element.url
     };
     this.dialog.open(AppEditorModalComponent, dialogConfig);
   }
@@ -156,10 +157,11 @@ export class ApplicationListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = '40%';
-    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.width = '100%';
+    dialogConfig.maxWidth = '600px';
     dialogConfig.data = {
       repositoryId: this.repositoryId,
+      step:1
     };
     this.dialog.open(ApplicationModalComponent, dialogConfig);
   }

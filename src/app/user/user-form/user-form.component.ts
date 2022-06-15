@@ -51,7 +51,7 @@ export class UserFormComponent implements OnInit {
         first_name: ['', Validators.required],
         last_name: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
-        phone: [],
+        phone: [''],
         password: ['', [Validators.required]],
         conformationPassword: [''],
         auth_type: ['password', Validators.required],

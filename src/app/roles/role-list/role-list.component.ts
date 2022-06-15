@@ -9,6 +9,7 @@ import { DeleteConformationDialogComponent } from 'src/app/core/components/delet
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { RoleFormComponent } from '../role-form/role-form.component';
 import { RoleService } from '../role.service';
+import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
 
 @Component({
   selector: 'kc-role-list',
@@ -31,7 +32,8 @@ export class RoleListComponent implements OnInit {
     private _toolbarService: ToolbarService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    public resource: ResourcePermissionService
   ) {
     this.currentUser = this.authService.getUserData();
   }

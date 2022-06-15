@@ -2,7 +2,7 @@ import { OnInit } from '@angular/core';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -17,6 +17,7 @@ import 'ace-builds/src-noconflict/mode-scss';
 import {dump as toYaml, load as fromYaml} from 'js-yaml';
 import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
 import {Location} from "@angular/common";
+import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
 
 
 @Component({
@@ -405,6 +406,7 @@ export class ApplicationModalComponent implements OnInit {
   companyID: any;
 
   repositoryId: any;
+  applicationURL: any;
   isLoading: boolean = false;
   stepper: number = 1;
   validity:any;
@@ -421,6 +423,8 @@ export class ApplicationModalComponent implements OnInit {
     'somewhere',
     'and are Yaml files'
   ];
+  applicationName: any;
+  showOk: boolean | undefined;
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ApplicationModalComponent>,
@@ -432,7 +436,8 @@ export class ApplicationModalComponent implements OnInit {
     private editorDialogRef: MatDialogRef<EditorModalComponent>,
     private router: Router,
     private location: Location,
-  ) { }
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     // @ts-ignore
@@ -670,5 +675,21 @@ export class ApplicationModalComponent implements OnInit {
     }
     console.log("x", x)
     return x
+  }
+
+  openAppEditor() {
+    console.log("applicationURL:" ,this.addApplication.value.url);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '100%';
+    dialogConfig.maxWidth = '700px'
+    dialogConfig.data = {
+      repositoryId: this.repositoryId,
+      applicationURL: this.addApplication.value.url,
+      applicationName: this.addApplication.value.name,
+      showOk:true,
+    };
+    this.dialog.open(AppEditorModalComponent, dialogConfig);
   }
 }

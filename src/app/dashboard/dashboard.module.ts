@@ -10,6 +10,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DashboardIndexComponent } from './dashboard-index/dashboard-index.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { ChartsModule } from 'ng2-charts';
+import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 
 @NgModule({
   declarations: [DashboardIndexComponent],
@@ -22,7 +23,8 @@ import { ChartsModule } from 'ng2-charts';
     MatIconModule,
     MatExpansionModule,
     FlexLayoutModule,
-    ChartsModule
+    ChartsModule,
+    NgxSkeletonLoaderModule
   ],
   exports: [],
 })

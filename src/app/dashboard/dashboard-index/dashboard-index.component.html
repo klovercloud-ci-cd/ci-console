@@ -1,6 +1,7 @@
 
 <div class="mx-7">
   <div
+    *ngIf="!isLoading"
     class="w-full h-full pt-6 pb-3"
     gdColumns="1fr 1fr 1fr 1fr"
     gdColumns.md="1fr 1fr 1fr"
@@ -11,29 +12,29 @@
   >
     <div class="chart-card ">
       <div class="p-5 flex items-center">
-        <h4>Total Webhook:</h4>
+        <h4>Total Webhooks:</h4>
         <h1 class="text-2xl pl-2 font-bold">{{totalWebhook}}</h1>
       </div>
       <div class="flex justify-center items-center">
         <div class="chart-wrapper h-64 w-64">
           <canvas baseChart height="250"
-            [datasets]="buildWebhookChartData"
-            [labels]="webhookChartLabels"
-            [options]="barChartOptions"
-            [plugins]="barChartPlugins"
-            [colors]="webhookChartColors"
-            [chartType]="barChartType">
+                  [datasets]="buildWebhookChartData"
+                  [labels]="webhookChartLabels"
+                  [options]="barChartOptions"
+                  [plugins]="barChartPlugins"
+                  [colors]="webhookChartColors"
+                  [chartType]="barChartType">
           </canvas>
         </div>
         <div class="">
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#1ABC9C] text-white ">{{enabledWebhook}}</h1> Enabled</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#BFC9CA] text-white ">{{disabledWebhook}}</h1> Disabled</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#1ABC9C] text-white ">{{enabledWebhook}}</h1> Enabled</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#BFC9CA] text-white ">{{disabledWebhook}}</h1> Disabled</div>
         </div>
       </div>
     </div>
     <div class="chart-card ">
       <div class="p-5 flex items-center">
-        <h4>Total Pipeline Processes:</h4>
+        <h4>Last 10 days Processes status:</h4>
         <h1 class="text-2xl pl-2 font-bold">{{totalPipeline}}</h1>
       </div>
       <div class="flex justify-center items-center">
@@ -48,37 +49,53 @@
           </canvas>
         </div>
         <div class="">
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#7ade9a] text-white ">{{pipelineCompleted}}</h1>Completed</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#ff3b5a] text-white ">{{pipelineFailed}}</h1>Failed</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#428df9] text-white ">{{pipelineRunning}}</h1>Running</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#BFC9CA] text-white ">{{pipelinePaused}}</h1>Paused</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#a3e8b9] text-white ">{{pipelineCompleted}}</h1>Completed</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#ff6e85] text-white ">{{pipelineFailed}}</h1>Failed</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#74aafa] text-white ">{{pipelineRunning}}</h1>Running</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#f8c87e] text-white ">{{pipelinePaused}}</h1>Paused</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#bbbcc7] text-white ">{{pipelineNonInitialized}}</h1>NonInitialized</div>
         </div>
       </div>
     </div>
-    <div class="chart-card " *ngFor="let agent of agentsArray.agentData; let i = index;">
-      <div class="p-5 flex items-center">
-        <h4>Total Pods:</h4>
-        <h1 class="text-2xl pl-2 font-bold">{{agentsArray.data[i].totalPods}}</h1>
+    <div class="chart-card " *ngFor="let agent of agents; let i = index;">
+      <div *ngIf="buildAgentsChartData[i]; else chartLoader">
+      <div class="p-5 flex items-center justify-between">
+        <h4 class="flex items-center">Agents:
+          <h1 class="text-xl pl-2 font-semibold">{{agent.agent_name | titlecase}}</h1>
+        </h4>
+        <h4 class="flex items-center">Total Pods:
+          <h1 class="text-2xl pl-2 font-bold">{{agentWiseTotalPodCount[i]}}</h1>
+        </h4>
       </div>
       <div class="flex justify-center items-center">
-        <div class="chart-wrapper h-64 w-64">
-          <canvas baseChart height="250"
-                  [datasets]="agent"
-                  [labels]="agentsChartLabels"
-                  [options]="barChartOptions"
-                  [plugins]="barChartPlugins"
-                  [colors]="agentsChartColors"
-                  [chartType]="barChartType">
-          </canvas>
-        </div>
+<!--        <span class="hidden">{{buildAgentsChartData[i][0]}}</span>-->
+          <div class="chart-wrapper h-64 w-64">
+            <canvas baseChart height="250"
+                    [datasets]="buildAgentsChartData[i]"
+                    [labels]="agentsChartLabels[i]"
+                    [options]="barChartOptions"
+                    [plugins]="barChartPlugins"
+                    [colors]="agentsChartColors"
+                    [chartType]="barChartType">
+            </canvas>
+          </div>
         <div class="">
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#7ade9a] text-white ">{{agentsArray.data[i].agentsPodsRunning}}</h1>Running</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#ff3b5a] text-white ">{{agentsArray.data[i].agentsPodsPending}}</h1>Pending</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#428df9] text-white ">{{agentsArray.data[i].agentsPodsUnknown}}</h1>Unknown</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#BFC9CA] text-white ">{{agentsArray.data[i].agentsPodsSucceeded}}</h1>Succeeded</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#ff3b5a] text-white ">{{agentsArray.data[i].agentsPodsFailed}}</h1>Failed</div>
+          <div *ngFor="let count of LabelWisePodCounts[i]; let j = index;" class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[{{podsStatusWiseColor[j]}}] text-white ">{{count}}</h1>{{agentsChartLabels[i][j]}}</div>
         </div>
       </div>
+    </div>
+      <ng-template #chartLoader>
+        <ngx-skeleton-loader
+          count="1"
+          [theme]="{
+          'border-radius': '1px',
+          height: '100%',
+          width: 'full',
+          'background-color': '#bbbcc7'
+        }"
+          animation="progress"
+        ></ngx-skeleton-loader>
+      </ng-template>
     </div>
     <div class="chart-card ">
       <div class="p-5 flex items-center">
@@ -97,85 +114,26 @@
           </canvas>
         </div>
         <div class="">
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#1E8449] text-white ">{{usersActive}}</h1> Active</div>
-          <div class="flex items-center gap-2 text-sm"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#BFC9CA] text-white ">{{usersInactive}}</h1> Inactive</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#A3E4D7] text-white ">{{usersActive}}</h1> Active</div>
+          <div class="flex items-center gap-2 text-xs"><h1 class="w-6 h-6 flex justify-center items-center rounded-full bg-[#85929E] text-white ">{{usersInactive}}</h1> Inactive</div>
         </div>
       </div>
     </div>
   </div>
 
+      <ngx-skeleton-loader
+        *ngIf="isLoading"
+        count="4"
+        [theme]="{
+        'justify-content':'between',
+          'border-radius': '4px',
+          height: '300px',
+          'margin-right': '16px',
+          width: '380px',
+          'margin-top':'20px',
+          'background-color': '#bbbcc7'
+        }"
+        animation="progress">
 
-<!--  <div class="">-->
-<!--    <div-->
-<!--      class="w-full h-full"-->
-<!--      gdColumns="1fr 1fr 1fr 1fr"-->
-<!--      gdColumns.md="1fr 1fr 1fr"-->
-<!--      gdColumns.lt-md="1fr 1fr"-->
-<!--      gdColumns.lt-sm="1fr"-->
-<!--      gdColumns.lt-xs="1fr"-->
-<!--      gdGap="10px"-->
-<!--    >-->
-<!--      <div class="cluster-card">-->
-<!--        <div class="flex gap-5 items-center pl-3">-->
-<!--          <img-->
-<!--            class="w-14 h-14"-->
-<!--            src="../../../assets/images/logos/Mask Group.svg"-->
-<!--            alt=""-->
-<!--          />-->
-<!--          <h1 class="text-base font-bold tracking-wider">Benefit-2</h1>-->
-
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="cluster-card">-->
-<!--        <div class="flex gap-5 items-center pl-3">-->
-<!--          <img-->
-<!--            class="w-14 h-14"-->
-<!--            src="../../../assets/images/logos/Mask Group.svg"-->
-<!--            alt=""-->
-<!--          />-->
-<!--          <h1 class="text-base font-bold tracking-wider">Benefit-2</h1>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="cluster-card">-->
-<!--        <div class="flex gap-5 items-center pl-3">-->
-<!--          <img-->
-<!--            class="w-14 h-14"-->
-<!--            src="../../../assets/images/logos/Mask Group.svg"-->
-<!--            alt=""-->
-<!--          />-->
-<!--          <h1 class="text-base font-bold tracking-wider">Benefit-3</h1>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="cluster-card">-->
-<!--        <div class="flex gap-5 items-center pl-3">-->
-<!--          <img-->
-<!--            class="w-14 h-14"-->
-<!--            src="../../../assets/images/logos/Mask Group.svg"-->
-<!--            alt=""-->
-<!--          />-->
-<!--          <h1 class="text-base font-bold tracking-wider">Benefit-4</h1>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="cluster-card">-->
-<!--        <div class="flex gap-5 items-center pl-3">-->
-<!--          <img-->
-<!--            class="w-14 h-14"-->
-<!--            src="../../../assets/images/logos/Mask Group.svg"-->
-<!--            alt=""-->
-<!--          />-->
-<!--          <h1 class="text-base font-bold tracking-wider">Benefit-5</h1>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="cluster-card">-->
-<!--        <div class="flex gap-5 items-center pl-3">-->
-<!--          <img-->
-<!--            class="w-14 h-14"-->
-<!--            src="../../../assets/images/logos/Mask Group.svg"-->
-<!--            alt=""-->
-<!--          />-->
-<!--          <h1 class="text-base font-bold tracking-wider">Benefit-6</h1>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+      </ngx-skeleton-loader>
 </div>

@@ -225,17 +225,18 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     for(let i=0; i<this.errorLine.length; i++){
       let value=this.getErrorMessageAndSuggestion(this.errorLine[i],this.InputData)
       let hasSuggestionMessage,noSuggestionMessage;
+
       if(!value.message){
         jsonErrorArray.push({
           row: this.errorLine[i] - 1,
           column: undefined,
-          text: `Error occurred in line: ` + this.errorLine[i]+" \nNo error message available.\nSuggestions: "+value.suggestions,
+          text: "No error message available.\nSuggestions: "+((value.suggestions=='*')?'Type anything':value.suggestions),
           type: "error"
         })
       }else {jsonErrorArray.push({
         row: this.errorLine[i] - 1,
         column: undefined,
-        text: `Error occurred in line: ` + this.errorLine[i]+" \n[ERROR]: "+value.message+ ".\nSuggestions: "+value.suggestions,
+        text: "[ERROR]: "+value.message+ ".\nSuggestions: "+((value.suggestions=='*')?'Type anything':value.suggestions),
         type: "error"
       })
       }

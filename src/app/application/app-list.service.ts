@@ -36,6 +36,16 @@ export class AppListService {
     });
   }
 
+  getAppSteps(companyID:String,repoId: String,appURL:String): Observable<any> {
+    HTTP_OPTIONS.params = {
+      companyId: companyID,
+      repositoryId:  repoId,
+      url:appURL,
+      action: 'GET_PIPELINE_FOR_VALIDATION'
+    };
+    return this.http.get(`${BASE_URL}pipelines`, HTTP_OPTIONS);
+  }
+
   addApplication(
     appPayload: any,
     companyID: any,
@@ -143,4 +153,6 @@ export class AppListService {
     };
     return this.http.get(`${BASE_URL}applications/${appId}`, HTTP_OPTIONS);
   }
+
+
 }

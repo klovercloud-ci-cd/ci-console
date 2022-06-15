@@ -29,6 +29,7 @@ import 'ace-builds/src-noconflict/mode-scss';
 import {dump as toYaml, load as fromYaml} from 'js-yaml';
 import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
 import {Location} from "@angular/common";
+import {ApplicationModalComponent} from "../application-modal/application-modal.component";
 
 
 @Component({
@@ -46,370 +47,7 @@ export class AppEditorModalComponent implements OnInit {
   arrayData:any = [];
   totalError:any=0;
   hasPipeline:boolean = false;
-
-  appStep: any = {
-    "_metadata":null,
-    "data":{
-      "name":"test",
-      "steps":[
-        {
-          "name":{
-            "accepts":"*",
-            "message":"",
-            "name":"name",
-            "valid":"true",
-            "value":"build"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"true",
-            "value":"BUILD"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"true",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":" SA, Sa, Service Account",
-              "message":" Service account not allowed!",
-              "name":"service_account",
-              "valid":"false",
-              "value":"test-sa"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"storage",
-              "valid":"true",
-              "value":"500Mi"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"access_mode",
-              "valid":"false",
-              "value":"ReadWriteOnce"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"args",
-              "valid":"false",
-              "value":"key3:value1,key4:value2"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"args_from_configmaps",
-              "valid":"true",
-              "value":"tekton/cm-test"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"images",
-              "valid":"true",
-              "value":"shabrul2451/test-dev,shabrul2451/test-pro"
-            },
-            {
-              "accepts":"git",
-              "message":"",
-              "name":"repository_type",
-              "valid":"true",
-              "value":"git"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"revision",
-              "valid":"true",
-              "value":"master"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"jenkinsJob, build, interstep, deployDev",
-              "message":"",
-              "name":"next",
-              "valid":"false",
-              "value":"intersteps"
-            },
-            {
-              "accepts":"jenkinsJob, build, interstep, deployDev",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"interstep"
-            },
-            {
-              "accepts":"jenkinsJob, build, interstep, deployDev",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"interstep"
-            }
-          ]
-        },
-        {
-          "name":{
-            "accepts":"step-1,step-2,step-3",
-            "message":"",
-            "name":"name",
-            "valid":"false",
-            "value":"interstep"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"true",
-            "value":"INTERMEDIARY"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"true",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"command",
-              "valid":"true",
-              "value":"echo"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"command_args",
-              "valid":"true",
-              "value":"Hello World"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"envs",
-              "valid":"false",
-              "value":"key3:value1,key4:value2"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"envs_from_configmaps",
-              "valid":"true",
-              "value":"tekton/cm-test"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"envs_from_secrets",
-              "valid":"true",
-              "value":"tekton/cm-test"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"images",
-              "valid":"true",
-              "value":"ubuntu"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"revision",
-              "valid":"true",
-              "value":"latest"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"service_account",
-              "valid":"true",
-              "value":"test-sa"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"deployDev, jenkinsJob, build, interstep",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"deployDev"
-            },
-            {
-              "accepts":"deployDev, jenkinsJob, build, interstep",
-              "message":"",
-              "name":"next",
-              "valid":"false",
-              "value":"deployDev"
-            }
-          ]
-        },
-        {
-          "name":{
-            "accepts":"*",
-            "message":"",
-            "name":"name",
-            "valid":"true",
-            "value":"deployDev"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"true",
-            "value":"DEPLOY"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"true",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"name",
-              "valid":"false",
-              "value":"ubuntu"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"namespace",
-              "valid":"false",
-              "value":"default"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"revision",
-              "valid":"true",
-              "value":"master"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"type",
-              "valid":"true",
-              "value":"deployment"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"agent",
-              "valid":"true",
-              "value":"local_agent"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"env",
-              "valid":"true",
-              "value":"dev"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"images",
-              "valid":"true",
-              "value":"shabrul2451/test-dev"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"build, interstep, deployDev, jenkinsJob",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"jenkinsJob"
-            }
-          ]
-        },
-        {
-          "name":{
-            "accepts":"*",
-            "message":"",
-            "name":"name",
-            "valid":"true",
-            "value":"jenkinsJob"
-          },
-          "type":{
-            "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-            "message":"",
-            "name":"type",
-            "valid":"true",
-            "value":"JENKINS_JOB"
-          },
-          "trigger":{
-            "accepts":"AUTO, MANUAL",
-            "message":"",
-            "name":"trigger",
-            "valid":"true",
-            "value":"AUTO"
-          },
-          "params":[
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"job",
-              "valid":"true",
-              "value":"new"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"params",
-              "valid":"true",
-              "value":"id:123,verbosity:high"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"secret",
-              "valid":"true",
-              "value":"jenkins-credentials"
-            },
-            {
-              "accepts":"*",
-              "message":"",
-              "name":"url",
-              "valid":"true",
-              "value":"http://jenkins.default.svc:8080"
-            }
-          ],
-          "next":[
-            {
-              "accepts":"build, interstep, deployDev, jenkinsJob",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"jenkinsJob"
-            },
-            {
-              "accepts":"build, interstep, deployDev, jenkinsJob",
-              "message":"",
-              "name":"next",
-              "valid":"true",
-              "value":"jenkinsJob"
-            }
-          ]
-        },
-      ]
-    },
-    "status":"success",
-    "message":"Successful"
-  };
+  appStep:any;
   stepAsMap = new Map()
   userPersonalInfo: any;
   user: any = this.auth.getUserData();
@@ -420,6 +58,7 @@ export class AppEditorModalComponent implements OnInit {
   isLoading: boolean = false;
   stepper: number = 1;
   validity:any;
+  appUrlData:any;
   options:any = {
     log: false,
     structure: true,
@@ -441,16 +80,15 @@ export class AppEditorModalComponent implements OnInit {
     private service: AppListService,
     private route: ActivatedRoute,
     @Inject(MAT_DIALOG_DATA) public data: ApplicationListComponent,
+    @Inject(MAT_DIALOG_DATA) public appUrlDatas: ApplicationModalComponent,
     private editorDialogRef: MatDialogRef<EditorModalComponent>,
     private router: Router,
     private location: Location,
-  ) { }
+  ) {
+    console.log("appUrlDatas: ",appUrlDatas.showOk)
+  }
 
-  ngOnInit(): void {
-    // @ts-ignore
-    if (this.appStep.data.steps.length>0){
-      this.hasPipeline=true;
-    }
+  async ngOnInit(): Promise<void> {
 
     // <----------Fetching User Info---------->
     this.repositoryId = this.data.repositoryId;
@@ -459,17 +97,56 @@ export class AppEditorModalComponent implements OnInit {
       this.companyID = res.data.metadata.company_id;
     });
 
-    this.validity = this.checkValidity(this.appStep.data.steps);
+    this.getPipelineSteps();
+  }
 
-    this.getDataKeyValue(this.appStep.data.steps);
+  getPipelineSteps(){
 
-    this.getTotalError(this.appStep.data.steps);
+    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+      this.userPersonalInfo = res;
+      this.companyID = res.data.metadata.company_id;
+      this.service.getAppSteps(this.companyID,this.appUrlDatas.repositoryId,this.appUrlDatas.applicationURL).subscribe((res) => {
+        console.log("RESPONSE PIPELINE:",res.data);
 
-    //  let output = this.appStep?.data?.steps.filter((items:any) => this.validity.find((items2:any) => (items2?.name?.value == items?.name?.value)));
-    //  console.log("output: ",this.validity, output);
-    // this.editorDialogRef.afterClosed().subscribe((data) => {
-    //   console.log("Editor Model Data", data)
-    // })
+        this.appStep = res;
+        // @ts-ignore
+        if (this.appStep?.data?.steps?.length>0){
+          this.hasPipeline=true;
+        }
+
+        this.validity = this.checkValidity(this.appStep?.data?.steps);
+        this.getDataKeyValue(this.appStep?.data?.steps);
+        this.getTotalError(this.appStep?.data?.steps);
+      });
+    });
+  }
+
+  applicationAdd(){
+    const data = {
+      applications: [
+        {
+          _metadata: {
+            name: this.appUrlDatas.applicationName,
+          },
+          url: this.appUrlDatas.applicationURL,
+        },
+      ],
+    };
+
+    this.service
+      .addApplication(data, this.companyID, this.appUrlDatas.repositoryId)
+      .subscribe(
+        (res) => {
+          this.isLoading = false;
+           console.log('Add Application response:', res);
+          this.dialogRef.close();
+          // console.log(this.authService.getUserData(), 'USER');
+        },
+        (err) => {
+          // this.openSnackBarError('Authentication Error', '');
+          console.log('err', err);
+        }
+      );
   }
 
 
@@ -509,8 +186,8 @@ export class AppEditorModalComponent implements OnInit {
 
   getDataKeyValue(allSteps:any){
     allSteps.map((_item: any, index:number)=>{
-
-      const nextVal = _item.next.map((nextValue:any)=>{
+      console.log('_item', _item)
+      const nextVal = _item?.next?.map((nextValue:any)=>{
         return nextValue.value;
       })
 
@@ -576,17 +253,18 @@ export class AppEditorModalComponent implements OnInit {
       let error=new Array();
        console.log("indexes:",nextErrorIndexes);
 
-      //
       if(_item.name.valid=='false'){
         error.push( 1);
-      }else if(_item.type.valid=='false'){
+      }
+      if(_item.type.valid=='false'){
         error.push( 2);
-      }else if(_item.trigger.valid=='false'){
+      }
+      if(_item.trigger.valid=='false'){
         error.push(3);
       }
         error.push(...paramErrorIndexes)
 
-      error.push(nextErrorIndexes)
+      error.push(...nextErrorIndexes)
        console.log("errors: ", nextErrorIndexes)
       this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
     })
@@ -597,11 +275,11 @@ export class AppEditorModalComponent implements OnInit {
     const v_val=appSteps.map((p:any)=>{
 
         const obj={
-          n_val:p.name.valid ==='true'?0:1 ,
-          ty_val:p.type.valid === 'true'?0:1,
+          n_val:p?.name?.valid ==='true'?0:1 ,
+          ty_val:p?.type?.valid === 'true'?0:1,
           t_val:p?.trigger?.valid === 'true'?0:1,
-          nx_val:p.next.filter((obj:any) => obj.valid === "false").length,
-          params:p.params.filter((obj:any) => obj.valid === "false").length
+          nx_val:p?.next?.filter((obj:any) => obj.valid === "false").length,
+          params:p?.params?.filter((obj:any) => obj.valid === "false").length
 
         }
 

@@ -1,6 +1,6 @@
 <div class="p-page">
   <div *ngIf="hasCompany; else company">
-    <div class="bg-light overflow-x-auto">
+    <div class="bg-light overflow-x-auto" *ngIf="resource.authorizedUser('application','READ'); else notAuthorized">
       <div class=" py-5">
         <div class="flex items-center justify-between">
           <h3 class="text-base text-dark font-semibold tracking-wide">Users</h3>
@@ -13,14 +13,6 @@
         </div>
       </div>
       <div class="page__content">
-        <div *ngIf="isLoading" class="p-4">
-          <mat-progress-spinner
-            strokeWidth="2"
-            diameter="40"
-            mode="indeterminate"
-          ></mat-progress-spinner>
-          <!-- <p class="mt-4">Loading Users</p> -->
-        </div>
         <table
           mat-table
           [dataSource]="dataSource"
@@ -77,8 +69,9 @@
                 mat-icon-button
                 [matMenuTriggerFor]="menu"
                 class="float-end"
-                [disabled]="currentUser?.userData?.user_id === user?.id"
+                [disabled]="!resource.authorizedUser('user','DELETE')"
               >
+<!--                [disabled]="currentUser?.userData?.user_id === user?.id"-->
                 <mat-icon>expand_more</mat-icon>
               </button>
 
@@ -100,7 +93,23 @@
         </table>
       </div>
     </div>
+
+    <ng-template #notAuthorized>
+      <h1 *ngIf="!isLoading" class="flex py-[5%] justify-center items-center text-title">Not authorized</h1>
+    </ng-template>
   </div>
+  <ngx-skeleton-loader
+    *ngIf="isLoading"
+    count="5"
+    [theme]="{
+          'border-radius': '1px',
+          height: '48px',
+          'margin-right': '16px',
+          width: 'full',
+          'background-color': '#bbbcc7'
+        }"
+    animation="progress"
+  ></ngx-skeleton-loader>
 
   <ng-template #company class="bg-dark-background-5 h-[87vh] w-full rounded-md">
     <h1 class="text-center pt-[2%] text-2xl text-yellow-500">
