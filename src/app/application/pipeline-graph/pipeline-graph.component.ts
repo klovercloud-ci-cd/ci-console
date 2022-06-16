@@ -191,7 +191,7 @@ export class PipelineGraphComponent
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(async (res: any) => {
         this.commit = res.data;
-        console.log("All COmmit: ",this.commit);
+        console.log(this.commit);
         this.commitList.push({
           branch: branchName,
 
