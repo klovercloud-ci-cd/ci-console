@@ -164,9 +164,9 @@ export class RepoServiceService {
     return this.http.get(`${BASE_URL}pipelines/${processId}`, HTTP_OPTIONS);
   }
 
-  getFootamarkLog(processId: any, stepName: any, footmarkName: any,page:number,limit:number) {
+  getFootamarkLog(processId: any, stepName: any, footmarkName: any,page:number,limit:number,claim:number) {
     HTTP_OPTIONS.params = {
-      claims: 0,
+      claims: claim,
       page:page,
       limit:limit,
       loadApplications:true,

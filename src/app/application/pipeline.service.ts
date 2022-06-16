@@ -45,4 +45,10 @@ export class PipelineService {
     };
     return this.http.get(`${BASE_URL + repoType}/branches`, HTTP_OPTIONS);
   }
+  getStepDetails(stepName:string,processId:string){
+    HTTP_OPTIONS.params = {
+      step:stepName
+    };
+    return this.http.get(`${BASE_URL}processes/${processId}/process_life_cycle_events`, HTTP_OPTIONS);
+  }
 }

@@ -40,9 +40,7 @@ export class HeaderComponent implements OnInit {
   sendWS: any;
 
   async ngOnInit(): Promise<void> {
-    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
-      this.userPersonalInfo = res;
-    });
+
     this.connectWs()
     /*/!*WS test data*!/
     const data =[
@@ -171,79 +169,82 @@ export class HeaderComponent implements OnInit {
     },3000)
 */
 
+    this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
+      this.userPersonalInfo = res;
+      console.log(this.userPersonalInfo,'user info ')
+      this.wsService.wsData.subscribe(res=>{
+        console.log(res,'socekt res from header')
+        const socketRes:any = res;
 
-
-    this.wsService.wsData.subscribe(res=>{
-      console.log(res,'socekt res from header')
-      const socketRes:any = res;
-      if (socketRes.status === 'INITIALIZING') {
-        localStorage.setItem('isFailed', 'false');
-        this.applist
-          .getProcessDetails(socketRes.process_id)
-          .subscribe((processRes: any) => {
+        if (socketRes.company_id === this.userPersonalInfo.data.metadata.company_id ){
+          if (socketRes.status === 'INITIALIZING') {
+            localStorage.setItem('isFailed', 'false');
             this.applist
-              .getAppDetails(
-                processRes.data.repository_id,
-                processRes.data.app_id
-              )
-              .subscribe((appRes: any) => {
-                appRes.data.url;
+              .getProcessDetails(socketRes.process_id)
+              .subscribe((processRes: any) => {
                 this.applist
-                  .getRepositoryInfo(
-                    appRes.data._metadata.CompanyId,
-                    processRes.data.repository_id
+                  .getAppDetails(
+                    processRes.data.repository_id,
+                    processRes.data.app_id
                   )
-                  .subscribe((repoRes) => {
-                    const queryPerams = {
-                      title: appRes.data._metadata.name,
-                      type: repoRes.data.type,
-                      url: appRes.data.url,
-                      repoId: processRes.data.repository_id,
-                      appId: processRes.data.app_id,
-                    };
-
-                    function base64ToHex(str: any) {
-                      for (
-                        var i = 0,
-                          bin = atob(str.replace(/[ \r\n]+$/, '')),
-                          hex = [];
-                        i < bin.length;
-                        ++i
-                      ) {
-                        let tmp = bin.charCodeAt(i).toString(16);
-                        if (tmp.length === 1) tmp = `0${tmp}`;
-                        hex[hex.length] = tmp;
-                      }
-                      return hex.join('');
-                    }
-
-                    const encodedString = btoa(JSON.stringify(queryPerams));
-                    const base64 = base64ToHex(encodedString);
-                    const link = `repository/${processRes.data.repository_id}/application/${base64}`;
-                    let checkDubble: any[] = [];
-                    if (
-                      !checkDubble.find(
-                        (element) => element.step == socketRes.step
+                  .subscribe((appRes: any) => {
+                    appRes.data.url;
+                    this.applist
+                      .getRepositoryInfo(
+                        appRes.data._metadata.CompanyId,
+                        processRes.data.repository_id
                       )
-                    ) {
-                      this.tostr.info(
-                        `<a class="text-dark" href="${link}">Application: ${appRes.data._metadata.name}, Step: ${socketRes.step}</a>`,
-                        'New Process Initializing!',
-                        {
-                          enableHtml: true,
-                          positionClass: 'toast-top-center',
-                          tapToDismiss: false,
+                      .subscribe((repoRes) => {
+                        const queryPerams = {
+                          title: appRes.data._metadata.name,
+                          type: repoRes.data.type,
+                          url: appRes.data.url,
+                          repoId: processRes.data.repository_id,
+                          appId: processRes.data.app_id,
+                        };
+
+                        function base64ToHex(str: any) {
+                          for (
+                            var i = 0,
+                              bin = atob(str.replace(/[ \r\n]+$/, '')),
+                              hex = [];
+                            i < bin.length;
+                            ++i
+                          ) {
+                            let tmp = bin.charCodeAt(i).toString(16);
+                            if (tmp.length === 1) tmp = `0${tmp}`;
+                            hex[hex.length] = tmp;
+                          }
+                          return hex.join('');
                         }
-                      );
-                    }
+
+                        const encodedString = btoa(JSON.stringify(queryPerams));
+                        const base64 = base64ToHex(encodedString);
+                        const link = `repository/${processRes.data.repository_id}/application/${base64}`;
+                        let checkDubble: any[] = [];
+                        if (
+                          !checkDubble.find(
+                            (element) => element.step == socketRes.step
+                          )
+                        ) {
+                          this.tostr.info(
+                            `<a class="text-dark" href="${link}">Application: ${appRes.data._metadata.name}, Step: ${socketRes.step}</a>`,
+                            'New Process Initializing!',
+                            {
+                              enableHtml: true,
+                              positionClass: 'toast-top-center',
+                              tapToDismiss: false,
+                            }
+                          );
+                        }
+                      });
                   });
               });
-          });
-      }
-      if (socketRes.status === 'FAILED') {
-        localStorage.setItem('isFailed', 'true');
-      }
-    })
+          }
+        }
+      })
+    });
+
   }
 
   ngOnDestroy() {

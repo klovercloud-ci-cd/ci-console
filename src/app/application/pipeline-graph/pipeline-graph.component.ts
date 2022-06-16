@@ -16,8 +16,9 @@ import { AuthService } from '../../auth/auth.service';
 import { AppListService } from '../app-list.service';
 import { RepoServiceService } from '../../repository/repo-service.service';
 import { PipelineService } from '../pipeline.service';
-import {skip} from "rxjs";
-import {WsService} from "../../shared/services/ws.service";
+import { skip } from 'rxjs';
+import { WsService } from '../../shared/services/ws.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -43,6 +44,8 @@ export class PipelineGraphComponent
   self: any;
   title: any;
 
+  failed: any[] = [];
+  error: any;
 
   setOpenBranch(index: number) {
     this.openBranch = index;
@@ -97,7 +100,7 @@ export class PipelineGraphComponent
   prev_logs_size: number = 0;
   nodeDetails: any = '';
   activeStep: any = '';
-
+  init = false;
   //refactor Start
   commit: any;
   _processIds: any;
@@ -115,8 +118,9 @@ export class PipelineGraphComponent
     private repo: RepoServiceService,
     private cdref: ChangeDetectorRef,
     private pipes: PipelineService,
-    private wsService:WsService,
     private navigateRoute: Router,
+    private wsService: WsService,
+    private tostr: ToastrService
   ) {
     // this._toolbarService.changeData({ title: this.urlParams.title });
     this.route.queryParams.subscribe(res=>{
@@ -126,42 +130,99 @@ export class PipelineGraphComponent
   }
 
   ngAfterContentInit(): void {
-    /*this.wsService.wsData.subscribe((res) => {
+    console.log(this.urlParams,'url perams')
+    this.pipes
+      .getStepDetails('build', 'bab32326-ba80-4c86-8101-14d4f112e6b6')
+      .subscribe((res) => {
+        console.log(res, 'step status');
+      });
+    this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
       console.log(res, 'socekt res from pipeline page');
       const socketRes: any = res;
+
       ///---------------
-      if (socketRes.status === 'INITIALIZING') {
-        //middle check gose here
-        setTimeout(()=>{
-          this.getPipeline(socketRes.process_id)
-        },1000)
-        const activeClass: any = document.getElementById(
-          socketRes.step + '_loader'
-        );
-        activeClass.classList.add('active');
-      }
-      if (socketRes.status === 'FAILED'){
-        setTimeout(()=>{
-          this.getPipeline(socketRes.process_id)
-        },1000)
-        const activeClass: any = document.getElementById(
-          socketRes.step + '_loader'
-        );
-        activeClass.classList.remove('active');
-      }
 
-      if (socketRes.status === 'SUCCESSFUL') {
-        setTimeout(()=>{
-          this.getPipeline(socketRes.process_id)
-        },1000)
-        const activeClass: any = document.getElementById(
-          socketRes.step + '_loader'
-        );
-        activeClass.classList.remove('active');
-
+      if (socketRes.process_id == this.pipeline.data.process_id) {
+        if (socketRes.status === 'INITIALIZING') {
+          this.init = true;
+          this.pipes
+            .getStepDetails(socketRes.step, socketRes.process_id)
+            .subscribe((res: any) => {
+              console.log(res, 'step status');
+              if (
+                res?.data.status === 'active' ||
+                res?.data.status === 'non_initialized'
+              ) {
+                //middle check gose here
+                this.getPipeline(socketRes.process_id);
+                setTimeout(() => {
+                  const activeClass: any = document.getElementById(
+                    socketRes.step + '_loader'
+                  );
+                  activeClass.classList.add('active');
+                  this.startBuild(socketRes.step);
+                }, 2000);
+              }
+            });
+        }
+        if (socketRes.status === 'PROCESSING') {
+          let faild = false;
+          for (let step of this.failed) {
+            if (step.name === socketRes.step) {
+              faild = true;
+            }
+          }
+          if (!this.init && !faild) {
+            this.init = true;
+            this.pipes
+              .getStepDetails(socketRes.step, socketRes.process_id)
+              .subscribe((res: any) => {
+                if (res?.data.status === 'active') {
+                  //middle check gose here
+                  this.getPipeline(socketRes.process_id);
+                  setTimeout(() => {
+                    const activeClass: any = document.getElementById(
+                      socketRes.step + '_loader'
+                    );
+                    activeClass.classList.add('active');
+                    this.startBuild(socketRes.step);
+                  }, 2000);
+                }
+              });
+          }
+        }
+        if (socketRes.status === 'FAILED') {
+          this.pipes
+            .getStepDetails(socketRes.step, socketRes.process_id)
+            .subscribe((res: any) => {
+              if (res?.data.status === 'failed') {
+                this.init = false;
+                this.failed.push({
+                  name: socketRes.step,
+                });
+                const activeClass: any = document.getElementById(
+                  socketRes.step + '_loader'
+                );
+                activeClass.classList.remove('active');
+              }
+            });
+        }
+        if (socketRes.status === 'SUCCESSFUL') {
+          this.init = false;
+          this.pipes
+            .getStepDetails(socketRes.step, socketRes.process_id)
+            .subscribe((res: any) => {
+              if (res?.data.status === 'completed') {
+                const activeClass: any = document.getElementById(
+                  socketRes.step + '_loader'
+                );
+                activeClass.classList.remove('active');
+              }
+            })
+        }
       }
-    });*/
+    });
   }
 
   @Input() nodeName!: number | string;
@@ -351,25 +412,46 @@ export class PipelineGraphComponent
     this.isLoading.graph = true;
     // console.log(commitId);
     this.repo.getProcess(commitId).subscribe((res: any) => {
-      if (res.data) {
-        this.processIds = res.data;
-        // console.log(this.processIds);
-        this.getPipeline(this.processIds[0].process_id);
+      if (res.data == null) {
+        this.tostr.warning(
+          `No process Found For this Commit`,
+          'Process Empty',
+          {
+            enableHtml: true,
+            positionClass: 'toast-top-center',
+            tapToDismiss: false,
+          }
+        );
+      } else {
+        if (res.data) {
+          this.processIds = res.data;
+          console.log(this.processIds);
+          this.getPipeline(this.processIds[0].process_id);
+        }
       }
     });
   }
 
   getPipeline(processId: any) {
     this.repo.getPipeLine(processId).subscribe((res: any) => {
-      this.isLoading.graph = false;
-      setTimeout(() => {
-        this.pipelineStep = res.data.steps;
-        this.pipeline = res;
-        this.envList = this.allenv();
-        this.stepsLists = this.stepsDetails();
-        this.initSvgArrow();
-        this.drawLines();
-      });
+      console.log(res,'pipeline data----')
+      if (res.data == null) {
+        this.tostr.warning(`No commit Found For this BRANCH`, 'Commits Empty', {
+          enableHtml: true,
+          positionClass: 'toast-top-center',
+          tapToDismiss: false,
+        });
+      } else {
+        this.isLoading.graph = false;
+        setTimeout(() => {
+          this.pipelineStep = res.data.steps;
+          this.pipeline = res;
+          this.envList = this.allenv();
+          this.stepsLists = this.stepsDetails();
+          this.initSvgArrow();
+          this.drawLines();
+        });
+      }
     });
   }
 
@@ -429,8 +511,7 @@ export class PipelineGraphComponent
     } while (currentDate - date < milliseconds);
   }
 
-
-  makeApiCallForLogs(
+ /* makeApiCallForLogs(
     processId: string,
     nodeName: string,
     footmarkName: string,
@@ -439,20 +520,21 @@ export class PipelineGraphComponent
     skip: number
   ) {
     this.repo
-      .getFootamarkLog(processId, nodeName, footmarkName, page, limit)
+      .getFootamarkLog(processId, nodeName, footmarkName, page, limit,)
       .subscribe((res: any) => {
         // console.log(res.data);
         return res.data;
       });
   }
-
+*/
   getLogs(
     processId: string,
     nodeName: string,
     footmarkName: string,
     page: number,
     limit: number,
-    skip: number
+    skip: number,
+    claim: number
   ) {
     const intObj: any = document.getElementById('intObj' + footmarkName);
 
@@ -474,7 +556,7 @@ export class PipelineGraphComponent
     observer.observe(intObj);
 
     this.repo
-      .getFootamarkLog(processId, nodeName, footmarkName, page, limit)
+      .getFootamarkLog(processId, nodeName, footmarkName, page, limit,claim)
       .subscribe((res: any) => {
         if (res?.data !== null){
           const footmarkData = []
@@ -505,10 +587,18 @@ export class PipelineGraphComponent
         if (this.skip == 0) {
           this.page++
         }
-        setTimeout(()=>{
-          if (this.isObjerving){
-            // console.log(this.page,this.skip)
-            this.getLogs(processId, nodeName, footmarkName, this.page, this.limit, this.skip)
+        setTimeout(() => {
+          if (this.isObjerving) {
+            console.log(this.page, this.skip);
+            this.getLogs(
+              processId,
+              nodeName,
+              footmarkName,
+              this.page,
+              this.limit,
+              this.skip,
+              claim
+            );
           }
         },2000)
 
@@ -725,12 +815,12 @@ export class PipelineGraphComponent
     });
   }
 
-  expandLog(footMarkIndex: number, foot: any, nodeName: string) {
-    this.setActiveFootMark(footMarkIndex)
+  expandLog(footMarkIndex: number, foot: any, nodeName: string,claim:number) {
+    this.setActiveFootMark(footMarkIndex);
     this.page = 0;
     this.skip=0
     this.logs=[]
     const processId = this.pipeline.data.process_id;
-    this.getLogs(processId, nodeName, foot, this.page, this.limit, this.skip);
+    this.getLogs(processId, nodeName, foot, this.page, this.limit, this.skip,claim);
   }
 }
