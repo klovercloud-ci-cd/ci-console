@@ -114,26 +114,25 @@ export class PipelineGraphComponent
   }
 
   ngAfterContentInit(): void {
-    this.wsService.wsData.subscribe((res) => {
+    /*this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
       console.log(res, 'socekt res from pipeline page');
       const socketRes: any = res;
-      if (this.activeStep === '') {
-        this.activeStep = socketRes.step;
-      }
       ///---------------
       if (socketRes.status === 'INITIALIZING') {
         //middle check gose here
+        setTimeout(()=>{
+          this.getPipeline(socketRes.process_id)
+        },1000)
         const activeClass: any = document.getElementById(
           socketRes.step + '_loader'
         );
         activeClass.classList.add('active');
       }
-      if (socketRes.status === 'PROCESSING') {
-      }
-
       if (socketRes.status === 'FAILED'){
-
+        setTimeout(()=>{
+          this.getPipeline(socketRes.process_id)
+        },1000)
         const activeClass: any = document.getElementById(
           socketRes.step + '_loader'
         );
@@ -141,12 +140,16 @@ export class PipelineGraphComponent
       }
 
       if (socketRes.status === 'SUCCESSFUL') {
+        setTimeout(()=>{
+          this.getPipeline(socketRes.process_id)
+        },1000)
         const activeClass: any = document.getElementById(
           socketRes.step + '_loader'
         );
         activeClass.classList.remove('active');
+
       }
-    });
+    });*/
   }
 
   @Input() nodeName!: number | string;
@@ -176,6 +179,7 @@ export class PipelineGraphComponent
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(async (res: any) => {
+        this.isLoading.commit = false;
         this.commit = res.data;
         console.log(this.commit);
         this.commitList.push({
@@ -202,7 +206,6 @@ export class PipelineGraphComponent
   getPipeline(processId: any) {
     this.repo.getPipeLine(processId).subscribe((res: any) => {
       this.isLoading.graph = false;
-      this.isLoading.commit = false;
       setTimeout(() => {
         this.pipelineStep = res.data.steps;
         this.pipeline = res;
