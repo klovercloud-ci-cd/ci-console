@@ -8,6 +8,7 @@ import { PipelineService } from '../../../application/pipeline.service';
 import { TokenService } from '../../../auth/token.service';
 import { AppListService } from '../../../application/app-list.service';
 import {WsService} from "../../../shared/services/ws.service";
+import {HeaderService} from "../header.service";
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,8 @@ import {WsService} from "../../../shared/services/ws.service";
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  notices: any[]=[];
+  next: string='';
   constructor(
     public dialog: MatDialog,
     private auth: AuthService,
@@ -24,7 +27,8 @@ export class HeaderComponent implements OnInit {
     private pipelineLog: PipelineService,
     private tokenService: TokenService,
     private applist: AppListService,
-    private wsService: WsService
+    private wsService: WsService,
+    private header: HeaderService
   ) {}
 
   pageTitle = '';
@@ -39,9 +43,8 @@ export class HeaderComponent implements OnInit {
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
     });
-    const company_Id: string = this.auth.getUserData().metadata.company_id;
-    const socket = this.pipelineLog.connectToSocket(company_Id);
-    /*WS test data*/
+    this.connectWs()
+    /*/!*WS test data*!/
     const data =[
       {
         claim: 0,
@@ -166,21 +169,12 @@ export class HeaderComponent implements OnInit {
         this.wsService.setWsData(socketRes);
       i = Math.floor(Math.random() * 10) + 1
     },3000)
+*/
 
 
-    socket.onmessage = (e) => {
-      if (e.data !== 'null') {
 
-        const socketRes = JSON.parse(e.data);
-
-       this.wsService.setWsData(socketRes);
-
-      }
-    };
-    this.sendWS = setInterval(() => {
-      //socket.send(' ');
-    }, 300);
     this.wsService.wsData.subscribe(res=>{
+      console.log(res,'socekt res from header')
       const socketRes:any = res;
       if (socketRes.status === 'INITIALIZING') {
         localStorage.setItem('isFailed', 'false');
@@ -257,10 +251,73 @@ export class HeaderComponent implements OnInit {
       clearInterval(this.sendWS);
     }
   }
+  connectWs(){
+    const company_Id: string = this.auth.getUserData().metadata.company_id;
+    const socket = this.pipelineLog.connectToSocket(company_Id);
+    socket.onmessage = (e) => {
+      if (e.data !== 'null') {
 
+        const socketRes = JSON.parse(e.data);
+
+        this.wsService.setWsData(socketRes);
+
+      }
+    };
+    socket.close =(e)=>{
+      console.log('reconnecting')
+      if (this.sendWS) {
+        clearInterval(this.sendWS);
+      }
+      this.connectWs()
+    }
+    socket.onopen=(e)=>{
+      console.log('socket connected')
+      this.sendWS = setInterval(() => {
+        socket.send(' ');
+      }, 300);
+    }
+
+  }
   logout() {
     this.auth.logOut();
   }
 
-  testClick() {}
+  openNotification() {
+    this.notices= []
+    this.next=''
+    this.header.getNotification().subscribe((res:any)=>{
+      for (let data of res.data){
+        this.notices.push(data)
+      }
+      for (let link of res._metadata.links){
+        if (link.next){
+          this.next=link.next
+        }
+      }
+      if (this.notices.length ==res._metadata.total_count){
+        this.next=''
+      }
+      console.log(this.notices,this.next)
+    })
+  }
+  nextLog(){
+    console.log('next click')
+    if (this.next !==''){
+      this.header.getNextLog(this.next).subscribe((res:any)=>{
+        if (res.data){
+          for (let data of res?.data){
+            this.notices.push(data)
+          }
+          for (let link of res._metadata.links){
+            if (link.next){
+              this.next=link.next
+            }
+          }
+          if (this.notices.length ==res._metadata.total_count){
+            this.next=''
+          }
+        }
+      })
+    }
+  }
 }

@@ -20,6 +20,7 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import {MatDividerModule} from "@angular/material/divider";
+import { NoticeDirective } from './header/notice.directive';
 
 @NgModule({
   declarations: [
@@ -27,25 +28,27 @@ import {MatDividerModule} from "@angular/material/divider";
     HeaderComponent,
     SidebarComponent,
     CollapsedSidebarComponent,
+    NoticeDirective,
+    NoticeDirective,
   ],
-    imports: [
-        ToastrModule.forRoot(),
-        AppRoutingModule,
-        CommonModule,
-        RouterModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatCardModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatMenuModule,
-        MatExpansionModule,
-        MatTreeModule,
-        MatRippleModule,
-        ProgressBarModule,
-        MatBadgeModule,
-        MatDividerModule,
-    ],
+  imports: [
+    ToastrModule.forRoot(),
+    AppRoutingModule,
+    CommonModule,
+    RouterModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatCardModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatExpansionModule,
+    MatTreeModule,
+    MatRippleModule,
+    ProgressBarModule,
+    MatBadgeModule,
+    MatDividerModule,
+  ],
   exports: [LayoutComponent, HeaderComponent, SidebarComponent],
 })
 export class LayoutModule {}

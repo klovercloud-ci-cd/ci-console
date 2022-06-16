@@ -16,8 +16,8 @@ import { AuthService } from '../../auth/auth.service';
 import { AppListService } from '../app-list.service';
 import { RepoServiceService } from '../../repository/repo-service.service';
 import { PipelineService } from '../pipeline.service';
-import {skip} from "rxjs";
-import {WsService} from "../../shared/services/ws.service";
+import { skip } from 'rxjs';
+import { WsService } from '../../shared/services/ws.service';
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -39,13 +39,12 @@ export class PipelineGraphComponent
   stepStatus: any;
   socketres: any;
 
-
   setOpenBranch(index: number) {
     this.openBranch = index;
   }
 
   setActiveFootMark(index: number) {
-    this.openFootMark = index
+    this.openFootMark = index;
   }
 
   nextStep() {
@@ -87,7 +86,7 @@ export class PipelineGraphComponent
   prevStepName: string = '';
   page: number = 1;
   limit: number = 10;
-  skip: number=0;
+  skip: number = 0;
   prev_logs_size: number = 0;
   nodeDetails: any = '';
   activeStep: any = '';
@@ -109,58 +108,45 @@ export class PipelineGraphComponent
     private repo: RepoServiceService,
     private cdref: ChangeDetectorRef,
     private pipes: PipelineService,
-    private wsService:WsService
+    private wsService: WsService
   ) {
     this._toolbarService.changeData({ title: this.urlParams.title });
   }
 
   ngAfterContentInit(): void {
-    this.wsService.wsData.subscribe(res=>{
+    this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
-      const socketRes:any = res;
-      if (socketRes && socketRes.footmark) {
-        if (
-          (socketRes.status === 'INITIALIZING' &&
-            this.activeStep != socketRes.step) ||
-          (socketRes.status === 'PROCESSING' &&
-            this.activeStep != socketRes.step)
-        ) {
-          if (socketRes.status === 'INITIALIZING') {
-            localStorage.setItem('isFailed', 'false');
-            this.activeStep = socketRes.step;
-           setTimeout(()=>{
-              this.startBuild(this.activeStep);
-            },500)
-          }
-          if (
-            socketRes.status === 'PROCESSING' &&
-            localStorage.getItem('isFailed') === 'false'
-          ) {
-            this.activeStep = socketRes.step;
-          }
-        }
-        if (this.activeStep === '') {
-          this.activeStep = socketRes.step;
-        }
-        console.log(socketRes);
-        if (socketRes.status === 'FAILED' || socketRes.status === 'ERROR') {
-          localStorage.setItem('isFailed', 'true');
-          this.repo.getPipeLine(socketRes.process_id).subscribe((res: any) => {
-              this.pipelineStep = res.data.steps;
-              this.pipeline = res;
-              this.envList = this.allenv();
-              this.stepsLists = this.stepsDetails();
-              this.initSvgArrow();
-              this.drawLines();
-              this.logClose();
-              this.startBuild(this.activeStep);
-              this.activeStep = '';
-          });
-        }
-        if (socketRes.status === 'SUCCESSFUL') {
-        }
+      console.log(res, 'socekt res from pipeline page');
+      const socketRes: any = res;
+      if (this.activeStep === '') {
+        this.activeStep = socketRes.step;
       }
-    })
+      ///---------------
+      if (socketRes.status === 'INITIALIZING') {
+        //middle check gose here
+        const activeClass: any = document.getElementById(
+          socketRes.step + '_loader'
+        );
+        activeClass.classList.add('active');
+      }
+      if (socketRes.status === 'PROCESSING') {
+      }
+
+      if (socketRes.status === 'FAILED'){
+
+        const activeClass: any = document.getElementById(
+          socketRes.step + '_loader'
+        );
+        activeClass.classList.remove('active');
+      }
+
+      if (socketRes.status === 'SUCCESSFUL') {
+        const activeClass: any = document.getElementById(
+          socketRes.step + '_loader'
+        );
+        activeClass.classList.remove('active');
+      }
+    });
   }
 
   @Input() nodeName!: number | string;
@@ -260,7 +246,7 @@ export class PipelineGraphComponent
           Object.assign(
             this.commitList[
               this.commitList.findIndex((el) => el.branch === branchName)
-              ],
+            ],
             res.data
           );
         });
@@ -274,7 +260,6 @@ export class PipelineGraphComponent
       currentDate = Date.now();
     } while (currentDate - date < milliseconds);
   }
-
 
   makeApiCallForLogs(
     processId: string,
@@ -305,10 +290,9 @@ export class PipelineGraphComponent
     const observer = new IntersectionObserver(
       (entry: any) => {
         if (entry[0].isIntersecting) {
-          this.isObjerving =true
-        }
-        else{
-          this.isObjerving =false
+          this.isObjerving = true;
+        } else {
+          this.isObjerving = false;
         }
       },
       {
@@ -322,42 +306,45 @@ export class PipelineGraphComponent
     this.repo
       .getFootamarkLog(processId, nodeName, footmarkName, page, limit)
       .subscribe((res: any) => {
-        if (res?.data !== null){
-          const footmarkData = []
-          console.log(this.page,'page')
-          console.log(this.skip,'skip')
-          for (let i=this.skip; i<res?.data.length;i++){
-            footmarkData.push(res?.data[i])
+        if (res?.data !== null) {
+          const footmarkData = [];
+          console.log(this.page, 'page');
+          console.log(this.skip, 'skip');
+          for (let i = this.skip; i < res?.data.length; i++) {
+            footmarkData.push(res?.data[i]);
           }
 
           if (res?.data.length < limit) {
-            this.skip = res?.data.length
+            this.skip = res?.data.length;
           } else {
-            this.skip = 0
+            this.skip = 0;
           }
-          console.log(footmarkData)
+          console.log(footmarkData);
 
           this.logs.push({
-            name:footmarkName,
-            data:[...footmarkData]
-          })
-
-
+            name: footmarkName,
+            data: [...footmarkData],
+          });
         } else if (res?.data === null) {
-          this.page -= 1
-
+          this.page -= 1;
         }
 
         if (this.skip == 0) {
-          this.page++
+          this.page++;
         }
-        setTimeout(()=>{
-          if (this.isObjerving){
-            console.log(this.page,this.skip)
-            this.getLogs(processId, nodeName, footmarkName, this.page, this.limit, this.skip)
+        setTimeout(() => {
+          if (this.isObjerving) {
+            console.log(this.page, this.skip);
+            this.getLogs(
+              processId,
+              nodeName,
+              footmarkName,
+              this.page,
+              this.limit,
+              this.skip
+            );
           }
-        },2000)
-
+        }, 2000);
       });
   }
 
@@ -509,7 +496,7 @@ export class PipelineGraphComponent
 
   startBuild(stepName: any) {
     this.logOpen = true;
-    this.openFootMarkName = stepName
+    this.openFootMarkName = stepName;
     const processId = this.pipeline.data.process_id;
     this.pipeline.data.steps.find((hola: any) => {
       if (hola.name === stepName) {
@@ -517,39 +504,38 @@ export class PipelineGraphComponent
       }
     });
     this.stepFootMark(processId, stepName, this.nodeDetails.status);
-
   }
 
   stepFootMark(processId: any, stepName: any, status: any) {
     this.repo.getfootPrint(processId, stepName).subscribe((res: any) => {
-      this.stepStatus =res.status
-      this.footMarks = res.data
-      this.setActiveFootMark(this.footMarks.length-1)
+      this.stepStatus = res.status;
+      this.footMarks = res.data;
+      this.setActiveFootMark(this.footMarks?.length - 1);
 
-      this.wsService.wsData.subscribe(res=>{
-       // @ts-ignore
-        if ( res.step === this.openFootMarkName){
-          let found = 0
-          for (let x of this.footMarks){
+      this.wsService.wsData.subscribe((res) => {
+        // @ts-ignore
+        if (res.step === this.openFootMarkName) {
+          let found = 0;
+          for (let x of this.footMarks) {
             // @ts-ignore
-            if (x === res.footmark){
-              found = 1
+            if (x === res.footmark) {
+              found = 1;
             }
           }
-          if (found === 0){
+          if (found === 0) {
             // @ts-ignore
-            this.footMarks.push(res.footmark)
+            this.footMarks.push(res.footmark);
           }
-          this.setActiveFootMark(this.footMarks.length-1)
-       }
-      })
-    })
+          this.setActiveFootMark(this.footMarks.length - 1);
+        }
+      });
+    });
   }
 
   logClose() {
     this.logOpen = false;
     this.fullmode = false;
-    this.activeStep =''
+    this.activeStep = '';
   }
 
   loadInfo(stepName: string) {
@@ -572,10 +558,10 @@ export class PipelineGraphComponent
   }
 
   expandLog(footMarkIndex: number, foot: any, nodeName: string) {
-    this.setActiveFootMark(footMarkIndex)
+    this.setActiveFootMark(footMarkIndex);
     this.page = 0;
-    this.skip=0
-    this.logs=[]
+    this.skip = 0;
+    this.logs = [];
     const processId = this.pipeline.data.process_id;
     this.getLogs(processId, nodeName, foot, this.page, this.limit, this.skip);
   }
