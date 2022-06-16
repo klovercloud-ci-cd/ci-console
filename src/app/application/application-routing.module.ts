@@ -10,7 +10,7 @@ const routes: Routes = [
     component: ApplicationListComponent,
   },
   {
-    path: 'application/:appID',
+    path: 'application',
     component: CiCdPipelineComponent,
   },
 ];

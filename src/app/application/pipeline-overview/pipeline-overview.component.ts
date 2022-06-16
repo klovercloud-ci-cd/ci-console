@@ -10,8 +10,6 @@ export class PipelineOverviewComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('fdfd');
 
-    console.log('ff');
   }
 }

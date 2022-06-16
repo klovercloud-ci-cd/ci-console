@@ -262,7 +262,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
           }
 
         },(err)=>{
-          this.snack.openSnackBar('Error!',err,'sb-error')
+          this.snack.openSnackBar('Error!',err.error.message,'sb-error')
         })}
       this.showPodsStatus=true
       console.log("agentsChartColors",this.agentsChartColors)
@@ -270,7 +270,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       console.log("LabelWisePodCounts",this.LabelWisePodCounts)
       console.log("agentData",this.buildAgentsChartData)
     },(err)=>{
-      this.snack.openSnackBar('Error!',err,'sb-error')
+      this.snack.openSnackBar('Error!',err.error.message,'sb-error')
     })
 
   }
@@ -293,15 +293,17 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       // console.log("User Info:",res.data.metadata.company_id)
       this._dashboardService.getAllWebhook(res.data.metadata.company_id).subscribe((res)=>{
         console.log("WebhookDashboard: ",res.data);
+        if (res.data.application.webhook.disabled>0 || res.data.application.webhook.enabled>0){
+          this.hasWebhook = true;
+        }
         this.hasData = true;
-        this.hasWebhook = true;
         this.webhook = res;
         this.enabledWebhook = this.webhook.data.application.webhook.enabled;
         this.disabledWebhook = this.webhook.data.application.webhook.disabled;
         this.totalWebhook = this.enabledWebhook+this.disabledWebhook;
         this.buildWebhookChartData[0].data = [this.enabledWebhook, this.disabledWebhook];
       },(err)=>{
-        this.snack.openSnackBar('Error!',err,'sb-error');
+        this.snack.openSnackBar('Error!',err.error.message,'sb-error');
       })
     })
 
@@ -312,8 +314,11 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
     this._dashboardService.getAllProcesses().subscribe((res)=>{
       console.log("Processes Response: ",res.data);
+      if (res.data.pipeline.completed>0 || res.data.pipeline.failed>0 || res.data.pipeline.nonInitialized>0 || res.data.pipeline.paused>0 || res.data.pipeline.running>0){
+        this.hasProcess = true;
+      }
+
       this.hasData = true;
-      this.hasProcess = true;
       this.pipeline = res;
       this.pipelineCompleted = this.pipeline.data.pipeline.completed;
       this.pipelineFailed = this.pipeline.data.pipeline.failed;
@@ -325,7 +330,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       this.buildpipelineChartData[0].data = [this.pipelineCompleted, this.pipelineFailed, this.pipelineRunning, this.pipelinePaused, this.pipelineNonInitialized];
 
     },(err)=>{
-      this.snack.openSnackBar('Error!',err,'sb-error')
+      this.snack.openSnackBar('Error!',err.error.message,'sb-error')
     })
 
     // <------------Agents Section------------>

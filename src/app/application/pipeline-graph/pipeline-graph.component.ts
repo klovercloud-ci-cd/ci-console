@@ -10,7 +10,7 @@ import {
 import { ApplicationListComponent } from '../application-list/application-list.component';
 import { ToolbarService } from '../../shared/services/toolbar.service';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { UserDataService } from '../../shared/services/user-data.service';
 import { AuthService } from '../../auth/auth.service';
 import { AppListService } from '../app-list.service';
@@ -38,6 +38,10 @@ export class PipelineGraphComponent
   openFootMarkName: any;
   stepStatus: any;
   socketres: any;
+  next: any;
+  prev: any;
+  self: any;
+  title: any;
 
 
   setOpenBranch(index: number) {
@@ -55,8 +59,10 @@ export class PipelineGraphComponent
   prevStep() {
     this.openBranch--;
   }
-
+  currentPage:number=0;
+  commitsPerCall:any;
   newLogs: any[] = [];
+  branchName:any;
   branchPanelOpen: boolean | undefined;
   pipeline: any;
   pipelineStep: any;
@@ -68,10 +74,10 @@ export class PipelineGraphComponent
   public branchs: any = [];
   public footMarks: any[] = [];
   public commitList: any[] = [];
-
-  urlParams: any = JSON.parse(
-    atob(this.hexToBase64(this.route.snapshot.paramMap.get('appID')))
-  );
+  urlParams: any;
+  // urlParams: any = JSON.parse(
+  //   atob(this.hexToBase64(this.route.snapshot.paramMap.get('appID')))
+  // );
   repoId = this.route.snapshot.paramMap.get('repoID');
   userInfo = this.auth.getUserData();
   companyId = this.userInfo.metadata.company_id;
@@ -85,8 +91,8 @@ export class PipelineGraphComponent
   public footMarksLegth: number = 0;
   logs: any[] = [];
   prevStepName: string = '';
-  page: number = 1;
-  limit: number = 10;
+  page: number = 0
+  limit: any = 5 ;
   skip: number=0;
   prev_logs_size: number = 0;
   nodeDetails: any = '';
@@ -109,58 +115,53 @@ export class PipelineGraphComponent
     private repo: RepoServiceService,
     private cdref: ChangeDetectorRef,
     private pipes: PipelineService,
-    private wsService:WsService
+    private wsService:WsService,
+    private navigateRoute: Router,
   ) {
-    this._toolbarService.changeData({ title: this.urlParams.title });
+    // this._toolbarService.changeData({ title: this.urlParams.title });
+    this.route.queryParams.subscribe(res=>{
+      this.title = res['title'];
+    })
+    this._toolbarService.changeData({ title: this.title });
   }
 
   ngAfterContentInit(): void {
-    this.wsService.wsData.subscribe(res=>{
+    /*this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
-      const socketRes:any = res;
-      if (socketRes && socketRes.footmark) {
-        if (
-          (socketRes.status === 'INITIALIZING' &&
-            this.activeStep != socketRes.step) ||
-          (socketRes.status === 'PROCESSING' &&
-            this.activeStep != socketRes.step)
-        ) {
-          if (socketRes.status === 'INITIALIZING') {
-            localStorage.setItem('isFailed', 'false');
-            this.activeStep = socketRes.step;
-           setTimeout(()=>{
-              this.startBuild(this.activeStep);
-            },500)
-          }
-          if (
-            socketRes.status === 'PROCESSING' &&
-            localStorage.getItem('isFailed') === 'false'
-          ) {
-            this.activeStep = socketRes.step;
-          }
-        }
-        if (this.activeStep === '') {
-          this.activeStep = socketRes.step;
-        }
-        console.log(socketRes);
-        if (socketRes.status === 'FAILED' || socketRes.status === 'ERROR') {
-          localStorage.setItem('isFailed', 'true');
-          this.repo.getPipeLine(socketRes.process_id).subscribe((res: any) => {
-              this.pipelineStep = res.data.steps;
-              this.pipeline = res;
-              this.envList = this.allenv();
-              this.stepsLists = this.stepsDetails();
-              this.initSvgArrow();
-              this.drawLines();
-              this.logClose();
-              this.startBuild(this.activeStep);
-              this.activeStep = '';
-          });
-        }
-        if (socketRes.status === 'SUCCESSFUL') {
-        }
+      console.log(res, 'socekt res from pipeline page');
+      const socketRes: any = res;
+      ///---------------
+      if (socketRes.status === 'INITIALIZING') {
+        //middle check gose here
+        setTimeout(()=>{
+          this.getPipeline(socketRes.process_id)
+        },1000)
+        const activeClass: any = document.getElementById(
+          socketRes.step + '_loader'
+        );
+        activeClass.classList.add('active');
       }
-    })
+      if (socketRes.status === 'FAILED'){
+        setTimeout(()=>{
+          this.getPipeline(socketRes.process_id)
+        },1000)
+        const activeClass: any = document.getElementById(
+          socketRes.step + '_loader'
+        );
+        activeClass.classList.remove('active');
+      }
+
+      if (socketRes.status === 'SUCCESSFUL') {
+        setTimeout(()=>{
+          this.getPipeline(socketRes.process_id)
+        },1000)
+        const activeClass: any = document.getElementById(
+          socketRes.step + '_loader'
+        );
+        activeClass.classList.remove('active');
+
+      }
+    });*/
   }
 
   @Input() nodeName!: number | string;
@@ -172,14 +173,37 @@ export class PipelineGraphComponent
   }
 
   ngOnInit() {
-    this.type = this.urlParams.type.toLowerCase() + 's';
-    this.repoUrl = this.urlParams.url;
+    // this.type = this.urlParams.type.toLowerCase() + 's';
+    // this.repoUrl = this.urlParams.url;
+    // console.log("this.type, this.repoId, this.repoUrl:",this.type, this.repoId, this.repoUrl)
+
+    this.route.queryParams.subscribe(res=>{
+      this.title = res['title'];
+      this.type = res['type'].toLowerCase() + 's';
+      this.repoUrl = atob(res['url'])
+      console.log("res['page']:", res['page'])
+      if (res['page']){
+        this.currentPage = Number(res['page'])
+      }
+      if (res['limit']){
+        this.limit = res['limit'];
+      }
+      // console.log("RESSSSSSSSSSSS",this.currentPage,this.limit)
+    })
+
     this.pipes
       .getBranch(this.type, this.repoId, this.repoUrl)
       .subscribe((res: any) => {
         this.branchs = res.data;
+        this.branchName = this.branchs[0].name;
         this.getCommit(this.branchs[0].name);
       });
+    this.navigateRoute.navigate([],
+      {
+        queryParams: {page:this.currentPage,limit:this.limit},
+        queryParamsHandling: 'merge'
+      }
+    )
   }
 
   ngAfterContentChecked() {
@@ -190,24 +214,146 @@ export class PipelineGraphComponent
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(async (res: any) => {
+        console.log("Response:",res._metadata)
+        this.commitsPerCall = res;
+        for (let link of res._metadata.links){
+          if (link.next){
+            this.next = link.next;
+          }
+          if(link.prev){
+            this.prev = link.prev;
+          }
+        }
+        if (this.commitsPerCall.length == res._metadata.total_count){
+          this.next=''
+        }
+        // console.log("Responsesss: ",res)
+        this.isLoading.commit = false;
         this.commit = res.data;
-        console.log(this.commit);
-        this.commitList.push({
+        this.commitList=[{
           branch: branchName,
+          commits: this.commit,
+        }];
+        let selfUrl;
+        for(let i=0; i<res._metadata.links.length; i++){
+          console.log('III',res._metadata.links[i])
+          if(res._metadata.links[i].self){
+            selfUrl = res._metadata.links[i].self;
+          }
+        }
+        var numb = selfUrl.match(/\d/g);
+        console.log("numb.join(\"\"):",numb);
+        console.log("selfUrl:",selfUrl)
 
-          commits: [...this.commit],
-        });
+        this.navigateRoute.navigate([],
+          {
+            queryParams: {page:this.currentPage,limit:this.limit},
+            queryParamsHandling: 'merge'
+          }
+        )
         this.getProcess(this.commit[0].sha);
       });
   }
 
+  getPrevNextCommit(branchName:any,pageNumber:number){
+    // let pageNumber:any;
+    // console.log("branchName",branchName,'', pageStatus);
+    // if (pageStatus=='next'){
+    //   pageNumber = this.currentPage + 1;
+    // }
+    // this.isLoading.commit = false;
+    // console.log("this.commit:",branchName);
+    // if (this.next !==''){
+      this.repo.getPrevNextCommit(this.type, this.repoId, this.repoUrl, branchName, pageNumber,  this.limit).subscribe((res:any)=>{
+        console.log("res.data",res.data);
+        this.commit = res.data;
+        this.commitList=[{
+          branch: branchName,
+          commits: this.commit,
+        }];
+        if (res.data){
+          this.isLoading.commit = false;
+          // for (let data of res?.data){
+          //   this.commitsPerCall.push(data)
+          // }
+          this.isLoading.commit = false;
+          this.commit = res.data;
+          // console.log("Res.Data:",res);
+          for (let link of res._metadata.links){
+            if (link.next){
+              this.next=link.next
+            }
+            if(link.prev){
+              this.prev = link.prev;
+            }
+          }
+          if (this.commitsPerCall.length ==res._metadata.total_count){
+            this.next=''
+          }
+          this.navigateRoute.navigate([],
+            {
+              queryParams: {page:pageNumber,limit:this.limit},
+              queryParamsHandling: 'merge'
+            }
+          )
+          // this.commitList=[{
+          //   branch: branchName,
+          //   commits: this.commit,
+          //   next: this.next,
+          //   prev: this.prev
+          // }];
+          // console.log("this.commitList::::",this.commitList)
+        }
+      })
+    // }
+  }
+
+  getPrevCommit(branchName:any, previous:string){
+    // this.isLoading.commit = true;
+    // // console.log("this.commit:",branchName,previous);
+    // if (this.prev !==''){
+    //   this.repo.getNextCommit(previous, this.repoId, this.repoUrl, branchName).subscribe((res:any)=>{
+    //     if (res.data){
+    //       this.isLoading.commit = false;
+    //       // for (let data of res?.data){
+    //       //   this.commitsPerCall.push(data)
+    //       // }
+    //       this.isLoading.commit = false;
+    //       this.commit = res.data;
+    //       if (res._metadata.links.length>2){
+    //       for (let link of res._metadata.links){
+    //           if (link.next){
+    //             this.next=link.next
+    //           }
+    //           if(link.prev){
+    //             this.prev = link.prev;
+    //           }
+    //         }
+    //       }else{
+    //         this.prev = '';
+    //       }
+    //       if (this.commitsPerCall.length ==res._metadata.total_count){
+    //         this.next=''
+    //       }
+    //
+    //       this.commitList = [{
+    //         branch: branchName,
+    //         commits: this.commit,
+    //         next: this.next,
+    //         prev: this.prev
+    //       }];
+    //     }
+    //   })
+    // }
+  }
+
   getProcess(commitId: any) {
     this.isLoading.graph = true;
-    console.log(commitId);
+    // console.log(commitId);
     this.repo.getProcess(commitId).subscribe((res: any) => {
       if (res.data) {
         this.processIds = res.data;
-        console.log(this.processIds);
+        // console.log(this.processIds);
         this.getPipeline(this.processIds[0].process_id);
       }
     });
@@ -216,7 +362,6 @@ export class PipelineGraphComponent
   getPipeline(processId: any) {
     this.repo.getPipeLine(processId).subscribe((res: any) => {
       this.isLoading.graph = false;
-      this.isLoading.commit = false;
       setTimeout(() => {
         this.pipelineStep = res.data.steps;
         this.pipeline = res;
@@ -240,6 +385,15 @@ export class PipelineGraphComponent
   }
 
   loadCommit(branchName: string) {
+
+    this.currentPage=0;
+    this.navigateRoute.navigate([],
+      {
+        queryParams: {page:0,limit:5},
+        queryParamsHandling: 'merge'
+      }
+    )
+
     const findLogByBranceName = this.commitList.find(
       (list) => list.branch === branchName
     );
@@ -287,7 +441,7 @@ export class PipelineGraphComponent
     this.repo
       .getFootamarkLog(processId, nodeName, footmarkName, page, limit)
       .subscribe((res: any) => {
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
       });
   }
@@ -324,8 +478,8 @@ export class PipelineGraphComponent
       .subscribe((res: any) => {
         if (res?.data !== null){
           const footmarkData = []
-          console.log(this.page,'page')
-          console.log(this.skip,'skip')
+          // console.log(this.page,'page')
+          // console.log(this.skip,'skip')
           for (let i=this.skip; i<res?.data.length;i++){
             footmarkData.push(res?.data[i])
           }
@@ -335,7 +489,7 @@ export class PipelineGraphComponent
           } else {
             this.skip = 0
           }
-          console.log(footmarkData)
+          // console.log(footmarkData)
 
           this.logs.push({
             name:footmarkName,
@@ -353,7 +507,7 @@ export class PipelineGraphComponent
         }
         setTimeout(()=>{
           if (this.isObjerving){
-            console.log(this.page,this.skip)
+            // console.log(this.page,this.skip)
             this.getLogs(processId, nodeName, footmarkName, this.page, this.limit, this.skip)
           }
         },2000)

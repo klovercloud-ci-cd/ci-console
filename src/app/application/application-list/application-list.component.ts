@@ -140,13 +140,14 @@ export class ApplicationListComponent implements OnInit {
             }
             return hex.join('');
           };
-
+          let gitURL = btoa(e.url);
           this.navigateRoute.navigate([
             'repository',
             response.data.id,
-            'application',
-            decodedData(encodedString),
-          ]);
+            'application'
+            // decodedData(encodedString),
+          ],
+            { queryParams: { type: response.data.type, title: e._metadata.name, url: gitURL, repoId: response.data.id, appId: e._metadata.id} });
         });
     });
   }

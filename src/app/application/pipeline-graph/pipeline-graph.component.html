@@ -118,6 +118,7 @@
                                  *ngIf="!isLoading.commit"
                                  class="bg-light-400"
             >
+
               <mat-expansion-panel-header
                 (click)="loadCommit(branch.name)"
                 id="{{ branch.name }} "
@@ -160,10 +161,13 @@
                       <div class="text-caption">
                         {{msg.sha}}
                       </div>
-
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="flex justify-between items-center">
+                <button [ngClass]="[currentPage==0?'flex items-center disabled text-light-1000':'flex items-center']" (click)="getPrevNextCommit(branch.name, currentPage-1)"><mat-icon [ngClass]="[currentPage==0?'text-light-1000':'']">chevron_left</mat-icon>Previous</button>
+                <button class="flex items-center" (click)="getPrevNextCommit(branch.name,currentPage+1)">Next<mat-icon>chevron_right</mat-icon></button>
               </div>
             </mat-expansion-panel>
           </mat-accordion>

@@ -23,7 +23,7 @@ export class CollapsedSidebarComponent implements OnInit {
     },
     {
       title: 'Repository',
-      icon: 'widgets',
+      icon: 'inventory_2',
       route: '/repository',
     },
   ];

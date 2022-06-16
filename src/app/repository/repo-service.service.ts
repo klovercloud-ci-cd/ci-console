@@ -93,6 +93,56 @@ export class RepoServiceService {
     return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
   }
 
+  getPrevNextCommit(repoType: string, repoId: string | null, repoUrl: string, branchName:any,page:number , limit: number){
+    console.log("NEXT:",repoType, repoId, repoUrl,page,branchName);
+    HTTP_OPTIONS.params = {
+      repoId,
+      url: repoUrl,
+      branch: branchName,
+      page:page,
+      limit:limit
+    };
+    return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
+    // HTTP_OPTIONS.params = {
+    //   repoId : repoID,
+    //   url: repoUrl,
+    //   branch: branch,
+    // };
+    // const removeBaseFromNextLink = next.replace('/api/v1/','')
+    // return this.http.get(
+    //   BASE_URL+removeBaseFromNextLink,
+    //   HTTP_OPTIONS
+    // );
+  }
+
+  // getNextCommit(next: string, repoID:string | null, repoUrl:string, branch:string) {
+  //   console.log("NEXT:",next)
+  //   HTTP_OPTIONS.params = {
+  //     repoId : repoID,
+  //     url: repoUrl,
+  //     branch: branch,
+  //   };
+  //   const removeBaseFromNextLink = next.replace('/api/v1/','')
+  //   return this.http.get(
+  //     BASE_URL+removeBaseFromNextLink,
+  //     HTTP_OPTIONS
+  //   );
+  // }
+
+  getPrevCommit(prev: string, repoID:string | null, repoUrl:string, branch:string) {
+    console.log("PREV:",prev)
+    HTTP_OPTIONS.params = {
+      repoId : repoID,
+      url: repoUrl,
+      branch: branch,
+    };
+    const removeBaseFromNextLink = prev.replace('/api/v1/','')
+    return this.http.get(
+      BASE_URL+removeBaseFromNextLink,
+      HTTP_OPTIONS
+    );
+  }
+
   getProcess(commitId: any) {
     HTTP_OPTIONS.params = {
       commitId,

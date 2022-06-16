@@ -285,6 +285,7 @@ export class HeaderComponent implements OnInit {
     this.notices= []
     this.next=''
     this.header.getNotification().subscribe((res:any)=>{
+      console.log("Response Notification:",res)
       for (let data of res.data){
         this.notices.push(data)
       }
@@ -300,7 +301,7 @@ export class HeaderComponent implements OnInit {
     })
   }
   nextLog(){
-    console.log('next click')
+    console.log('next click');
     console.log("this.next",this.next)
     if (this.next !==''){
       this.header.getNextLog(this.next).subscribe((res:any)=>{

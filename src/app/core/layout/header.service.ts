@@ -18,7 +18,9 @@ export class HeaderService {
 
   getNotification(){
     HTTP_OPTIONS.params = {
-      scope:'notification'
+      scope:'notification',
+      page:0,
+      limit:2
     };
       return this.http.get(
         `${BASE_URL}processes_events`,
@@ -27,7 +29,6 @@ export class HeaderService {
   }
 
   getNextLog(next: string) {
-    console.log("NEXT:",next)
     const removeBaseFromNextLink = next.replace('/api/v1/','')
     return this.http.get(
       BASE_URL+removeBaseFromNextLink,
