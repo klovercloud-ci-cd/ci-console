@@ -14,7 +14,7 @@ import { OnInit } from '@angular/core';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -30,6 +30,7 @@ import {dump as toYaml, load as fromYaml} from 'js-yaml';
 import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
 import {Location} from "@angular/common";
 import {ApplicationModalComponent} from "../application-modal/application-modal.component";
+import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
 
 
 @Component({
@@ -74,7 +75,9 @@ export class AppEditorModalComponent implements OnInit {
   ];
   constructor(
     private fb: FormBuilder,
+    private allDialog: MatDialog,
     public dialogRef: MatDialogRef<AppEditorModalComponent>,
+    public closeDialogRef: MatDialogRef<ApplicationModalComponent>,
     private userInfo: UserDataService,
     private auth: AuthService,
     private service: AppListService,
@@ -84,6 +87,7 @@ export class AppEditorModalComponent implements OnInit {
     private editorDialogRef: MatDialogRef<EditorModalComponent>,
     private router: Router,
     private location: Location,
+    public resource: ResourcePermissionService
   ) {
     console.log("appUrlDatas: ",appUrlDatas.showOk)
   }
@@ -330,6 +334,9 @@ export class AppEditorModalComponent implements OnInit {
           this.isLoading = false;
           //  console.log('Add Application response', res);
           this.dialogRef.close();
+          this.closeDialogRef.close();
+          this.allDialog.closeAll();
+
           // console.log(this.authService.getUserData(), 'USER');
         },
         (err) => {

@@ -154,5 +154,4 @@ export class AppListService {
     return this.http.get(`${BASE_URL}applications/${appId}`, HTTP_OPTIONS);
   }
 
-
 }

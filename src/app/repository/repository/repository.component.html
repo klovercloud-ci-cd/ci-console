@@ -1,4 +1,4 @@
-<div class="kc-card m-6 p-6">
+<div class="kc-card m-6 p-6 min-h-[80vh]">
   <div class="flex justify-between pb-4">
     <div></div>
     <button *ngIf="resource.authorizedUser('repository','CREATE')" class="kc-button-primary-sm" (click)="openDialog()">
@@ -24,22 +24,11 @@
            class="kc-card shadow-card h-full cursor-pointer p-6"
            [routerLink]="['/repository', repo.id]"
       >
-        <div class="space-y-3 py-3">
+        <div class="space-y-3 py-2">
 
               <div class="flex justify-between items-center">
-                <div class="flex items-center gap-1">
-                  <svg width="28" height="28" viewBox="0 0 28 28"
-                       xmlns="http://www.w3.org/2000/svg">
-                    <mask id="mask0_6135_3620" style="mask-type:alpha" maskUnits="userSpaceOnUse"
-                          x="0" y="0" width="24" height="24">
-                      <rect width="24" height="24" fill="#838699" />
-                    </mask>
-                    <g mask="url(#mask0_6135_3620)">
-                      <path
-                        d="M20 13H4C3.45 13 3 13.45 3 14V20C3 20.55 3.45 21 4 21H20C20.55 21 21 20.55 21 20V14C21 13.45 20.55 13 20 13ZM7 19C5.9 19 5 18.1 5 17C5 15.9 5.9 15 7 15C8.1 15 9 15.9 9 17C9 18.1 8.1 19 7 19ZM20 3H4C3.45 3 3 3.45 3 4V10C3 10.55 3.45 11 4 11H20C20.55 11 21 10.55 21 10V4C21 3.45 20.55 3 20 3ZM7 9C5.9 9 5 8.1 5 7C5 5.9 5.9 5 7 5C8.1 5 9 5.9 9 7C9 8.1 8.1 9 7 9Z"
-                        fill="#838699" />
-                    </g>
-                  </svg>
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-dark-500">widgets</mat-icon>
                   <h1 class="text-md font-semi-bold">
                     Repository- {{ i + 1 }}
                   </h1>
@@ -66,7 +55,7 @@
           <button
             class="flex items-center gap-2 "
           >
-            <mat-icon class="text-dark-500">widgets</mat-icon>
+            <mat-icon class="text-dark-500">apps</mat-icon>
             <span
               class=""
               *ngIf="repo?.applications?.length > 0; else applist"
@@ -86,12 +75,12 @@
   </div>
   <ngx-skeleton-loader
     *ngIf="isLoading"
-    count="6"
+    count="8"
     [theme]="{
           'border-radius': '3px',
-          height: '100px',
+          height: '130px',
           'margin-right': '16px',
-          width: '350px',
+          width: '370px',
           'background-color': '#bbbcc7'
         }"
     animation="progress"

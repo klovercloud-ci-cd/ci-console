@@ -11,13 +11,13 @@
 }
 
 .sidepanel {
-  //@apply fixed z-50 h-full top-0 left-0 bg-dark text-light;
+  @apply bg-light-900 text-dark;
   position: fixed;
   z-index: 1;
   height: 100%;
   top: 0;
   left: 0;
-  background-color: #131d35;
+  //background-color: #131d35;
   transform: translateX(-260px);
   transition: transform 0.5s;
 }

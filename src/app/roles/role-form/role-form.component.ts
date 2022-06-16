@@ -6,6 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RoleService } from '../role.service';
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 @Component({
   selector: 'kc-role-form',
@@ -24,7 +25,8 @@ export class RoleFormComponent implements OnInit {
     private fb: FormBuilder,
     private _roleService: RoleService,
     private snackBar: MatSnackBar,
-    private dialogRef: MatDialogRef<RoleFormComponent>
+    private dialogRef: MatDialogRef<RoleFormComponent>,
+    private snack: SharedSnackbarService,
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +52,9 @@ export class RoleFormComponent implements OnInit {
   get permissionsArray(): FormArray {
     return this.roleForm.get('permissions') as FormArray;
   }
-
+// ,(err)=>{
+//   this.snack.openSnackBar('Error!',err,'sb-error');
+// }
   // Form Submit
   onSubmit(): void {
     const _formData = this.roleForm.getRawValue();
@@ -68,27 +72,22 @@ export class RoleFormComponent implements OnInit {
           // this.snackBar.open('Success! Role created.', 'Close', {
           //   duration: 4000,
           // });
+          this.snack.openSnackBar('Success! Role created.','','sb-success');
           this.dialogRef.close(true);
         },
         (err) => {
-          // this.snackBar.open(err?.error?.message, 'Close', {
-          //   duration: 6000,
-          // });
+          this.snack.openSnackBar('Success! Role created.','','sb-error');
         }
       );
     } else {
       this._roleService.createRole(payload).subscribe(
         (_) => {
-          // this.snackBar.open('Success! Role created.', 'Close', {
-          //   duration: 4000,
-          // });
+          this.snack.openSnackBar('Success! Role created.','','sb-success');
+          this.dialogRef.close(true);
           this.dialogRef.close(true);
         },
         (err) => {
-          console.log('Error:', err?.error);
-          // this.snackBar.open(err?.error?.message, 'Close', {
-          //   duration: 6000,
-          // });
+          this.snack.openSnackBar('',err?.error?.message,'sb-error');
         }
       );
     }

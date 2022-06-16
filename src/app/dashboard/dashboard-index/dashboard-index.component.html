@@ -1,7 +1,8 @@
 
-<div class="mx-7">
+<div class="mx-7" >
+  <span class="hidden bg-[#EC7063] bg-[#34495E] bg-[#EC7063] bg-[#ff6e85]"></span>
+
   <div
-    *ngIf="!isLoading"
     class="w-full h-full pt-6 pb-3"
     gdColumns="1fr 1fr 1fr 1fr"
     gdColumns.md="1fr 1fr 1fr"
@@ -10,7 +11,7 @@
     gdColumns.lt-xs="1fr"
     gdGap="10px"
   >
-    <div class="chart-card ">
+    <div class="chart-card " *ngIf="resource.authorizedUser('company','READ') && hasWebhook">
       <div class="p-5 flex items-center">
         <h4>Total Webhooks:</h4>
         <h1 class="text-2xl pl-2 font-bold">{{totalWebhook}}</h1>
@@ -32,9 +33,9 @@
         </div>
       </div>
     </div>
-    <div class="chart-card ">
+    <div class="chart-card " *ngIf="resource.authorizedUser('process','READ') && hasProcess">
       <div class="p-5 flex items-center">
-        <h4>Last 10 days Processes status:</h4>
+        <h4>Processing Status (last 10 days) :</h4>
         <h1 class="text-2xl pl-2 font-bold">{{totalPipeline}}</h1>
       </div>
       <div class="flex justify-center items-center">
@@ -58,7 +59,7 @@
       </div>
     </div>
     <div class="chart-card " *ngFor="let agent of agents; let i = index;">
-      <div *ngIf="buildAgentsChartData[i]; else chartLoader">
+      <div *ngIf="resource.authorizedUser('process','READ') && buildAgentsChartData[i]; else chartLoader">
       <div class="p-5 flex items-center justify-between">
         <h4 class="flex items-center">Agents:
           <h1 class="text-xl pl-2 font-semibold">{{agent.agent_name | titlecase}}</h1>
@@ -68,7 +69,6 @@
         </h4>
       </div>
       <div class="flex justify-center items-center">
-<!--        <span class="hidden">{{buildAgentsChartData[i][0]}}</span>-->
           <div class="chart-wrapper h-64 w-64">
             <canvas baseChart height="250"
                     [datasets]="buildAgentsChartData[i]"
@@ -97,7 +97,8 @@
         ></ngx-skeleton-loader>
       </ng-template>
     </div>
-    <div class="chart-card ">
+    <div class="chart-card "  *ngIf="resource.authorizedUser('user','READ') && hasUser">
+
       <div class="p-5 flex items-center">
         <h4>Total Users:</h4>
         <h1 class="text-2xl pl-2 font-bold">{{totalUsers}}</h1>
@@ -121,19 +122,19 @@
     </div>
   </div>
 
-      <ngx-skeleton-loader
-        *ngIf="isLoading"
-        count="4"
-        [theme]="{
-        'justify-content':'between',
-          'border-radius': '4px',
-          height: '300px',
-          'margin-right': '16px',
-          width: '380px',
-          'margin-top':'20px',
-          'background-color': '#bbbcc7'
-        }"
-        animation="progress">
+<!--      <ngx-skeleton-loader-->
+<!--        *ngIf="isLoading"-->
+<!--        count="8"-->
+<!--        [theme]="{-->
+<!--        'justify-content':'between',-->
+<!--          'border-radius': '4px',-->
+<!--          height: '300px',-->
+<!--          'margin-right': '16px',-->
+<!--          width: '380px',-->
+<!--          'margin-top':'20px',-->
+<!--          'background-color': '#bbbcc7'-->
+<!--        }"-->
+<!--        animation="progress">-->
 
-      </ngx-skeleton-loader>
+<!--      </ngx-skeleton-loader>-->
 </div>

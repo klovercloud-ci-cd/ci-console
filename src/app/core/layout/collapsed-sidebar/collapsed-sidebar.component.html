@@ -34,6 +34,7 @@
       matRipple
     >
       <a
+        (click)="openNav()"
         [routerLink]="[node.url]"
         [routerLinkActive]="'active'"
         class="dropdown__link flex items-center"

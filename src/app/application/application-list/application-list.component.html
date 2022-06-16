@@ -1,4 +1,5 @@
 <div class="p-page">
+
   <div>
     <div class="bg-light overflow-x-auto" *ngIf="resource.authorizedUser('application','READ'); else notAuthorized">
       <div class=" py-5">
@@ -13,8 +14,7 @@
             </button>
         </div>
       </div>
-      <div class="page__content">
-
+      <div class="page__content"  *ngIf="!isLoading && hasData; else noData">
         <table
           mat-table
           [dataSource]="dataSource"
@@ -98,6 +98,9 @@
           ></tr>
         </table>
       </div>
+      <ng-template #noData>
+        <h1 *ngIf="!isLoading && !hasData" class="flex py-[5%] justify-center items-center text-title">No Data Found</h1>
+      </ng-template>
     </div>
     <ng-template #notAuthorized>
       <h1 *ngIf="!isLoading" class="flex py-[5%] justify-center items-center text-title">Not authorized</h1>
@@ -117,107 +120,3 @@
   ></ngx-skeleton-loader>
 
 </div>
-
-
-
-
-
-<!--<div>-->
-<!--  <div class="w-full overflow-x-auto mx-auto">-->
-<!--    <div class="mx-2 md:mx-7 my-5 bg-light">-->
-<!--      <div-->
-<!--        class="search-container w-full flex items-center justify-between  py-5"-->
-<!--      >-->
-<!--        <div>-->
-<!--          <h1 class="text-base font-semibold tracking-wide">-->
-<!--            Application List-->
-<!--          </h1>-->
-<!--        </div>-->
-<!--        <div class="flex items-center gap-3">-->
-<!--          <button class="kc-button-primary-sm" (click)="openDialog()">-->
-<!--              Add New-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="resp">-->
-<!--        <table-->
-<!--          mat-table-->
-<!--          [dataSource]="dataSource"-->
-<!--          class="mat-elevation-z8 bg-transparent overflow-x-scroll md:overflow-x-hidden"-->
-<!--        >-->
-<!--          <ng-container matColumnDef="name">-->
-<!--            <th mat-header-cell *matHeaderCellDef width="15%">Name</th>-->
-<!--            <td mat-cell *matCellDef="let element" class="kc-table">-->
-<!--              &lt;!&ndash; [routerLink]="['application/', element._metadata.id]" &ndash;&gt;-->
-<!--              <div class="cursor-pointer" (click)="someRoute(element)">-->
-<!--                {{ element._metadata.name }}-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </ng-container>-->
-
-<!--          <ng-container matColumnDef="label">-->
-<!--            <th mat-header-cell *matHeaderCellDef width="30%">Labels</th>-->
-<!--            <td mat-cell *matCellDef="let element">-->
-<!--              &lt;!&ndash; {{ element._metadata.labels.CompanyId }} &ndash;&gt;-->
-<!--              <div *ngIf="element._metadata.labels != null; else noLabels">-->
-<!--                <div *ngFor="let key of objectKeys(element._metadata.labels)">-->
-<!--                  {{ key + " : " + element._metadata.labels[key] }}-->
-<!--                </div>-->
-<!--              </div>-->
-
-<!--              <ng-template #noLabels>-->
-<!--                <span>N/A</span>-->
-<!--              </ng-template>-->
-<!--            </td>-->
-<!--          </ng-container>-->
-
-<!--          <ng-container matColumnDef="webhook">-->
-<!--            <th mat-header-cell *matHeaderCellDef width="15%">Webhook</th>-->
-<!--            <td mat-cell *matCellDef="let element">-->
-<!--              <div class="w-28 flex justify-between">-->
-<!--                <span>{{-->
-<!--                  element._metadata.is_webhook_enabled ? "enabled" : "disabled"-->
-<!--                }}</span>-->
-
-<!--                <mat-slide-toggle-->
-<!--                  (change)="webUpdate(element)"-->
-<!--                  class="example-margin"-->
-<!--                  [(ngModel)]="element._metadata.is_webhook_enabled"-->
-<!--                  [checked]="element._metadata.is_webhook_enabled"-->
-<!--                >-->
-<!--                </mat-slide-toggle>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </ng-container>-->
-<!--          <ng-container matColumnDef="url">-->
-<!--            <th mat-header-cell *matHeaderCellDef width="30%">URL</th>-->
-<!--            <td mat-cell *matCellDef="let element">-->
-<!--              <a [href]="element.url">{{ element.url }}</a>-->
-<!--            </td>-->
-<!--          </ng-container>-->
-<!--          <ng-container matColumnDef="action">-->
-<!--            <th mat-header-cell *matHeaderCellDef width="10%">Action</th>-->
-<!--            <td mat-cell *matCellDef="let element">-->
-<!--              <button mat-button [matMenuTriggerFor]="menu"><mat-icon>expand_more</mat-icon></button>-->
-<!--              <mat-menu #menu="matMenu" classList="customize">-->
-<!--                <button mat-menu-item (click)="openAppEditor()"><span><mat-icon class="cursor-pointer hover:text-green-500">preview</mat-icon></span>Preview</button>-->
-<!--                <button mat-menu-item (click)="deleteApp(element)"><span ><mat-icon class="cursor-pointer hover:text-red-500">delete</mat-icon>Delete</span></button>-->
-<!--              </mat-menu>-->
-<!--            </td>-->
-<!--          </ng-container>-->
-
-<!--          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
-<!--          <tr-->
-<!--            mat-row-->
-<!--            *matRowDef="let row; columns: displayedColumns"-->
-<!--            class="hover:bg-light-600 transition duration-100"-->
-<!--          ></tr>-->
-<!--        </table>-->
-<!--      </div>-->
-
-
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-

@@ -49,22 +49,21 @@ export class CollapsedSidebarComponent implements OnInit {
 
   hasChild = (_: number, node: NavItemNode) => node.expandable;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {    this.navItems = [
+    {
+      name: 'Settings',
+      icon: 'settings',
+      isExpanded: true,
+      children: [
+        { name: 'User', icon: 'people', url: '/users' },
+        { name: 'Role', icon: 'manage_accounts', url: '/roles' },
+      ],
+    },
+  ];
+    this.dataSource.data = this.navItems;
+  }
 
   openNav() {
-    this.navItems = [
-      {
-        name: 'Settings',
-        icon: 'settings',
-        isExpanded: true,
-        children: [
-          { name: 'User', icon: 'people', url: '/users' },
-          { name: 'Role', icon: 'supervisor_account', url: '/roles' },
-        ],
-      },
-    ];
-    this.dataSource.data = this.navItems;
-
     setTimeout(() => {
       this.ss.emitData();
     }, 400);

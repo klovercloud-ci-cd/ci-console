@@ -61,7 +61,7 @@ export class SidebarComponent implements OnInit {
         isExpanded: true,
         children: [
           { name: 'User', icon: 'people', url: '/users' },
-          { name: 'Role', icon: 'supervisor_account', url: '/roles' },
+          { name: 'Role', icon: 'manage_accounts', url: '/roles' },
         ],
       },
     ];

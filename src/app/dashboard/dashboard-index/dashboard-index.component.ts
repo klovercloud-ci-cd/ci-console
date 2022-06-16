@@ -15,6 +15,7 @@ import {ResourcePermissionService} from "../../shared/services/resource-permissi
 import {DashboardService} from "../dashboard.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {UserDataService} from "../../shared/services/user-data.service";
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 // import {Chart} from 'chartjs';
 
@@ -25,7 +26,11 @@ import {UserDataService} from "../../shared/services/user-data.service";
 })
 export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   @ViewChild('textElement') textElement: ElementRef | any;
-  isLoading:boolean=false;
+  hasData:boolean=false;
+  hasUser:boolean=false;
+  hasWebhook:boolean=false;
+  hasProcess:boolean=false;
+  hasPods:boolean=false;
   totalWebhook:Number=0;
   totalPipeline:Number=0;
   totalPods:Number=0;
@@ -63,7 +68,8 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     private userInfo: UserDataService,
     private renderer: Renderer2,
     private cdref: ChangeDetectorRef,
-    private resource: ResourcePermissionService
+    public resource: ResourcePermissionService,
+    private snack: SharedSnackbarService,
   ) {
     this._toolbarService.changeData({ title: 'Dashboard' });
 
@@ -102,7 +108,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   ];
   // public agentsChartColors: Color[][] = [[{ backgroundColor: ['#7ade9a', '#ff3b5a','#428df9'] }],[{ backgroundColor: ['#7ade9a', '#ff3b5a'] }]];
   // Running","Succeeded","Pending","ImagePullBackOff","CrashLoopBackOff","Terminated","Unknown","Error"
-  podsStatusWiseColor:any=['#7ade9a', '#428df9','#f6b44d','#ff6e85', '#428df9','#3b3d48','#BFC9CA']
+  podsStatusWiseColor:any=['#74aafa', '#a3e8b9','#f8c87e','#ff6e85', '#EC7063','#34495E','#BFC9CA']
   public agentsChartColors: Color[] = [{ backgroundColor: this.podsStatusWiseColor}];
   // public agentsChartColor: Color[] = [];
   // public agentChartColors: Color[] = [ { backgroundColor: ['#428df9', '#7ade9a','#428df9',"#ff"] }];
@@ -180,7 +186,13 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   // agentsInfo: Agent[];
 
   async ngOnInit(): Promise<void> {
-    this.isLoading=true;
+
+    // hasUser
+    // hasWebhook
+    // hasProcess
+    // hasPods
+
+    // this.isLoading=true;
     this.getDetails();
     // this.initLabelWiseColor()
     this._dashboardService.getAllAgents().subscribe((res)=>{
@@ -192,7 +204,9 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       for(let item=0; item<res.data.length; item++){
 
         this._dashboardService.getPodsByAgent(res.data[item]["agent_name"]).subscribe((response)=>{
-          console.log("--------response:",response)
+
+          this.hasData = true;
+          console.log("--------GetPodsByAgent response:",response);
           this.labelAndColor=new Map<string, string>();
           this.label=["Running","Succeeded","Pending","ImagePullBackOff","CrashLoopBackOff","Terminated","Unknown","Error"]
           this.podCount=[0,0,0,0,0,0,0]
@@ -247,13 +261,16 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
             stack: '1'
           }
 
-          this.isLoading = false;
+        },(err)=>{
+          this.snack.openSnackBar('Error!',err,'sb-error')
         })}
       this.showPodsStatus=true
       console.log("agentsChartColors",this.agentsChartColors)
       console.log("agentsChartLabels",this.agentsChartLabels)
       console.log("LabelWisePodCounts",this.LabelWisePodCounts)
       console.log("agentData",this.buildAgentsChartData)
+    },(err)=>{
+      this.snack.openSnackBar('Error!',err,'sb-error')
     })
 
   }
@@ -276,11 +293,15 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       // console.log("User Info:",res.data.metadata.company_id)
       this._dashboardService.getAllWebhook(res.data.metadata.company_id).subscribe((res)=>{
         console.log("WebhookDashboard: ",res.data);
+        this.hasData = true;
+        this.hasWebhook = true;
         this.webhook = res;
         this.enabledWebhook = this.webhook.data.application.webhook.enabled;
         this.disabledWebhook = this.webhook.data.application.webhook.disabled;
         this.totalWebhook = this.enabledWebhook+this.disabledWebhook;
         this.buildWebhookChartData[0].data = [this.enabledWebhook, this.disabledWebhook];
+      },(err)=>{
+        this.snack.openSnackBar('Error!',err,'sb-error');
       })
     })
 
@@ -291,6 +312,8 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
     this._dashboardService.getAllProcesses().subscribe((res)=>{
       console.log("Processes Response: ",res.data);
+      this.hasData = true;
+      this.hasProcess = true;
       this.pipeline = res;
       this.pipelineCompleted = this.pipeline.data.pipeline.completed;
       this.pipelineFailed = this.pipeline.data.pipeline.failed;
@@ -301,6 +324,8 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
       this.buildpipelineChartData[0].data = [this.pipelineCompleted, this.pipelineFailed, this.pipelineRunning, this.pipelinePaused, this.pipelineNonInitialized];
 
+    },(err)=>{
+      this.snack.openSnackBar('Error!',err,'sb-error')
     })
 
     // <------------Agents Section------------>
@@ -351,7 +376,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     //
     //   }
     // }
-    console.log(this.agents)
+    // console.log(this.agents)
     let infoData;
     // this.agents.data.agent.map((_items:any, index:any)=>{
     //   let totalPods;
@@ -398,12 +423,17 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
 
     this._dashboardService.getAllUsers().subscribe((res) => {
+      console.log("User Data: ",res);
+      this.hasUser = true;
       this.users = res;
       this.usersActive = this.users?.data?.users?.active;
       this.usersInactive = this.users?.data?.users?.inactive;
       this.totalUsers = this.usersActive + this.usersInactive;
       this.buildUsersChartData[0].data = [this.usersActive, this.usersInactive];
-    });
+      },(err)=>{
+        console.log("errerr",err)
+        }
+      );
 
 
   }

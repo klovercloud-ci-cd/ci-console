@@ -6,6 +6,7 @@ import { RoleService } from 'src/app/roles/role.service';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { ConfirmPasswordMatch } from 'src/app/shared/validators/confirmPassword.validator';
 import { UserService } from '../user.service';
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 @Component({
   selector: 'kc-user-form',
@@ -34,7 +35,8 @@ export class UserFormComponent implements OnInit {
     private route: ActivatedRoute,
     private _toolbarService: ToolbarService,
     private router: Router,
-    private _roleService: RoleService
+    private _roleService: RoleService,
+    private snack: SharedSnackbarService,
   ) {
     this.userId = route.snapshot.params['id'];
   }
@@ -155,16 +157,12 @@ export class UserFormComponent implements OnInit {
     } else {
       this._userService.createUser(_formData).subscribe(
         (_) => {
-          // this.snackBar.open('Success! User created.', 'Close', {
-          //   duration: 10000,
-          // });
+          this.snack.openSnackBar('Success! Role created.','','sb-success');
           this.router.navigate(['/users']);
         },
         (err) => {
           this.isSubmitting = false;
-          // this.snackBar.open(err?.error?.message, 'Close', {
-          //   duration: 10000,
-          // });
+          this.snack.openSnackBar('',err?.error?.message,'sb-error');
         }
       );
     }

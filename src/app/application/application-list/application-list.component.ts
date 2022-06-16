@@ -49,10 +49,12 @@ export class ApplicationListComponent implements OnInit {
   Object = Object;
 
   array: any;
+  hasData: boolean = false;
 
   @ViewChild('paginator') paginator!: MatPaginator;
 
   @ViewChild(MatSort) matSort!: MatSort;
+
 
   constructor(
     private service: AppListService,
@@ -74,6 +76,7 @@ export class ApplicationListComponent implements OnInit {
 
     this.service.refreshNeeded$.subscribe(() => {
       this.getAppList();
+      // this.dialog.closeAll();
     });
 
     this.getAppList();
@@ -86,6 +89,10 @@ export class ApplicationListComponent implements OnInit {
       this.service
         .getRepositoryInfo(this.companyID, this.repositoryId)
         .subscribe((response: any) => {
+          console.log("RRRresponse: ",response.data.applications.length)
+          if(response.data.applications.length){
+            this.hasData = true;
+          }
           this.array = response;
           this.dataSource = new MatTableDataSource(response.data.applications);
           this.dataSource.paginator = this.paginator;
@@ -93,6 +100,10 @@ export class ApplicationListComponent implements OnInit {
           this.isLoading = false;
           console.log('RepoInfo: ', response.data.type);
           this.repoType = response.data.type;
+        },(err)=>{
+          this.hasData = false;
+          this.isLoading = false;
+          console.log('No data found!')
         });
     });
   }
@@ -141,8 +152,9 @@ export class ApplicationListComponent implements OnInit {
   }
 
   openAppEditor(element:any) {
+    console.log("repositoryId",this.repositoryId)
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '100%';
     dialogConfig.maxWidth = '600px'
@@ -155,7 +167,7 @@ export class ApplicationListComponent implements OnInit {
 
   openDialog() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '100%';
     dialogConfig.maxWidth = '600px';

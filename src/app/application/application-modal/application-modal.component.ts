@@ -18,6 +18,7 @@ import {dump as toYaml, load as fromYaml} from 'js-yaml';
 import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
 import {Location} from "@angular/common";
 import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
+import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
 
 
 @Component({
@@ -35,370 +36,370 @@ export class ApplicationModalComponent implements OnInit {
   arrayData:any = [];
   totalError:any=0;
   hasPipeline:boolean = false;
-
-  appStep: any = {
-    "_metadata":null,
-    "data":{
-       "name":"test",
-       "steps":[
-          {
-             "name":{
-                "accepts":"*",
-                "message":"",
-                "name":"name",
-                "valid":"true",
-                "value":"build"
-             },
-             "type":{
-                "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-                "message":"",
-                "name":"type",
-                "valid":"true",
-                "value":"BUILD"
-             },
-             "trigger":{
-                "accepts":"AUTO, MANUAL",
-                "message":"",
-                "name":"trigger",
-                "valid":"true",
-                "value":"AUTO"
-             },
-             "params":[
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"service_account",
-                   "valid":"true",
-                   "value":"test-sa"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"storage",
-                   "valid":"true",
-                   "value":"500Mi"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"access_mode",
-                   "valid":"false",
-                   "value":"ReadWriteOnce"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"args",
-                   "valid":"false",
-                   "value":"key3:value1,key4:value2"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"args_from_configmaps",
-                   "valid":"true",
-                   "value":"tekton/cm-test"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"images",
-                   "valid":"true",
-                   "value":"shabrul2451/test-dev,shabrul2451/test-pro"
-                },
-                {
-                   "accepts":"git",
-                   "message":"",
-                   "name":"repository_type",
-                   "valid":"true",
-                   "value":"git"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"revision",
-                   "valid":"true",
-                   "value":"master"
-                }
-             ],
-             "next":[
-                {
-                   "accepts":"jenkinsJob, build, interstep, deployDev",
-                   "message":"",
-                   "name":"next",
-                   "valid":"true",
-                   "value":"interstep"
-                },
-               {
-                 "accepts":"jenkinsJob, build, interstep, deployDev",
-                 "message":"",
-                 "name":"next",
-                 "valid":"true",
-                 "value":"interstep"
-               },
-               {
-                 "accepts":"jenkinsJob, build, interstep, deployDev",
-                 "message":"",
-                 "name":"next",
-                 "valid":"true",
-                 "value":"interstep"
-               }
-             ]
-          },
-          {
-             "name":{
-                "accepts":"step-1,step-2,step-3",
-                "message":"",
-                "name":"name",
-                "valid":"false",
-                "value":"interstep"
-             },
-             "type":{
-                "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-                "message":"",
-                "name":"type",
-                "valid":"true",
-                "value":"INTERMEDIARY"
-             },
-             "trigger":{
-                "accepts":"AUTO, MANUAL",
-                "message":"",
-                "name":"trigger",
-                "valid":"true",
-                "value":"AUTO"
-             },
-             "params":[
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"command",
-                   "valid":"true",
-                   "value":"echo"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"command_args",
-                   "valid":"true",
-                   "value":"Hello World"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"envs",
-                   "valid":"true",
-                   "value":"key3:value1,key4:value2"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"envs_from_configmaps",
-                   "valid":"true",
-                   "value":"tekton/cm-test"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"envs_from_secrets",
-                   "valid":"true",
-                   "value":"tekton/cm-test"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"images",
-                   "valid":"true",
-                   "value":"ubuntu"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"revision",
-                   "valid":"true",
-                   "value":"latest"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"service_account",
-                   "valid":"true",
-                   "value":"test-sa"
-                }
-             ],
-             "next":[
-                {
-                   "accepts":"deployDev, jenkinsJob, build, interstep",
-                   "message":"",
-                   "name":"next",
-                   "valid":"false",
-                   "value":"deployDev"
-                },
-                {
-                  "accepts":"deployDev, jenkinsJob, build, interstep",
-                  "message":"",
-                  "name":"next",
-                  "valid":"false",
-                  "value":"deployDev"
-               }
-             ]
-          },
-          {
-             "name":{
-                "accepts":"*",
-                "message":"",
-                "name":"name",
-                "valid":"true",
-                "value":"deployDev"
-             },
-             "type":{
-                "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-                "message":"",
-                "name":"type",
-                "valid":"true",
-                "value":"DEPLOY"
-             },
-             "trigger":{
-                "accepts":"AUTO, MANUAL",
-                "message":"",
-                "name":"trigger",
-                "valid":"true",
-                "value":"AUTO"
-             },
-             "params":[
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"name",
-                   "valid":"true",
-                   "value":"ubuntu"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"namespace",
-                   "valid":"true",
-                   "value":"default"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"revision",
-                   "valid":"true",
-                   "value":"master"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"type",
-                   "valid":"true",
-                   "value":"deployment"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"agent",
-                   "valid":"true",
-                   "value":"local_agent"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"env",
-                   "valid":"true",
-                   "value":"dev"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"images",
-                   "valid":"true",
-                   "value":"shabrul2451/test-dev"
-                }
-             ],
-             "next":[
-                {
-                   "accepts":"build, interstep, deployDev, jenkinsJob",
-                   "message":"",
-                   "name":"next",
-                   "valid":"true",
-                   "value":"jenkinsJob"
-                }
-             ]
-          },
-          {
-             "name":{
-                "accepts":"*",
-                "message":"",
-                "name":"name",
-                "valid":"true",
-                "value":"jenkinsJob"
-             },
-             "type":{
-                "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-                "message":"",
-                "name":"type",
-                "valid":"true",
-                "value":"JENKINS_JOB"
-             },
-             "trigger":{
-                "accepts":"AUTO, MANUAL",
-                "message":"",
-                "name":"trigger",
-                "valid":"true",
-                "value":"AUTO"
-             },
-             "params":[
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"job",
-                   "valid":"true",
-                   "value":"new"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"params",
-                   "valid":"true",
-                   "value":"id:123,verbosity:high"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"secret",
-                   "valid":"true",
-                   "value":"jenkins-credentials"
-                },
-                {
-                   "accepts":"*",
-                   "message":"",
-                   "name":"url",
-                   "valid":"true",
-                   "value":"http://jenkins.default.svc:8080"
-                }
-             ],
-             "next":[
-               {
-                  "accepts":"build, interstep, deployDev, jenkinsJob",
-                  "message":"",
-                  "name":"next",
-                  "valid":"true",
-                  "value":"jenkinsJob"
-               },
-               {
-                  "accepts":"build, interstep, deployDev, jenkinsJob",
-                  "message":"",
-                  "name":"next",
-                  "valid":"true",
-                  "value":"jenkinsJob"
-               }
-            ]
-          },
-       ]
-    },
-    "status":"success",
-    "message":"Successful"
- };
+  appStep:any;
+  // appStep: any = {
+  //   "_metadata":null,
+  //   "data":{
+  //     "name":"test",
+  //     "steps":[
+  //       {
+  //         "name":{
+  //           "accepts":"*",
+  //           "message":"",
+  //           "name":"name",
+  //           "valid":"false",
+  //           "value":"build"
+  //         },
+  //         "type":{
+  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
+  //           "message":"",
+  //           "name":"type",
+  //           "valid":"true",
+  //           "value":"BUILD"
+  //         },
+  //         "trigger":{
+  //           "accepts":"AUTO, MANUAL",
+  //           "message":"",
+  //           "name":"trigger",
+  //           "valid":"true",
+  //           "value":"AUTO"
+  //         },
+  //         "params":[
+  //           {
+  //             "accepts":" SA, Sa, Service Account",
+  //             "message":" Service account not allowed!",
+  //             "name":"service_account",
+  //             "valid":"true",
+  //             "value":"test-sa"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"storage",
+  //             "valid":"true",
+  //             "value":"500Mi"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"access_mode",
+  //             "valid":"true",
+  //             "value":"ReadWriteOnce"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"args",
+  //             "valid":"true",
+  //             "value":"key3:value1,key4:value2"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"args_from_configmaps",
+  //             "valid":"true",
+  //             "value":"tekton/cm-test"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"images",
+  //             "valid":"true",
+  //             "value":"shabrul2451/test-dev,shabrul2451/test-pro"
+  //           },
+  //           {
+  //             "accepts":"git",
+  //             "message":"",
+  //             "name":"repository_type",
+  //             "valid":"true",
+  //             "value":"git"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"revision",
+  //             "valid":"true",
+  //             "value":"master"
+  //           }
+  //         ],
+  //         "next":[
+  //           {
+  //             "accepts":"jenkinsJob, build, interstep, deployDev",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"intersteps"
+  //           },
+  //           {
+  //             "accepts":"jenkinsJob, build, interstep, deployDev",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"interstep"
+  //           },
+  //           {
+  //             "accepts":"jenkinsJob, build, interstep, deployDev",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"interstep"
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "name":{
+  //           "accepts":"step-1,step-2,step-3",
+  //           "message":"",
+  //           "name":"name",
+  //           "valid":"true",
+  //           "value":"interstep"
+  //         },
+  //         "type":{
+  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
+  //           "message":"",
+  //           "name":"type",
+  //           "valid":"true",
+  //           "value":"INTERMEDIARY"
+  //         },
+  //         "trigger":{
+  //           "accepts":"AUTO, MANUAL",
+  //           "message":"",
+  //           "name":"trigger",
+  //           "valid":"true",
+  //           "value":"AUTO"
+  //         },
+  //         "params":[
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"command",
+  //             "valid":"true",
+  //             "value":"echo"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"command_args",
+  //             "valid":"true",
+  //             "value":"Hello World"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"envs",
+  //             "valid":"true",
+  //             "value":"key3:value1,key4:value2"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"envs_from_configmaps",
+  //             "valid":"true",
+  //             "value":"tekton/cm-test"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"envs_from_secrets",
+  //             "valid":"true",
+  //             "value":"tekton/cm-test"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"images",
+  //             "valid":"true",
+  //             "value":"ubuntu"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"revision",
+  //             "valid":"true",
+  //             "value":"latest"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"service_account",
+  //             "valid":"true",
+  //             "value":"test-sa"
+  //           }
+  //         ],
+  //         "next":[
+  //           {
+  //             "accepts":"deployDev, jenkinsJob, build, interstep",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"deployDev"
+  //           },
+  //           {
+  //             "accepts":"deployDev, jenkinsJob, build, interstep",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"deployDev"
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "name":{
+  //           "accepts":"*",
+  //           "message":"",
+  //           "name":"name",
+  //           "valid":"true",
+  //           "value":"deployDev"
+  //         },
+  //         "type":{
+  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
+  //           "message":"",
+  //           "name":"type",
+  //           "valid":"true",
+  //           "value":"DEPLOY"
+  //         },
+  //         "trigger":{
+  //           "accepts":"AUTO, MANUAL",
+  //           "message":"",
+  //           "name":"trigger",
+  //           "valid":"true",
+  //           "value":"AUTO"
+  //         },
+  //         "params":[
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"name",
+  //             "valid":"true",
+  //             "value":"ubuntu"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"namespace",
+  //             "valid":"true",
+  //             "value":"default"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"revision",
+  //             "valid":"true",
+  //             "value":"master"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"type",
+  //             "valid":"true",
+  //             "value":"deployment"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"agent",
+  //             "valid":"true",
+  //             "value":"local_agent"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"env",
+  //             "valid":"true",
+  //             "value":"dev"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"images",
+  //             "valid":"true",
+  //             "value":"shabrul2451/test-dev"
+  //           }
+  //         ],
+  //         "next":[
+  //           {
+  //             "accepts":"build, interstep, deployDev, jenkinsJob",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"jenkinsJob"
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "name":{
+  //           "accepts":"*",
+  //           "message":"",
+  //           "name":"name",
+  //           "valid":"true",
+  //           "value":"jenkinsJob"
+  //         },
+  //         "type":{
+  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
+  //           "message":"",
+  //           "name":"type",
+  //           "valid":"true",
+  //           "value":"JENKINS_JOB"
+  //         },
+  //         "trigger":{
+  //           "accepts":"AUTO, MANUAL",
+  //           "message":"",
+  //           "name":"trigger",
+  //           "valid":"true",
+  //           "value":"AUTO"
+  //         },
+  //         "params":[
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"job",
+  //             "valid":"true",
+  //             "value":"new"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"params",
+  //             "valid":"true",
+  //             "value":"id:123,verbosity:high"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"secret",
+  //             "valid":"true",
+  //             "value":"jenkins-credentials"
+  //           },
+  //           {
+  //             "accepts":"*",
+  //             "message":"",
+  //             "name":"url",
+  //             "valid":"true",
+  //             "value":"http://jenkins.default.svc:8080"
+  //           }
+  //         ],
+  //         "next":[
+  //           {
+  //             "accepts":"build, interstep, deployDev, jenkinsJob",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"jenkinsJob"
+  //           },
+  //           {
+  //             "accepts":"build, interstep, deployDev, jenkinsJob",
+  //             "message":"",
+  //             "name":"next",
+  //             "valid":"true",
+  //             "value":"jenkinsJob"
+  //           }
+  //         ]
+  //       },
+  //     ]
+  //   },
+  //   "status":"success",
+  //   "message":"Successful"
+  // };
   stepAsMap = new Map()
   userPersonalInfo: any;
   user: any = this.auth.getUserData();
@@ -436,14 +437,11 @@ export class ApplicationModalComponent implements OnInit {
     private editorDialogRef: MatDialogRef<EditorModalComponent>,
     private router: Router,
     private location: Location,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public resource: ResourcePermissionService,
   ) {}
 
   ngOnInit(): void {
-    // @ts-ignore
-    if (this.appStep.data.steps.length>0){
-      this.hasPipeline=true;
-    }
 
    // <----------Fetching User Info---------->
     this.repositoryId = this.data.repositoryId;
@@ -451,18 +449,6 @@ export class ApplicationModalComponent implements OnInit {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
     });
-
-    this.validity = this.checkValidity(this.appStep.data.steps);
-
-    this.getDataKeyValue(this.appStep.data.steps);
-
-    this.getTotalError(this.appStep.data.steps);
-
-    //  let output = this.appStep?.data?.steps.filter((items:any) => this.validity.find((items2:any) => (items2?.name?.value == items?.name?.value)));
-    //  console.log("output: ",this.validity, output);
-    // this.editorDialogRef.afterClosed().subscribe((data) => {
-    //   console.log("Editor Model Data", data)
-    // })
   }
 
 
@@ -602,7 +588,6 @@ export class ApplicationModalComponent implements OnInit {
 
   addApplicationFormData() {
     this.isLoading = true;
-
     const data = {
       applications: [
         {
@@ -621,6 +606,7 @@ export class ApplicationModalComponent implements OnInit {
           this.isLoading = false;
          //  console.log('Add Application response', res);
           this.dialogRef.close();
+
           // console.log(this.authService.getUserData(), 'USER');
         },
         (err) => {
@@ -678,9 +664,9 @@ export class ApplicationModalComponent implements OnInit {
   }
 
   openAppEditor() {
-    console.log("applicationURL:" ,this.addApplication.value.url);
+    console.log("applicationURL:" ,this.repositoryId);
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '100%';
     dialogConfig.maxWidth = '700px'
@@ -691,5 +677,6 @@ export class ApplicationModalComponent implements OnInit {
       showOk:true,
     };
     this.dialog.open(AppEditorModalComponent, dialogConfig);
+    this.dialogRef.close();
   }
 }

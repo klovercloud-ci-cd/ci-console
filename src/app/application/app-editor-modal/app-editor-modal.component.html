@@ -33,7 +33,7 @@
   </mat-expansion-panel>
 </mat-accordion>
   <div class="absolute top-2 right-2 cursor-pointer" *ngIf="hasPipeline" (click)="closeAppModal()">
-    <mat-icon>highlight_off</mat-icon>
+    <mat-icon>close</mat-icon>
   </div>
   <div *ngIf="appUrlDatas?.showOk">
     <p *ngIf="hasPipeline && totalError>0" class="text-yellow-600 text-right py-3">*Please edit your pipeline and add the application</p>
