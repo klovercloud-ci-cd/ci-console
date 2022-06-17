@@ -429,15 +429,16 @@ export class PipelineGraphComponent
 
   getPipeline(processId: any) {
     this.repo.getPipeLine(processId).subscribe((res: any) => {
-      console.log(res,'pipeline data----')
+      this.isLoading.graph = false;
       if (res.data == null) {
-        this.tostr.warning(`No commit Found For this BRANCH`, 'Commits Empty', {
+        this.error.pipeline= true
+        /*this.tostr.warning(`No commit Found For this BRANCH`, 'Commits Empty', {
           enableHtml: true,
           positionClass: 'toast-top-center',
           tapToDismiss: false,
-        });
+        });*/
       } else {
-        this.isLoading.graph = false;
+        this.error.pipeline= false
         setTimeout(() => {
           this.pipelineStep = res.data.steps;
           this.pipeline = res;
