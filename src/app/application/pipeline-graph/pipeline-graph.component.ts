@@ -19,6 +19,7 @@ import { PipelineService } from '../pipeline.service';
 import { skip } from 'rxjs';
 import { WsService } from '../../shared/services/ws.service';
 import { ToastrService } from 'ngx-toastr';
+import {ProcessLifecycleEventService} from "../process-lifecycle-event.service";
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -120,7 +121,8 @@ export class PipelineGraphComponent
     private pipes: PipelineService,
     private navigateRoute: Router,
     private wsService: WsService,
-    private tostr: ToastrService
+    private tostr: ToastrService,
+    private processLifecycleEventService: ProcessLifecycleEventService,
   ) {
     // this._toolbarService.changeData({ title: this.urlParams.title });
     this.route.queryParams.subscribe(res=>{
@@ -671,6 +673,7 @@ export class PipelineGraphComponent
             name: step.name,
             params: step.params,
             status: step.status,
+            type: step.type,
           });
         }
       }
@@ -757,6 +760,16 @@ export class PipelineGraphComponent
     });
     this.stepFootMark(processId, stepName, this.nodeDetails.status);
 
+  }
+
+  trigger(step: any) {
+    // this.logOpen = false;
+    // this.openFootMarkName = stepName
+    const processId = this.pipeline.data.process_id;
+    console.log(step, " ",this.pipeline.data)
+    this.processLifecycleEventService.reclaim(processId,step.name,step.type).subscribe((res: any)=>{
+      console.log(res)
+    })
   }
 
   stepFootMark(processId: any, stepName: any, status: any) {
