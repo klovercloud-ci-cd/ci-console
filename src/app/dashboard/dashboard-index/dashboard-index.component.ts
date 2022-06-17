@@ -106,20 +106,11 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   public pipelineChartColors: Color[] = [
     { backgroundColor: ['#a3e8b9', '#ff6e85','#74aafa', '#f8c87e', '#bbbcc7'] },
   ];
-  // public agentsChartColors: Color[][] = [[{ backgroundColor: ['#7ade9a', '#ff3b5a','#428df9'] }],[{ backgroundColor: ['#7ade9a', '#ff3b5a'] }]];
-  // Running","Succeeded","Pending","ImagePullBackOff","CrashLoopBackOff","Terminated","Unknown","Error"
   podsStatusWiseColor:any=['#74aafa', '#a3e8b9','#f8c87e','#ff6e85', '#EC7063','#34495E','#BFC9CA']
   public agentsChartColors: Color[] = [{ backgroundColor: this.podsStatusWiseColor}];
-  // public agentsChartColor: Color[] = [];
-  // public agentChartColors: Color[] = [ { backgroundColor: ['#428df9', '#7ade9a','#428df9',"#ff"] }];
-  // public agentsChartColorsArr: Agent[]=[{ChartColors:[ { backgroundColor: ['#7ade9a', '#ff3b5a','#428df9'] }]}]
   public usersChartColors: Color[] = [
     { backgroundColor: ['#A3E4D7', '#85929E'] },
   ];
-
-  // public barDummyChartColors: Color[] = [
-  //   { backgroundColor: ['#C5CAE9', '#C5CAE9', '#C5CAE9'] },
-  // ];
 
   buildWebhookChartData: ChartDataSets[] = [
     {
@@ -270,7 +261,12 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       console.log("LabelWisePodCounts",this.LabelWisePodCounts)
       console.log("agentData",this.buildAgentsChartData)
     },(err)=>{
-      this.snack.openSnackBar('Error!',err.error.message,'sb-error')
+      if (err.status==500){
+        console.log("May be light-house-query is down!")
+      }else{
+        this.snack.openSnackBar('Error!',err.error.message,'sb-error')
+      }
+
     })
 
   }
@@ -335,53 +331,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
     // <------------Agents Section------------>
 
-    // this.agents = {
-    //   "data": {
-    //     "agent": [
-    //       {
-    //         "name": "agent1",
-    //         "pods": {
-    //           "running": 10,
-    //           "pending": 5,
-    //           "unknown": 2,
-    //           "succeeded": 3,
-    //           "failed": 3
-    //         },
-    //         "deployment": {
-    //           "count": 10
-    //         }
-    //       },
-    //       {
-    //         "name": "agent2",
-    //         "pods": {
-    //           "running": 15,
-    //           "pending": 10,
-    //           "unknown": 2,
-    //           "succeeded": 3,
-    //           "failed": 3
-    //         },
-    //         "deployment": {
-    //           "count": 10
-    //         }
-    //       },
-    //       {
-    //         "name": "agent3",
-    //         "pods": {
-    //           "running": 22,
-    //           "pending": 11,
-    //           "unknown": 33,
-    //           "succeeded": 44,
-    //           "failed": 55
-    //         },
-    //         "deployment": {
-    //           "count": 10
-    //         }
-    //       }
-    //     ],
-    //
-    //   }
-    // }
-    // console.log(this.agents)
+
     let infoData;
     // this.agents.data.agent.map((_items:any, index:any)=>{
     //   let totalPods;

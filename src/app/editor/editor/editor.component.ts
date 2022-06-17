@@ -83,7 +83,6 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit(): void {
     // console.log("The DATA: ",(this.InputData));
-
     this.editorDialogRef.afterClosed().subscribe((data) => {
       // console.log("Editor M v.2: ", data)
     })
