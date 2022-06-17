@@ -131,11 +131,6 @@ export class PipelineGraphComponent
 
   ngAfterContentInit(): void {
     console.log(this.urlParams,'url perams')
-    this.pipes
-      .getStepDetails('build', 'bab32326-ba80-4c86-8101-14d4f112e6b6')
-      .subscribe((res) => {
-        console.log(res, 'step status');
-      });
     this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
       console.log(res, 'socekt res from pipeline page');
