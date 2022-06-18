@@ -326,9 +326,15 @@
           </div>
         </div>
       </div>
-
+      <div *ngIf="error.pipeline !=''" class="absolute h-80  left-16 right-16 top-1/3  kc-card border-kc-bdr-card bg-warn-200 p-12 mx-16 flex justify-center items-center">
+        <div class="text-center">
+          <h3 class="text-sub-title">Process not found!</h3>
+          <h4 class="">No Process found for this revision!</h4>
+        </div>
+      </div>
       <div *ngIf="isLoading.graph" class="relative top-16 left-6">
         <div class="grid grid-cols-2 w-[25rem]">
+
           <div>
             <ngx-skeleton-loader
               [theme]="{

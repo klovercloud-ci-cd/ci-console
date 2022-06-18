@@ -45,7 +45,9 @@ export class PipelineGraphComponent
   title: any;
 
   failed: any[] = [];
-  error: any;
+  error: any={
+    pipeline:''
+  };
   commitId: any;
 
   setOpenBranch(index: number) {
@@ -264,8 +266,8 @@ export class PipelineGraphComponent
         console.log('numb.join(""):', numb);
         console.log('selfUrl:', selfUrl);
 
-        this.navigateRoute.navigate([], {
-          queryParams: { page: this.currentPage, limit: this.limit },
+        await this.navigateRoute.navigate([], {
+          queryParams: {page: this.currentPage, limit: this.limit},
           queryParamsHandling: 'merge',
         });
         if (this.commitId) {
@@ -324,6 +326,10 @@ export class PipelineGraphComponent
     // console.log(commitId);
     this.repo.getProcess(commitId).subscribe((res: any) => {
       if (res.data == null) {
+        this.error.pipeline ='error'
+        this.envList = ''
+        this.pipeline=''
+        this.isLoading.graph = false;
         this.tostr.warning(
           `No process Found For this Commit`,
           'Process Empty',
@@ -335,6 +341,7 @@ export class PipelineGraphComponent
         );
       } else {
         if (res.data) {
+          this.error.pipeline =''
           this.processIds = res.data;
           console.log(this.processIds);
           this.getPipeline(this.processIds[0].process_id);
@@ -447,8 +454,6 @@ export class PipelineGraphComponent
       .subscribe((res: any) => {
         if (res?.data !== null) {
           const footmarkData = [];
-          // console.log(this.page,'page')
-          // console.log(this.skip,'skip')
           for (let i = this.skip; i < res?.data.length; i++) {
             footmarkData.push(res?.data[i]);
           }
@@ -458,7 +463,6 @@ export class PipelineGraphComponent
           } else {
             this.skip = 0;
           }
-          // console.log(footmarkData)
 
           this.logs.push({
             name: footmarkName,
@@ -681,15 +685,8 @@ export class PipelineGraphComponent
             this.stepStatus !== 'active' &&
             this.openFootMark !== this.footMarks.indexOf(socketRes.footmark)
           ) {
-            //this.expandLog(this.footMarks.indexOf(socketRes.footmark), socketRes.footmark, socketRes.step, socketRes.claim)
-            //console.log(this.footMarks.indexOf(socketRes.footmark),'index of runnig footmark')
             this.setActiveFootMark(this.footMarks.indexOf(socketRes.footmark));
 
-            setTimeout(() => {
-              // @ts-ignore
-              // document.getElementById('scrollArea'+socketRes.footmark).classList.add('logPanel')
-            }, 1000);
-          } else {
           }
         }
       });
