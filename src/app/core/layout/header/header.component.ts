@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
   userPersonalInfo: any;
 
   sendWS: any;
-
+  checkDubble: any[] = [];
   async ngOnInit(): Promise<void> {
 
     this.connectWs()
@@ -178,7 +178,7 @@ export class HeaderComponent implements OnInit {
 
         if (socketRes.company_id === this.userPersonalInfo.data.metadata.company_id ){
           if (socketRes.status === 'INITIALIZING') {
-            localStorage.setItem('isFailed', 'false');
+
             this.applist
               .getProcessDetails(socketRes.process_id)
               .subscribe((processRes: any) => {
@@ -195,38 +195,29 @@ export class HeaderComponent implements OnInit {
                         processRes.data.repository_id
                       )
                       .subscribe((repoRes) => {
-                        const queryPerams = {
-                          title: appRes.data._metadata.name,
-                          type: repoRes.data.type,
-                          url: appRes.data.url,
-                          repoId: processRes.data.repository_id,
-                          appId: processRes.data.app_id,
-                        };
+                        const gitUrl = btoa(appRes.data.url);
+                        const title = appRes.data._metadata.name;
+                        const commitId = processRes.data.commit_id;
+                        const type = repoRes.data.type;
+                        const repoId = processRes.data.repository_id;
+                        const appId = processRes.data.app_id;
+                        //http://localhost:2022/repository/5d372397-28bf-4c27-a305-8681520403be/application?type=GITHUB&title=Test-application&url=aHR0cHM6Ly9naXRodWIuY29tL3plcm9tc2kvdGVzdC1hcHA%3D&repoId=5d372397-28bf-4c27-a305-8681520403be&appId=7ef757e6-adc3-4699-bb81-ddbac0522096&page=0&limit=5
+                        const queryPerams = `?type=${type}&title=${title}&url=${gitUrl}&repoId=${repoId}&appId=${appId}&commitId=${commitId}`
 
-                        function base64ToHex(str: any) {
-                          for (
-                            var i = 0,
-                              bin = atob(str.replace(/[ \r\n]+$/, '')),
-                              hex = [];
-                            i < bin.length;
-                            ++i
-                          ) {
-                            let tmp = bin.charCodeAt(i).toString(16);
-                            if (tmp.length === 1) tmp = `0${tmp}`;
-                            hex[hex.length] = tmp;
-                          }
-                          return hex.join('');
-                        }
 
-                        const encodedString = btoa(JSON.stringify(queryPerams));
-                        const base64 = base64ToHex(encodedString);
-                        const link = `repository/${processRes.data.repository_id}/application/${base64}`;
-                        let checkDubble: any[] = [];
+                        const link = `repository/${processRes.data.repository_id}/application/${queryPerams}`;
+
                         if (
-                          !checkDubble.find(
+                          !this.checkDubble.find(
                             (element) => element.step == socketRes.step
                           )
                         ) {
+                          this.checkDubble.push({
+                            step:socketRes.step
+                          })
+                          this.wsService.wsData.subscribe(res=>{
+
+                          })
                           this.tostr.info(
                             `<a class="text-dark" href="${link}">Application: ${appRes.data._metadata.name}, Step: ${socketRes.step}</a>`,
                             'New Process Initializing!',
@@ -240,6 +231,10 @@ export class HeaderComponent implements OnInit {
                       });
                   });
               });
+          }
+          if (socketRes.status === 'FAILED' || socketRes.status === 'failed' || socketRes.status === 'SUCCESSFUL') {
+            //this.checkDubble.slice(this.checkDubble.indexOf({step:socketRes.step}),1)
+            this.checkDubble=[]
           }
         }
       })

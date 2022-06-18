@@ -10,16 +10,15 @@ import {
 import { ApplicationListComponent } from '../application-list/application-list.component';
 import { ToolbarService } from '../../shared/services/toolbar.service';
 import { HttpClient } from '@angular/common/http';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserDataService } from '../../shared/services/user-data.service';
 import { AuthService } from '../../auth/auth.service';
 import { AppListService } from '../app-list.service';
 import { RepoServiceService } from '../../repository/repo-service.service';
 import { PipelineService } from '../pipeline.service';
-import { skip } from 'rxjs';
 import { WsService } from '../../shared/services/ws.service';
 import { ToastrService } from 'ngx-toastr';
-import {ProcessLifecycleEventService} from "../process-lifecycle-event.service";
+import { ProcessLifecycleEventService } from '../process-lifecycle-event.service';
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -47,13 +46,14 @@ export class PipelineGraphComponent
 
   failed: any[] = [];
   error: any;
+  commitId: any;
 
   setOpenBranch(index: number) {
     this.openBranch = index;
   }
 
   setActiveFootMark(index: number) {
-    this.openFootMark = index
+    this.openFootMark = index;
   }
 
   nextStep() {
@@ -63,25 +63,21 @@ export class PipelineGraphComponent
   prevStep() {
     this.openBranch--;
   }
-  currentPage:number=0;
-  commitsPerCall:any;
+
+  currentPage: number = 0;
+  commitsPerCall: any;
   newLogs: any[] = [];
-  branchName:any;
-  branchPanelOpen: boolean | undefined;
+  branchName: any;
   pipeline: any;
   pipelineStep: any;
   envList: any;
   stepsLists: any;
   logOpen: boolean = false;
-  branchList: any;
   fullmode = false;
   public branchs: any = [];
   public footMarks: any[] = [];
   public commitList: any[] = [];
   urlParams: any;
-  // urlParams: any = JSON.parse(
-  //   atob(this.hexToBase64(this.route.snapshot.paramMap.get('appID')))
-  // );
   repoId = this.route.snapshot.paramMap.get('repoID');
   userInfo = this.auth.getUserData();
   companyId = this.userInfo.metadata.company_id;
@@ -95,16 +91,15 @@ export class PipelineGraphComponent
   public footMarksLegth: number = 0;
   logs: any[] = [];
   prevStepName: string = '';
-  page: number = 0
-  limit: any = 5 ;
-  skip: number=0;
+  page: number = 0;
+  limit: any = 5;
+  skip: number = 0;
   prev_logs_size: number = 0;
   nodeDetails: any = '';
   activeStep: any = '';
   init = false;
   //refactor Start
   commit: any;
-  _processIds: any;
   isLoading = { graph: true, commit: true };
   socket: any;
   isObjerving: boolean = false;
@@ -122,24 +117,20 @@ export class PipelineGraphComponent
     private navigateRoute: Router,
     private wsService: WsService,
     private tostr: ToastrService,
-    private processLifecycleEventService: ProcessLifecycleEventService,
+    private processLifecycleEventService: ProcessLifecycleEventService
   ) {
-    // this._toolbarService.changeData({ title: this.urlParams.title });
-    this.route.queryParams.subscribe(res=>{
+    this.route.queryParams.subscribe((res) => {
       this.title = res['title'];
-    })
+    });
     this._toolbarService.changeData({ title: this.title });
   }
 
   ngAfterContentInit(): void {
-    console.log(this.urlParams,'url perams')
+    console.log(this.urlParams, 'url perams');
     this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
       console.log(res, 'socekt res from pipeline page');
       const socketRes: any = res;
-
-      ///---------------
-
       if (socketRes.process_id == this.pipeline.data.process_id) {
         if (socketRes.status === 'INITIALIZING') {
           this.init = true;
@@ -151,15 +142,11 @@ export class PipelineGraphComponent
                 res?.data.status === 'active' ||
                 res?.data.status === 'non_initialized'
               ) {
-                //middle check gose here
                 this.getPipeline(socketRes.process_id);
+                this.openLogPanel(socketRes.step);
                 setTimeout(() => {
-                  const activeClass: any = document.getElementById(
-                    socketRes.step + '_loader'
-                  );
-                  activeClass.classList.add('active');
-                  this.startBuild(socketRes.step);
-                }, 2000);
+                  this.setActiveFootMark(0);
+                }, 1000);
               }
             });
         }
@@ -176,47 +163,23 @@ export class PipelineGraphComponent
               .getStepDetails(socketRes.step, socketRes.process_id)
               .subscribe((res: any) => {
                 if (res?.data.status === 'active') {
-                  //middle check gose here
                   this.getPipeline(socketRes.process_id);
-                  setTimeout(() => {
-                    const activeClass: any = document.getElementById(
-                      socketRes.step + '_loader'
-                    );
-                    activeClass.classList.add('active');
-                    this.startBuild(socketRes.step);
-                  }, 2000);
                 }
               });
           }
         }
-        if (socketRes.status === 'FAILED') {
+        if (socketRes.status === 'FAILED' || socketRes.status === 'failed') {
           this.pipes
             .getStepDetails(socketRes.step, socketRes.process_id)
             .subscribe((res: any) => {
               if (res?.data.status === 'failed') {
-                this.init = false;
-                this.failed.push({
-                  name: socketRes.step,
-                });
-                const activeClass: any = document.getElementById(
-                  socketRes.step + '_loader'
-                );
-                activeClass.classList.remove('active');
+                this.getPipeline(socketRes.process_id);
               }
             });
         }
         if (socketRes.status === 'SUCCESSFUL') {
           this.init = false;
-          this.pipes
-            .getStepDetails(socketRes.step, socketRes.process_id)
-            .subscribe((res: any) => {
-              if (res?.data.status === 'completed') {
-                const activeClass: any = document.getElementById(
-                  socketRes.step + '_loader'
-                );
-                activeClass.classList.remove('active');
-              }
-            })
+          this.getPipeline(socketRes.process_id);
         }
       }
     });
@@ -231,23 +194,21 @@ export class PipelineGraphComponent
   }
 
   ngOnInit() {
-    // this.type = this.urlParams.type.toLowerCase() + 's';
-    // this.repoUrl = this.urlParams.url;
-    // console.log("this.type, this.repoId, this.repoUrl:",this.type, this.repoId, this.repoUrl)
+    ///test
 
-    this.route.queryParams.subscribe(res=>{
+    this.route.queryParams.subscribe((res) => {
       this.title = res['title'];
       this.type = res['type'].toLowerCase() + 's';
-      this.repoUrl = atob(res['url'])
-      console.log("res['page']:", res['page'])
-      if (res['page']){
-        this.currentPage = Number(res['page'])
+      this.repoUrl = atob(res['url']);
+      this.commitId = res['commitId'];
+      console.log("res['page']:", res['page']);
+      if (res['page']) {
+        this.currentPage = Number(res['page']);
       }
-      if (res['limit']){
+      if (res['limit']) {
         this.limit = res['limit'];
       }
-      // console.log("RESSSSSSSSSSSS",this.currentPage,this.limit)
-    })
+    });
 
     this.pipes
       .getBranch(this.type, this.repoId, this.repoUrl)
@@ -256,12 +217,10 @@ export class PipelineGraphComponent
         this.branchName = this.branchs[0].name;
         this.getCommit(this.branchs[0].name);
       });
-    this.navigateRoute.navigate([],
-      {
-        queryParams: {page:this.currentPage,limit:this.limit},
-        queryParamsHandling: 'merge'
-      }
-    )
+    this.navigateRoute.navigate([], {
+      queryParams: {page: this.currentPage, limit: this.limit},
+      queryParamsHandling: 'merge',
+    }).then(r =>{});
   }
 
   ngAfterContentChecked() {
@@ -272,137 +231,92 @@ export class PipelineGraphComponent
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(async (res: any) => {
-        console.log("Response:",res._metadata)
+        console.log('Response:', res._metadata);
         this.commitsPerCall = res;
-        for (let link of res._metadata.links){
-          if (link.next){
+        for (let link of res._metadata.links) {
+          if (link.next) {
             this.next = link.next;
           }
-          if(link.prev){
+          if (link.prev) {
             this.prev = link.prev;
           }
         }
-        if (this.commitsPerCall.length == res._metadata.total_count){
-          this.next=''
+        if (this.commitsPerCall.length == res._metadata.total_count) {
+          this.next = '';
         }
         // console.log("Responsesss: ",res)
         this.isLoading.commit = false;
         this.commit = res.data;
-        this.commitList=[{
-          branch: branchName,
-          commits: this.commit,
-        }];
+        this.commitList = [
+          {
+            branch: branchName,
+            commits: this.commit,
+          },
+        ];
         let selfUrl;
-        for(let i=0; i<res._metadata.links.length; i++){
-          console.log('III',res._metadata.links[i])
-          if(res._metadata.links[i].self){
+        for (let i = 0; i < res._metadata.links.length; i++) {
+          console.log('III', res._metadata.links[i]);
+          if (res._metadata.links[i].self) {
             selfUrl = res._metadata.links[i].self;
           }
         }
         var numb = selfUrl.match(/\d/g);
-        console.log("numb.join(\"\"):",numb);
-        console.log("selfUrl:",selfUrl)
+        console.log('numb.join(""):', numb);
+        console.log('selfUrl:', selfUrl);
 
-        this.navigateRoute.navigate([],
-          {
-            queryParams: {page:this.currentPage,limit:this.limit},
-            queryParamsHandling: 'merge'
-          }
-        )
-        this.getProcess(this.commit[0].sha);
+        this.navigateRoute.navigate([], {
+          queryParams: { page: this.currentPage, limit: this.limit },
+          queryParamsHandling: 'merge',
+        });
+        if (this.commitId) {
+          this.getProcess(this.commitId);
+        } else {
+          this.getProcess(this.commit[0].sha);
+        }
       });
   }
 
-  getPrevNextCommit(branchName:any,pageNumber:number){
-    // let pageNumber:any;
-    // console.log("branchName",branchName,'', pageStatus);
-    // if (pageStatus=='next'){
-    //   pageNumber = this.currentPage + 1;
-    // }
-    // this.isLoading.commit = false;
-    // console.log("this.commit:",branchName);
-    // if (this.next !==''){
-      this.repo.getPrevNextCommit(this.type, this.repoId, this.repoUrl, branchName, pageNumber,  this.limit).subscribe((res:any)=>{
-        console.log("res.data",res.data);
+  getPrevNextCommit(branchName: any, pageNumber: number) {
+    this.repo
+      .getPrevNextCommit(
+        this.type,
+        this.repoId,
+        this.repoUrl,
+        branchName,
+        pageNumber,
+        this.limit
+      )
+      .subscribe((res: any) => {
+        console.log('res.data', res.data);
         this.commit = res.data;
-        this.commitList=[{
-          branch: branchName,
-          commits: this.commit,
-        }];
-        if (res.data){
+        this.commitList = [
+          {
+            branch: branchName,
+            commits: this.commit,
+          },
+        ];
+        if (res.data) {
           this.isLoading.commit = false;
-          // for (let data of res?.data){
-          //   this.commitsPerCall.push(data)
-          // }
           this.isLoading.commit = false;
           this.commit = res.data;
           // console.log("Res.Data:",res);
-          for (let link of res._metadata.links){
-            if (link.next){
-              this.next=link.next
+          for (let link of res._metadata.links) {
+            if (link.next) {
+              this.next = link.next;
             }
-            if(link.prev){
+            if (link.prev) {
               this.prev = link.prev;
             }
           }
-          if (this.commitsPerCall.length ==res._metadata.total_count){
-            this.next=''
+          if (this.commitsPerCall.length == res._metadata.total_count) {
+            this.next = '';
           }
-          this.navigateRoute.navigate([],
-            {
-              queryParams: {page:pageNumber,limit:this.limit},
-              queryParamsHandling: 'merge'
-            }
-          )
-          // this.commitList=[{
-          //   branch: branchName,
-          //   commits: this.commit,
-          //   next: this.next,
-          //   prev: this.prev
-          // }];
-          // console.log("this.commitList::::",this.commitList)
+          this.navigateRoute.navigate([], {
+            queryParams: { page: pageNumber, limit: this.limit },
+            queryParamsHandling: 'merge',
+          });
         }
-      })
-    // }
-  }
-
-  getPrevCommit(branchName:any, previous:string){
-    // this.isLoading.commit = true;
-    // // console.log("this.commit:",branchName,previous);
-    // if (this.prev !==''){
-    //   this.repo.getNextCommit(previous, this.repoId, this.repoUrl, branchName).subscribe((res:any)=>{
-    //     if (res.data){
-    //       this.isLoading.commit = false;
-    //       // for (let data of res?.data){
-    //       //   this.commitsPerCall.push(data)
-    //       // }
-    //       this.isLoading.commit = false;
-    //       this.commit = res.data;
-    //       if (res._metadata.links.length>2){
-    //       for (let link of res._metadata.links){
-    //           if (link.next){
-    //             this.next=link.next
-    //           }
-    //           if(link.prev){
-    //             this.prev = link.prev;
-    //           }
-    //         }
-    //       }else{
-    //         this.prev = '';
-    //       }
-    //       if (this.commitsPerCall.length ==res._metadata.total_count){
-    //         this.next=''
-    //       }
-    //
-    //       this.commitList = [{
-    //         branch: branchName,
-    //         commits: this.commit,
-    //         next: this.next,
-    //         prev: this.prev
-    //       }];
-    //     }
-    //   })
-    // }
+      });
   }
 
   getProcess(commitId: any) {
@@ -431,7 +345,7 @@ export class PipelineGraphComponent
 
   getPipeline(processId: any) {
     this.repo.getPipeLine(processId).subscribe((res: any) => {
-      console.log(res,'pipeline data----')
+      console.log(res, 'pipeline data----');
       if (res.data == null) {
         this.tostr.warning(`No commit Found For this BRANCH`, 'Commits Empty', {
           enableHtml: true,
@@ -454,8 +368,8 @@ export class PipelineGraphComponent
 
   initSvgArrow() {
     const svgHeight =
-      this.higestNodeEnv(this.nodeByEnv())[0].steps.length * 230;
-    const svgWidth = this.totalenv() * 230;
+      this.higestNodeEnv(this.nodeByEnv())[0].steps.length * 300;
+    const svgWidth = this.totalenv() * 300;
 
     // @ts-ignore
     document.getElementById('svg')?.style.height = svgHeight + 'px';
@@ -464,14 +378,11 @@ export class PipelineGraphComponent
   }
 
   loadCommit(branchName: string) {
-
-    this.currentPage=0;
-    this.navigateRoute.navigate([],
-      {
-        queryParams: {page:0,limit:5},
-        queryParamsHandling: 'merge'
-      }
-    )
+    this.currentPage = 0;
+    this.navigateRoute.navigate([], {
+      queryParams: { page: 0, limit: 5 },
+      queryParamsHandling: 'merge',
+    });
 
     const findLogByBranceName = this.commitList.find(
       (list) => list.branch === branchName
@@ -493,7 +404,7 @@ export class PipelineGraphComponent
           Object.assign(
             this.commitList[
               this.commitList.findIndex((el) => el.branch === branchName)
-              ],
+            ],
             res.data
           );
         });
@@ -508,22 +419,6 @@ export class PipelineGraphComponent
     } while (currentDate - date < milliseconds);
   }
 
- /* makeApiCallForLogs(
-    processId: string,
-    nodeName: string,
-    footmarkName: string,
-    page: number,
-    limit: number,
-    skip: number
-  ) {
-    this.repo
-      .getFootamarkLog(processId, nodeName, footmarkName, page, limit,)
-      .subscribe((res: any) => {
-        // console.log(res.data);
-        return res.data;
-      });
-  }
-*/
   getLogs(
     processId: string,
     nodeName: string,
@@ -537,12 +432,7 @@ export class PipelineGraphComponent
 
     const observer = new IntersectionObserver(
       (entry: any) => {
-        if (entry[0].isIntersecting) {
-          this.isObjerving =true
-        }
-        else{
-          this.isObjerving =false
-        }
+        this.isObjerving = !!entry[0].isIntersecting;
       },
       {
         root: document.getElementById('scrollArea' + footmarkName),
@@ -553,36 +443,33 @@ export class PipelineGraphComponent
     observer.observe(intObj);
 
     this.repo
-      .getFootamarkLog(processId, nodeName, footmarkName, page, limit,claim)
+      .getFootamarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
-        if (res?.data !== null){
-          const footmarkData = []
+        if (res?.data !== null) {
+          const footmarkData = [];
           // console.log(this.page,'page')
           // console.log(this.skip,'skip')
-          for (let i=this.skip; i<res?.data.length;i++){
-            footmarkData.push(res?.data[i])
+          for (let i = this.skip; i < res?.data.length; i++) {
+            footmarkData.push(res?.data[i]);
           }
 
           if (res?.data.length < limit) {
-            this.skip = res?.data.length
+            this.skip = res?.data.length;
           } else {
-            this.skip = 0
+            this.skip = 0;
           }
           // console.log(footmarkData)
 
           this.logs.push({
-            name:footmarkName,
-            data:[...footmarkData]
-          })
-
-
+            name: footmarkName,
+            data: [...footmarkData],
+          });
         } else if (res?.data === null) {
-          this.page -= 1
-
+          this.page -= 1;
         }
 
         if (this.skip == 0) {
-          this.page++
+          this.page++;
         }
         setTimeout(() => {
           if (this.isObjerving) {
@@ -597,8 +484,7 @@ export class PipelineGraphComponent
               claim
             );
           }
-        },2000)
-
+        }, 2000);
       });
   }
 
@@ -716,9 +602,18 @@ export class PipelineGraphComponent
       const svgOfset = this.getOffset(svg);
 
       for (let step of this.pipelineStep) {
+        if (step.status === 'active') {
+          const activeClass: any = document.getElementById(
+            step.name + '_loader'
+          );
+          activeClass.classList.add('active');
+        } else {
+          const activeClass: any = document.getElementById(
+            step.name + '_loader'
+          );
+          activeClass.classList.remove('active');
+        }
         if (step.next !== null) {
-          const startNode = document.getElementById(step.name);
-          const startNodeOfset = this.getOffset(startNode);
           for (let next of step.next) {
             const start = this.getOffset(document.getElementById(step.name));
             const end = this.getOffset(document.getElementById(next));
@@ -749,86 +644,100 @@ export class PipelineGraphComponent
     });
   }
 
-  startBuild(stepName: any) {
+  openLogPanel(stepName: any) {
     this.logOpen = true;
-    this.openFootMarkName = stepName
+    this.openFootMarkName = stepName;
     const processId = this.pipeline.data.process_id;
-    this.pipeline.data.steps.find((hola: any) => {
-      if (hola.name === stepName) {
-        this.nodeDetails = hola;
-      }
-    });
-    this.stepFootMark(processId, stepName, this.nodeDetails.status);
-
+    this.getPipeline(processId);
+    setTimeout(() => {
+      this.pipeline.data.steps.find((hola: any) => {
+        if (hola.name === stepName) {
+          this.nodeDetails = hola;
+        }
+      });
+      this.stepFootMark(processId, stepName, this.nodeDetails.status);
+    }, 300);
   }
 
   trigger(step: any) {
-    // this.logOpen = false;
-    // this.openFootMarkName = stepName
     const processId = this.pipeline.data.process_id;
-    console.log(step, " ",this.pipeline.data)
-    this.processLifecycleEventService.reclaim(processId,step.name,step.type).subscribe((res: any)=>{
-      console.log(res)
-    })
+    console.log(step, ' ', this.pipeline.data);
+    this.processLifecycleEventService
+      .reclaim(processId, step.name, step.type)
+      .subscribe((res: any) => {
+        console.log(res);
+      });
   }
 
   stepFootMark(processId: any, stepName: any, status: any) {
     this.repo.getfootPrint(processId, stepName).subscribe((res: any) => {
-      this.stepStatus =res.status
-      this.footMarks = res.data
-      this.setActiveFootMark(this.footMarks.length-1)
+      this.stepStatus = res.status;
+      this.footMarks = res.data;
+      this.setActiveFootMark(this.footMarks.length - 1);
+      this.wsService.wsData.subscribe((res) => {
+        const socketRes: any = res;
+        if (socketRes.process_id == this.pipeline.data.process_id) {
+          if (
+            this.stepStatus !== 'active' &&
+            this.openFootMark !== this.footMarks.indexOf(socketRes.footmark)
+          ) {
+            //this.expandLog(this.footMarks.indexOf(socketRes.footmark), socketRes.footmark, socketRes.step, socketRes.claim)
+            //console.log(this.footMarks.indexOf(socketRes.footmark),'index of runnig footmark')
+            this.setActiveFootMark(this.footMarks.indexOf(socketRes.footmark));
 
-      this.wsService.wsData.subscribe(res=>{
-       // @ts-ignore
-        if ( res.step === this.openFootMarkName){
-          let found = 0
-          for (let x of this.footMarks){
+            setTimeout(() => {
+              // @ts-ignore
+              // document.getElementById('scrollArea'+socketRes.footmark).classList.add('logPanel')
+            }, 1000);
+          } else {
+          }
+        }
+      });
+      this.wsService.wsData.subscribe((res) => {
+        // @ts-ignore
+        if (res.step === this.openFootMarkName) {
+          let found = 0;
+          for (let x of this.footMarks) {
             // @ts-ignore
-            if (x === res.footmark){
-              found = 1
+            if (x === res.footmark) {
+              found = 1;
             }
           }
-          if (found === 0){
+          if (found === 0) {
             // @ts-ignore
-            this.footMarks.push(res.footmark)
+            this.footMarks.push(res.footmark);
           }
-          this.setActiveFootMark(this.footMarks.length-1)
-       }
-      })
-    })
+        }
+      });
+    });
   }
 
   logClose() {
     this.logOpen = false;
     this.fullmode = false;
-    this.activeStep =''
+    this.activeStep = '';
   }
 
   loadInfo(stepName: string) {
-    const info = this.pipelineStep.filter(function (data: any) {
+    this.pipelineStep.filter(function (data: any) {
       return data.name == stepName;
     });
   }
 
-  getGetProcessById(commit: any, id: number): void {
-    this.repo.getProcess(commit.data[0].sha).subscribe((res: any) => {
-      this.processIds = res.data;
-      this.repo.getPipeLine(res.data[0].process_id).subscribe((res: any) => {
-        this.pipelineStep = res.data.steps;
-        this.pipeline = res;
-        this.envList = this.allenv();
-        this.stepsLists = this.stepsDetails();
-        this.initSvgArrow();
-      });
-    });
-  }
-
-  expandLog(footMarkIndex: number, foot: any, nodeName: string,claim:number) {
+  expandLog(footMarkIndex: number, foot: any, nodeName: string, claim: number) {
     this.setActiveFootMark(footMarkIndex);
     this.page = 0;
-    this.skip=0
-    this.logs=[]
+    this.skip = 0;
+    this.logs = [];
     const processId = this.pipeline.data.process_id;
-    this.getLogs(processId, nodeName, foot, this.page, this.limit, this.skip,claim);
+    this.getLogs(
+      processId,
+      nodeName,
+      foot,
+      this.page,
+      this.limit,
+      this.skip,
+      claim
+    );
   }
 }

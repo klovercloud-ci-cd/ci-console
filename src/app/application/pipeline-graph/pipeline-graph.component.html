@@ -74,8 +74,8 @@
                   </mat-icon>
                 </div>
                 //logPanel
-                <div class="px-3 overflow-auto h-full w-full " id="{{'scrollArea'+foot}}" >
-                     <div class="h-full">
+                <div class="px-3 overflow-auto h-full w-full  " id="{{'scrollArea'+foot}}" >
+                     <div class="h-full logPanel">
                        <span *ngFor="let logDetails of logs">
                       <span *ngIf="logDetails.name === foot" class="space-y-2">
                         <pre
@@ -280,7 +280,7 @@ dffdfd
                       <mat-menu #menu="matMenu" class="kc-node-menu">
                         <p class="mx-4 py-3 uppercase font-semi-bold">{{step.name}}</p>
                         <mat-divider></mat-divider>
-                        <button (click)="startBuild(step.name)" mat-menu-item>
+                        <button (click)="openLogPanel(step.name)" mat-menu-item>
                           <mat-icon
                             aria-hidden="false"
                             aria-label="Example home icon"
