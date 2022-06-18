@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { ApplicationListComponent } from '../application-list/application-list.component';
 import { ToolbarService } from '../../shared/services/toolbar.service';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UserDataService } from '../../shared/services/user-data.service';
 import { AuthService } from '../../auth/auth.service';
@@ -246,7 +246,6 @@ export class PipelineGraphComponent
       if (res['limit']){
         this.limit = res['limit'];
       }
-      // console.log("RESSSSSSSSSSSS",this.currentPage,this.limit)
     })
 
     this.pipes
@@ -314,14 +313,6 @@ export class PipelineGraphComponent
   }
 
   getPrevNextCommit(branchName:any,pageNumber:number){
-    // let pageNumber:any;
-    // console.log("branchName",branchName,'', pageStatus);
-    // if (pageStatus=='next'){
-    //   pageNumber = this.currentPage + 1;
-    // }
-    // this.isLoading.commit = false;
-    // console.log("this.commit:",branchName);
-    // if (this.next !==''){
       this.repo.getPrevNextCommit(this.type, this.repoId, this.repoUrl, branchName, pageNumber,  this.limit).subscribe((res:any)=>{
         console.log("res.data",res.data);
         this.commit = res.data;
@@ -406,6 +397,12 @@ export class PipelineGraphComponent
   }
 
   getProcess(commitId: any) {
+    this.navigateRoute.navigate([],
+      {
+        queryParams: {commitId:commitId},
+        queryParamsHandling: 'merge'
+      }
+    )
     this.isLoading.graph = true;
     // console.log(commitId);
     this.repo.getProcess(commitId).subscribe((res: any) => {

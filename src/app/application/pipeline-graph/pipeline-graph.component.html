@@ -184,7 +184,6 @@
 
         </div>
         <div *ngIf="error?.pipeline" class="h-full h-full bg-warn-200">
-dffdfd
         </div>
       </div>
     </mat-card>
@@ -197,8 +196,7 @@ dffdfd
           <mat-label>Select Process ID</mat-label>
           <mat-select class="">
             <div class="kc-node-menu">
-              <mat-option
-                (click)="getProcess(commit[0].sha)"
+              <mat-option (click)="getPipeline(id.process_id)"
                 *ngFor="let id of processIds"
                 value="option1"
               >{{ id.process_id }}</mat-option
