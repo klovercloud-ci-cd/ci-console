@@ -6,7 +6,7 @@ import {
   Renderer2,
 } from '@angular/core';
 import { Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { AuthService } from '../../auth/auth.service';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
@@ -16,6 +16,7 @@ import {DashboardService} from "../dashboard.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {UserDataService} from "../../shared/services/user-data.service";
 import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
+import {AddCompanyComponent} from "../../company/add-company/add-company.component";
 
 // import {Chart} from 'chartjs';
 
@@ -60,6 +61,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   user: any = this.authService.getUserData();
   test: any = 1;
   labelWiseColor= new Map<string, string>();
+  currentUser: any;
   constructor(
     private dialog: MatDialog,
     private authService: AuthService,
@@ -72,7 +74,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     private snack: SharedSnackbarService,
   ) {
     this._toolbarService.changeData({ title: 'Dashboard' });
-
+    this.currentUser = this.authService.getUserData();
   }
 
 
@@ -165,6 +167,10 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   // agentsInfo: Agent[];
 
   async ngOnInit(): Promise<void> {
+
+    if (!this.currentUser.metadata.company_id) {
+      this.openDialog();
+    }
 
     // this.isLoading=true;
     this.getDetails();
@@ -269,7 +275,10 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
 
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
-      // console.log("User Info:",res.data.metadata.company_id)
+      console.log("User Info:",res.data.metadata.company_id)
+      if(!res.data.metadata.company_id){
+
+      }
       this._dashboardService.getAllWebhook(res.data.metadata.company_id).subscribe((res)=>{
         console.log("WebhookDashboard: ",res.data);
         if (res.data.application.webhook.disabled>0 || res.data.application.webhook.enabled>0){
@@ -374,6 +383,18 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       );
 
 
+  }
+
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '45vw';
+
+    // dialogConfig.data = {
+    //   companyID: this.companyID,
+    // };
+    this.dialog.open(AddCompanyComponent, dialogConfig);
   }
 
   ngAfterContentChecked() {

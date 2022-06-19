@@ -1,10 +1,13 @@
 <div
-  class="kc-card shadow-card  rounded-lg p-5 relative min-h-[250px] overflow-scroll max-h-[90vh]"
+  class="kc-card shadow-card  rounded-lg p-5 relative min-h-[250px] overflow-auto max-h-[90vh]"
 >
 
-  <div *ngIf="invalidUrl" class=" px-[5%] text-center flex flex-col justify-center pt-[10%] gap-2">
-    <h1 class="gap-1 lg:gap-3 text-[#5C638B] text-xl font-semibold">Please provide valid <span class="text-dark-tomato-red">.git</span> url or add a pipeline with your project.</h1>
-    <a [href]="'https://github.com/klovercloud-ci-cd/documentation/blob/master/cocepts.md#pipeline'" target="_blank" class="text-sm block text-right text-sm text-dark-info">Learn More.</a>
+  <div *ngIf="invalidUrl" class=" px-[3%] text-center flex flex-col justify-center pt-[10%] gap-2 relative overflow-hidden">
+    <h1 class="gap-1 text-[#5C638B] text-xl font-semibold">Please provide valid <span class="text-dark-tomato-red">.git</span> url or add a pipeline with your project.</h1>
+    <a [href]="'https://github.com/klovercloud-ci-cd/documentation/blob/master/cocepts.md#pipeline'" target="_blank" class="text-sm block text-right text-sm text-dark-info pr-3">Learn More.</a>
+  </div>
+  <div class="absolute top-2 right-2 cursor-pointer" *ngIf="invalidUrl" (click)="closeAppModal()">
+    <mat-icon>close</mat-icon>
   </div>
   <div *ngIf="!invalidUrl">
   <div class="flex justify-end items-center py-3" *ngIf="hasPipeline">

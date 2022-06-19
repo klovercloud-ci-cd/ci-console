@@ -106,11 +106,11 @@ export class ApiCallInterceptor implements HttpInterceptor {
             });
           }
         } else if (error.status === 400) {
-          this.snackBar.openSnackBar(
+          /*this.snackBar.openSnackBar(
             'HTTP ERROR! ',
             '400 Bad Request!',
             'sb-error'
-          );
+          );*/
         } else if (error.status === 0) {
           this.snackBar.openSnackBar(
             'ERROR!',

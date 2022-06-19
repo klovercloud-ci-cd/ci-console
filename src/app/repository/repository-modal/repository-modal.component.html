@@ -37,7 +37,7 @@
       <h1 class="text-right">
         <span class="cursor-pointer">
           <div [ngSwitch]="repoFormGroup.value.type">
-            <div *ngSwitchCase="'github'">
+            <div *ngSwitchCase="'GITHUB'">
               <div class="flex justify-end gap-1">
                 <span class="example-container" cdkScrollable>
                   <div
@@ -61,7 +61,7 @@
                 </a>
               </div>
             </div>
-            <div *ngSwitchCase="'gitlab'">
+            <div *ngSwitchCase="'GITLAB'">
               <div class="flex justify-end gap-1">
                 <span class="example-container" cdkScrollable>
                   <div
@@ -88,7 +88,7 @@
                 </a>
               </div>
             </div>
-            <div *ngSwitchCase="'bitbucket'">
+            <div *ngSwitchCase="'BIT_BUCKET'">
               <div class="flex justify-end gap-1">
                 <span class="example-container" cdkScrollable>
                   <div

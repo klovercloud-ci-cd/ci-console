@@ -179,8 +179,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    // dialogConfig.width = '45%';
-    dialogConfig.panelClass = 'custom-modalbox';
+    dialogConfig.width = '45vw';
 
     // dialogConfig.data = {
     //   companyID: this.companyID,

@@ -3,10 +3,10 @@
     <mat-card class="registration-form mt-4 " mat-dialog-content>
       <div class="form-wrapper ">
         <div class="text-instruction flex justify-between">
-          <h1 class="text-xl">Company Info</h1>  
-          <div  class="px-2 py-1 text-xs bg-dark-background-4 border cursor-pointer hover:bg-dark-background-3 border-dark-primary rounded-md" (click)="closeAppModal()">Close</div>  
+          <h1 class="text-xl text-dark">Company Info</h1>
+          <div  class="px-2 py-1 text-xs text-dark bg-light border cursor-pointer hover:bg-dark-light border-dark-primary rounded-md" (click)="closeAppModal()">Close</div>
         </div>
-        
+
         <!-- Input Form -->
 
         <form
@@ -14,8 +14,8 @@
           (ngSubmit)="attachCompanyFormData()"
         >
           <div class="flex flex-col xl:flex-row gap-5">
-            <mat-form-field class="kcci-field" appearance="outline">
-              <mat-label class="text-white">Name </mat-label>
+            <mat-form-field  class="kcci-field w-1/2 text-dark" appearance="outline">
+              <mat-label class="text-dark">Name </mat-label>
               <input
                 type="text"
                 autocomplete="off"
@@ -27,11 +27,21 @@
             </mat-form-field>
           </div>
 
+<!--          <mat-form-field class="kcci-field w-1/2" appearance="outline">-->
+<!--            <mat-label class="text-dark">Name</mat-label>-->
+<!--            <input-->
+<!--              formControlName="name"-->
+<!--              type="text"-->
+<!--              autocomplete="off"-->
+<!--              matInput-->
+<!--            />-->
+<!--          </mat-form-field>-->
+
           <!-- Add Repository Section -->
-          
+
           <mat-accordion multi="false">
             <div
-              class="rounded-md form-drop bg-[#1A2C4A] border-dark-primary border-1.5 p-2 mb-4 relative"
+              class="rounded-md form-drop bg-light border-dark-primary border-1.5 p-2 mb-4 relative"
               *ngFor="let repo of repositories.controls; let i = index"
               formArrayName="repositories"
             >
@@ -43,18 +53,17 @@
                   (closed)="panelOpenState = false"
                 >
                   <mat-expansion-panel-header>
-                    <h1 class="text-lg mb-2">Repository</h1>
+                    <h1 class="text-lg text-dark mb-2">Repository</h1>
                   </mat-expansion-panel-header>
 
                   <div class="flex flex-col xl:flex-row gap-5">
                     <mat-form-field
-                      class="kcci-field kc-select-container text-white"
+                      class="kcci-field kc-select-container text-dark"
                       appearance="outline"
                     >
                       <mat-label>Type</mat-label>
                       <mat-select formControlName="type" name="repo">
                         <mat-option
-                          class="kc-select-type"
                           *ngFor="let repo of repos"
                           [value]="repo.value"
                         >
@@ -64,7 +73,7 @@
                     </mat-form-field>
 
                     <mat-form-field class="kcci-field" appearance="outline">
-                      <mat-label class="text-white">Token </mat-label>
+                      <mat-label class="text-dark">Token </mat-label>
                       <input
                         formControlName="token"
                         required
@@ -206,7 +215,7 @@
                         <h1 class="flex justify-end p-2">
                           <mat-icon
                             (click)="removeApplicaiton(i, appIndex)"
-                            class="cursor-pointer text-dark-danger"
+                            class=" text-dark"
                             >close</mat-icon
                           >
                         </h1>
@@ -218,7 +227,7 @@
                             class="kcci-field"
                             appearance="outline"
                           >
-                            <mat-label class="text-white">Name </mat-label>
+                            <mat-label class="text-dark">Name </mat-label>
                             <input
                               formControlName="name"
                               type="text"
@@ -230,7 +239,7 @@
                             class="kcci-field"
                             appearance="outline"
                           >
-                            <mat-label class="text-white">URL </mat-label>
+                            <mat-label class="text-dark">URL </mat-label>
                             <input
                               formControlName="url"
                               type="text"
@@ -269,7 +278,7 @@
                     </div>
                     <h1
                       (click)="removeRepository(i)"
-                      class="cursor-pointer text-dark-danger absolute top-0 right-0 z-10"
+                      class="p-2 text-dark absolute top-0 right-0 z-10"
                     >
                       <span class="-mt-5 -mr-5">
                         <div class="flex items-center gap-1">
@@ -301,18 +310,18 @@
                   aria-label="Example home icon"
                   >control_point</mat-icon
                 >
-                <h1 class="text-base text-white">Repository</h1>
+                <h1 class="text-base text-dark">Repository</h1>
               </div>
             </button>
           </div>
 
           <div
             class="w-full"
-            *ngIf="!attachCompanyForm.valid; else other_content"
+
           >
             <div class="w-52 sm:w-56 md:w-60 lg:w-52 ml-auto">
               <button
-                class="bg-slate-500 kc-register block"
+                class="kc-button-primary block"
                 type="submit"
                 [disabled]="!attachCompanyForm.valid"
               >
@@ -320,28 +329,28 @@
               </button>
             </div>
           </div>
-          <ng-template #other_content>
-            <div class="w-40 md:w-60 lg:w-52 ml-auto">
-              <button
-                class="bg-dark-primary kc-register block text-white"
-                type="submit"
-                [disabled]="!attachCompanyForm.valid"
-              >
-                <span *ngIf="!isLoading; else before_submit">
-                  Attach Company
-                </span>
-                <ng-template #before_submit>
-                  <div class="py-3 mx-auto w-40">
-                    <mat-progress-bar
-                      class="green-progress kc-progress-bar"
-                      mode="indeterminate"
-                    >
-                    </mat-progress-bar>
-                  </div>
-                </ng-template>
-              </button>
-            </div>
-          </ng-template>
+<!--          <ng-template #other_content>-->
+<!--            <div class="w-40 md:w-60 lg:w-52 ml-auto">-->
+<!--              <button-->
+<!--                class="bg-light kc-register block text-dark"-->
+<!--                type="submit"-->
+<!--                [disabled]="!attachCompanyForm.valid"-->
+<!--              >-->
+<!--                <span *ngIf="!isLoading; else before_submit">-->
+<!--                  Attach Company-->
+<!--                </span>-->
+<!--                <ng-template #before_submit>-->
+<!--                  <div class="py-3 mx-auto w-40">-->
+<!--                    <mat-progress-bar-->
+<!--                      class="green-progress kc-progress-bar"-->
+<!--                      mode="indeterminate"-->
+<!--                    >-->
+<!--                    </mat-progress-bar>-->
+<!--                  </div>-->
+<!--                </ng-template>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </ng-template>-->
         </form>
       </div>
     </mat-card>
