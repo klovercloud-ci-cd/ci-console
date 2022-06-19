@@ -329,15 +329,6 @@ export class PipelineGraphComponent
         this.envList = ''
         this.pipeline=''
         this.isLoading.graph = false;
-        this.tostr.warning(
-          `No process Found For this Commit`,
-          'Process Empty',
-          {
-            enableHtml: true,
-            positionClass: 'toast-top-center',
-            tapToDismiss: false,
-          }
-        );
       } else {
         if (res.data) {
           this.error.pipeline =''

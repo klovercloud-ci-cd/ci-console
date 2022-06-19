@@ -132,21 +132,6 @@ export class HeaderComponent implements OnInit {
                   });
               });
           }
-          /*if (socketRes.status === 'FAILED' || socketRes.status === 'failed' || socketRes.status === 'SUCCESSFUL') {
-            this.checkDubble=[]
-
-            if (socketRes.status === 'FAILED'){
-              this.tostr.info(
-                `Step: ${socketRes.step}`,
-                'Process Failed!',
-                {
-                  enableHtml: true,
-                  positionClass: 'toast-top-center',
-                  tapToDismiss: false,
-                }
-              );
-            }
-          }*/
         }
       })
     });
