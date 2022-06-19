@@ -20,7 +20,7 @@ export class HeaderService {
     HTTP_OPTIONS.params = {
       scope:'notification',
       page:0,
-      limit:2
+      limit:5
     };
       return this.http.get(
         `${BASE_URL}processes_events`,
