@@ -115,37 +115,6 @@ div{
   @apply bg-light-500 text-dark;
   margin-top: 0;
   word-wrap: break-word;
-
- /* .log {
-    ::ng-deep {
-      .mat-expansion-panel-body {
-        max-height: 100px;
-        overflow-y: scroll;
-      }
-
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-
-      !* Track *!
-      ::-webkit-scrollbar-track {
-        @apply bg-dark-background-1;
-      }
-
-      !* Handle *!
-      ::-webkit-scrollbar-thumb {
-        background: #939393;
-        border-radius: 30px;
-
-        &:hover {
-          background: #555;
-          width: 10px;
-          height: 10px;
-        }
-      }
-    }
-  }*/
 }
 
 .log-card {
@@ -156,8 +125,6 @@ div{
   transition: all 0.1s ease-in-out;
 }
 .logPanel {
-
-  /* Control snap from here */
   overflow-y: auto;
   overscroll-behavior-y: contain;
   scroll-snap-type: y mandatory;

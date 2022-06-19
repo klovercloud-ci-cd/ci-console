@@ -18,6 +18,7 @@ import {HeaderService} from "../header.service";
 export class HeaderComponent implements OnInit {
   notices: any[]=[];
   next: string='';
+  newNoticeCount: any =0;
   constructor(
     public dialog: MatDialog,
     private auth: AuthService,
@@ -47,9 +48,34 @@ export class HeaderComponent implements OnInit {
       this.userPersonalInfo = res;
       console.log(this.userPersonalInfo,'user info ')
       this.wsService.wsData.subscribe(res=>{
+
         console.log(res,'socekt res from header')
         const socketRes:any = res;
-
+        if (socketRes.status === 'INITIALIZING' || socketRes.status === 'FAILED' ||socketRes.status === 'SUCCESSFUL') {
+          this.newNoticeCount = this.newNoticeCount+1
+          if (socketRes.status === 'FAILED'){
+            this.tostr.info(
+              `Step: ${socketRes.step}`,
+              'Process Failed!',
+              {
+                enableHtml: true,
+                positionClass: 'toast-top-center',
+                tapToDismiss: false,
+              }
+            );
+          }
+          if (socketRes.status === 'SUCCESSFUL'){
+            this.tostr.info(
+              `Step: ${socketRes.step}`,
+              'Successful!',
+              {
+                enableHtml: true,
+                positionClass: 'toast-top-center',
+                tapToDismiss: false,
+              }
+            );
+          }
+        }
         if (socketRes.company_id === this.userPersonalInfo.data.metadata.company_id ){
           if (socketRes.status === 'INITIALIZING') {
 
@@ -106,9 +132,21 @@ export class HeaderComponent implements OnInit {
                   });
               });
           }
-          if (socketRes.status === 'FAILED' || socketRes.status === 'failed' || socketRes.status === 'SUCCESSFUL') {
+          /*if (socketRes.status === 'FAILED' || socketRes.status === 'failed' || socketRes.status === 'SUCCESSFUL') {
             this.checkDubble=[]
-          }
+
+            if (socketRes.status === 'FAILED'){
+              this.tostr.info(
+                `Step: ${socketRes.step}`,
+                'Process Failed!',
+                {
+                  enableHtml: true,
+                  positionClass: 'toast-top-center',
+                  tapToDismiss: false,
+                }
+              );
+            }
+          }*/
         }
       })
     });
@@ -151,6 +189,7 @@ export class HeaderComponent implements OnInit {
   }
 
   openNotification() {
+    this.newNoticeCount = 0
     this.notices= []
     this.next=''
     this.header.getNotification().subscribe((res:any)=>{

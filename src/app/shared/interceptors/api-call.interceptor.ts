@@ -96,9 +96,11 @@ export class ApiCallInterceptor implements HttpInterceptor {
               });
           } else {
             this.router.navigate(['auth/login']).then((_) => {
+              this.tokenService.removeAccessToken()
+              this.tokenService.removeRefreshToken()
               this.snackBar.openSnackBar(
                 'HTTP ERROR! ',
-                'Redirecting to login pagen.',
+                '401 Unauthorized! Please Login Again.',
                 'sb-error'
               );
             });
@@ -106,7 +108,7 @@ export class ApiCallInterceptor implements HttpInterceptor {
         } else if (error.status === 400) {
           this.snackBar.openSnackBar(
             'HTTP ERROR! ',
-            'Redirecting to login page',
+            '400 Bad Request!',
             'sb-error'
           );
         } else if (error.status === 0) {
