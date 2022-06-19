@@ -4,6 +4,9 @@ div,h1{
 .active {
   @apply bg-[#0f172a]  text-dark;
 }
+.dropdown__link{
+  color: white;
+}
 
 $sidenavWidth: 260px;
 
@@ -59,11 +62,11 @@ $sidenavWidth: 260px;
     line-height: 16px;
     letter-spacing: 0.2px;
     text-align: left;
-    // color: #96a4b7;
+    //color: #96a4b7;
     transition: all 0.3s linear;
     &:hover,
     &.active {
-      color: var(--color-primary);
+      color: white;
       @apply bg-transparent;
     }
   }

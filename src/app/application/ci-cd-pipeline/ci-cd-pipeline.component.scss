@@ -1,4 +1,6 @@
-
+div{
+  @apply text-dark;
+}
 .flex-item {
   position: relative;
   @apply px-8 py-4 bg-light-500;

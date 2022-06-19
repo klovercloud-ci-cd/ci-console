@@ -1,6 +1,9 @@
-.example-container {
-  height: 100vh;
-  @apply text-light;
+//.example-container {
+//  height: 100vh;
+//  @apply text-light;
+//}
+div{
+  @apply text-dark;
 }
 .example-sidenav {
   @apply bg-light-400 xl:border-r-[1px] xl:border-kc-bdr-card w-[260px];

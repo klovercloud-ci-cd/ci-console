@@ -9,6 +9,7 @@ import { UserDataService } from 'src/app/shared/services/user-data.service';
 import { RepoServiceService } from '../repo-service.service';
 import { RepositoryModalComponent } from '../repository-modal/repository-modal.component';
 import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 @Component({
   selector: 'kcci-repository',
@@ -26,6 +27,7 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
   userPersonalInfo: any;
 
   isLoading = true;
+  hasRepository:any;
 
   constructor(
     private repoService: RepoServiceService,
@@ -34,7 +36,8 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     private userInfo: UserDataService,
     private auth: AuthService,
     private dialog: MatDialog,
-    public resource: ResourcePermissionService
+    public resource: ResourcePermissionService,
+    private  snack : SharedSnackbarService,
   ) {
     this._toolbarService.changeData({ title: 'Repositories' });
   }
@@ -53,8 +56,13 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
       this.repoService
         .getCompanyInfo(this.companyID)
         .subscribe((response: any) => {
+          if(response.data.repositories.length>0){
+            this.hasRepository = true;
+          }
           this.isLoading = false;
           this.repoArray = response.data.repositories;
+        },(err)=>{
+          this.isLoading = false;
         });
     });
   }
@@ -67,7 +75,7 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     });
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
     dialogConfig.width = '100%';
     dialogConfig.maxWidth = '600px';
     dialogConfig.data = {

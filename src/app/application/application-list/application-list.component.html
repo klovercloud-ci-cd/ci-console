@@ -1,4 +1,4 @@
-<div class="p-page">
+<div class="p-page max-h-[90vh]">
 
   <div>
     <div class="bg-light overflow-x-auto" *ngIf="resource.authorizedUser('application','READ'); else notAuthorized">
@@ -99,7 +99,7 @@
         </table>
       </div>
       <ng-template #noData>
-        <h1 *ngIf="!isLoading && !hasData" class="flex py-[5%] justify-center items-center text-title">No Data Found</h1>
+        <h1 *ngIf="!isLoading && !hasData" class="flex py-[5%] justify-center items-center text-title">No Application Found</h1>
       </ng-template>
     </div>
     <ng-template #notAuthorized>

@@ -1,4 +1,6 @@
-
+div{
+  @apply text-dark;
+}
 .overview-row{
   @apply grid grid-cols-3 border-b border-kc-bdr-card ;
   .overview-item{

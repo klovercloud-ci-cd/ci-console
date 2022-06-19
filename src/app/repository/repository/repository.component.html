@@ -8,7 +8,7 @@
   <div class="">
     <mat-divider></mat-divider>
   </div>
-  <div class="pt-6 ">
+  <div class="pt-6 " *ngIf="hasRepository; else noRepository">
     <div
       class="w-full h-full"
       gdColumns="1fr 1fr 1fr 1fr"
@@ -28,7 +28,7 @@
 
               <div class="flex justify-between items-center">
                 <div class="flex items-center gap-2">
-                  <mat-icon class="text-dark-500">widgets</mat-icon>
+                  <mat-icon class="text-dark-500">inventory_2</mat-icon>
                   <h1 class="text-md font-semi-bold">
                     Repository- {{ i + 1 }}
                   </h1>
@@ -73,6 +73,9 @@
       <h1 *ngIf="!isLoading" class="flex justify-center items-center text-title">Not authorized</h1>
     </ng-template>
   </div>
+  <ng-template #noRepository>
+    <h1  *ngIf="!isLoading && !hasRepository" class="flex py-[5%] justify-center items-center text-title">No Repository Found</h1>
+  </ng-template>
   <ngx-skeleton-loader
     *ngIf="isLoading"
     count="8"

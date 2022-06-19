@@ -31,6 +31,7 @@ import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.compo
 import {Location} from "@angular/common";
 import {ApplicationModalComponent} from "../application-modal/application-modal.component";
 import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 
 @Component({
@@ -52,7 +53,7 @@ export class AppEditorModalComponent implements OnInit {
   stepAsMap = new Map()
   userPersonalInfo: any;
   user: any = this.auth.getUserData();
-
+  invalidUrl:any;
   companyID: any;
 
   repositoryId: any;
@@ -87,7 +88,8 @@ export class AppEditorModalComponent implements OnInit {
     private editorDialogRef: MatDialogRef<EditorModalComponent>,
     private router: Router,
     private location: Location,
-    public resource: ResourcePermissionService
+    public resource: ResourcePermissionService,
+    public snack: SharedSnackbarService,
   ) {
     console.log("appUrlDatas: ",appUrlDatas.showOk)
   }
@@ -121,7 +123,12 @@ export class AppEditorModalComponent implements OnInit {
         this.validity = this.checkValidity(this.appStep?.data?.steps);
         this.getDataKeyValue(this.appStep?.data?.steps);
         this.getTotalError(this.appStep?.data?.steps);
-      });
+      },
+        (err)=>{
+        if (err.status == 400){
+        this.invalidUrl = true;
+        }
+        });
     });
   }
 
