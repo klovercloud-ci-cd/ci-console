@@ -165,6 +165,7 @@ export class PipelineGraphComponent
               .subscribe((res: any) => {
                 if (res?.data.status === 'active') {
                   this.getPipeline(socketRes.process_id);
+                  this.openLogPanel(socketRes.step);
                 }
               });
           }

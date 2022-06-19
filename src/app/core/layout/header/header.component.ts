@@ -9,6 +9,7 @@ import { TokenService } from '../../../auth/token.service';
 import { AppListService } from '../../../application/app-list.service';
 import {WsService} from "../../../shared/services/ws.service";
 import {HeaderService} from "../header.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -29,7 +30,8 @@ export class HeaderComponent implements OnInit {
     private tokenService: TokenService,
     private applist: AppListService,
     private wsService: WsService,
-    private header: HeaderService
+    private header: HeaderService,
+    private navigateRoute: Router,
   ) {}
 
   pageTitle = '';
@@ -213,5 +215,45 @@ export class HeaderComponent implements OnInit {
         }
       })
     }
+  }
+
+  navigateToProcess(processId:string) {
+    this.applist
+      .getProcessDetails(processId)
+      .subscribe((processRes: any) => {
+        this.applist
+          .getAppDetails(
+            processRes.data.repository_id,
+            processRes.data.app_id
+          )
+          .subscribe((appRes: any) => {
+            appRes.data.url;
+            this.applist
+              .getRepositoryInfo(
+                appRes.data._metadata.CompanyId,
+                processRes.data.repository_id
+              )
+              .subscribe((repoRes) => {
+                const gitUrl = btoa(appRes.data.url);
+                const title = appRes.data._metadata.name;
+                const commitId = processRes.data.commit_id;
+                const type = repoRes.data.type;
+                const repoId = processRes.data.repository_id;
+                const appId = processRes.data.app_id;
+                //http://localhost:2022/repository/5d372397-28bf-4c27-a305-8681520403be/application?type=GITHUB&title=Test-application&url=aHR0cHM6Ly9naXRodWIuY29tL3plcm9tc2kvdGVzdC1hcHA%3D&repoId=5d372397-28bf-4c27-a305-8681520403be&appId=7ef757e6-adc3-4699-bb81-ddbac0522096&page=0&limit=5
+                //const queryPerams = `?type=${type}&title=${title}&url=${gitUrl}&repoId=${repoId}&appId=${appId}&commitId=${commitId}`
+
+
+                //const link = `repository/${processRes.data.repository_id}/application/${queryPerams}`;
+                this.navigateRoute.navigate([
+                    'repository',
+                    repoId,
+                    'application'
+                    // decodedData(encodedString),
+                  ],
+                  { queryParams: { type: type, title: title, url: gitUrl, repoId: repoId, appId: appId,commitId: commitId} });
+              });
+          });
+      });
   }
 }

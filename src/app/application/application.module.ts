@@ -31,6 +31,7 @@ import { EditorModule } from '../editor/editor.module';
 import { AppEditorModalComponent } from './app-editor-modal/app-editor-modal.component';
 
 import {MatDividerModule} from "@angular/material/divider";
+import {MatListModule} from "@angular/material/list";
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import {MatDividerModule} from "@angular/material/divider";
     MatProgressBarModule,
     NgxSkeletonLoaderModule,
     EditorModule,
-    MatDividerModule
+    MatDividerModule,
+    MatListModule,
   ],
 })
 export class ApplicationModule {}

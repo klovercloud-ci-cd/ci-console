@@ -199,11 +199,10 @@
       <div class="absolute right-6 ">
         <mat-form-field>
           <mat-label>Select Process ID</mat-label>
-          <mat-select class="">
+          <mat-select value="0">
             <div class="kc-node-menu">
               <mat-option (click)="getPipeline(id.process_id)"
-                *ngFor="let id of processIds"
-                value="option1"
+                *ngFor="let id of processIds;let i =index"
               >{{ id.process_id }}</mat-option
               >
             </div>
