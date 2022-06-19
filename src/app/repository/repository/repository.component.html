@@ -1,0 +1,91 @@
+<div class="kc-card m-6 p-6 min-h-[80vh]">
+  <div class="flex justify-between pb-4">
+    <div></div>
+    <button *ngIf="resource.authorizedUser('repository','CREATE')" class="kc-button-primary-sm" (click)="openDialog()">
+      Add New
+    </button>
+  </div>
+  <div class="">
+    <mat-divider></mat-divider>
+  </div>
+  <div class="pt-6 " *ngIf="hasRepository; else noRepository">
+    <div
+      class="w-full h-full"
+      gdColumns="1fr 1fr 1fr 1fr"
+      gdColumns.md="1fr 1fr 1fr"
+      gdColumns.lt-md="1fr 1fr"
+      gdColumns.lt-sm="1fr"
+      gdColumns.lt-xs="1fr"
+      gdGap="16px"
+      *ngIf="resource.authorizedUser('repository','CREATE'); else other"
+    >
+
+      <div mat-ripple *ngFor="let repo of repoArray; let i = index"
+           class="kc-card shadow-card h-full cursor-pointer p-6"
+           [routerLink]="['/repository', repo.id]"
+      >
+        <div class="space-y-3 py-2">
+
+              <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-dark-500">inventory_2</mat-icon>
+                  <h1 class="text-md font-semi-bold">
+                    Repository- {{ i + 1 }}
+                  </h1>
+                </div>
+                <img
+                  *ngIf="repo.type.toLowerCase() == 'github'"
+                  class="w-7 h-7 "
+                  src="../../../assets/images/logos/github.svg"
+                  alt=""
+                />
+                <img
+                  *ngIf="repo.type.toLowerCase() == 'gitlab'"
+                  class="w-7 h-7"
+                  src="../../../assets/images/logos/gitlab.svg"
+                  alt=""
+                />
+                <img
+                  *ngIf="repo.type.toLowerCase() == 'bit_bucket'"
+                  class="w-7 h-7 "
+                  src="../../../assets/images/logos/bitbucket.svg"
+                  alt=""
+                />
+              </div>
+          <button
+            class="flex items-center gap-2 "
+          >
+            <mat-icon class="text-dark-500">apps</mat-icon>
+            <span
+              class=""
+              *ngIf="repo?.applications?.length > 0; else applist"
+            >
+                    Applications({{ repo.applications.length }})
+                  </span>
+            <ng-template #applist>
+              <span class="">No Application added</span>
+            </ng-template>
+          </button>
+        </div>
+      </div>
+    </div>
+    <ng-template #other>
+      <h1 *ngIf="!isLoading" class="flex justify-center items-center text-title">Not authorized</h1>
+    </ng-template>
+  </div>
+  <ng-template #noRepository>
+    <h1  *ngIf="!isLoading && !hasRepository" class="flex py-[5%] justify-center items-center text-title">No Repository Found</h1>
+  </ng-template>
+  <ngx-skeleton-loader
+    *ngIf="isLoading"
+    count="8"
+    [theme]="{
+          'border-radius': '3px',
+          height: '130px',
+          'margin-right': '16px',
+          width: '370px',
+          'background-color': '#bbbcc7'
+        }"
+    animation="progress"
+  ></ngx-skeleton-loader>
+</div>

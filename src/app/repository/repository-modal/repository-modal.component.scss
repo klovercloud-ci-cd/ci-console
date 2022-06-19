@@ -1,0 +1,11 @@
+
+::ng-deep {
+  .my-tooltip {
+    white-space: pre-line;
+    text-align: center;
+    @apply bg-info-400 border-1.5 text-dark border-kc-bdr-card;
+    min-height: 50px;
+    padding: 8px 0px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,24 @@
+<div class="py-10 px-5 _content bg-light rounded-md">
+  <div class="flex items-center justify-center mb-8">
+    <mat-icon class="_delete-icon" color="accent">delete</mat-icon>
+  </div>
+  <h5 class="mb-2 text-center">{{ message }}</h5>
+  <mat-dialog-actions align="center">
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="onConfirmClick()"
+      tabindex="1"
+    >
+      Delete
+    </button>
+    <button
+      mat-raised-button
+      mat-dialog-close
+      tabindex="-1"
+      class="m-2 bg-light text-dark"
+    >
+      Cancel
+    </button>
+  </mat-dialog-actions>
+</div>

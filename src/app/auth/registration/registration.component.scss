@@ -1,14 +1,11 @@
 .boom {
-  background: url(../../../assets/images/bg/login-right-bg-dark.svg) center
-    top/100% 100% no-repeat;
+  @apply bg-light;
 }
 .right-content {
-  background: url(../../../assets/images/bg/bg-shapes.svg) center top/100% 100%
-    no-repeat;
   @apply h-full pt-[10%] px-[5%] sm:px-[10%] 2xl:px-[15%];
 }
 .main-container {
-  @apply bg-dark-background-5 h-full;
+  @apply bg-light-400 h-full;
 }
 .wrapper-grid {
   @apply grid xl:grid-cols-2 grid-cols-1 h-full;
@@ -16,14 +13,7 @@
 .left-content {
   @apply mx-auto xl:flex xl:items-end justify-center hidden;
 }
-.registration-form {
-  @apply border-[#697ca2]
-  border-2  text-dark-text;
-  background: linear-gradient(280.19deg, #3d4d6d -5.42%, #182641 204.15%);
-}
-.form-wrapper {
-  @apply w-full px-7 pt-8;
-}
+
 .form-logo {
   @apply flex justify-center;
 }
@@ -56,7 +46,7 @@
   @apply pb-5 text-white;
 }
 .kc-number {
-  @apply bg-dark-container;
+  @apply bg-light-400;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

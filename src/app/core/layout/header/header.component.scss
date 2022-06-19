@@ -1,21 +1,15 @@
 
-/*
 ::ng-deep{
-  .mat-menu-panel{
-    min-width: 350px !important;
+  .kc-menu {
+    min-width: 270px !important;
     max-width: 350px !important;
-    background-color: #13121f;
+    @apply bg-light-400 border-kc-bdr-card border-1.5 p-6;
   }
-}*/
+  .mat-menu-content{
+    padding: 0 !important;
+  }
 
-::ng-deep .kc-menu {
-  min-width: 350px !important;
-  max-width: 350px !important;
-  background-color: #13121f;
 }
-::ng-deep .kc-profile-icon{
-  svg {
-    fill: red;
-  }
-}
+
+/* based on angular-toastr css https://github.com/Foxandxss/angular-toastr/blob/cb508fe6801d6b288d3afc525bb40fee1b101650/dist/angular-toastr.css */
 

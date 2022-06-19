@@ -1,0 +1,62 @@
+//.kc-expansion-panel {
+//  background: transparent;
+//  margin-top: 0;
+//}
+//::-webkit-scrollbar {
+//  width: 8px;
+//  height: 8px;
+//
+//  &:hover {
+//    width: 10px;
+//    height: 10px;
+//  }
+//}
+//
+///* Track */
+//::-webkit-scrollbar-track {
+//  @apply bg-dark-background-1;
+//}
+//
+///* Handle */
+//::-webkit-scrollbar-thumb {
+//  background: #307fa9;
+//  border-radius: 30px;
+//
+//  &:hover {
+//    background: #555;
+//    width: 10px;
+//    height: 10px;
+//  }
+//}
+.mat-dialog-container{
+  @apply overflow-hidden;
+}
+div{
+  @apply text-dark;
+}
+.page__content {
+  @apply bg-light-400 p-6 rounded-md;
+}
+
+.resource_custom_form_btn {
+  line-height: 52px;
+  margin-top: 4px;
+}
+
+._submit__btn {
+  line-height: 40px;
+  height: 40px;
+}
+
+::ng-deep {
+  .mat-dialog-container {
+    background-color: transparent !important;
+    padding: 0;
+  }
+}
+
+::ng-deep {
+  .mat-select-panel {
+    @apply bg-dark-background-4 ml-2;
+  }
+}

@@ -4,14 +4,8 @@ import { CommonModule } from '@angular/common';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { GeneralSettingsComponent } from './general-settings/general-settings.component';
 
-
 @NgModule({
-  declarations: [
-    GeneralSettingsComponent
-  ],
-  imports: [
-    CommonModule,
-    SettingsRoutingModule
-  ]
+  declarations: [GeneralSettingsComponent],
+  imports: [CommonModule, SettingsRoutingModule],
 })
-export class SettingsModule { }
+export class SettingsModule {}

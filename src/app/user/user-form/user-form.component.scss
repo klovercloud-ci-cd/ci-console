@@ -1,0 +1,53 @@
+div{
+  @apply text-dark;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+
+  &:hover {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-dark-background-1;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-background-4;
+  border-radius: 30px;
+
+  &:hover {
+    @apply bg-dark-background-active;
+    width: 10px;
+    height: 10px;
+  }
+}
+
+.page__content {
+  @apply bg-light-400 p-6 rounded-md;
+}
+
+.resource_custom_form_btn {
+  line-height: 52px;
+  margin-top: 4px;
+}
+
+._submit__btn {
+  line-height: 50px;
+  height: 50px;
+  // &.is_submitting {
+  //   &.mat-primary.mat-button-disabled {
+  //     @apply bg-primary;
+  //   }
+  // }
+}
+
+::ng-deep {
+  .mat-select-panel {
+    @apply bg-light ml-2;
+  }
+}

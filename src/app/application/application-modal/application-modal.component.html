@@ -1,0 +1,50 @@
+<div
+  class="kc-card shadow-card  rounded-lg p-5 relative overflow-hidden"
+>
+  <div class="flex justify-between items-center">
+  <h1 class="pt-3 pb-4" >Add New Application</h1>
+
+  <h1 *ngIf="stepper==2">Total <span class="text-red-500">{{totalError}} errors</span> in this pipeline</h1>
+  </div>
+  <div class="example-container">
+    <form [formGroup]="addApplication" (ngSubmit)="addApplicationFormData()">
+
+      <div class="flex gap-x-2">
+        <mat-form-field class="kcci-field w-1/2" appearance="outline">
+          <mat-label class="text-dark">Name</mat-label>
+          <input
+            formControlName="name"
+            type="text"
+            autocomplete="off"
+            matInput
+          />
+        </mat-form-field>
+        <mat-form-field class="kcci-field w-1/2" appearance="outline">
+          <mat-label class="text-dark">URL</mat-label>
+          <input
+            formControlName="url"
+            type="text"
+            autocomplete="off"
+            matInput
+          />
+        </mat-form-field>
+      </div>
+    </form>
+    <div mat-dialog-actions class=" flex justify-between">
+      <div></div>
+
+      <div>
+        <button
+          class="kc-button-primary-sm-outline kc-register block px-3 py-2 rounded-md cursor-pointer"
+          (click)="openAppEditor()"
+          [disabled]="!addApplication.valid"
+        >
+          Next >
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="absolute top-2 right-2 cursor-pointer" (click)="closeAppModal()">
+    <mat-icon>close</mat-icon>
+  </div>
+</div>

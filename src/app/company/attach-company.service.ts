@@ -1,13 +1,15 @@
-import {
+import  {
   HttpClient,
-  HttpErrorResponse,
+  HttpErrorResponse} from '@angular/common/http';
+import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import  { Router } from '@angular/router';
+import  { Observable} from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { TokenService } from '../auth/token.service';
+import  { TokenService } from '../auth/token.service';
 
 const BASE_URL = environment.v1AuthEndpoint;
 const HTTP_OPTIONS = {
@@ -36,7 +38,7 @@ export class AttachCompanyService {
         `Body: ${error.error}`
       );
     }
-    return throwError('Internal server error!');
+    return throwError(error);
   }
 
   attachCompany(attachCompanyPayload: any): Observable<any> {
@@ -45,10 +47,10 @@ export class AttachCompanyService {
     };
 
     return this.http
-      .post(BASE_URL + 'users', attachCompanyPayload, HTTP_OPTIONS)
+      .put(`${BASE_URL}users`, attachCompanyPayload, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
-          console.log("Response Log: ",res);
+          console.log('Response Log: ', res);
         }),
         catchError(AttachCompanyService.handleError)
       );

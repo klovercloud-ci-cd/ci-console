@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import {
+import  { OnInit } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import  {
   FormArray,
   FormBuilder,
+  FormGroup} from '@angular/forms';
+import {
   FormControl,
-  FormGroup,
   Validators,
 } from '@angular/forms';
-import { ToolbarService } from 'src/app/shared/services/toolbar.service';
-import { AttachCompanyService } from '../attach-company.service';
+import  { MatDialogRef } from '@angular/material/dialog';
+import  { AuthService } from 'src/app/auth/auth.service';
+import  { TokenService } from 'src/app/auth/token.service';
+import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
+import  { AttachCompanyService } from '../attach-company.service';
 
 interface RepoType {
   value: string;
@@ -20,50 +25,55 @@ interface RepoType {
   styleUrls: ['./add-company.component.scss'],
 })
 export class AddCompanyComponent implements OnInit {
-  selectedValue: string = '';
-  selectedCar: string = '';
+  selectedValue = '';
+
+  selectedCar = '';
+
   panelOpenState = true;
 
+  tooltipMsg =
+    "Click on 'Generate Here' to generate the token and paste that in the input field.";
+
   repos: RepoType[] = [
-    { value: 'bitbucket', viewValue: 'Bitbucket' },
-    { value: 'github', viewValue: 'Github' },
-    { value: 'gitlab', viewValue: 'Gitlab' },
+    { value: 'BIT_BUCKET', viewValue: 'Bitbucket' },
+    { value: 'GITHUB', viewValue: 'Github' },
+    { value: 'GITLAB', viewValue: 'Gitlab' },
   ];
+
   isLoading = false;
+
   showAddApp = false;
+
   showAddRepo = false;
 
   constructor(
     private fb: FormBuilder,
-    private attachCompanyService: AttachCompanyService, private _toolbarService: ToolbarService
+    private attachCompanyService: AttachCompanyService,
+    private _toolbarService: ToolbarService,
+    private authService: AuthService,
+    private tokenService: TokenService,
+    public dialogRef: MatDialogRef<AttachCompanyService>,
   ) {}
 
   ngOnInit(): void {
-    this._toolbarService.changeData({ title: 'Attach Company' });
+    this._toolbarService.changeData({ title: 'Settings' });
   }
 
-  // ----------------- Where it all began -----------------
+  // ----------------- Attach Company Form -----------------
 
   formDataFormat: any;
+
   repoData: any = [];
 
-  // get hobbyControls() {
-  //   return (<FormArray>this.attachCompanyForm.get('hobbies')).controls;
-  // }
-
   attachCompanyForm = this.fb.group({
-    companyId: ['', Validators.required],
+    // companyId: ['', Validators.required],
     name: [''],
-    repositories: this.fb.array([], [Validators.required]),
+    repositories: this.fb.array([]),
   });
-
-  // addHobby() {
-  //   const control = new FormControl(null);
-  //   (<FormArray>this.attachCompanyForm.get('hobbies')).push(control);
-  // }
 
   // Application
   applicaitonVal!: string;
+
   applicaitonVal1!: string;
 
   // Form Repo
@@ -75,7 +85,6 @@ export class AddCompanyComponent implements OnInit {
     return this.fb.group({
       type: ['', [Validators.required]],
       token: ['', [Validators.required]],
-      // auth_type: ['password'],
       applications: this.fb.array([]),
     });
   }
@@ -122,58 +131,46 @@ export class AddCompanyComponent implements OnInit {
   }
 
   attachCompanyFormData() {
-    // this.attachCompanyForm.delete('field1');
+    this.isLoading = true;
     console.log(this.attachCompanyForm.value);
-    let { companyId, name, repositories } = this.attachCompanyForm.value;
+    const {  name, repositories } = this.attachCompanyForm.value;
 
-    repositories.map((item: any,index:number) => {
-      const app = item.applications.map((app: any) => {
-        return { _metedata: { name: app.name }, url: app.url };
-      });
-      item.id = index+1;
+    repositories.map((item: any, index: number) => {
+      const app = item.applications.map((app: any) => ({ _metadata: { name: app.name }, url: app.url }));
       item.applications = app;
       return item;
     });
-    let companyData = {
-      id: companyId,
+    const companyData = {
       name,
       repositories,
     };
-
     console.log(companyData);
+    this.attachCompanyService
+      .attachCompany(this.attachCompanyForm.value)
+      .subscribe(
+        (res) => {
+          this.isLoading = false;
+          if (res.status === 'success') {
+            this.authService.refreshToken({
+              refresh_token: this.tokenService.getRefreshToken(),
+            }).subscribe((res) => {
+            this.dialogRef.close();
+            this.refresh();
+            });
+          }
+          console.log(res.status);
+        },
+        (err) => {
+          console.log('err', err);
+        }
+      );
+  }
 
-    this.attachCompanyService.attachCompany(JSON.stringify(companyData)).subscribe((res) => {
-      if (res.status ==='success'){
-        this.isLoading =false
-        console.log('Company Attached!');
-      }
-      else{
-        console.log("Errorrrr!!");
-        
-      }
-    })
-    // this.attachCompanyService
-    //   .attachCompany(this.attachCompanyForm.value)
-    //   .subscribe(
-    //     (res) => {
-    //       if (res.status === 'success') {
-    //         // this.isLoading = false;
-    //         // this.router.navigate(['/auth/login']);
-    //         // this.openSnackBar('Registration Successfull', '');
-    //         console.log('Registration Successfull', '');
-    //       }
-    //       console.log(res.status);
-    //       // console.log(this.authService.getUserData(), 'USER');
-    //     },
-    //     (err) => {
-    //       // this.openSnackBarError('Authentication Error', '');
-    //       console.log('err', err);
-    //     }
-    //   );
+  refresh(): void {
+    window.location.reload();
+}
 
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1500);
+  closeAppModal() {
+    this.dialogRef.close();
   }
 }

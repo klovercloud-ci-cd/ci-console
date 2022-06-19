@@ -1,26 +1,27 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {ProfileComponent} from "./profile/profile.component";
-import {ChangePasswordComponent} from "./change-password/change-password.component";
+import { Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { ProfileComponent } from './profile/profile.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 const routes: Routes = [
   {
-    path:'',
-    pathMatch:'full',
-    redirectTo: 'profile'
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'profile',
   },
   {
-    path:'profile',
-    component:ProfileComponent
+    path: 'profile',
+    component: ProfileComponent,
   },
   {
-    path:'change-password',
-    component:ChangePasswordComponent
-  }
+    path: 'reset-password',
+    component: ChangePasswordComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UserProfileRoutingModule { }
+export class UserProfileRoutingModule {}

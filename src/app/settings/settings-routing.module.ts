@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {GeneralSettingsComponent} from "./general-settings/general-settings.component";
+import { Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { Error404Component } from '../error/error404/error404.component';
+
+const childrenRoutes: Routes = [];
 
 const routes: Routes = [
   {
-    path:'',
-    pathMatch:'full',
-    redirectTo: 'general'
+    path: '',
+    children: childrenRoutes,
   },
   {
-    path:'general',
-    component:GeneralSettingsComponent
-  }
+    path: '**',
+    component: Error404Component,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SettingsRoutingModule { }
+export class SettingsRoutingModule {}

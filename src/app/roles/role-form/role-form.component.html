@@ -1,0 +1,79 @@
+<div class="page__content">
+  <div class="flex items-center justify-between mb-10">
+    <h3 class="text-xl font-semibold">
+      {{ data?.name ? "Update Role" : "Create Role" }}
+    </h3>
+  </div>
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+    <div class="w-full">
+      <mat-form-field class="block w-full" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          type="text"
+          formControlName="name"
+          matInput
+          placeholder="Name"
+          required
+        />
+        <mat-error
+          *ngIf="
+            roleForm.get('name')?.touched &&
+            roleForm.get('name')?.hasError('required')
+          "
+        >First Name is required
+        </mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field
+        class="block w-full"
+        floatLabel="never"
+        appearance="outline"
+      >
+        <mat-select
+          formControlName="permissions"
+          placeholder="Permissions"
+          multiple
+        >
+          <mat-option
+            *ngFor="let permission of permissionList"
+            [value]="permission?.name"
+          >{{ permission?.name }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            roleForm.get('permissions')?.touched &&
+            roleForm.get('permissions')?.hasError('required')
+          "
+        >Permissions is required
+        </mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div class="text-right mt-6">
+      <button mat-dialog-close mat-button type="button" class="mr-2">
+        Cancel
+      </button>
+      <button
+        [disabled]="roleForm.invalid || isSubmitting"
+        class="w-44 _submit__btn text-xl"
+        [ngClass]="{ is_submitting: isSubmitting }"
+        type="submit"
+        mat-flat-button
+        color="primary"
+      >
+        <span *ngIf="!isSubmitting">{{
+          data?.name ? "Update" : "Create"
+          }}</span>
+        <div *ngIf="isSubmitting" class="leading-6">
+          <mat-progress-bar
+            color="accent"
+            mode="indeterminate"
+          ></mat-progress-bar>
+        </div>
+      </button>
+    </div>
+  </form>
+</div>

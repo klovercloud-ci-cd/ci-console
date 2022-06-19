@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import type { Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ApplicationListComponent } from './application-list/application-list.component';
 import { CiCdPipelineComponent } from './ci-cd-pipeline/ci-cd-pipeline.component';
 
 const routes: Routes = [
   {
-    path: 'pipe',
-    component: CiCdPipelineComponent,
+    path: '',
+    component: ApplicationListComponent,
   },
   {
-    path: 'list',
-    component: ApplicationListComponent,
-  }
+    path: 'application',
+    component: CiCdPipelineComponent,
+  },
 ];
 
 @NgModule({

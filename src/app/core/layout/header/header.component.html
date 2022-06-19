@@ -1,43 +1,104 @@
-<div class="flex gap-x-4 cursor-pointer">
+<div class="flex gap-x-8 justify-between items-center">
+  <div class="flex gap-x-6 cursor-pointer">
+    <mat-icon class="text-dark-500"
+      (click)="openNotification()"
+      matBadgeColor="warn"
+      matBadge="{{newNoticeCount==0?'':newNoticeCount}}"
+      [matMenuTriggerFor]="notice"
+      >notifications</mat-icon
+    >
+  </div>
+  <mat-menu
+    #notice="matMenu"
+    xPosition="before"
+    class="text-dark kc-menu"
+  ><div class="">
+    <div class="text-sub-title mb-3">Notifications</div>
+    <mat-divider></mat-divider>
+    <div class="mt-3 space-y-2 h-80 relative overflow-y-auto p-2">
+      <div *ngFor="let notice of notices"  class="kc-card p-2 border-kc-bdr-card space-y-2 cursor-pointer" >
+        <div (click)="navigateToProcess(notice?.process_id)">
+          <div class="flex justify-between items-center">
+            <div class="font-semi-bold">{{notice.data?.step}}</div>
+            <div class="text-caption text-dark-500">{{notice?.CreatedAt | date:'d MMM yyy, HH:mm:ss'}}</div>
+          </div>
+          <div [ngClass]="notice.data?.status === 'FAILED'?'text-danger':notice.data?.status ==='INITIALIZING'?'text-info':'text-success'" class="text-button-sm">{{notice.data?.status}}</div>
+          <div class="text-caption">{{notice?.process_id}}</div>
+        </div>
+      </div>
+      <div kcciNotice (click)="nextLog()" class="bottom-0 kc-button-primary-sm-outline flex justify-center gap-2 items-center"><mat-icon>add</mat-icon> More</div>
+    </div>
 
-  <button
-    mat-button
-    [matMenuTriggerFor]="afterMenu"
-    class="flex justify-center items-center"
-  >
-    User name <mat-icon>account_circle</mat-icon>
-  </button>
-  <mat-menu #afterMenu="matMenu" xPosition="before" class="text-white  kc-menu">
-    <div class="flex bg-[#8700ff] items-center p-4 py-6 gap-2">
-      <div class="h-12 w-12 bg-gray-500 rounded-full flex justify-center items-center bg-opacity-25 font-bold">
-        <mat-icon class=" material-icons-sharp kc-profile-icon text-3xl -mt-3 mr-1.5">perm_identity</mat-icon>
-      </div>
-      <h1 class="text-xl">{{userPersonalInfo?.data?.first_name}}<span class="text-sm">(Admin)</span></h1>
-    </div>
-    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-active">
-      <div class="flex h-full  items-center p-4 gap-6">
-        <mat-icon class="text-fill-green-700 material-icons-outlined text-stroke-white">account_circle</mat-icon>
-        <div>
-          <h1>My Profile</h1>
-          <h2>Personal info</h2>
-        </div>
-      </div>
-      <div>
-        <mat-icon>navigate_next</mat-icon>
-      </div>
-    </div>
-    <div class="flex justify-between bg-dark-background items-center px-2 hover:bg-dark-background-active">
-      <div class="flex h-full  items-center p-4 gap-6">
-        <mat-icon class="material-icons-outlined text-dark-danger">settings</mat-icon>
-        <div>
-          <h1>Settings</h1>
-          <h2>Manage Others Settings</h2>
-        </div>
-      </div>
-      <div>
-        <mat-icon>navigate_next</mat-icon>
-      </div>
-    </div>
-    <button matRipple mat-button class="text-center w-full " (click)="logout()">LOGOUT</button>
+  </div>
   </mat-menu>
+  <div class="flex gap-x-6 cursor-pointer">
+    <button
+      mat-ripple
+      [matMenuTriggerFor]="profileDropdown"
+      class="kc-button-transparent-sm flex justify-center items-center"
+    >
+      <div class="flex gap-2 items-center drop-shadow-lg">
+        {{ userPersonalInfo?.data?.first_name || "User name" }}
+        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="31" height="31" rx="6" fill="white"/>
+          <mask id="mask0_17_15" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="31">
+            <rect width="31" height="31" fill="#eff4fa"/>
+          </mask>
+          <g mask="url(#mask0_17_15)">
+            <path d="M18.7191 14.6274C19.4835 13.7126 19.9621 12.4891 19.9621 11.1266C19.9621 8.27845 17.9114 6 15.4051 6C12.8987 6 10.8481 8.27845 10.8481 11.1266C10.8481 12.4948 11.33 13.7229 12.099 14.6388C9.78973 15.0786 8 17.1349 8 19.5569V23.4304C8 23.7721 8.22783 24 8.56965 24C8.91146 24 9.13929 23.7722 9.13929 23.4304V19.5569C9.13929 17.3924 10.8482 15.6835 13.0127 15.6835H13.3579C13.9765 16.0356 14.6658 16.2532 15.4051 16.2532C16.1445 16.2532 16.8337 16.0356 17.4535 15.6835C17.4547 15.6835 17.4547 15.6835 17.4558 15.6835H17.7975C19.9621 15.6835 21.6709 17.3924 21.6709 19.5569V23.4304C21.6709 23.7721 21.8988 24 22.2406 24C22.5823 24 22.8102 23.7722 22.9241 23.4304V19.5569C22.9241 17.0984 21.0785 15.025 18.7191 14.6274ZM11.9874 11.1266C11.9874 8.96202 13.4684 7.13923 15.4051 7.13923C17.3419 7.13923 18.8229 8.96202 18.8229 11.1266C18.8229 13.2911 17.3419 15.1139 15.4051 15.1139C13.4684 15.1139 11.9874 13.2912 11.9874 11.1266V11.1266Z" fill="#182641"/>
+          </g>
+        </svg>
+      </div>
+
+    </button>
+    <mat-menu
+      #profileDropdown="matMenu"
+      xPosition="before"
+      class="bg-light-400  kc-menu"
+    >
+      <div class="w-full flex gap-4 items-center pb-4">
+        <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="31" height="31" rx="6" fill="white"/>
+          <mask id="mask0_17_15" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="31">
+            <rect width="31" height="31" fill="#eff4fa"/>
+          </mask>
+          <g mask="url(#mask0_17_15)">
+            <path d="M18.7191 14.6274C19.4835 13.7126 19.9621 12.4891 19.9621 11.1266C19.9621 8.27845 17.9114 6 15.4051 6C12.8987 6 10.8481 8.27845 10.8481 11.1266C10.8481 12.4948 11.33 13.7229 12.099 14.6388C9.78973 15.0786 8 17.1349 8 19.5569V23.4304C8 23.7721 8.22783 24 8.56965 24C8.91146 24 9.13929 23.7722 9.13929 23.4304V19.5569C9.13929 17.3924 10.8482 15.6835 13.0127 15.6835H13.3579C13.9765 16.0356 14.6658 16.2532 15.4051 16.2532C16.1445 16.2532 16.8337 16.0356 17.4535 15.6835C17.4547 15.6835 17.4547 15.6835 17.4558 15.6835H17.7975C19.9621 15.6835 21.6709 17.3924 21.6709 19.5569V23.4304C21.6709 23.7721 21.8988 24 22.2406 24C22.5823 24 22.8102 23.7722 22.9241 23.4304V19.5569C22.9241 17.0984 21.0785 15.025 18.7191 14.6274ZM11.9874 11.1266C11.9874 8.96202 13.4684 7.13923 15.4051 7.13923C17.3419 7.13923 18.8229 8.96202 18.8229 11.1266C18.8229 13.2911 17.3419 15.1139 15.4051 15.1139C13.4684 15.1139 11.9874 13.2912 11.9874 11.1266V11.1266Z" fill="#182641"/>
+          </g>
+        </svg>
+        <h1 class="text-xl">
+          {{ userPersonalInfo?.data?.first_name
+          }}<span class="text-sm">(Admin)</span>
+        </h1>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="py-2 ">
+        <div mat-ripple class="py-2 w-full flex gap-4 items-center rounded-md cursor-pointer" routerLink="/user-profile/profile">
+            <mat-icon class="text-dark-500">person</mat-icon>
+          <div class="">
+            <h1>My Profile</h1>
+          </div>
+        </div>
+        <div mat-ripple class="py-2 w-full flex gap-4 items-center rounded-md cursor-pointer" routerLink="/user-profile/reset-password">
+          <mat-icon class="text-dark-500">sync_lock</mat-icon>
+          <div>
+            <h1>Change Password</h1>
+          </div>
+        </div>
+<!--        <div mat-ripple class="py-2 w-full flex gap-4 items-center rounded-md cursor-pointer">-->
+<!--          <mat-icon class="text-dark-500">settings</mat-icon>-->
+<!--          <div>-->
+<!--            <h1>Settings</h1>-->
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+      <mat-divider></mat-divider>
+      <div mat-ripple class="py-2 mt-4 flex gap-4 w-full cursor-pointer rounded-md" (click)="logout()">
+        <mat-icon class="text-dark-500">logout</mat-icon>
+        <div>
+          <h1>logout</h1>
+        </div>
+      </div>
+    </mat-menu>
+  </div>
 </div>

@@ -1,31 +1,59 @@
-.example-container {
-  height: 100vh;
-  color: white;
-  background-color: #0d1527;
+//.example-container {
+//  height: 100vh;
+//  @apply text-light;
+//}
+div{
+  @apply text-dark;
 }
 .example-sidenav {
-  background-color: #131d35;
-  @apply xl:border-r-[1px] xl:border-[#495c7d] w-[260px];
+  @apply bg-light-400 xl:border-r-[1px] xl:border-kc-bdr-card w-[260px];
 }
 
 .content-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #0d1527;
+  @apply flex justify-center items-center bg-light-400;
 }
 
-
 .sidepanel {
-  position: fixed;  
+  @apply bg-light-900 text-dark;
+  position: fixed;
   z-index: 1;
   height: 100%;
   top: 0;
   left: 0;
-  background-color: #131d35;
+  //background-color: #131d35;
   transform: translateX(-260px);
-  transition: transform .5s;
+  transition: transform 0.5s;
 }
-.open{
+.open {
   transform: translateX(0px);
 }
+
+
+//.example-container {
+//  height: 100vh;
+//  color: white;
+//}
+//.example-sidenav {
+//  @apply bg-light-400 xl:border-r-[1px] xl:border-[#495c7d] w-[260px];
+//}
+//
+//.content-body {
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  background-color: #0d1527;
+//}
+//
+//.sidepanel {
+//  position: fixed;
+//  z-index: 1;
+//  height: 100%;
+//  top: 0;
+//  left: 0;
+//  background-color: #131d35;
+//  transform: translateX(-260px);
+//  transition: transform 0.5s;
+//}
+//.open {
+//  transform: translateX(0px);
+//}

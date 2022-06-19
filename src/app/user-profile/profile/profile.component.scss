@@ -1,0 +1,22 @@
+.my__profile {
+  width: 100%;
+  @apply flex justify-center items-center;
+}
+.edit__profile {
+  min-height: 85vh;
+  @apply w-full h-full text-dark-text mx-7 bg-light-400;
+}
+
+.profile_card {
+  @apply bg-light-400 border border-kc-bdr-card rounded-md text-dark p-[5px];
+
+}
+
+.cluster-card {
+  @apply bg-light-400 border border-kc-bdr-card rounded-md text-dark;
+  padding: 5px;
+
+  div {
+    @apply py-4;
+  }
+}
