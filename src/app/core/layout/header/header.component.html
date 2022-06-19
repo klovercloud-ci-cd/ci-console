@@ -3,8 +3,7 @@
     <mat-icon class="text-dark-500"
       (click)="openNotification()"
       matBadgeColor="warn"
-
-              matBadge="{{newNoticeCount}}"
+      matBadge="{{newNoticeCount==0?'':newNoticeCount}}"
       [matMenuTriggerFor]="notice"
       >notifications</mat-icon
     >
@@ -20,9 +19,9 @@
       <div *ngFor="let notice of notices"  class="kc-card p-2 border-kc-bdr-card space-y-2">
         <div class="flex justify-between items-center">
           <div class="font-semi-bold">{{notice.data?.step}}</div>
-          <div class="text-caption">{{notice.CreatedAt}}</div>
+          <div class="text-caption">{{notice.CreatedAt | date:'d MMM yyy, HH:mm:ss'}}</div>
         </div>
-        <div class="text-button-sm">{{notice.data?.status}}</div>
+        <div [ngClass]="notice.data?.status ==='FAILED'?'text-danger':notice.data?.status ==='INITIALIZING'?'text-info':'text-success'" class="text-button-sm ">{{notice.data?.status}}</div>
         <div class="text-caption">{{notice.process_id}}</div>
       </div>
       <div kcciNotice (click)="nextLog()" class="bottom-0 kc-button-primary-sm-outline flex justify-center gap-2 items-center"><mat-icon>add</mat-icon> More</div>
