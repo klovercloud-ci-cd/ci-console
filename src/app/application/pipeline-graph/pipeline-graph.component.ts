@@ -94,13 +94,12 @@ export class PipelineGraphComponent
   logs: any[] = [];
   prevStepName: string = '';
   page: number = 0;
-  limit: any = 5;
+  limit: any = 10;
   skip: number = 0;
   prev_logs_size: number = 0;
   nodeDetails: any = '';
   activeStep: any = '';
   init = false;
-  //refactor Start
   commit: any;
   isLoading = { graph: true, commit: true };
   socket: any;
@@ -674,19 +673,25 @@ export class PipelineGraphComponent
   }
 
   stepFootMark(processId: any, stepName: any, status: any) {
-    this.repo.getfootPrint(processId, stepName).subscribe((res: any) => {
-      this.stepStatus = res.status;
-      this.footMarks = res.data;
+    this.repo.getfootPrint(processId, stepName).subscribe((footMarkRes: any) => {
+      this.stepStatus = footMarkRes.status;
+      this.footMarks = footMarkRes.data;
+      this.activeStep =stepName;
       this.setActiveFootMark(this.footMarks.length - 1);
-      this.wsService.wsData.subscribe((res) => {
-        const socketRes: any = res;
+      this.wsService.wsData.subscribe((WSRes) => {
+        const socketRes: any = WSRes;
         if (socketRes.process_id == this.pipeline.data.process_id) {
           if (
             this.stepStatus !== 'active' &&
             this.openFootMark !== this.footMarks.indexOf(socketRes.footmark)
           ) {
+            this.activeStep = socketRes.footmark;
+            //console.log('scrollArea'+this.activeStep)
             this.setActiveFootMark(this.footMarks.indexOf(socketRes.footmark));
 
+          }
+          if (this.stepStatus === 'active'){
+            console.log('scrollArea'+this.activeStep)
           }
         }
       });
@@ -723,6 +728,7 @@ export class PipelineGraphComponent
 
   expandLog(footMarkIndex: number, foot: any, nodeName: string, claim: number) {
     this.setActiveFootMark(footMarkIndex);
+
     this.page = 0;
     this.skip = 0;
     this.logs = [];

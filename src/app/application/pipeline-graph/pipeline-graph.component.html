@@ -74,8 +74,8 @@
                   </mat-icon>
                 </div>
                 //logPanel
-                <div class="px-3 overflow-auto h-full w-full  " id="{{'scrollArea'+foot}}" >
-                     <div class="h-full logPanel">
+                <div class="px-3 overflow-auto h-full w-full" id="{{'scrollArea'+foot}}" >
+                     <div class="h-full">
                        <span *ngFor="let logDetails of logs">
                       <span *ngIf="logDetails.name === foot" class="space-y-2">
                         <pre
@@ -434,72 +434,6 @@
             </div>
           </div>
         </div>
-        <!--<div class="flex gap-0 justify-center">
-          <ngx-skeleton-loader
-            class=""
-            count="1"
-            [theme]="{
-              height: '60px',
-              width: '60px',
-              'z-index': 100,
-              'background-color': '#bbbcc7'
-            }"
-            animation="progress-dark"
-            appearance="circle"
-          ></ngx-skeleton-loader>
-        </div>
-        <div class="flex gap-0 justify-center h-[150px]">
-          <ngx-skeleton-loader
-            class=""
-            count="1"
-            [theme]="{
-              'border-radius': '5px',
-              width: '150px',
-              height: '5px',
-              transform: 'rotate(-30deg)',
-              'background-color': '#bbbcc7'
-            }"
-            animation="progress-dark"
-            appearance="line"
-          ></ngx-skeleton-loader>
-          <ngx-skeleton-loader
-            class=""
-            count="1"
-            [theme]="{
-              'border-radius': '5px',
-              width: '150px',
-              height: '5px',
-              transform: 'rotate(30deg)',
-              'background-color': '#bbbcc7'
-            }"
-            animation="progress-dark"
-            appearance="line"
-          ></ngx-skeleton-loader>
-        </div>
-        <div class="flex gap-[150px] justify-center -mt-[150px]">
-          <ngx-skeleton-loader
-            class=""
-            count="1"
-            [theme]="{
-              height: '60px',
-              width: '60px',
-              'background-color': '#bbbcc7'
-            }"
-            animation="progress-dark"
-            appearance="circle"
-          ></ngx-skeleton-loader>
-          <ngx-skeleton-loader
-            class=""
-            count="1"
-            [theme]="{
-              height: '60px',
-              width: '60px',
-              'background-color': '#bbbcc7'
-            }"
-            animation="progress-dark"
-            appearance="circle"
-          ></ngx-skeleton-loader>
-        </div>-->
       </div>
     </mat-card>
   </div>
