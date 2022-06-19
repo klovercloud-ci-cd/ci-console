@@ -62,7 +62,9 @@ export class RepositoryModalComponent implements OnInit {
         }
       );
   }
-
+  someThing(){
+    alert("SOmething")
+  }
   closeAppModal() {
     this.dialogRef.close();
   }

@@ -29,11 +29,11 @@
             <!-- <p class="mt-4">Loading Users</p> -->
           </div>
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef width="15%">Name</th>
+            <th mat-header-cell *matHeaderCellDef width="15%" class="font-bold">Name</th>
             <td mat-cell *matCellDef="let element" class="kc-table">
               <!-- [routerLink]="['application/', element._metadata.id]" -->
-              <div class="cursor-pointer" (click)="someRoute(element)">
-                {{ element._metadata.name }}
+              <div class="cursor-pointer flex items-center gap-1 hover:text-dark" (click)="someRoute(element)">
+                <mat-icon  class="text-blue-400">link</mat-icon>{{ element._metadata.name }}
               </div>
             </td>
           </ng-container>
@@ -76,7 +76,7 @@
           <ng-container matColumnDef="url">
             <th mat-header-cell *matHeaderCellDef width="30%">URL</th>
             <td mat-cell *matCellDef="let element">
-              <a [href]="element.url">{{ element.url }}</a>
+              <a [href]="element.url" class=" flex items-center gap-1"><mat-icon class="text-blue-400">link</mat-icon>{{ element.url }}</a>
             </td>
           </ng-container>
           <ng-container matColumnDef="action">

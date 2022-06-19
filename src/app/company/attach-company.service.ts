@@ -11,7 +11,7 @@ import { catchError, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import  { TokenService } from '../auth/token.service';
 
-const BASE_URL = 'http://192.168.68.114:4200/api/v1/';
+const BASE_URL = environment.v1AuthEndpoint;
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export class AttachCompanyService {
     };
 
     return this.http
-      .put(`${BASE_URL  }users`, attachCompanyPayload, HTTP_OPTIONS)
+      .put(`${BASE_URL}users`, attachCompanyPayload, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
           console.log('Response Log: ', res);

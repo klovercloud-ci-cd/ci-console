@@ -19,7 +19,10 @@ th {
   @apply bg-dark-border-default hover:text-dark-background-5 hover:bg-white transition duration-500 w-full py-2 mx-auto rounded-md flex items-center justify-center;
 }
 
-
+th, mat-header-row, .mat-header-cell-def{
+  font-weight:bold;
+  font-size: 16px;
+}
 //
 //.mat-table {
 //  overflow: auto;

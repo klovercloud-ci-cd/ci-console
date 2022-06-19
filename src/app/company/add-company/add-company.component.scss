@@ -26,8 +26,7 @@
 }
 .registration-form {
   min-height: 85vh;
-  @apply w-full h-full text-dark-text md:mx-7;
-  background: linear-gradient(280.19deg, #1d283f -5.42%, #182641 204.15%);
+  @apply w-full h-full text-light  bg-light;
 }
 .form-title {
   @apply text-2xl uppercase;
@@ -142,7 +141,7 @@ input[type="number"] {
   .my-tooltip {
     white-space: pre-line;
     text-align: center;
-    @apply bg-dark-container border-[1px] border-dark-primary;
+    @apply bg-info border-[1px] border-dark-primary;
     min-height: 50px;
     padding: 8px 0px;
 
