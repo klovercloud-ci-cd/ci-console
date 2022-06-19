@@ -1,7 +1,9 @@
 .p-page {
   @apply mx-7;
 }
-
+div{
+  @apply text-dark;
+}
 .add-user {
   .mat-icon {
     height: 18px;

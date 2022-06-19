@@ -158,7 +158,7 @@ export class ApplicationListComponent implements OnInit {
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '100%';
-    dialogConfig.maxWidth = '600px'
+    dialogConfig.maxWidth = '600px',
     dialogConfig.data = {
       repositoryId: this.repositoryId,
       applicationURL: element.url

@@ -1,5 +1,5 @@
 <div
-  class="kc-card shadow-card  rounded-lg p-5 relative "
+  class="kc-card shadow-card  rounded-lg p-5 relative overflow-hidden"
 >
   <div class="flex justify-between items-center">
   <h1 class="pt-3 pb-4" >Add New Application</h1>
@@ -29,22 +29,20 @@
           />
         </mat-form-field>
       </div>
-
-      <div mat-dialog-actions class=" flex justify-between">
-        <div></div>
-
-        <div>
-          <span
-            class="kc-button-primary-sm-outline kc-register block px-3 py-2 rounded-md cursor-pointer"
-          (click)="openAppEditor()"
-          >
-        Next >
-        </span>
-        </div>
-      </div>
-
-
     </form>
+    <div mat-dialog-actions class=" flex justify-between">
+      <div></div>
+
+      <div>
+        <button
+          class="kc-button-primary-sm-outline kc-register block px-3 py-2 rounded-md cursor-pointer"
+          (click)="openAppEditor()"
+          [disabled]="!addApplication.valid"
+        >
+          Next >
+        </button>
+      </div>
+    </div>
   </div>
   <div class="absolute top-2 right-2 cursor-pointer" (click)="closeAppModal()">
     <mat-icon>close</mat-icon>

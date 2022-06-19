@@ -4,6 +4,9 @@
 //  min-height: 47vh;
 //}
 @use "sass:color";
+div{
+  @apply text-dark;
+}
 .chart-card{
   //@apply bg-light-700 border-1.5 border-kc-bdr-card;
   @apply bg-light-400 border border-kc-bdr-card rounded-md text-dark;

@@ -20,17 +20,6 @@ export class DashboardService {
 
   constructor(private http: HttpClient, private token: TokenService) { }
 
-  // http://localhost:8085/api/v1/users?action=users_count
-  //   Get Total Process Count by Date: <with token>
-  // http://localhost:8080/api/v1/processes?operation=countProcessByCompanyIdAndDate&from=2022-06-01&to=2022-06-10
-  //   Get Pipeline Dashboard Data by Date: <with token>
-  // http://localhost:8080/api/v1/pipelines?action=dashboard_data&from=2022-05-23&to=2022-06-20
-  //   Get Pods Dashboard Data: <with token>
-  // http://localhost:8080/api/v1/kube_objects?object=pod&action=dashboard_data&agent=abc
-
-
-  // http://localhost:8080/api/v1/companies/a5a55aa0-6165-4e70-bf3f-4663b3293ec0?action=dashboard_data
-
   getAppSteps(companyID:String,repoId: String,appURL:String): Observable<any> {
     HTTP_OPTIONS.params = {
       companyId: companyID,
@@ -68,8 +57,6 @@ export class DashboardService {
     };
     return this.http.get(`${BASE_URL}agents`, HTTP_OPTIONS);
   }
-
-  // http://localhost:8080/api/v1/kube_objects?object=pod&action=dashboard_data&agent=abc
 
   getPodsByAgent(agent_name:string): Observable<any>{
     HTTP_OPTIONS.params = {

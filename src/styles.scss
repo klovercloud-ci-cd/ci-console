@@ -135,7 +135,7 @@ body {
 }
 * {
   font-family: Manrope, sans-serif;
-  @apply font-regular text-dark text-paragraph tracking-wide;
+  @apply font-regular  text-paragraph tracking-wide;
 }
 .ace_error{
   cursor: pointer;
@@ -162,7 +162,7 @@ body {
   position: relative;
 }
 .sb-error {
-  @apply bg-danger-50 shadow-md shadow-danger-100 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px];
+  @apply bg-danger-50 shadow-md shadow-danger-100 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px] text-dark;
   transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
   position: relative;
 }

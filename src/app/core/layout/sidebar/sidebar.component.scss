@@ -2,7 +2,9 @@
   @apply bg-light-600  text-dark-slider-color;
 }
 $sidenavWidth: 260px;
-
+div{
+  @apply text-dark;
+}
 .sidenav {
   padding: 20px 18px;
   width: $sidenavWidth;
@@ -28,7 +30,7 @@ $sidenavWidth: 260px;
     line-height: 16px;
     letter-spacing: 0.2px;
     text-align: left;
-    color: #ffffff;
+    color: black;
     @apply flex items-center;
     &:hover,
     &.active {

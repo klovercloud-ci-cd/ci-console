@@ -156,19 +156,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     }
   ];
 
-// {
-//   "deployment": {
-//     "count": 0
-//   },
-//   "name": "def",
-//   "pods": {
-//     "ImagePullBackOff": 1,
-//     "NullContainerStatuses1": 1,
-//     "NullContainerStatuses2": 1,
-//     "Succeeded": 1,
-//     "WaitingReason3": 1
-//   }
-// }
+
   labelAndColor= new Map<string, string>();
   label:any= []
   color:any= []
@@ -177,11 +165,6 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   // agentsInfo: Agent[];
 
   async ngOnInit(): Promise<void> {
-
-    // hasUser
-    // hasWebhook
-    // hasProcess
-    // hasPods
 
     // this.isLoading=true;
     this.getDetails();
@@ -299,7 +282,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
         this.totalWebhook = this.enabledWebhook+this.disabledWebhook;
         this.buildWebhookChartData[0].data = [this.enabledWebhook, this.disabledWebhook];
       },(err)=>{
-        this.snack.openSnackBar('Error!',err.error.message,'sb-error');
+        this.snack.openSnackBar('Webhook!',err.error.message,'sb-error');
       })
     })
 
@@ -326,7 +309,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       this.buildpipelineChartData[0].data = [this.pipelineCompleted, this.pipelineFailed, this.pipelineRunning, this.pipelinePaused, this.pipelineNonInitialized];
 
     },(err)=>{
-      this.snack.openSnackBar('Error!',err.error.message,'sb-error')
+      this.snack.openSnackBar('Processes!',err.error.message,'sb-error')
     })
 
     // <------------Agents Section------------>
@@ -386,7 +369,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       this.totalUsers = this.usersActive + this.usersInactive;
       this.buildUsersChartData[0].data = [this.usersActive, this.usersInactive];
       },(err)=>{
-        console.log("errerr",err)
+        console.log("errerr",err);
         }
       );
 
