@@ -19,6 +19,7 @@ import { PipelineService } from '../pipeline.service';
 import { WsService } from '../../shared/services/ws.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProcessLifecycleEventService } from '../process-lifecycle-event.service';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -104,6 +105,7 @@ export class PipelineGraphComponent
   isLoading = { graph: true, commit: true };
   socket: any;
   isObjerving: boolean = false;
+  selected: any
 
   constructor(
     private _toolbarService: ToolbarService,
@@ -196,7 +198,7 @@ export class PipelineGraphComponent
 
   ngOnInit() {
     ///test
-
+this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
     this.route.queryParams.subscribe((res) => {
       this.title = res['title'];
       this.type = res['type'].toLowerCase() + 's';
@@ -333,7 +335,8 @@ export class PipelineGraphComponent
         if (res.data) {
           this.error.pipeline =''
           this.processIds = res.data;
-          console.log(this.processIds);
+          // this.selected=this.processIds[0].process_id
+          console.log("this.selected",this.selected);
           this.getPipeline(this.processIds[0].process_id);
         }
       }
