@@ -4,9 +4,14 @@
   <div class="log-card relative">
 
     <div [ngClass]="fullmode?'':'hidden'"
-         class="absolute right-0 h-[calc(100vh-170px)] top-[.78rem] z-50 w-[calc(100%-1.5rem)] bg-black">
-      <div (click)="fullModeClose()" class="flex items-center justify-end cursor-pointer w-full h-10 bg-primary-800 px-3">
-        <mat-icon class="text-white">fullscreen_exit</mat-icon>
+         class="absolute right-0 h-[calc(100vh-170px)] overflow-hidden top-[.78rem] z-50 w-[calc(100%-1.5rem)] bg-black">
+      <div (click)="fullModeClose()" class="flex items-center justify-between cursor-pointer w-full h-10 bg-primary-800 px-3">
+        <div class="text-light font-semi-bold">
+          {{singleLogDetails.footmark}}
+        </div>
+        <div>
+          <mat-icon class="text-white">fullscreen_exit</mat-icon>
+        </div>
       </div>
       <div class="p-3">
         <span *ngFor="let logDetails of logs">
@@ -55,7 +60,7 @@
       <div class="h-[calc(100vh-320px)] overflow-y-auto " id="footmarkDiv">
         <div *ngFor="let foot of footMarks; let i = index;let last = last" class=" ">
           <mat-accordion class="example-headers-align">
-            <mat-expansion-panel [expanded]="openFootMark === i" (opened)="expandLog(i,foot,nodeDetails.name, pipeline.data.claim)"
+            <mat-expansion-panel [expanded]="openFootMark === i" (opened)="expandLog(i,foot,nodeDetails.name, pipeline.data.claim,nodeDetails.status)"
                                  hideToggle
                                  *ngIf="!isLoading.commit"
                                  class="bg-light-400"

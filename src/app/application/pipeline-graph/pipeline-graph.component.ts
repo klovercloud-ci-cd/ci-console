@@ -487,12 +487,14 @@ export class PipelineGraphComponent
               claim
             );
           }
-        }, 2000);
+        }, 1500);
       });
   }
 
   fullMode(footMarkIndex: any, foot: any) {
     this.fullmode = true;
+    // @ts-ignore
+    document.getElementById('scrollArea'+foot).classList.add('logPanel')
     this.singleLogDetails = {
       index: footMarkIndex,
       footmark: foot,
@@ -500,7 +502,10 @@ export class PipelineGraphComponent
   }
 
   fullModeClose() {
+
     this.fullmode = false;
+    // @ts-ignore
+    document.getElementById('scrollArea'+foot).classList.remove('logPanel')
   }
 
   private totalenv() {
@@ -649,16 +654,19 @@ export class PipelineGraphComponent
 
   openLogPanel(stepName: any) {
     this.logOpen = true;
-    this.openFootMarkName = stepName;
+
     const processId = this.pipeline.data.process_id;
     this.getPipeline(processId);
+    this.stepFootMark(processId, stepName);
+
     setTimeout(() => {
       this.pipeline.data.steps.find((hola: any) => {
         if (hola.name === stepName) {
           this.nodeDetails = hola;
+          this.openFootMarkName = this.footMarks[this.footMarks.length-1];
+          this.getLogs(processId,stepName,this.openFootMarkName,this.page,this.limit,this.skip,this.pipeline.data.claim)
         }
       });
-      this.stepFootMark(processId, stepName, this.nodeDetails.status);
     }, 300);
   }
 
@@ -672,7 +680,7 @@ export class PipelineGraphComponent
       });
   }
 
-  stepFootMark(processId: any, stepName: any, status: any) {
+  stepFootMark(processId: any, stepName: any) {
     this.repo.getfootPrint(processId, stepName).subscribe((footMarkRes: any) => {
       this.stepStatus = footMarkRes.status;
       this.footMarks = footMarkRes.data;
@@ -726,9 +734,18 @@ export class PipelineGraphComponent
     });
   }
 
-  expandLog(footMarkIndex: number, foot: any, nodeName: string, claim: number) {
-    this.setActiveFootMark(footMarkIndex);
+  expandLog(footMarkIndex: number, foot: any, nodeName: string, claim: number,status:string) {
+    this.singleLogDetails = {
+      index: footMarkIndex,
+      footmark: foot,
+    };
 
+    this.setActiveFootMark(footMarkIndex);
+    if (status ==='active' && this.openFootMark === footMarkIndex){
+      console.log('scrollArea'+foot)
+      // @ts-ignore
+      document.getElementById('scrollArea'+foot).classList.add('logPanel')
+    }
     this.page = 0;
     this.skip = 0;
     this.logs = [];
