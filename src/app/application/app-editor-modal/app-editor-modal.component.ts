@@ -27,7 +27,6 @@ import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/mode-typescript';
 import 'ace-builds/src-noconflict/mode-scss';
 import {dump as toYaml, load as fromYaml} from 'js-yaml';
-import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
 import {Location} from "@angular/common";
 import {ApplicationModalComponent} from "../application-modal/application-modal.component";
 import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
@@ -85,13 +84,11 @@ export class AppEditorModalComponent implements OnInit {
     private route: ActivatedRoute,
     @Inject(MAT_DIALOG_DATA) public data: ApplicationListComponent,
     @Inject(MAT_DIALOG_DATA) public appUrlDatas: ApplicationModalComponent,
-    private editorDialogRef: MatDialogRef<EditorModalComponent>,
     private router: Router,
     private location: Location,
     public resource: ResourcePermissionService,
     public snack: SharedSnackbarService,
   ) {
-    console.log("appUrlDatas: ",appUrlDatas.showOk)
   }
 
   async ngOnInit(): Promise<void> {
@@ -112,7 +109,6 @@ export class AppEditorModalComponent implements OnInit {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
       this.service.getAppSteps(this.companyID,this.appUrlDatas.repositoryId,this.appUrlDatas.applicationURL).subscribe((res) => {
-        console.log("RESPONSE PIPELINE:",res.data);
 
         this.appStep = res;
         // @ts-ignore
@@ -149,13 +145,10 @@ export class AppEditorModalComponent implements OnInit {
       .subscribe(
         (res) => {
           this.isLoading = false;
-           console.log('Add Application response:', res);
           this.dialogRef.close();
-          // console.log(this.authService.getUserData(), 'USER');
         },
         (err) => {
-          // this.openSnackBarError('Authentication Error', '');
-          console.log('err', err);
+          this.snack.openSnackBar('Application add Failed',err.error._metadata,'sb-error')
         }
       );
   }
@@ -197,7 +190,6 @@ export class AppEditorModalComponent implements OnInit {
 
   getDataKeyValue(allSteps:any){
     allSteps.map((_item: any, index:number)=>{
-      console.log('_item', _item)
       const nextVal = _item?.next?.map((nextValue:any)=>{
         return nextValue.value;
       })
@@ -205,11 +197,10 @@ export class AppEditorModalComponent implements OnInit {
 
       // count:=0
       const paramVal = _item.params.map((paramValue:any)=>{
-        // paramIndexMap[`${paramValue.name} : ${paramValue.value}`]=
         const param = `${paramValue.name} : ${paramValue.value}`
         return param;
       })
-      // let paramIndexMap = new Map<string, number>();
+
       let paramErrorIndexes=[]
 
       for (var i in _item.params) {
@@ -226,7 +217,6 @@ export class AppEditorModalComponent implements OnInit {
           }else{
             nextErrorIndexes.push(Number(i)+6)
           }
-          // console.log(_item.next[i].value,": ",_item.next[i].valid, " ", Number(i)," ",6," ",length)
 
         }
       }
@@ -251,7 +241,7 @@ export class AppEditorModalComponent implements OnInit {
         })
         next_val = !nextValue.includes('false')
       }
-// console.log("keyAndvalue",keyAndvalue)
+
       // <----------Checking Param Array---------->
       if(_item?.params !== null){
         const paramsValue = _item?.params?.map((item:any)=>{
@@ -259,10 +249,8 @@ export class AppEditorModalComponent implements OnInit {
         })
         params_val = !paramsValue.includes('false')
       }
-      // this.arrayData.push(_obj);
 
       let error=new Array();
-       console.log("indexes:",nextErrorIndexes);
 
       if(_item.name.valid=='false'){
         error.push( 1);
@@ -276,13 +264,11 @@ export class AppEditorModalComponent implements OnInit {
         error.push(...paramErrorIndexes)
 
       error.push(...nextErrorIndexes)
-       console.log("errors: ", nextErrorIndexes)
       this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
     })
   }
 
   getTotalError(appSteps:any){
-
     const v_val=appSteps.map((p:any)=>{
 
         const obj={
@@ -293,9 +279,7 @@ export class AppEditorModalComponent implements OnInit {
           params:p?.params?.filter((obj:any) => obj.valid === "false").length
 
         }
-
         return obj
-
       }
     )
 
@@ -303,7 +287,6 @@ export class AppEditorModalComponent implements OnInit {
       return accumulator + object.n_val+object.ty_val+object.t_val+object.nx_val+object.params;
     }, 0);
     this.totalError = fCount;
-    console.log("fCount: ",fCount)
   }
 
   addApplication = this.fb.group({
@@ -314,57 +297,18 @@ export class AppEditorModalComponent implements OnInit {
   gotoNext(e:number){
     const {name,url} = this.addApplication.value;
     this.href = this.router.url;
-    // console.log("PATH: ",this.location.path());
 
     this.stepper = e;
 
   }
-
-  addApplicationFormData() {
-    this.isLoading = true;
-
-    const data = {
-      applications: [
-        {
-          _metadata: {
-            name: this.addApplication.value.name,
-          },
-          url: this.addApplication.value.url,
-        },
-      ],
-    };
-
-    this.service
-      .addApplication(data, this.companyID, this.repositoryId)
-      .subscribe(
-        (res) => {
-          this.isLoading = false;
-          //  console.log('Add Application response', res);
-          this.dialogRef.close();
-          this.closeDialogRef.close();
-          this.allDialog.closeAll();
-
-          // console.log(this.authService.getUserData(), 'USER');
-        },
-        (err) => {
-          // this.openSnackBarError('Authentication Error', '');
-          console.log('err', err);
-        }
-      );
-  }
-
   closeAppModal() {
     this.dialogRef.close();
   }
 
   editorPropsFix(data: any): void {
-    console.log("Get Update Data", data)
-    //  Update Editor item
-    //   key: "name" replaceValue: "step1" stepname: "interstep"
     const stepName= data?.stepname;
     const itemValue = this.stepAsMap.get(stepName)
     const newStepName= data?.replaceValue;
-    console.log(itemValue)
     const _item = itemValue?.stepData;
 
     const nextVal = _item?.next?.map((nextValue:any)=>{
@@ -389,14 +333,12 @@ export class AppEditorModalComponent implements OnInit {
   mapReplace(map: any, prevKey: string, newKey: string, newKeyValue: any): any {
     const x = new Map()
     for (const [key, value] of this.stepAsMap) {
-      console.log("key val", newKey, key)
       if (prevKey === key) {
         x.set(newKey, newKeyValue)
         continue
       }
       x.set(key, value)
     }
-    console.log("x", x)
     return x
   }
 }

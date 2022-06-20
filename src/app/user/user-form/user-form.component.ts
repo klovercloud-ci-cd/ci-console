@@ -101,14 +101,12 @@ export class UserFormComponent implements OnInit {
 
   // Patch Form
   patchForm(userData: any): void {
-    console.log('patch userData', userData);
     const _formData = {
       first_name: userData?.first_name,
       last_name: userData?.last_name,
       phone: userData?.phone,
       email: userData?.email,
     };
-    console.log(_formData);
     this.userForm.patchValue(_formData);
     const resources = userData?.resource_permission?.resources;
     if (resources?.length) {
@@ -127,7 +125,6 @@ export class UserFormComponent implements OnInit {
   onSubmit(): void {
     this.isSubmitting = true;
     const _formData = this.userForm.value;
-    console.log('_formData: ', _formData);
 
     const resourceData = this.resourcesFormArray.value;
     const resources = resourceData.map((resource: any) => {

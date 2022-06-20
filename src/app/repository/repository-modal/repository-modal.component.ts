@@ -6,6 +6,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RepoServiceService } from '../repo-service.service';
 import { RepositoryComponent } from '../repository/repository.component';
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 interface RepoType {
   value: string;
@@ -33,12 +34,11 @@ export class RepositoryModalComponent implements OnInit {
     public dialogRef: MatDialogRef<RepositoryModalComponent>,
     private service: RepoServiceService,
     private fb: FormBuilder,
+    private snack: SharedSnackbarService,
     @Inject(MAT_DIALOG_DATA) public data: RepositoryComponent
   ) {}
 
   ngOnInit(): void {
-    // @ts-ignore
-    console.log('CompID:', this.data.companyID);
   }
 
   repoFormGroup: any = this.fb.group({
@@ -54,17 +54,13 @@ export class RepositoryModalComponent implements OnInit {
         (res) => {
           this.isLoading = false;
           this.dialogRef.close();
-          console.log('RepoRespo: ', res);
         },
         (err) => {
-          // this.openSnackBarError('Authentication Error', '');
-          console.log('err', err);
+          this.snack.openSnackBar('Repository Add Failed',err.error.message,'sb-error')
         }
       );
   }
-  someThing(){
-    alert("SOmething")
-  }
+
   closeAppModal() {
     this.dialogRef.close();
   }

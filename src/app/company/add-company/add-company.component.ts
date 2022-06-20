@@ -13,6 +13,7 @@ import  { AuthService } from 'src/app/auth/auth.service';
 import  { TokenService } from 'src/app/auth/token.service';
 import  { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import  { AttachCompanyService } from '../attach-company.service';
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 interface RepoType {
   value: string;
@@ -53,6 +54,7 @@ export class AddCompanyComponent implements OnInit {
     private authService: AuthService,
     private tokenService: TokenService,
     public dialogRef: MatDialogRef<AttachCompanyService>,
+    private snack: SharedSnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -109,7 +111,6 @@ export class AddCompanyComponent implements OnInit {
   // addApplicaitonControl(repoIndex: string): void {}
 
   addApplicaiton(repoIndex: number): void {
-    console.log('Add app: ', this.repoApplication(repoIndex));
     this.repoApplication(repoIndex).push(
       // new FormControl('', [Validators.required])
       this.appNameGroup()
@@ -132,7 +133,6 @@ export class AddCompanyComponent implements OnInit {
 
   attachCompanyFormData() {
     this.isLoading = true;
-    console.log(this.attachCompanyForm.value);
     const {  name, repositories } = this.attachCompanyForm.value;
 
     repositories.map((item: any, index: number) => {
@@ -144,7 +144,6 @@ export class AddCompanyComponent implements OnInit {
       name,
       repositories,
     };
-    console.log(companyData);
     this.attachCompanyService
       .attachCompany(this.attachCompanyForm.value)
       .subscribe(
@@ -158,10 +157,9 @@ export class AddCompanyComponent implements OnInit {
             this.refresh();
             });
           }
-          console.log(res.status);
         },
         (err) => {
-          console.log('err', err);
+          this.snack.openSnackBar('Company Add Failed!', err.error.message,'sb-warn');
         }
       );
   }

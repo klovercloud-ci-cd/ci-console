@@ -80,7 +80,7 @@
                 </div>
                 //logPanel
                 <div class="px-3 overflow-auto h-full w-full" id="{{'scrollArea'+foot}}" >
-                     <div class="h-full">
+                  <div class="h-full">
                        <span *ngFor="let logDetails of logs">
                       <span *ngIf="logDetails.name === foot" class="space-y-2">
                         <pre
@@ -89,7 +89,7 @@
                         >{{ log }}</pre>
                       </span>
                      </span>
-                     </div>
+                  </div>
                   <div class="my-3 h-5" id="{{'intObj'+foot}}"></div>
                 </div>
               </div>
@@ -199,11 +199,11 @@
       <div class="absolute right-6 ">
         <mat-form-field>
           <mat-label>Select Process ID</mat-label>
-          <mat-select  [(ngModel)]="selected">
+          <mat-select value="0">
             <div class="kc-node-menu">
               <mat-option (click)="getPipeline(id.process_id)"
-                *ngFor="let id of processIds,let i = index"
-                value="i"
+                          *ngFor="let id of processIds,let i = index"
+                          value="0"
               >{{ id.process_id }}</mat-option>
             </div>
           </mat-select>

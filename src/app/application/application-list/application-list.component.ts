@@ -15,6 +15,7 @@ import { AppListService } from '../app-list.service';
 import { ApplicationModalComponent } from '../application-modal/application-modal.component';
 import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
 import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 @Component({
   selector: 'kcci-application-list',
@@ -65,7 +66,8 @@ export class ApplicationListComponent implements OnInit {
     private auth: AuthService,
     private repo: RepoServiceService,
     private navigateRoute: Router,
-    public resource: ResourcePermissionService
+    public resource: ResourcePermissionService,
+    private snack: SharedSnackbarService
   ) {
     this._toolbarService.changeData({ title: 'Applications' });
   }
@@ -89,7 +91,6 @@ export class ApplicationListComponent implements OnInit {
       this.service
         .getRepositoryInfo(this.companyID, this.repositoryId)
         .subscribe((response: any) => {
-          console.log("RRRresponse: ",response.data.applications.length)
           if(response.data.applications.length){
             this.hasData = true;
           }
@@ -98,12 +99,10 @@ export class ApplicationListComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.matSort;
           this.isLoading = false;
-          console.log('RepoInfo: ', response.data.type);
           this.repoType = response.data.type;
         },(err)=>{
           this.hasData = false;
           this.isLoading = false;
-          console.log('No data found!')
         });
     });
   }
@@ -123,23 +122,7 @@ export class ApplicationListComponent implements OnInit {
             repoId: response.data.id,
             appId: e._metadata.id,
           };
-          console.log(data);
-          // @ts-ignore
-          const encodedString = btoa(JSON.stringify(data));
-          console.log('Encoded Value: ', encodedString);
 
-          const decodedData = function base64ToHex(str: any) {
-            for (
-              var i = 0, bin = atob(str.replace(/[ \r\n]+$/, '')), hex = [];
-              i < bin.length;
-              ++i
-            ) {
-              let tmp = bin.charCodeAt(i).toString(16);
-              if (tmp.length === 1) tmp = `0${tmp}`;
-              hex[hex.length] = tmp;
-            }
-            return hex.join('');
-          };
           let gitURL = btoa(e.url);
           this.navigateRoute.navigate([
             'repository',
@@ -153,7 +136,6 @@ export class ApplicationListComponent implements OnInit {
   }
 
   openAppEditor(element:any) {
-    console.log("repositoryId",this.repositoryId)
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
@@ -180,7 +162,6 @@ export class ApplicationListComponent implements OnInit {
   }
 
   deleteApp(e: any) {
-    console.log('Delete:', e._metadata.name);
     const data = {
       applications: [
         {
@@ -202,11 +183,10 @@ export class ApplicationListComponent implements OnInit {
       .deleteApplication(data, this.companyID, this.repositoryId)
       .subscribe(
         (res) => {
-          console.log('Delete Application response', res);
+          this.snack.openSnackBar('Application Deleted Successfully!','','sb-success')
         },
         (err) => {
-          // this.openSnackBarError('Authentication Error', '');
-          console.log('err', err);
+          this.snack.openSnackBar('Application Delete Action Failed!','','sb-error')
         }
       )
       }
@@ -229,10 +209,10 @@ export class ApplicationListComponent implements OnInit {
       };
       this.service.updateWebhook(queryPayload).subscribe(
         (res: any) => {
-          console.log('Webhook response', res);
+          this.snack.openSnackBar('Webhook Updated','','sb-success')
         },
         (err) => {
-          console.log(err);
+          this.snack.openSnackBar('Webhook Updated Action Failed',err.error.message,'sb-error')
         }
       );
     });

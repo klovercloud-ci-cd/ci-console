@@ -62,7 +62,6 @@ export class AppListService {
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
-          console.log('Response Logg: ', res);
         }),
         // map(()=>{
         //   this._refreshNeeded$.next();
@@ -89,7 +88,6 @@ export class AppListService {
       repositoryId: repoId,
       companyUpdateOption: 'DELETE_APPLICATION',
     };
-    console.log('Payload: ', appPayload, companyID, repoId);
 
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
@@ -97,7 +95,6 @@ export class AppListService {
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
-          console.log('Response Log: ', res);
         }),
         catchError((error: HttpErrorResponse): Observable<any> => {
           // we expect 404, it's not a failure for us.
@@ -120,7 +117,6 @@ export class AppListService {
       webhookId: qp.webhookId,
       // companyUpdateOption: 'DELETE_APPLICATION',
     };
-    console.log('QP:', qp);
     return this.http
       .patch(
         `${BASE_URL}companies/${qp.companyId}/repositories/${qp.repoId}/webhooks`,
@@ -130,7 +126,6 @@ export class AppListService {
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();
-          console.log('Response Log: ', res);
         }),
         catchError((error: HttpErrorResponse): Observable<any> => {
           // we expect 404, it's not a failure for us.

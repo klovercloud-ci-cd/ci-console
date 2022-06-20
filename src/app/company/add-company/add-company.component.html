@@ -27,18 +27,6 @@
             </mat-form-field>
           </div>
 
-<!--          <mat-form-field class="kcci-field w-1/2" appearance="outline">-->
-<!--            <mat-label class="text-dark">Name</mat-label>-->
-<!--            <input-->
-<!--              formControlName="name"-->
-<!--              type="text"-->
-<!--              autocomplete="off"-->
-<!--              matInput-->
-<!--            />-->
-<!--          </mat-form-field>-->
-
-          <!-- Add Repository Section -->
-
           <mat-accordion multi="false">
             <div
               class="rounded-md form-drop bg-light border-dark-primary border-1.5 p-2 mb-4 relative"
@@ -94,7 +82,7 @@
                             attachCompanyForm.value.repositories[i].type
                           "
                         >
-                          <div *ngSwitchCase="'github'">
+                          <div *ngSwitchCase="'GITHUB'">
                             <div class="flex justify-end gap-1">
                               <span class="example-container" cdkScrollable>
                                 <div
@@ -121,7 +109,7 @@
                               </a>
                             </div>
                           </div>
-                          <div *ngSwitchCase="'gitlab'">
+                          <div *ngSwitchCase="'GITLAB'">
                             <div class="flex justify-end gap-1">
                               <span class="example-container" cdkScrollable>
                                 <div
@@ -148,7 +136,7 @@
                               </a>
                             </div>
                           </div>
-                          <div *ngSwitchCase="'bitbucket'">
+                          <div *ngSwitchCase="'BIT_BUCKET'">
                             <div class="flex justify-end gap-1">
                               <span class="example-container" cdkScrollable>
                                 <div
@@ -326,31 +314,11 @@
                 [disabled]="!attachCompanyForm.valid"
               >
                 Attach Company
+
               </button>
             </div>
           </div>
-<!--          <ng-template #other_content>-->
-<!--            <div class="w-40 md:w-60 lg:w-52 ml-auto">-->
-<!--              <button-->
-<!--                class="bg-light kc-register block text-dark"-->
-<!--                type="submit"-->
-<!--                [disabled]="!attachCompanyForm.valid"-->
-<!--              >-->
-<!--                <span *ngIf="!isLoading; else before_submit">-->
-<!--                  Attach Company-->
-<!--                </span>-->
-<!--                <ng-template #before_submit>-->
-<!--                  <div class="py-3 mx-auto w-40">-->
-<!--                    <mat-progress-bar-->
-<!--                      class="green-progress kc-progress-bar"-->
-<!--                      mode="indeterminate"-->
-<!--                    >-->
-<!--                    </mat-progress-bar>-->
-<!--                  </div>-->
-<!--                </ng-template>-->
-<!--              </button>-->
-<!--            </div>-->
-<!--          </ng-template>-->
+
         </form>
       </div>
     </mat-card>

@@ -68,13 +68,9 @@ export class RoleListComponent implements OnInit {
       (res) => {
         this.dataSource = res?.data;
         this.isLoading = false;
-        console.log('res?.data:', res?.data);
       },
       (err) => {
         this.isLoading = false;
-        // this.snackBar.open(err?.error?.message, 'Close', {
-        //   duration: 5000,
-        // });
       }
     );
   }

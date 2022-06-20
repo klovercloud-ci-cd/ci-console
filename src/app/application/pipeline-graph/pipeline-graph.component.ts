@@ -167,6 +167,7 @@ export class PipelineGraphComponent
               .subscribe((res: any) => {
                 if (res?.data.status === 'active') {
                   this.getPipeline(socketRes.process_id);
+                  this.openLogPanel(socketRes.step);
                 }
               });
           }
@@ -198,7 +199,7 @@ export class PipelineGraphComponent
 
   ngOnInit() {
     ///test
-this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
+    this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
     this.route.queryParams.subscribe((res) => {
       this.title = res['title'];
       this.type = res['type'].toLowerCase() + 's';
@@ -344,6 +345,7 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
   }
 
   getPipeline(processId: any) {
+    console.log("processId",processId)
     this.repo.getPipeLine(processId).subscribe((res: any) => {
       console.log(res, 'pipeline data----');
       if (res.data == null) {
@@ -404,7 +406,7 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
           Object.assign(
             this.commitList[
               this.commitList.findIndex((el) => el.branch === branchName)
-            ],
+              ],
             res.data
           );
         });
