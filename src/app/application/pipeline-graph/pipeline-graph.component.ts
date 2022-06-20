@@ -687,6 +687,7 @@ export class PipelineGraphComponent
       .subscribe((res: any) => {
         const processId = this.pipeline.data.process_id;
         this.getPipeline(processId);
+        this.openLogPanel(step)
       });
   }
 

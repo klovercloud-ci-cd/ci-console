@@ -215,9 +215,11 @@
       <div class="absolute right-6 ">
         <mat-form-field>
           <mat-label>Select Process ID</mat-label>
-          <mat-select>
-            <mat-option *ngFor="let id of processIds" [value]="id.process_id"
-                        (click)="getPipeline(id.process_id)">
+          <mat-select value="0">
+            <mat-option *ngFor="let id of processIds"
+                        (click)="getPipeline(id.process_id)"
+                        value="0"
+            >
               {{id.process_id}}
             </mat-option>
           </mat-select>
