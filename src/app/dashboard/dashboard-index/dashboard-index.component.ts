@@ -57,6 +57,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   agents:any;
   users:any;
   showPodsStatus: boolean =false
+  hasCompany: boolean =false;
   private closeSubject: any;
   user: any = this.authService.getUserData();
   test: any = 1;
@@ -237,14 +238,17 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
             stack: '1'
           }
         },(err)=>{
-          this.snack.openSnackBar('Error!',err.error.message,'sb-error')
+          this.hasData = false;
+          // this.snack.openSnackBar('Error!',err.error.message,'sb-error')
         })}
       this.showPodsStatus=true
     },(err)=>{
       if (err.status==500){
         console.log("May be light-house-query is down!")
       }else{
-        this.snack.openSnackBar('Error!',err.error.message,'sb-error')
+        if (this.hasCompany) {
+          this.snack.openSnackBar('Error!', err.error.message, 'sb-error')
+        }
       }
     })
   }
@@ -254,8 +258,8 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     // <------------Webhook Section------------>
 
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
-      if(!res.data.metadata.company_id){
-
+      if(res.data.metadata.company_id){
+        this.hasCompany = true;
       }
       this._dashboardService.getAllWebhook(res.data.metadata.company_id).subscribe((res)=>{
         if (res.data.application.webhook.disabled>0 || res.data.application.webhook.enabled>0){
@@ -268,7 +272,11 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
         this.totalWebhook = this.enabledWebhook+this.disabledWebhook;
         this.buildWebhookChartData[0].data = [this.enabledWebhook, this.disabledWebhook];
       },(err)=>{
-        this.snack.openSnackBar('Webhook!',err.error.message,'sb-error');
+        this.hasData = false;
+
+        // if (this.hasCompany) {
+        //   this.snack.openSnackBar('Webhook!',err.error.message,'sb-error');
+        // }
       })
     })
 
@@ -313,7 +321,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       this.buildUsersChartData[0].data = [this.usersActive, this.usersInactive];
       },(err)=>{
         this.hasUser = false;
-        this.snack.openSnackBar('Users',err.error.message,'sb-error')
+        // this.snack.openSnackBar('Users',err.error.message,'sb-error')
         }
       );
 
