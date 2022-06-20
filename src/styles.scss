@@ -146,7 +146,7 @@ body {
 *snack bar start
 */
 .sb-success {
-  @apply bg-success-100 shadow-md shadow-danger-200 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px];
+  @apply bg-success-100 shadow-md shadow-success-200 rounded-md w-[592px] max-h-[206px] h-[76px] md:w-[800px] lg:w-[1216px];
   transition: 0.3s all cubic-bezier(0.39, 0.575, 0.565, 1);
   position: relative;
 }

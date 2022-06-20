@@ -1,8 +1,10 @@
-# { CI-Console }
-> This is an open source CI/CD project powered by **[KloverCloud Inc ©](https://www.klovercloud.com/)**
-## Clone this repository and run - 
-```Bash 
- npm install
- ng serve
 ```
-_Will server at http://localhost:2022/_
+ ,-----. ,--.          ,-----.                                  ,--.         
+'  .--./ `--' ,-----. '  .--./  ,---.  ,--,--,   ,---.   ,---.  |  |  ,---.  
+|  |     ,--. '-----' |  |     | .-. | |      \ (  .-'  | .-. | |  | | .-. : 
+'  '--'\ |  |         '  '--'\ ' '-' ' |  ||  | .-'  `) ' '-' ' |  | \   --. 
+ `-----' `--'          `-----'  `---'  `--''--' `----'   `---'  `--'  `----' 
+ ```
+This is the web console of klovercloud ci/cd.
+
+<a href="https://github.com/klovercloud-ci-cd/documentation#to-install-ci-console-run">Installation Guide.</a>
