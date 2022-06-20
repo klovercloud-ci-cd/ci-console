@@ -19,7 +19,8 @@ import { PipelineService } from '../pipeline.service';
 import { WsService } from '../../shared/services/ws.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProcessLifecycleEventService } from '../process-lifecycle-event.service';
-import {FormControl, FormGroup} from "@angular/forms";
+import { FormControl, FormGroup } from '@angular/forms';
+import { SharedSnackbarService } from '../../shared/snackbar/shared-snackbar.service';
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -46,8 +47,8 @@ export class PipelineGraphComponent
   title: any;
 
   failed: any[] = [];
-  error: any={
-    pipeline:''
+  error: any = {
+    pipeline: '',
   };
   commitId: any;
 
@@ -105,7 +106,6 @@ export class PipelineGraphComponent
   isLoading = { graph: true, commit: true };
   socket: any;
   isObjerving: boolean = false;
-  selected: any
 
   constructor(
     private _toolbarService: ToolbarService,
@@ -120,6 +120,7 @@ export class PipelineGraphComponent
     private navigateRoute: Router,
     private wsService: WsService,
     private tostr: ToastrService,
+    private snackBar: SharedSnackbarService,
     private processLifecycleEventService: ProcessLifecycleEventService
   ) {
     this.route.queryParams.subscribe((res) => {
@@ -129,10 +130,8 @@ export class PipelineGraphComponent
   }
 
   ngAfterContentInit(): void {
-    console.log(this.urlParams, 'url perams');
     this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
-      console.log(res, 'socekt res from pipeline page');
       const socketRes: any = res;
       if (socketRes.process_id == this.pipeline.data.process_id) {
         if (socketRes.status === 'INITIALIZING') {
@@ -140,7 +139,6 @@ export class PipelineGraphComponent
           this.pipes
             .getStepDetails(socketRes.step, socketRes.process_id)
             .subscribe((res: any) => {
-              console.log(res, 'step status');
               if (
                 res?.data.status === 'active' ||
                 res?.data.status === 'non_initialized'
@@ -199,13 +197,11 @@ export class PipelineGraphComponent
 
   ngOnInit() {
     ///test
-this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
     this.route.queryParams.subscribe((res) => {
       this.title = res['title'];
       this.type = res['type'].toLowerCase() + 's';
       this.repoUrl = atob(res['url']);
       this.commitId = res['commitId'];
-      console.log("res['page']:", res['page']);
       if (res['page']) {
         this.currentPage = Number(res['page']);
       }
@@ -221,10 +217,12 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
         this.branchName = this.branchs[0].name;
         this.getCommit(this.branchs[0].name);
       });
-    this.navigateRoute.navigate([], {
-      queryParams: {page: this.currentPage, limit: this.limit},
-      queryParamsHandling: 'merge',
-    }).then(r =>{});
+    this.navigateRoute
+      .navigate([], {
+        queryParams: { page: this.currentPage, limit: this.limit },
+        queryParamsHandling: 'merge',
+      })
+      .then((r) => {});
   }
 
   ngAfterContentChecked() {
@@ -235,7 +233,6 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName)
       .subscribe(async (res: any) => {
-        console.log('Response:', res._metadata);
         this.commitsPerCall = res;
         for (let link of res._metadata.links) {
           if (link.next) {
@@ -248,7 +245,6 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
         if (this.commitsPerCall.length == res._metadata.total_count) {
           this.next = '';
         }
-        // console.log("Responsesss: ",res)
         this.isLoading.commit = false;
         this.commit = res.data;
         this.commitList = [
@@ -259,17 +255,14 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
         ];
         let selfUrl;
         for (let i = 0; i < res._metadata.links.length; i++) {
-          console.log('III', res._metadata.links[i]);
           if (res._metadata.links[i].self) {
             selfUrl = res._metadata.links[i].self;
           }
         }
         var numb = selfUrl.match(/\d/g);
-        console.log('numb.join(""):', numb);
-        console.log('selfUrl:', selfUrl);
 
         await this.navigateRoute.navigate([], {
-          queryParams: {page: this.currentPage, limit: this.limit},
+          queryParams: { page: this.currentPage, limit: this.limit },
           queryParamsHandling: 'merge',
         });
         if (this.commitId) {
@@ -291,7 +284,6 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
         this.limit
       )
       .subscribe((res: any) => {
-        console.log('res.data', res.data);
         this.commit = res.data;
         this.commitList = [
           {
@@ -303,7 +295,6 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
           this.isLoading.commit = false;
           this.isLoading.commit = false;
           this.commit = res.data;
-          // console.log("Res.Data:",res);
           for (let link of res._metadata.links) {
             if (link.next) {
               this.next = link.next;
@@ -325,19 +316,27 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
 
   getProcess(commitId: any) {
     this.isLoading.graph = true;
-    // console.log(commitId);
     this.repo.getProcess(commitId).subscribe((res: any) => {
+
+      this.processIds = [];
       if (res.data == null) {
-        this.error.pipeline ='error'
-        this.envList = ''
-        this.pipeline=''
+
+        this.error.pipeline = 'error';
+        this.envList = '';
+        this.pipeline = '';
         this.isLoading.graph = false;
       } else {
         if (res.data) {
-          this.error.pipeline =''
+          for (let branch in this.branchs) {
+            for (let data of res?.data) {
+              if (data.branch === this.branchs[branch].name) {
+                this.setOpenBranch(parseInt(branch));
+                this.loadCommit(data.branch);
+              }
+            }
+          }
+          this.error.pipeline = '';
           this.processIds = res.data;
-          // this.selected=this.processIds[0].process_id
-          console.log("this.selected",this.selected);
           this.getPipeline(this.processIds[0].process_id);
         }
       }
@@ -346,7 +345,6 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
 
   getPipeline(processId: any) {
     this.repo.getPipeLine(processId).subscribe((res: any) => {
-      console.log(res, 'pipeline data----');
       if (res.data == null) {
         this.tostr.warning(`No commit Found For this BRANCH`, 'Commits Empty', {
           enableHtml: true,
@@ -471,7 +469,6 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
         }
         setTimeout(() => {
           if (this.isObjerving) {
-            console.log(this.page, this.skip);
             this.getLogs(
               processId,
               nodeName,
@@ -489,7 +486,7 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
   fullMode(footMarkIndex: any, foot: any) {
     this.fullmode = true;
     // @ts-ignore
-    document.getElementById('scrollArea'+foot).classList.add('logPanel')
+    document.getElementById('scrollArea' + foot).classList.add('logPanel');
     this.singleLogDetails = {
       index: footMarkIndex,
       footmark: foot,
@@ -497,10 +494,9 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
   }
 
   fullModeClose() {
-
     this.fullmode = false;
     // @ts-ignore
-    document.getElementById('scrollArea'+foot).classList.remove('logPanel')
+    document.getElementById('scrollArea' + foot).classList.remove('logPanel');
   }
 
   private totalenv() {
@@ -606,6 +602,17 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
 
       for (let step of this.pipelineStep) {
         if (step.status === 'active') {
+          this.logOpen = true;
+          const processId = this.pipeline.data.process_id;
+          this.stepFootMark(processId, step.name);
+
+          setTimeout(() => {
+            this.pipeline.data.steps.find((hola: any) => {
+              if (hola.name === step.name) {
+                this.nodeDetails = hola;
+              }
+            });
+          }, 300);
           const activeClass: any = document.getElementById(
             step.name + '_loader'
           );
@@ -658,8 +665,16 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
       this.pipeline.data.steps.find((hola: any) => {
         if (hola.name === stepName) {
           this.nodeDetails = hola;
-          this.openFootMarkName = this.footMarks[this.footMarks.length-1];
-          this.getLogs(processId,stepName,this.openFootMarkName,this.page,this.limit,this.skip,this.pipeline.data.claim)
+          this.openFootMarkName = this.footMarks[this.footMarks.length - 1];
+          this.getLogs(
+            processId,
+            stepName,
+            this.openFootMarkName,
+            this.page,
+            this.limit,
+            this.skip,
+            this.pipeline.data.claim
+          );
         }
       });
     }, 300);
@@ -667,54 +682,55 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
 
   trigger(step: any) {
     const processId = this.pipeline.data.process_id;
-    console.log(step, ' ', this.pipeline.data);
     this.processLifecycleEventService
       .reclaim(processId, step.name, step.type)
       .subscribe((res: any) => {
-        console.log(res);
+        const processId = this.pipeline.data.process_id;
+        this.getPipeline(processId);
       });
   }
 
   stepFootMark(processId: any, stepName: any) {
-    this.repo.getfootPrint(processId, stepName).subscribe((footMarkRes: any) => {
-      this.stepStatus = footMarkRes.status;
-      this.footMarks = footMarkRes.data;
-      this.activeStep =stepName;
-      this.setActiveFootMark(this.footMarks.length - 1);
-      this.wsService.wsData.subscribe((WSRes) => {
-        const socketRes: any = WSRes;
-        if (socketRes.process_id == this.pipeline.data.process_id) {
-          if (
-            this.stepStatus !== 'active' &&
-            this.openFootMark !== this.footMarks.indexOf(socketRes.footmark)
-          ) {
-            this.activeStep = socketRes.footmark;
-            //console.log('scrollArea'+this.activeStep)
-            this.setActiveFootMark(this.footMarks.indexOf(socketRes.footmark));
-
-          }
-          if (this.stepStatus === 'active'){
-            console.log('scrollArea'+this.activeStep)
-          }
-        }
-      });
-      this.wsService.wsData.subscribe((res) => {
-        // @ts-ignore
-        if (res.step === this.openFootMarkName) {
-          let found = 0;
-          for (let x of this.footMarks) {
-            // @ts-ignore
-            if (x === res.footmark) {
-              found = 1;
+    this.repo
+      .getfootPrint(processId, stepName)
+      .subscribe((footMarkRes: any) => {
+        this.stepStatus = footMarkRes.status;
+        this.footMarks = footMarkRes.data;
+        this.activeStep = stepName;
+        this.setActiveFootMark(this.footMarks.length - 1);
+        this.wsService.wsData.subscribe((WSRes) => {
+          const socketRes: any = WSRes;
+          if (socketRes.process_id == this.pipeline.data.process_id) {
+            if (
+              this.stepStatus !== 'active' &&
+              this.openFootMark !== this.footMarks.indexOf(socketRes.footmark)
+            ) {
+              this.activeStep = socketRes.footmark;
+              this.setActiveFootMark(
+                this.footMarks.indexOf(socketRes.footmark)
+              );
+            }
+            if (this.stepStatus === 'active') {
             }
           }
-          if (found === 0) {
-            // @ts-ignore
-            this.footMarks.push(res.footmark);
+        });
+        this.wsService.wsData.subscribe((res) => {
+          // @ts-ignore
+          if (res.step === this.openFootMarkName) {
+            let found = 0;
+            for (let x of this.footMarks) {
+              // @ts-ignore
+              if (x === res.footmark) {
+                found = 1;
+              }
+            }
+            if (found === 0) {
+              // @ts-ignore
+              this.footMarks.push(res.footmark);
+            }
           }
-        }
+        });
       });
-    });
   }
 
   logClose() {
@@ -729,17 +745,22 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
     });
   }
 
-  expandLog(footMarkIndex: number, foot: any, nodeName: string, claim: number,status:string) {
+  expandLog(
+    footMarkIndex: number,
+    foot: any,
+    nodeName: string,
+    claim: number,
+    status: string
+  ) {
     this.singleLogDetails = {
       index: footMarkIndex,
       footmark: foot,
     };
 
     this.setActiveFootMark(footMarkIndex);
-    if (status ==='active' && this.openFootMark === footMarkIndex){
-      console.log('scrollArea'+foot)
+    if (status === 'active' && this.openFootMark === footMarkIndex) {
       // @ts-ignore
-      document.getElementById('scrollArea'+foot).classList.add('logPanel')
+      document.getElementById('scrollArea' + foot).classList.add('logPanel');
     }
     this.page = 0;
     this.skip = 0;
@@ -754,5 +775,46 @@ this.selected='31227988-26fe-4d0d-b7a7-b8862a2ddbb4'
       this.skip,
       claim
     );
+  }
+
+  navigateToCommit(commit_Id: any) {
+    this.repo.getProcess(commit_Id).subscribe((res: any) => {
+      if (res.data !== null) {
+        this.applist
+          .getRepositoryInfo(res.data[0].company_id, res.data[0].repository_id)
+          .subscribe((appRes) => {
+            for (let x of appRes.data.applications) {
+              if (x._metadata.id === res.data[0].app_id) {
+                const gitUrl = btoa(x.url);
+                const title = x._metadata.name;
+                const commitId = commit_Id;
+                const type = appRes.data.type;
+                const repoId = res.data[0].repository_id;
+                const appId = res.data[0].process_id;
+                this.navigateRoute
+                  .navigateByUrl('/RefreshComponent', {
+                    skipLocationChange: true,
+                  })
+                  .then(() => {
+                    this.navigateRoute
+                      .navigate(['repository', repoId, 'application'], {
+                        queryParams: {
+                          type: type,
+                          title: title,
+                          url: gitUrl,
+                          repoId: repoId,
+                          appId: appId,
+                          commitId: commitId,
+                        },
+                      })
+                      .then(() => {});
+                  });
+              }
+            }
+          });
+      } else {
+        this.getProcess(commit_Id);
+      }
+    });
   }
 }
