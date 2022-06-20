@@ -58,13 +58,10 @@ export class RegistrationComponent implements OnInit {
           this.router.navigate(['/auth/login']);
           this.snack.openSnackBar('Registration Successfull', 'You can login now','sb-success');
         }
-        console.log(res.status);
-        console.log(this.authService.getUserData(), 'USER');
       },
       (err) => {
         this.isLoading = false;
         this.snack.openSnackBar('Registration Failed!', 'Please submit valid credentials.','sb-warn');
-        console.log('err', err);
       }
     );
   }

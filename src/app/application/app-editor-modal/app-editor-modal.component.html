@@ -3,8 +3,8 @@
 >
 
   <div *ngIf="invalidUrl" class=" px-[3%] text-center flex flex-col justify-center pt-[10%] gap-2 relative overflow-hidden">
-    <h1 class="gap-1 text-[#5C638B] text-xl font-semibold">Please provide valid <span class="text-dark-tomato-red">.git</span> url or add a pipeline with your project.</h1>
-    <a [href]="'https://github.com/klovercloud-ci-cd/documentation/blob/master/cocepts.md#pipeline'" target="_blank" class="text-sm block text-right text-sm text-dark-info pr-3">Learn More.</a>
+    <h1 class="gap-1 text-[#5C638B] text-xl font-semibold">Please provide valid .git source code / add a pipeline with your project.</h1>
+    <h1 class="pr-3"><a [href]="'https://github.com/klovercloud-ci-cd/documentation/blob/master/cocepts.md#pipeline'" target="_blank" class="text-sm block text-right text-sm text-dark-info hover:text-blue-600">Learn More</a></h1>
   </div>
   <div class="absolute top-2 right-2 cursor-pointer" *ngIf="invalidUrl" (click)="closeAppModal()">
     <mat-icon>close</mat-icon>

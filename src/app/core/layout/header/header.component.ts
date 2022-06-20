@@ -49,9 +49,7 @@ export class HeaderComponent implements OnInit {
 
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
-      console.log(this.userPersonalInfo, 'user info ');
       this.wsService.wsData.subscribe((res) => {
-        console.log(res, 'socekt res from header');
         const socketRes: any = res;
         if (
           socketRes.status === 'INITIALIZING' ||
@@ -151,14 +149,12 @@ export class HeaderComponent implements OnInit {
       }
     };
     socket.close = (e) => {
-      console.log('reconnecting');
       if (this.sendWS) {
         clearInterval(this.sendWS);
       }
       this.connectWs();
     };
     socket.onopen = (e) => {
-      console.log('socket connected');
       this.sendWS = setInterval(() => {
         socket.send(' ');
       }, 300);
@@ -174,7 +170,6 @@ export class HeaderComponent implements OnInit {
     this.notices = [];
     this.next = '';
     this.header.getNotification().subscribe((res: any) => {
-      console.log('Response Notification:', res);
       for (let data of res.data) {
         this.notices.push(data);
       }
@@ -186,13 +181,10 @@ export class HeaderComponent implements OnInit {
       if (this.notices.length == res._metadata.total_count) {
         this.next = '';
       }
-      console.log(this.notices, this.next);
     });
   }
 
   nextLog() {
-    console.log('next click');
-    console.log('this.next', this.next);
     if (this.next !== '') {
       this.header.getNextLog(this.next).subscribe((res: any) => {
         if (res.data) {

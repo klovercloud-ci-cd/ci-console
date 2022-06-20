@@ -52,13 +52,10 @@ export class RoleFormComponent implements OnInit {
   get permissionsArray(): FormArray {
     return this.roleForm.get('permissions') as FormArray;
   }
-// ,(err)=>{
-//   this.snack.openSnackBar('Error!',err,'sb-error');
-// }
+
   // Form Submit
   onSubmit(): void {
     const _formData = this.roleForm.getRawValue();
-    console.log('Form Value:', this.roleForm.value, _formData);
     const permissions = _formData?.permissions?.map((role: any) => ({
       name: role,
     }));
@@ -76,7 +73,7 @@ export class RoleFormComponent implements OnInit {
           this.dialogRef.close(true);
         },
         (err) => {
-          this.snack.openSnackBar('Success! Role created.','','sb-error');
+          this.snack.openSnackBar('Role creation failed.','','sb-error');
         }
       );
     } else {

@@ -15,10 +15,10 @@ import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/mode-typescript';
 import 'ace-builds/src-noconflict/mode-scss';
 import {dump as toYaml, load as fromYaml} from 'js-yaml';
-import {EditorModalComponent} from "../../editor/editor-modal/editor-modal.component";
 import {Location} from "@angular/common";
 import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
 import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 
 @Component({
@@ -37,369 +37,6 @@ export class ApplicationModalComponent implements OnInit {
   totalError:any=0;
   hasPipeline:boolean = false;
   appStep:any;
-  // appStep: any = {
-  //   "_metadata":null,
-  //   "data":{
-  //     "name":"test",
-  //     "steps":[
-  //       {
-  //         "name":{
-  //           "accepts":"*",
-  //           "message":"",
-  //           "name":"name",
-  //           "valid":"false",
-  //           "value":"build"
-  //         },
-  //         "type":{
-  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-  //           "message":"",
-  //           "name":"type",
-  //           "valid":"true",
-  //           "value":"BUILD"
-  //         },
-  //         "trigger":{
-  //           "accepts":"AUTO, MANUAL",
-  //           "message":"",
-  //           "name":"trigger",
-  //           "valid":"true",
-  //           "value":"AUTO"
-  //         },
-  //         "params":[
-  //           {
-  //             "accepts":" SA, Sa, Service Account",
-  //             "message":" Service account not allowed!",
-  //             "name":"service_account",
-  //             "valid":"true",
-  //             "value":"test-sa"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"storage",
-  //             "valid":"true",
-  //             "value":"500Mi"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"access_mode",
-  //             "valid":"true",
-  //             "value":"ReadWriteOnce"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"args",
-  //             "valid":"true",
-  //             "value":"key3:value1,key4:value2"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"args_from_configmaps",
-  //             "valid":"true",
-  //             "value":"tekton/cm-test"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"images",
-  //             "valid":"true",
-  //             "value":"shabrul2451/test-dev,shabrul2451/test-pro"
-  //           },
-  //           {
-  //             "accepts":"git",
-  //             "message":"",
-  //             "name":"repository_type",
-  //             "valid":"true",
-  //             "value":"git"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"revision",
-  //             "valid":"true",
-  //             "value":"master"
-  //           }
-  //         ],
-  //         "next":[
-  //           {
-  //             "accepts":"jenkinsJob, build, interstep, deployDev",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"intersteps"
-  //           },
-  //           {
-  //             "accepts":"jenkinsJob, build, interstep, deployDev",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"interstep"
-  //           },
-  //           {
-  //             "accepts":"jenkinsJob, build, interstep, deployDev",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"interstep"
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         "name":{
-  //           "accepts":"step-1,step-2,step-3",
-  //           "message":"",
-  //           "name":"name",
-  //           "valid":"true",
-  //           "value":"interstep"
-  //         },
-  //         "type":{
-  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-  //           "message":"",
-  //           "name":"type",
-  //           "valid":"true",
-  //           "value":"INTERMEDIARY"
-  //         },
-  //         "trigger":{
-  //           "accepts":"AUTO, MANUAL",
-  //           "message":"",
-  //           "name":"trigger",
-  //           "valid":"true",
-  //           "value":"AUTO"
-  //         },
-  //         "params":[
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"command",
-  //             "valid":"true",
-  //             "value":"echo"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"command_args",
-  //             "valid":"true",
-  //             "value":"Hello World"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"envs",
-  //             "valid":"true",
-  //             "value":"key3:value1,key4:value2"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"envs_from_configmaps",
-  //             "valid":"true",
-  //             "value":"tekton/cm-test"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"envs_from_secrets",
-  //             "valid":"true",
-  //             "value":"tekton/cm-test"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"images",
-  //             "valid":"true",
-  //             "value":"ubuntu"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"revision",
-  //             "valid":"true",
-  //             "value":"latest"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"service_account",
-  //             "valid":"true",
-  //             "value":"test-sa"
-  //           }
-  //         ],
-  //         "next":[
-  //           {
-  //             "accepts":"deployDev, jenkinsJob, build, interstep",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"deployDev"
-  //           },
-  //           {
-  //             "accepts":"deployDev, jenkinsJob, build, interstep",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"deployDev"
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         "name":{
-  //           "accepts":"*",
-  //           "message":"",
-  //           "name":"name",
-  //           "valid":"true",
-  //           "value":"deployDev"
-  //         },
-  //         "type":{
-  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-  //           "message":"",
-  //           "name":"type",
-  //           "valid":"true",
-  //           "value":"DEPLOY"
-  //         },
-  //         "trigger":{
-  //           "accepts":"AUTO, MANUAL",
-  //           "message":"",
-  //           "name":"trigger",
-  //           "valid":"true",
-  //           "value":"AUTO"
-  //         },
-  //         "params":[
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"name",
-  //             "valid":"true",
-  //             "value":"ubuntu"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"namespace",
-  //             "valid":"true",
-  //             "value":"default"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"revision",
-  //             "valid":"true",
-  //             "value":"master"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"type",
-  //             "valid":"true",
-  //             "value":"deployment"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"agent",
-  //             "valid":"true",
-  //             "value":"local_agent"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"env",
-  //             "valid":"true",
-  //             "value":"dev"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"images",
-  //             "valid":"true",
-  //             "value":"shabrul2451/test-dev"
-  //           }
-  //         ],
-  //         "next":[
-  //           {
-  //             "accepts":"build, interstep, deployDev, jenkinsJob",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"jenkinsJob"
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         "name":{
-  //           "accepts":"*",
-  //           "message":"",
-  //           "name":"name",
-  //           "valid":"true",
-  //           "value":"jenkinsJob"
-  //         },
-  //         "type":{
-  //           "accepts":"BUILD, DEPLOY, INTERMEDIARY, JENKINS_JOB",
-  //           "message":"",
-  //           "name":"type",
-  //           "valid":"true",
-  //           "value":"JENKINS_JOB"
-  //         },
-  //         "trigger":{
-  //           "accepts":"AUTO, MANUAL",
-  //           "message":"",
-  //           "name":"trigger",
-  //           "valid":"true",
-  //           "value":"AUTO"
-  //         },
-  //         "params":[
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"job",
-  //             "valid":"true",
-  //             "value":"new"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"params",
-  //             "valid":"true",
-  //             "value":"id:123,verbosity:high"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"secret",
-  //             "valid":"true",
-  //             "value":"jenkins-credentials"
-  //           },
-  //           {
-  //             "accepts":"*",
-  //             "message":"",
-  //             "name":"url",
-  //             "valid":"true",
-  //             "value":"http://jenkins.default.svc:8080"
-  //           }
-  //         ],
-  //         "next":[
-  //           {
-  //             "accepts":"build, interstep, deployDev, jenkinsJob",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"jenkinsJob"
-  //           },
-  //           {
-  //             "accepts":"build, interstep, deployDev, jenkinsJob",
-  //             "message":"",
-  //             "name":"next",
-  //             "valid":"true",
-  //             "value":"jenkinsJob"
-  //           }
-  //         ]
-  //       },
-  //     ]
-  //   },
-  //   "status":"success",
-  //   "message":"Successful"
-  // };
   stepAsMap = new Map()
   userPersonalInfo: any;
   user: any = this.auth.getUserData();
@@ -434,11 +71,11 @@ export class ApplicationModalComponent implements OnInit {
     private service: AppListService,
     private route: ActivatedRoute,
     @Inject(MAT_DIALOG_DATA) public data: ApplicationListComponent,
-    private editorDialogRef: MatDialogRef<EditorModalComponent>,
     private router: Router,
     private location: Location,
     private dialog: MatDialog,
     public resource: ResourcePermissionService,
+    private snack: SharedSnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -527,7 +164,6 @@ export class ApplicationModalComponent implements OnInit {
       // this.arrayData.push(_obj);
 
       let error;
-      // console.log("_item?.name?.value:-",_item.name.valid);
 
 
       if(_item.name.valid=='false'){
@@ -541,7 +177,6 @@ export class ApplicationModalComponent implements OnInit {
       }else if(next_val==false){
         error = 5 + _item?.params.length;
       }
-      // console.log("_ITEM: ",_item)
       this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
     })
   }
@@ -568,7 +203,6 @@ export class ApplicationModalComponent implements OnInit {
       return accumulator + object.n_val+object.ty_val+object.t_val+object.nx_val+object.params;
     }, 0);
     this.totalError = fCount;
-    console.log("fCount: ",fCount)
   }
 
 
@@ -580,7 +214,6 @@ export class ApplicationModalComponent implements OnInit {
   gotoNext(e:number){
     const {name,url} = this.addApplication.value;
     this.href = this.router.url;
-    // console.log("PATH: ",this.location.path());
 
     this.stepper = e;
 
@@ -604,14 +237,12 @@ export class ApplicationModalComponent implements OnInit {
       .subscribe(
         (res) => {
           this.isLoading = false;
-         //  console.log('Add Application response', res);
           this.dialogRef.close();
 
-          // console.log(this.authService.getUserData(), 'USER');
         },
         (err) => {
           // this.openSnackBarError('Authentication Error', '');
-          console.log('err', err);
+          this.snack.openSnackBar('Webhook Updated Action Failed',err.error.message,'sb-error')
         }
       );
   }
@@ -621,13 +252,11 @@ export class ApplicationModalComponent implements OnInit {
   }
 
   editorPropsFix(data: any): void {
-    console.log("Get Update Data", data)
   //  Update Editor item
   //   key: "name" replaceValue: "step1" stepname: "interstep"
     const stepName= data?.stepname;
     const itemValue = this.stepAsMap.get(stepName)
     const newStepName= data?.replaceValue;
-    console.log(itemValue)
     const _item = itemValue?.stepData;
 
     const nextVal = _item?.next?.map((nextValue:any)=>{
@@ -652,19 +281,16 @@ export class ApplicationModalComponent implements OnInit {
   mapReplace(map: any, prevKey: string, newKey: string, newKeyValue: any): any {
     const x = new Map()
     for (const [key, value] of this.stepAsMap) {
-      console.log("key val", newKey, key)
       if (prevKey === key) {
         x.set(newKey, newKeyValue)
         continue
       }
       x.set(key, value)
     }
-    console.log("x", x)
     return x
   }
 
   openAppEditor() {
-    console.log("applicationURL:" ,this.repositoryId);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;

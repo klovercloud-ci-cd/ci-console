@@ -9,6 +9,7 @@ import { DeleteConformationDialogComponent } from 'src/app/core/components/delet
 import { ToolbarService } from 'src/app/shared/services/toolbar.service';
 import { UserService } from '../user.service';
 import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 @Component({
   selector: 'kc-user-list',
@@ -28,99 +29,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   queryParams = {
     status: 'active',
   };
-
-  userList: any = [
-    {
-      metadata: {
-        company_id: 'f25a2224-b1b2-46f0-9d57-52947d9052b3',
-        first_name: '',
-        last_name: '',
-      },
-      id: '49a742c8-50cd-41a5-92c2-798d87d466e9',
-      first_name: 'klovercloud',
-      last_name: 'Admin',
-      email: 'klovercloud.admin@klovercloud.com',
-      phone: '01521339629',
-      password: '$2a$10$3Kmxy2CV6BXWeGYjZeeOg.m.pjb4S2TWTSzNpbou3BmaPbdsOcvCy',
-      status: 'active',
-      created_date: '2022-05-18T11:11:00.935Z',
-      updated_date: '2022-05-18T11:11:00.935Z',
-      auth_type: 'password',
-      resource_permission: {
-        resources: [
-          {
-            name: 'user',
-            roles: [
-              {
-                name: 'ADMIN',
-              },
-            ],
-          },
-          {
-            name: 'company',
-            roles: [
-              {
-                name: 'ADMIN',
-              },
-            ],
-          },
-          {
-            name: 'cost_management',
-            roles: [
-              {
-                name: 'ADMIN',
-              },
-            ],
-          },
-        ],
-      },
-    },
-    {
-      metadata: {
-        company_id: 'f25a2224-b1b2-46f0-9d57-52947d9052b3',
-        first_name: '',
-        last_name: '',
-      },
-      id: '49a742c8-50cd-41a5-92c2-798d87d466e9',
-      first_name: 'klovercloud',
-      last_name: 'CI_CD',
-      email: 'kc-cicd.admin@klovercloud.com',
-      phone: '01545127895',
-      password: '$2a$10$3Kmxy2CV6BXWeGYjZeeOg.m.pjb4S2TWTSzNpbou3BmaPbdsOcvCy',
-      status: 'active',
-      created_date: '2022-05-18T11:11:00.935Z',
-      updated_date: '2022-05-18T11:11:00.935Z',
-      auth_type: 'password',
-      resource_permission: {
-        resources: [
-          {
-            name: 'user',
-            roles: [
-              {
-                name: 'ADMIN',
-              },
-            ],
-          },
-          {
-            name: 'company',
-            roles: [
-              {
-                name: 'ADMIN',
-              },
-            ],
-          },
-          {
-            name: 'cost_management',
-            roles: [
-              {
-                name: 'ADMIN',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ];
 
   // Table
   displayedColumns: string[] = [
@@ -144,7 +52,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private authService: AuthService,
-    public resource: ResourcePermissionService
+    public resource: ResourcePermissionService,
+    private snack: SharedSnackbarService,
   ) {
     this.currentUser = this.authService.getUserData();
   }
@@ -166,7 +75,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
-    console.log('this.getScreenWidth', this.getScreenWidth);
 
     if (this.getScreenWidth < 1400) {
       this.dialogWidth = '70%';
@@ -197,18 +105,13 @@ export class UserListComponent implements OnInit, OnDestroy {
       (res) => {
         this.isLoading = false;
         this.dataSource = res?.data;
-        console.log('res?.data: ', res?.data);
       },
       (err) => {
-        this.isLoading = false;
-        console.log(err);
-        // this.snackBar.open(err?.error?.message || "Can't fetch users");
       }
     );
   }
 
   onDelete(user: any): void {
-    console.log('user:', user);
 
     const dialogRef = this.dialog.open(DeleteConformationDialogComponent, {
       data: {
@@ -219,11 +122,10 @@ export class UserListComponent implements OnInit, OnDestroy {
       if (confirmed) {
         this._userService.deleteUser(user).subscribe(
           (res) => {
-            // this.snackBar.open('Delete initiated', 'close', { duration: 5000 });
+            this.snack.openSnackBar('Delete initiated','','sb-success');
           },
           (err) => {
-            console.log(err);
-            // this.snackBar.open(err.error.message, 'close', { duration: 5000 });
+            this.snack.openSnackBar('Delete failed','','sb-error');
           }
         );
       }

@@ -176,17 +176,13 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     this.getDetails();
     // this.initLabelWiseColor()
     this._dashboardService.getAllAgents().subscribe((res)=>{
-      console.log("getAllAgents: ",res, " len:",res.data.length)
-      this.agents=res.data
-      console.log("agents: ",this.agents)
-      // this.agentsChartColors=[]
+      this.agents=res.data;
       this.buildAgentsChartData=[]
       for(let item=0; item<res.data.length; item++){
 
         this._dashboardService.getPodsByAgent(res.data[item]["agent_name"]).subscribe((response)=>{
 
           this.hasData = true;
-          console.log("--------GetPodsByAgent response:",response);
           this.labelAndColor=new Map<string, string>();
           this.label=["Running","Succeeded","Pending","ImagePullBackOff","CrashLoopBackOff","Terminated","Unknown","Error"]
           this.podCount=[0,0,0,0,0,0,0]
@@ -240,47 +236,28 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
             showLine: false,
             stack: '1'
           }
-
         },(err)=>{
           this.snack.openSnackBar('Error!',err.error.message,'sb-error')
         })}
       this.showPodsStatus=true
-      console.log("agentsChartColors",this.agentsChartColors)
-      console.log("agentsChartLabels",this.agentsChartLabels)
-      console.log("LabelWisePodCounts",this.LabelWisePodCounts)
-      console.log("agentData",this.buildAgentsChartData)
     },(err)=>{
       if (err.status==500){
         console.log("May be light-house-query is down!")
       }else{
         this.snack.openSnackBar('Error!',err.error.message,'sb-error')
       }
-
     })
-
   }
 
-  // initLabelWiseColor(){
-  //   this.labelWiseColor.set("Succeeded","#7ade9a")
-  //   this.labelWiseColor.set("Running","#ff3b5a")
-  //   this.labelWiseColor.set("ImagePullBackOff","#D35400")
-  //   this.labelWiseColor.set("Pending","#BFC9CA")
-  //   this.labelWiseColor.set("CrashLoopBackOff","#F9E70E")
-  //   this.labelWiseColor.set("Unknown","#f90ef5")
-  //   this.labelWiseColor.set("Terminated","#f90e0e")
-  // }
   getDetails() {
 
     // <------------Webhook Section------------>
 
-
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
-      console.log("User Info:",res.data.metadata.company_id)
       if(!res.data.metadata.company_id){
 
       }
       this._dashboardService.getAllWebhook(res.data.metadata.company_id).subscribe((res)=>{
-        console.log("WebhookDashboard: ",res.data);
         if (res.data.application.webhook.disabled>0 || res.data.application.webhook.enabled>0){
           this.hasWebhook = true;
         }
@@ -295,13 +272,9 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       })
     })
 
-
-
-
     // <------------Pipeline Section------------>
 
     this._dashboardService.getAllProcesses().subscribe((res)=>{
-      console.log("Processes Response: ",res.data);
       if (res.data.pipeline.completed>0 || res.data.pipeline.failed>0 || res.data.pipeline.nonInitialized>0 || res.data.pipeline.paused>0 || res.data.pipeline.running>0){
         this.hasProcess = true;
       }
@@ -318,59 +291,20 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       this.buildpipelineChartData[0].data = [this.pipelineCompleted, this.pipelineFailed, this.pipelineRunning, this.pipelinePaused, this.pipelineNonInitialized];
 
     },(err)=>{
-      this.snack.openSnackBar('Processes!',err.error.message,'sb-error')
+      this.hasData = false;
+      // this.snack.openSnackBar('Processes!',err.error.message,'sb-error')
     })
 
     // <------------Agents Section------------>
 
 
     let infoData;
-    // this.agents.data.agent.map((_items:any, index:any)=>{
-    //   let totalPods;
-    //   this.agentsPodsRunning = _items.pods.running;
-    //   this.agentsPodsPending = _items.pods.pending;
-    //   this.agentsPodsUnknown = _items.pods.unknown;
-    //   this.agentsPodsSucceeded = _items.pods.succeeded;
-    //   this.agentsPodsFailed = _items.pods.failed;
-    //   this.totalPods = this.agentsPodsRunning + this.agentsPodsPending + this.agentsPodsUnknown + this.agentsPodsSucceeded + this.agentsPodsFailed;
-    //
-    //   infoData = {
-    //     "agentsPodsRunning": this.agentsPodsRunning,
-    //     "agentsPodsPending": this.agentsPodsPending,
-    //     "agentsPodsUnknown": this.agentsPodsUnknown,
-    //     "agentsPodsSucceeded": this.agentsPodsSucceeded,
-    //     "agentsPodsFailed": this.agentsPodsFailed,
-    //     "totalPods": this.totalPods
-    //   }
-    //
-    //   // @ts-ignore
-    //   // this.buildAgentsChartData.push(chartData);
-    //
-    //   // @ts-ignore
-    //   this.buildAgentsChartData.push([{
-    //     backgroundColor: 'white',
-    //     borderColor: 'transparent',
-    //     data: [this.agentsPodsRunning, this.agentsPodsPending, this.agentsPodsUnknown, this.agentsPodsSucceeded, this.agentsPodsFailed],
-    //     fill: false,
-    //     showLine: false,
-    //     stack: '1'
-    //   }])
-    //   this.podsInfo.push(infoData)
-    // })
-    // this.buildAgentsChartData.shift();
-
-    // @ts-ignore
-    // this.buildAgentsChartData;
-
-
-
 
 
     // <------------Users Section------------>
 
 
     this._dashboardService.getAllUsers().subscribe((res) => {
-      console.log("User Data: ",res);
       this.hasUser = true;
       this.users = res;
       this.usersActive = this.users?.data?.users?.active;
@@ -378,7 +312,8 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       this.totalUsers = this.usersActive + this.usersInactive;
       this.buildUsersChartData[0].data = [this.usersActive, this.usersInactive];
       },(err)=>{
-        console.log("errerr",err);
+        this.hasUser = false;
+        this.snack.openSnackBar('Users',err.error.message,'sb-error')
         }
       );
 
@@ -391,9 +326,6 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     dialogConfig.autoFocus = true;
     dialogConfig.width = '45vw';
 
-    // dialogConfig.data = {
-    //   companyID: this.companyID,
-    // };
     this.dialog.open(AddCompanyComponent, dialogConfig);
   }
 

@@ -46,7 +46,6 @@ export class ForgotPasswordComponent implements OnInit {
 
     this.forgotPassMail = this.forgotPass.value.email;
     this.auth.forgotPassData(this.forgotPassMail).subscribe(res=>{
-      console.log(this.forgotPassMail)
     })
   }
 
@@ -91,7 +90,6 @@ export class ForgotPasswordComponent implements OnInit {
     (err) => {
       this.isLoading = false;
       this.snackBar.openSnackBar('Registration Failed!', 'Please submit valid credentials.','sb-error');
-      console.log('err', err);
     })
   }
 

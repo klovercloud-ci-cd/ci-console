@@ -71,7 +71,6 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
-      // console.log("I have Company: ",this.companyID);
     });
 
     const dialogConfig = new MatDialogConfig();
