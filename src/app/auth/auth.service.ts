@@ -49,6 +49,9 @@ export class AuthService {
   }
 
   login(loginPayload: any): Observable<any> {
+
+    var date = new Date();    
+    localStorage.setItem('loginTime',date.toISOString());
     HTTP_OPTIONS.params = {
       grant_type: 'password',
     };
@@ -91,6 +94,8 @@ export class AuthService {
   }
 
   logOut(): void {
+
+    localStorage.removeItem('loginTime');
     this.tokenService.removeAccessToken();
     this.tokenService.removeRefreshToken();
     setTimeout(() => {

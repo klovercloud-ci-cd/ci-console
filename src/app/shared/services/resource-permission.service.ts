@@ -20,7 +20,7 @@ export class ResourcePermissionService{
 
   getResourcePermissions(){
     // @ts-ignore
-    let obj =  JSON.parse(atob(localStorage.getItem("access_token").split('.')[1]))
+    let obj =  JSON.parse(atob(localStorage.getItem("access_token")?.split('.')[1]))
     let resourcePermissions= new  Map( );
     for (let i = 0; i <  obj.data.resources.length; i++) {
       let permission=new Set();

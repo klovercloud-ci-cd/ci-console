@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
   logIn(): void {
 
     this.isLoading =true
-
+    
     this.authService
       .login({
         email: this.loginForm.value.email,

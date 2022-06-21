@@ -1,11 +1,11 @@
 div,h1{
-  color: white !important;
+  color: black !important;
 }
 .active {
-  @apply bg-[#0f172a]  text-dark;
+  @apply bg-[#9ba8c7]  text-dark;
 }
 .dropdown__link{
-  color: white;
+  color: black;
 }
 
 $sidenavWidth: 260px;
@@ -35,11 +35,11 @@ $sidenavWidth: 260px;
     line-height: 16px;
     letter-spacing: 0.2px;
     text-align: left;
-    color: #ffffff;
+    color: black;
     @apply flex items-center;
     &:hover,
     &.active {
-      color: var(--color-primary);
+      color: black;
       @apply bg-transparent;
     }
     &.showed {
@@ -66,7 +66,7 @@ $sidenavWidth: 260px;
     transition: all 0.3s linear;
     &:hover,
     &.active {
-      color: white;
+      color: black;
       @apply bg-transparent;
     }
   }

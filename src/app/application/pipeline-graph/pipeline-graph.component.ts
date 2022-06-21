@@ -698,7 +698,7 @@ export class PipelineGraphComponent
         this.stepStatus = footMarkRes.status;
         this.footMarks = footMarkRes.data;
         this.activeStep = stepName;
-        this.setActiveFootMark(this.footMarks.length - 1);
+        this.setActiveFootMark(this.footMarks?.length - 1);
         this.wsService.wsData.subscribe((WSRes) => {
           const socketRes: any = WSRes;
           if (socketRes.process_id == this.pipeline.data.process_id) {

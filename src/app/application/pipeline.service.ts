@@ -27,9 +27,10 @@ export class PipelineService {
   socket: any;
 
   connectToSocket(id?: any) {
+    let login_time = localStorage.getItem('loginTime');
     const BASE_URL_WS = environment.v1ApiEndPointWS;
     const socket = new WebSocket(
-      `${BASE_URL_WS}pipelines/ws?token=${this.token.getAccessToken()}`
+      `${BASE_URL_WS}pipelines/ws?token=${this.token.getAccessToken()}&from=${login_time}`
     );
 
     socket.onopen = (e: any) => {

@@ -87,7 +87,7 @@
         </div>
       </div>
     </div>
-    <div class="">
+    <div class="" [ngClass]="openCollapsedBar? 'blur-sm ' : ''">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
