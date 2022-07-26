@@ -75,6 +75,8 @@ export class UserListComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
+    console.log("this.getScreenWidthsss: ",this.getScreenWidth);
+    
 
     if (this.getScreenWidth < 1400) {
       this.dialogWidth = '70%';

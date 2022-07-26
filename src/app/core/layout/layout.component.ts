@@ -48,6 +48,7 @@ export class LayoutComponent implements OnInit, AfterContentChecked {
 
   ngOnInit() {
     this.getScreenWidth = window.innerWidth;
+
     if (this.getScreenWidth < 1280) {
       this.isOpen = false;
     } else {

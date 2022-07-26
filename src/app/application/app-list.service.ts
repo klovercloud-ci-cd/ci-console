@@ -52,13 +52,13 @@ export class AppListService {
     repoId: any
   ): Observable<any> {
     HTTP_OPTIONS.params = {
-      companyId: companyID,
-      repositoryId: repoId,
+      // companyId: companyID,
+      // repositoryId: repoId,
       companyUpdateOption: 'APPEND_APPLICATION',
     };
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .post(`${BASE_URL}applications`, appPayload, HTTP_OPTIONS)
+      .put(`${BASE_URL}companies/${companyID}/repositories/${repoId}/applications`, appPayload, HTTP_OPTIONS)
       .pipe(
         map((res: any) => {
           this._refreshNeeded$.next();

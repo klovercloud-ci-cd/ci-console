@@ -168,7 +168,8 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   // agentsInfo: Agent[];
 
   async ngOnInit(): Promise<void> {
-
+    setTimeout(() => { this.ngOnInit() }, 5000);
+    console.log("Dashboard Reloaded!")
     if (!this.currentUser.metadata.company_id) {
       this.openDialog();
     }
@@ -179,7 +180,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     this._dashboardService.getAllAgents().subscribe((res)=>{
       this.agents=res.data;
       this.buildAgentsChartData=[]
-      for(let item=0; item<res.data.length; item++){
+      for(let item=0; item<res?.data?.length; item++){
 
         this._dashboardService.getPodsByAgent(res.data[item]["agent_name"]).subscribe((response)=>{
 

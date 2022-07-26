@@ -32,6 +32,10 @@ import { AppEditorModalComponent } from './app-editor-modal/app-editor-modal.com
 
 import {MatDividerModule} from "@angular/material/divider";
 import {MatListModule} from "@angular/material/list";
+import { LightHouseComponent } from './light-house/light-house.component';
+import { LighthouseGraphComponent } from './lighthouse-graph/lighthouse-graph.component';
+import {NgxGraphModule} from "@swimlane/ngx-graph";
+import {NgxChartsModule} from "@swimlane/ngx-charts";
 
 
 @NgModule({
@@ -42,6 +46,8 @@ import {MatListModule} from "@angular/material/list";
     PipelineGraphComponent,
     PipelineOverviewComponent,
     AppEditorModalComponent,
+    LightHouseComponent,
+    LighthouseGraphComponent,
   ],
   imports: [
     CommonModule,
@@ -74,6 +80,8 @@ import {MatListModule} from "@angular/material/list";
     EditorModule,
     MatDividerModule,
     MatListModule,
+    NgxGraphModule,
+    NgxChartsModule
   ],
 })
 export class ApplicationModule {}

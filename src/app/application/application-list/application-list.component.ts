@@ -23,7 +23,7 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
   styleUrls: ['./application-list.component.scss'],
 })
 export class ApplicationListComponent implements OnInit {
-  isLoading = true;
+  isLoading = false;
 
   load = false;
 
@@ -85,14 +85,18 @@ export class ApplicationListComponent implements OnInit {
   }
 
   getAppList() {
+    this.isLoading = true;
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
       this.service
         .getRepositoryInfo(this.companyID, this.repositoryId)
         .subscribe((response: any) => {
+          this.isLoading = false;
+          console.log("response",response);
           if(response.data.applications.length){
             this.hasData = true;
+            this.isLoading = false;
           }
           this.array = response;
           this.dataSource = new MatTableDataSource(response.data.applications);
@@ -194,6 +198,7 @@ export class ApplicationListComponent implements OnInit {
   }
 
   webUpdate(appId: any) {
+    this.isLoading = true;
     this.repositoryId = this.route.snapshot.paramMap.get('repoID');
 
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {

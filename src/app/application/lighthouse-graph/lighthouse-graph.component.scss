@@ -1,0 +1,92 @@
+.chart-container{
+  @apply flex pl-14  pt-16 bg-light-600;
+  //overflow: scroll !important;
+  //background-image: radial-gradient(#3b3d48 1px, transparent 0);
+  //background-size: 30px 40px;
+}
+#over .ngx-charts{
+  overflow: scroll !important;
+}
+.graph {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+.graph .edge {
+  stroke: #666;
+  fill: none; }
+.graph .edge .edge-label {
+  stroke: none;
+  font-size: 12px;
+  fill: #666; }
+.graph .panning-rect {
+  fill: transparent;
+  cursor: move; }
+.graph .node-group .node:focus {
+  outline: none; }.graph {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none; }
+.graph .edge {
+  stroke: #666;
+  fill: none; }
+.graph .edge .edge-label {
+  stroke: none;
+  font-size: 12px;
+  fill: #666; }
+.graph .panning-rect {
+  fill: transparent;
+  cursor: move; }
+.graph .node-group .node:focus {
+  outline: none;
+}
+
+.edge {
+  path  {
+    stroke: #fff !important;
+  }
+}
+text{
+  font-size: 10px;
+  font-weight: 600;
+}
+.process__text{
+  font-size: 12px;
+  font-weight: 900;
+  font: bold 15px sans-serif;
+}
+.text__label{
+  font: bold 15px sans-serif;
+}
+.node__text{
+  font: bold 12px sans-serif;
+  fill: #61A1C6;
+}
+.bg-doted{
+  background-image: radial-gradient(#3b3d48 1px, transparent 0);
+  background-size: 30px 40px;
+}
+:host ::ng-deep {
+  display: block;
+  height: inherit;
+  width: inherit;
+}
+
+:host ::ng-deep .cardContainer {
+  line-height: 0.8em;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  //border: 1px solid #a7a7a7;
+  //box-shadow: inset 0px -50px 62px -30px rgba(0, 0, 0, 0.04);
+  border-radius: 5px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 10px;
+}
+.svgClass,foreignObject{
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}

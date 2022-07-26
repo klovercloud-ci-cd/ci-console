@@ -14,7 +14,8 @@ import  {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.serv
 })
 export class ForgotPasswordComponent implements OnInit {
   isLoading = false;
-
+  gotoOtp:boolean = false;
+  stayOnForget:boolean=true;
   forgotPass = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
   });
@@ -43,18 +44,33 @@ export class ForgotPasswordComponent implements OnInit {
   });
 
   forgotPassComponent() {
-
+    this.isLoading = true;
     this.forgotPassMail = this.forgotPass.value.email;
-    this.auth.forgotPassData(this.forgotPassMail).subscribe(res=>{
-    })
+    this.auth.forgotPassData(this.forgotPassMail).subscribe((res)=>{
+      console.log("Response: ",res);
+      this.gotoOtp = true;
+      this.stayOnForget = false;
+        this.snackBar.openSnackBar('Submit OTP!', res.message,'sb-success');
+    },
+      (err) => {
+        this.isLoading = false;
+        this.snackBar.openSnackBar('Forget Password Failed!', err,'sb-error');
+      })
   }
 
   resendCode(){
-    this.auth.forgotPassData(this.forgotPassMail)
+    this.auth.forgotPassData(this.forgotPassMail).subscribe((res)=>{
+        console.log("Resend:",res);
+      this.snackBar.openSnackBar('Submit OTP!', 'OTP Resend','sb-success');
+      })
   }
 
   otpSumit(){
-    this.otpCode = this.otpForm.value.otp
+    this.otpCode = this.otpForm.value.otp;
+    this.isLoading = true;
+    setTimeout(()=>{
+      this.isLoading = false;
+    },250)
   }
 
   confirmPasswordMatch(controlName: string, matchingControlName: string) {
@@ -72,12 +88,11 @@ export class ForgotPasswordComponent implements OnInit {
 
   // @ts-ignore
   changePassword(){
-
     this.isLoading = true;
     const payload ={
       "email": this.forgotPassMail,
-      "new_password": this.setNewPassword.value.password,
-      "otp": this.otpCode
+      "new_password": this.setNewPassword.value.password || '',
+      "otp": this.otpCode || ''
     }
     this.auth.chnagePasword(payload).subscribe((res)=>{
       if(res.status ==='success'){
@@ -89,7 +104,7 @@ export class ForgotPasswordComponent implements OnInit {
     },
     (err) => {
       this.isLoading = false;
-      this.snackBar.openSnackBar('Registration Failed!', 'Please submit valid credentials.','sb-error');
+      this.snackBar.openSnackBar('Password Change Failed!', err,'sb-error');
     })
   }
 

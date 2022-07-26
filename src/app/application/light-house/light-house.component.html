@@ -1,0 +1,53 @@
+
+<div  class="relative">
+  <div class="svgCanvas bg-light-600 h-[700px] w-full mt-[1.5rem] w-full overflow-scroll relative flex px-6 top-[2.8rem]" >
+
+    <svg class="" id="svg" height="1000" width="100%"  overflow="hidden"></svg>
+
+    <div class="absolute top-10 left-[5%] w-full">
+
+<!--      Header content-->
+
+      <div class="w-full flex justify-center gap-6 pb-10">
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 bg-info"></div>
+          <h1 class="text-lg font-bold">Running</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 bg-success"></div>
+          <h1 class="text-lg font-bold">Completed</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 bg-danger"></div>
+          <h1 class="text-lg font-bold">Failed</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 bg-rose-400"></div>
+          <h1 class="text-lg font-bold">ImagePullBackOff</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-5 h-5 bg-teal-500"></div>
+          <h1 class="text-lg font-bold">Other</h1>
+        </div>
+      </div>
+
+<!--      Graph Section-->
+
+        <div class="flex items-center gap-32 py-10">
+          <div class="bg-white h-20 w-20 rounded-full flex items-center justify-center text-black cursor-pointer z-10 flex justify-center items-center shadow-xl drop-shadow-xl" id="root_process" (click)="getRoot()">
+            <h1 class="text-blue-500 text-sm font-bold">Process</h1>
+          </div>
+          <div class="flex  flex-col justify-around gap-20" >
+            <div *ngFor="let agent of agentArray;">
+            <div class="rounded-md bg-white pl-5 py-3 flex justify-center items-center gap-4 pr-10 relative  shadow-xl drop-shadow-xl" id="{{agent.id}}">
+              <img width="35" src="assets/images/kuber.svg" alt="">
+              <h1 class="text-xs text-teal-600 tracking-wider font-bold">{{agent.name}}</h1>
+              <mat-icon *ngIf="agent?.footmarks?.length" class="absolute top-2 left-full -ml-3 text-blue-500 text-4xl cursor-pointer" (click)="getFootmarks(agent?.id,agent?.footmarks)">arrow_right</mat-icon>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

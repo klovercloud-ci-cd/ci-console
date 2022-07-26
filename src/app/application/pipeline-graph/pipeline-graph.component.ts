@@ -338,6 +338,12 @@ export class PipelineGraphComponent
           this.error.pipeline = '';
           this.processIds = res.data;
           this.getPipeline(this.processIds[0].process_id);
+          this.navigateRoute
+            .navigate([], {
+              queryParams: { processID: this.processIds[0].process_id },
+              queryParamsHandling: 'merge',
+            })
+            .then((r) => {});
         }
       }
     });

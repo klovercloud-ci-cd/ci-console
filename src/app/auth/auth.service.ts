@@ -50,7 +50,7 @@ export class AuthService {
 
   login(loginPayload: any): Observable<any> {
 
-    var date = new Date();    
+    var date = new Date();
     localStorage.setItem('loginTime',date.toISOString());
     HTTP_OPTIONS.params = {
       grant_type: 'password',
@@ -142,7 +142,7 @@ export class AuthService {
     return false;
   }
 
-  forgotPassData(media: string) {
+  forgotPassData(media: string): Observable<any> {
     HTTP_OPTIONS.params = {
       action: 'forgot_password',
       media,
@@ -151,6 +151,9 @@ export class AuthService {
       BASE_URL + endpoints.FORGOT_PASSWORD,
       '',
       HTTP_OPTIONS
+    ).pipe(
+      tap((event: any) => {}),
+      catchError(this.handleError)
     );
   }
 
