@@ -72,4 +72,25 @@ export class LighthouseService {
       );
   }
 
+  // http://localhost:8080/api/v1/kube_objects?action=get_by_id&object=config-map&id=1729408a-c872-49c3-81f4-8e9be3b69157&agent=test_agent&processId=abc123
+
+  getDetails(processId:string,agentName:string,typeName:string,typeId:string): Observable<any> {
+    HTTP_OPTIONS.params = {
+      processId: processId,
+      action: 'get_by_id',
+      object:'',
+      id:typeId,
+      agent:agentName,
+    };
+
+    return this.http
+      .get(`${BASE_URL}kube_objects`, HTTP_OPTIONS)
+      .pipe(
+        tap((res: any) => {
+          // console.log('Response Log: ');
+        }),
+        catchError(LighthouseService.handleError)
+      );
+  }
+
 }
