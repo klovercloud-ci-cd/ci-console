@@ -97,7 +97,6 @@ export class LighthouseGraphComponent implements OnInit {
     setTimeout(()=>{
       this.kabir()
       // @ts-ignore
-      console.log("some",event?.target?.getAttribute('class'))
     },1000)
   }
 
@@ -117,7 +116,6 @@ export class LighthouseGraphComponent implements OnInit {
     let agentLinks: any, agentNodes: any;
     for(let i=0; i<this.agentsArray.length; i++){
 
-      // console.log("step.params",this.agentsArray[i].agent)
       agentNodes = [
         {
           id: this.agentsArray[i].agent,
@@ -149,7 +147,6 @@ export class LighthouseGraphComponent implements OnInit {
     this.isLoading = true;
     this.repo?.getPipeLine(processId)?.subscribe((res: any) => {
       if(res.data.steps){
-        // console.log("Res:",res.data.steps)
         this.hasData=true;
       }
       this.isLoading = false;
@@ -171,7 +168,7 @@ export class LighthouseGraphComponent implements OnInit {
     })
   }
 
-  trigger(node_id:string, event: any, uid:string, agentType:string) {
+  trigger(node_id:string, event: any, uid:string, agentType:string, triggerInitialization:number) {
 
     if(this.checkAgents(node_id)){
       this.agentName=node_id;
@@ -182,14 +179,13 @@ export class LighthouseGraphComponent implements OnInit {
     }
 
     if (event.target.getAttribute('id') == 'k8s'){
-      this.getPods(node_id,event,uid,agentType);
+      this.getPods(node_id,event,uid,agentType,triggerInitialization);
     }
 
     if (this.containerAllArray && this.checkPods(event.target.getAttribute('id'))){
 
       this.containerArrow = false;
       this.pods = node_id;
-      console.log("this.pods",this.pods)
 
       let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
 
@@ -202,13 +198,12 @@ export class LighthouseGraphComponent implements OnInit {
 
           for (let i=0; i<this.containerAllArray.length; i++){
 
-            console.log("this.PODSS------",this.containerAllArray[i])
-
             if(this.containerAllArray[i].id===node_id) {
 
               for (let container in this.containerAllArray[i].name) {
 
-                console.log("this.containerAllArray[i]",this.containerAllArray[i].status[container])
+                for (let containerInfo in this.containerAllArray[i].name[container]){
+                }
 
                 let c_Color="";
 
@@ -227,13 +222,26 @@ export class LighthouseGraphComponent implements OnInit {
                     c_Color='#f60d0d'
                   }
                 }
-                  subNodes = [
+                let reason:string='';
+                if(this.containerAllArray[i].status[container].state.hasOwnProperty('running')){
+
+                  reason='running';
+                }else if(this.containerAllArray[i].status[container].state.hasOwnProperty('waiting')){
+
+                  reason=this.containerAllArray[i].status[container].state.waiting.reason;
+                }
+
+
+
+                subNodes = [
                     {
                       id: this.containerAllArray[i].name[container].name,
                       label: this.containerAllArray[i].name[container].name,
                       type: "container",
                       colorType:'container',
                       namespace: 'kc',
+                      reason:reason,
+                      containerData:this.containerAllArray[i].name[container]||'',
                       options: {
                         color: c_Color,
                       }
@@ -285,20 +293,13 @@ export class LighthouseGraphComponent implements OnInit {
         this.lighthouseService.getAfterAgents(this.processID,node_id)
           .subscribe(
             (res) => {
-              console.log("Objects Response:",res)
               this.agents = node_id;
               this.afterAgentArray = res;
 
               for (let agent in this.afterAgentArray?.data) {
-                // daemon_sets,deployments,stateful_sets,replica_sets;
-
-                console.log("this.afterAgentArray?.data",this.afterAgentArray?.data);
 
                 this.afterAgentArray?.data[agent]?.map((item: any) => {
 
-                  console.log("XXXXX",item.name,'--',item.available_replicas)
-
-                  // let totalReplica = item.available_replicas+item.unavailable_replicas;
                   let available_replicas;
                   let unavailable_replicas;
                   if(item.number_available){
@@ -310,8 +311,6 @@ export class LighthouseGraphComponent implements OnInit {
                     unavailable_replicas = (50 * (item.replicas - item.ready_replicas)) / item.replicas;
                   }
                   let rep_height = (50 - available_replicas).toString();
-
-                  // console.log("agent",agent)
 
                   let enableTrigger:boolean=false;
                   if(!(agent=='deployments' || agent=='daemon_sets' || agent=='stateful_sets' || agent=='replica_sets')){
@@ -329,6 +328,7 @@ export class LighthouseGraphComponent implements OnInit {
                       rep_height:rep_height,
                       type: "k8s",
                       podType:'',
+                      containerData:'',
                       uid:item.uid||'',
                       agentType:agent||'',
                       trigger:enableTrigger||false,
@@ -377,34 +377,22 @@ export class LighthouseGraphComponent implements OnInit {
 
   // Drawing Pods
 
-  getPods(node_id:string, event: any, uid:string,agentType:string){
-    console.log("this.isPodChanged",this.isPodChanged)
+  getPods(node_id:string, event: any, uid:string,agentType:string,triggerInitialization:number){
+    if(triggerInitialization){
+      this.isPodChanged=1
+    }
 
     let pod_changed:number=1;
 
-    //
-    // if(pod_changed === 1){
-    //   this.isPodChanged=1;
-    // }else {
-    //   this.isPodChanged=pod_changed;
-    // }
     this.typeName='';
     // this.pods='';
     this.enableReload = true;
-    // this.navigateRoute.navigate([], {
-    //   queryParams: {
-    //     '': null,
-    //   },
-    //   queryParamsHandling: 'merge'
-    // })
-    // this.pods='';
 
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
 
     this.timeoutId = setTimeout(() => {
-
       this.lighthouseService.getPods(this.processID,this.agentName,this.typeName,uid)
         .subscribe(
           (res) => {
@@ -414,10 +402,8 @@ export class LighthouseGraphComponent implements OnInit {
               this.isPodChanged++;
             }
           })
-
-      this.getPods(node_id,event,uid,agentType);
+      this.getPods(node_id,event,uid,agentType,0);
     }, 5000);
-
 
       let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
 
@@ -442,7 +428,6 @@ export class LighthouseGraphComponent implements OnInit {
           this.lighthouseService.getPods(this.processID, this.agentName, this.typeName, uid)
             .subscribe(
               (res) => {
-                console.log("Pods Response:",res)
                 this.allPodsArray = res.data;
                 this.afterAgents = node_id;
                 let some = res.data.map((containerItem: any) => {
@@ -459,8 +444,7 @@ export class LighthouseGraphComponent implements OnInit {
                 })
                 this.containerAllArray = some;
                 this.podArray = res;
-                this.podArray.data.map((pod: any) => {
-                  console.log("Pods:", pod)
+                this.podArray.data.map((pod: any,index:number) => {
                   let podColor;
                   if (pod.status.phase === 'Succeeded') {
                     podColor = '#1d8d13'
@@ -500,7 +484,6 @@ export class LighthouseGraphComponent implements OnInit {
                       }
                     }
                   }
-                  console.log("pod.metadata",pod.metadata)
                   subNodes = [
                     {
                       id: pod.metadata.name,
@@ -508,6 +491,7 @@ export class LighthouseGraphComponent implements OnInit {
                       type: pod.metadata.name,
                       pod: 'pod',
                       uid:pod.metadata.uid||'',
+                      containerData:pod,
                       agentType: pod.kind.toLowerCase() || '',
                       namespace: 'default',
                       options: {
@@ -549,35 +533,41 @@ export class LighthouseGraphComponent implements OnInit {
     this.isPodChanged++;
   }
 
-  detailsModal(id:string,uid:string,type:any){
-    let objectType;
-    if(type=='ingresses'){
-      objectType='ingress';
-    }else if(type=='network_policies'){
-      objectType='network-policy'
-    }else if(type=='pod'){
-      objectType='pod'
-    }else{
-      objectType = type.replace(/_/g, "-").substring(0, type.length - 1);
+  detailsModal(id:string,uid:string,type:any,containerData:any){
+    if(containerData){
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = false;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '100%';
+      dialogConfig.maxWidth = '600px',
+        dialogConfig.data = containerData
+      this.dialog.open(LighthouseInfoModalComponent, dialogConfig);
+    }else {
+      let objectType;
+      if (type == 'ingresses') {
+        objectType = 'ingress';
+      } else if (type == 'network_policies') {
+        objectType = 'network-policy'
+      } else if (type == 'pod') {
+        objectType = 'pod'
+      } else {
+        objectType = type.replace(/_/g, "-").substring(0, type.length - 1);
+      }
+
+      this.lighthouseService.getDetails(this.processID, this.agentName, objectType, uid)
+        .subscribe(
+          (res) => {
+            const dialogConfig = new MatDialogConfig();
+            dialogConfig.disableClose = false;
+            dialogConfig.autoFocus = true;
+            dialogConfig.width = '100%';
+            dialogConfig.maxWidth = '600px',
+              dialogConfig.data = res.data.obj
+            this.dialog.open(LighthouseInfoModalComponent, dialogConfig);
+          }, (err) => {
+
+          })
     }
-
-    console.log("Event:",this.processID,"--",this.agentName,"__type--",type,"--uid",uid);
-
-    this.lighthouseService.getDetails(this.processID,this.agentName,objectType,uid)
-      .subscribe(
-        (res) => {
-          console.log("Details Res:",res.data);
-          const dialogConfig = new MatDialogConfig();
-          dialogConfig.disableClose = false;
-          dialogConfig.autoFocus = true;
-          dialogConfig.width = '100%';
-          dialogConfig.maxWidth = '600px',
-            dialogConfig.data = res.data
-          this.dialog.open(LighthouseInfoModalComponent, dialogConfig);
-        },(err)=>{
-
-        })
-    console.log("Modal ID:",id,event)
 
   }
 
@@ -598,7 +588,6 @@ export class LighthouseGraphComponent implements OnInit {
   }
 
   optionFunction() {
-    // console.log("Option dot clicked!")
   }
 
 }

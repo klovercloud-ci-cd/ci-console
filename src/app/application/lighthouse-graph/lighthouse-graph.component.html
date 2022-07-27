@@ -118,13 +118,20 @@
                 </text>
 
                 <text
-                  *ngIf="!checkAgents(node?.id) "
+                  *ngIf="!checkAgents(node?.id) && !(node?.colorType==='container')"
                   alignment-baseline="central"
                   [attr.x]="25"
                   [attr.y]="23"
                   x="20"
                 >
                   {{ node?.namespace }}/{{node.label}}
+                </text>
+
+                <text
+                  *ngIf="!checkAgents(node?.id) && (node?.colorType==='container')"
+                  x="50%" y="80%" dominant-baseline="middle" text-anchor="middle"
+                >
+                  {{node?.reason}}
                 </text>
               </svg>
 
@@ -171,7 +178,7 @@
           xmlns="http://www.w3.org/2000/svg"
           [attr.x]="191"
           [attr.y]="node?.height / 2 || '18px'"
-          width="18" height="18" viewBox="0 0 24 24" (click)="trigger(node?.id, $event, node?.uid,node?.agentType)" class="cursor-pointer" >
+          width="18" height="18" viewBox="0 0 24 24" (click)="trigger(node?.id, $event, node?.uid,node?.agentType,1)" class="cursor-pointer" >
           <path d="M21 12l-18 12v-24z" fill="#3498DB" id="{{node?.type}}" [class]="node?.agentType || node?.pod" />
         </svg>
 
@@ -205,7 +212,7 @@
 <!--          #clickMenuTrigger="matMenuTrigger"-->
       </svg>
       <mat-menu #clickMenu="matMenu" class="bg-white ml-5 -mt-10">
-        <button mat-menu-item class="bg-white mt-2" style="text-align: center; padding: 0" (click)="detailsModal(node?.id,node?.uid,node?.agentType)">Info</button>
+        <button mat-menu-item class="bg-white mt-2" style="text-align: center; padding: 0" (click)="detailsModal(node?.id,node?.uid,node?.agentType,node?.containerData)">Info</button>
       </mat-menu>
     </ng-template>
 

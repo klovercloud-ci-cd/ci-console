@@ -325,6 +325,12 @@ export class PipelineGraphComponent
         this.envList = '';
         this.pipeline = '';
         this.isLoading.graph = false;
+        this.navigateRoute
+          .navigate([], {
+            queryParams: { processID: null },
+            queryParamsHandling: 'merge',
+          })
+          .then((r) => {});
       } else {
         if (res.data) {
           for (let branch in this.branchs) {
@@ -820,6 +826,7 @@ export class PipelineGraphComponent
             }
           });
       } else {
+
         this.getProcess(commit_Id);
       }
     });
