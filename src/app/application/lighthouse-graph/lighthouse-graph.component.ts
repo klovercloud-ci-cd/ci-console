@@ -6,6 +6,9 @@ import {LighthouseService} from "../lighthouse.service";
 import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 import {RepoServiceService} from "../../repository/repo-service.service";
 import {ToolbarService} from "../../shared/services/toolbar.service";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
+import {LighthouseInfoModalComponent} from "../lighthouse-info-modal/lighthouse-info-modal.component";
 
 @Component({
   selector: 'kcci-lighthouse-graph',
@@ -73,6 +76,7 @@ export class LighthouseGraphComponent implements OnInit {
     private snack: SharedSnackbarService,
     private repo: RepoServiceService,
     private _toolbarService: ToolbarService,
+    private dialog: MatDialog,
   ) {
     this.route.queryParams.subscribe((res) => {
       this.root = res['root'];
@@ -113,7 +117,7 @@ export class LighthouseGraphComponent implements OnInit {
     let agentLinks: any, agentNodes: any;
     for(let i=0; i<this.agentsArray.length; i++){
 
-      console.log("step.params",this.agentsArray[i].agent)
+      // console.log("step.params",this.agentsArray[i].agent)
       agentNodes = [
         {
           id: this.agentsArray[i].agent,
@@ -145,7 +149,7 @@ export class LighthouseGraphComponent implements OnInit {
     this.isLoading = true;
     this.repo?.getPipeLine(processId)?.subscribe((res: any) => {
       if(res.data.steps){
-        console.log("Res:",res.data.steps)
+        // console.log("Res:",res.data.steps)
         this.hasData=true;
       }
       this.isLoading = false;
@@ -196,12 +200,15 @@ export class LighthouseGraphComponent implements OnInit {
           this.containerNodes = this.podNodeArray;
           this.containerLinks = this.podLinkArray;
 
-
           for (let i=0; i<this.containerAllArray.length; i++){
+
+            console.log("this.PODSS------",this.containerAllArray[i])
 
             if(this.containerAllArray[i].id===node_id) {
 
               for (let container in this.containerAllArray[i].name) {
+
+                console.log("this.containerAllArray[i]",this.containerAllArray[i].status[container])
 
                 let c_Color="";
 
@@ -220,7 +227,6 @@ export class LighthouseGraphComponent implements OnInit {
                     c_Color='#f60d0d'
                   }
                 }
-                console.log("this.containerAllArray[i].name[container].name---------",this.containerAllArray[i].name[container].name)
                   subNodes = [
                     {
                       id: this.containerAllArray[i].name[container].name,
@@ -279,17 +285,34 @@ export class LighthouseGraphComponent implements OnInit {
         this.lighthouseService.getAfterAgents(this.processID,node_id)
           .subscribe(
             (res) => {
-              console.log("Response:",res)
+              console.log("Objects Response:",res)
               this.agents = node_id;
               this.afterAgentArray = res;
 
               for (let agent in this.afterAgentArray?.data) {
                 // daemon_sets,deployments,stateful_sets,replica_sets;
 
+                console.log("this.afterAgentArray?.data",this.afterAgentArray?.data);
+
                 this.afterAgentArray?.data[agent]?.map((item: any) => {
-                  let replica_height = (50 * item.available_replicas) / item.replicas;
-                  let rep_height = (50 - replica_height).toString();
-                  console.log("agent",agent)
+
+                  console.log("XXXXX",item.name,'--',item.available_replicas)
+
+                  // let totalReplica = item.available_replicas+item.unavailable_replicas;
+                  let available_replicas;
+                  let unavailable_replicas;
+                  if(item.number_available){
+                    let total_replicas=item.number_available+item.number_unavailable;
+                    available_replicas = (50 * item.number_available) / total_replicas;
+                    unavailable_replicas = (50 * item.number_unavailable) / total_replicas;
+                  }else {
+                    available_replicas = (50 * item.ready_replicas) / item.replicas;
+                    unavailable_replicas = (50 * (item.replicas - item.ready_replicas)) / item.replicas;
+                  }
+                  let rep_height = (50 - available_replicas).toString();
+
+                  // console.log("agent",agent)
+
                   let enableTrigger:boolean=false;
                   if(!(agent=='deployments' || agent=='daemon_sets' || agent=='stateful_sets' || agent=='replica_sets')){
                     enableTrigger=true;
@@ -300,9 +323,9 @@ export class LighthouseGraphComponent implements OnInit {
                       label: item.name,
                       namespace: item.namespace,
                       replicas: item.replicas || null,
-                      replica_height: replica_height || '',
-                      available_replicas: item.available_replicas || 0,
-                      unavailable_replicas: item.unavailable_replicas || 0,
+                      replica_height: available_replicas || '',
+                      available_replicas: available_replicas || 0,
+                      unavailable_replicas: unavailable_replicas || 0,
                       rep_height:rep_height,
                       type: "k8s",
                       podType:'',
@@ -390,14 +413,11 @@ export class LighthouseGraphComponent implements OnInit {
             }else {
               this.isPodChanged++;
             }
-            // this.isPodChanged=pod_changed;
-            console.log('some')
           })
 
       this.getPods(node_id,event,uid,agentType);
     }, 5000);
 
-    console.log("Reloaded!");
 
       let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
 
@@ -422,6 +442,7 @@ export class LighthouseGraphComponent implements OnInit {
           this.lighthouseService.getPods(this.processID, this.agentName, this.typeName, uid)
             .subscribe(
               (res) => {
+                console.log("Pods Response:",res)
                 this.allPodsArray = res.data;
                 this.afterAgents = node_id;
                 let some = res.data.map((containerItem: any) => {
@@ -479,14 +500,15 @@ export class LighthouseGraphComponent implements OnInit {
                       }
                     }
                   }
-
+                  console.log("pod.metadata",pod.metadata)
                   subNodes = [
                     {
                       id: pod.metadata.name,
                       label: pod.metadata.name,
                       type: pod.metadata.name,
                       pod: 'pod',
-                      agentType: pod.metadata.name || '',
+                      uid:pod.metadata.uid||'',
+                      agentType: pod.kind.toLowerCase() || '',
                       namespace: 'default',
                       options: {
                         color: podColor,
@@ -527,16 +549,36 @@ export class LighthouseGraphComponent implements OnInit {
     this.isPodChanged++;
   }
 
-  detailsModal(id:string,event:any){
-    console.log("Event:",this.processID,"--",this.agentName,"--",event,"--",this.typeName);
-    // this.lighthouseService.getDetails(this.processID,this.agentName,event,this.typeName)
-    //   .subscribe(
-    //     (res) => {
-    //
-    //     },(err)=>{
-    //
-    //     })
+  detailsModal(id:string,uid:string,type:any){
+    let objectType;
+    if(type=='ingresses'){
+      objectType='ingress';
+    }else if(type=='network_policies'){
+      objectType='network-policy'
+    }else if(type=='pod'){
+      objectType='pod'
+    }else{
+      objectType = type.replace(/_/g, "-").substring(0, type.length - 1);
+    }
+
+    console.log("Event:",this.processID,"--",this.agentName,"__type--",type,"--uid",uid);
+
+    this.lighthouseService.getDetails(this.processID,this.agentName,objectType,uid)
+      .subscribe(
+        (res) => {
+          console.log("Details Res:",res.data);
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.disableClose = false;
+          dialogConfig.autoFocus = true;
+          dialogConfig.width = '100%';
+          dialogConfig.maxWidth = '600px',
+            dialogConfig.data = res.data
+          this.dialog.open(LighthouseInfoModalComponent, dialogConfig);
+        },(err)=>{
+
+        })
     console.log("Modal ID:",id,event)
+
   }
 
   checkPods(id:string):boolean{
@@ -556,7 +598,7 @@ export class LighthouseGraphComponent implements OnInit {
   }
 
   optionFunction() {
-    console.log("Option dot clicked!")
+    // console.log("Option dot clicked!")
   }
 
 }

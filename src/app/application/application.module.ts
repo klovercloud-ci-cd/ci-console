@@ -36,6 +36,9 @@ import { LightHouseComponent } from './light-house/light-house.component';
 import { LighthouseGraphComponent } from './lighthouse-graph/lighthouse-graph.component';
 import {NgxGraphModule} from "@swimlane/ngx-graph";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { LighthouseInfoModalComponent } from './lighthouse-info-modal/lighthouse-info-modal.component';
+import {LighthouseInfoEditorComponent} from "../editor/lighthouse-info-editor/lighthouse-info-editor.component";
+// import { InfoEditorComponent } from './lighthouse-graph/info-editor/info-editor.component';
 
 
 @NgModule({
@@ -48,6 +51,7 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     AppEditorModalComponent,
     LightHouseComponent,
     LighthouseGraphComponent,
+    LighthouseInfoModalComponent,
   ],
   imports: [
     CommonModule,
@@ -59,7 +63,6 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-
     MatProgressSpinnerModule,
     MatCardModule,
     MatExpansionModule,
@@ -81,7 +84,7 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     MatDividerModule,
     MatListModule,
     NgxGraphModule,
-    NgxChartsModule
+    NgxChartsModule,
   ],
 })
 export class ApplicationModule {}

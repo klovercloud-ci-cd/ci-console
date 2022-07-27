@@ -78,7 +78,7 @@ export class LighthouseService {
     HTTP_OPTIONS.params = {
       processId: processId,
       action: 'get_by_id',
-      object:'',
+      object:typeName,
       id:typeId,
       agent:agentName,
     };
@@ -87,7 +87,7 @@ export class LighthouseService {
       .get(`${BASE_URL}kube_objects`, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
-          // console.log('Response Log: ');
+          // console.log('Response Log: ',);
         }),
         catchError(LighthouseService.handleError)
       );

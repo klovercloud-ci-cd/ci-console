@@ -32,7 +32,6 @@ import {ApplicationModalComponent} from "../application-modal/application-modal.
 import {ResourcePermissionService} from "../../shared/services/resource-permission.service";
 import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
-
 @Component({
   selector: 'kcci-app-editor-modal',
   templateUrl: './app-editor-modal.component.html',
@@ -92,6 +91,7 @@ export class AppEditorModalComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    console.log("DATAAAA",this.data)
 
     // <----------Fetching User Info---------->
     this.repositoryId = this.data.repositoryId;
@@ -299,7 +299,6 @@ export class AppEditorModalComponent implements OnInit {
     this.href = this.router.url;
 
     this.stepper = e;
-
   }
   closeAppModal() {
     this.dialogRef.close();

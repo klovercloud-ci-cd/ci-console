@@ -34,7 +34,7 @@
       <!-- Some:  {{item.value.name}} -->
       <!--              {{item.value.stepData.name.value | json}}-->
       <div class="text-white">
-<!--        {{item?.value['next']|json}}-->
+<!--        {{item?.value|json}}-->
         <kcci-editor (fixProp)="editorPropsFix($event)" [(text)]="item.value.data" [InputData]="item.value.stepData" [errorLine]="!item.value?.isValid ? item.value.error : 0" mode="yaml"></kcci-editor>
         <!-- yamlInputData -->
       </div>

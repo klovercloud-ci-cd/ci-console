@@ -24,6 +24,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { EditorModule } from './editor/editor.module';
 import { ChartsModule } from 'ng2-charts';
+import {LighthouseInfoEditorComponent} from "./editor/lighthouse-info-editor/lighthouse-info-editor.component";
 
 
 const globalRippleConfig: RippleGlobalOptions = {
@@ -54,7 +55,7 @@ const globalRippleConfig: RippleGlobalOptions = {
     LoadingBarModule,
     SnackbarModule,
     EditorModule,
-    ChartsModule
+    ChartsModule,
   ],
   providers: [
     {

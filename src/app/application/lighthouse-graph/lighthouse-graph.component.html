@@ -204,8 +204,8 @@
 
 <!--          #clickMenuTrigger="matMenuTrigger"-->
       </svg>
-      <mat-menu #clickMenu="matMenu" class="bg-light-600 ml-5 -mt-10">
-        <button mat-menu-item class="mt-2 flex justify-center mx-auto" (click)="detailsModal(node?.id,node?.agentType)">details</button>
+      <mat-menu #clickMenu="matMenu" class="bg-white ml-5 -mt-10">
+        <button mat-menu-item class="bg-white mt-2" style="text-align: center; padding: 0" (click)="detailsModal(node?.id,node?.uid,node?.agentType)">Info</button>
       </mat-menu>
     </ng-template>
 
