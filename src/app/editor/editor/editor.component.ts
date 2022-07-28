@@ -77,7 +77,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit(): void {
-
+    console.log("this.errorLine[i],this.InputDat",this.errorLine)
 
     // @ts-ignore
     this.editorService.toggleState$.subscribe((res:any) => {
@@ -121,19 +121,18 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getErrorMessageAndSuggestion(line:Number, data:any){
-
+    console.log("DATA",data,"---",line,'--',data.params.length)
     if (line==1){
-        return {message:data.name.message,suggestions:data.name.accepts}
-    }else if (line==2){
+      return {message:data.name.message,suggestions:data.name.accepts}
+    }if (line==2){
       return {message:data.type.message,suggestions:data.type.accepts}
-    }else if (line==3){
+    }if (line==3){
       return {message:data.trigger.message,suggestions:data.trigger.accepts}
-    }else if (line<=data.params.length+4 && line >4){
+    }if (line<=data.params.length+4 && line >4){
       return {message:data.params[Number(line)-5].message,suggestions:data.params[Number(line)-5].accepts}
     }else{
-      return {message:data.params[Number(line)-(data.params.length+1)].message,suggestions:data.params[Number(line)-(data.params.length+1)].accepts}
+      return {message:data.next[Number(line)-(data.params.length+6)].message,suggestions:data.next[Number(line)-(data.params.length+6)].accepts}
     }
-
   }
   private initEditor_(): void {
 
@@ -160,6 +159,8 @@ export class EditorComponent implements OnInit, AfterViewInit, OnChanges {
     for(let i=0; i<this.errorLine.length; i++){
       let value=this.getErrorMessageAndSuggestion(this.errorLine[i],this.InputData)
       let hasSuggestionMessage,noSuggestionMessage;
+
+      console.log("value",value);
 
       if(!value.message){
         jsonErrorArray.push({

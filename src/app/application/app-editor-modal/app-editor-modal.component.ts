@@ -196,7 +196,7 @@ export class AppEditorModalComponent implements OnInit {
 
 
       // count:=0
-      const paramVal = _item.params.map((paramValue:any)=>{
+      const paramVal = _item?.params?.map((paramValue:any)=>{
         const param = `${paramValue.name} : ${paramValue.value}`
         return param;
       })
@@ -210,12 +210,12 @@ export class AppEditorModalComponent implements OnInit {
       }
       let nextErrorIndexes=[]
       for (var i in _item.next) {
-
+        console.log("Validity",_item.next[i].valid)
         if (_item.next[i].valid=='false'){
           if (paramErrorIndexes.length>0){
             nextErrorIndexes.push(Number(i)+6+Number(paramErrorIndexes[paramErrorIndexes.length-1]))
           }else{
-            nextErrorIndexes.push(Number(i)+6)
+            nextErrorIndexes.push(Number(i)+_item.params.length+6);
           }
 
         }
@@ -269,24 +269,34 @@ export class AppEditorModalComponent implements OnInit {
   }
 
   getTotalError(appSteps:any){
-    const v_val=appSteps.map((p:any)=>{
-
-        const obj={
-          n_val:p?.name?.valid ==='true'?0:1 ,
-          ty_val:p?.type?.valid === 'true'?0:1,
-          t_val:p?.trigger?.valid === 'true'?0:1,
-          nx_val:p?.next?.filter((obj:any) => obj.valid === "false").length,
-          params:p?.params?.filter((obj:any) => obj.valid === "false").length
-
+    const appStepObject=appSteps?.map((process:any,index:number)=>{
+     let next_value=0
+      if (process.next){
+        next_value=process?.next?.filter((obj:any) => obj?.valid === 'false').length
+      }else{
+        console.log("here...")
+        next_value=0
+      }
+      const obj={
+          name_value:process?.name?.valid =='true'?0:1 ,
+          type_value:process?.type?.valid === 'true'?0:1,
+          trigger_value:process?.trigger?.valid === 'true'?0:1,
+          next_value:next_value,
+          params:process?.params?.filter((obj:any) => obj?.valid === 'false').length
         }
         return obj
       }
     )
 
-    const fCount = v_val.reduce((accumulator:any, object:any) => {
-      return accumulator + object.n_val+object.ty_val+object.t_val+object.nx_val+object.params;
+    console.log("appStepObject",appStepObject)
+
+    const fCount = appStepObject.reduce((accumulator:any, object:any) => {
+      console.log("accumulatoraccumulator---accumulator",accumulator,object)
+      return accumulator + Number(Number(object.name_value)+Number(object.type_value)+Number(object.trigger_value)+Number(object.next_value)+Number(object.params));
     }, 0);
+
     this.totalError = fCount;
+    console.log("this.totalError", fCount)
   }
 
   addApplication = this.fb.group({
@@ -336,6 +346,7 @@ export class AppEditorModalComponent implements OnInit {
         x.set(newKey, newKeyValue)
         continue
       }
+      console.log("Key----------------",key)
       x.set(key, value)
     }
     return x

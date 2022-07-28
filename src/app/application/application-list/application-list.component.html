@@ -99,7 +99,14 @@
         </table>
       </div>
       <ng-template #noData>
-        <h1 *ngIf="!isLoading && !hasData" class="flex py-[5%] justify-center items-center text-title">No Application Found</h1>
+<!--        <h1 *ngIf="!isLoading && !hasData" class="flex py-[5%] justify-center items-center text-title">No Application Found</h1>-->
+        <div *ngIf="!isLoading && !hasData"
+          class="absolute h-[75vh]  left-7 right-7  kc-card border-kc-bdr-card bg-warn-200 flex justify-center pt-[5%]">
+          <div class="text-center">
+            <h3 class="text-title">No Application Found</h3>
+<!--            <h4 class="">No Process found for lighthouse!</h4>-->
+          </div>
+        </div>
       </ng-template>
     </div>
     <ng-template #notAuthorized>

@@ -48,7 +48,7 @@
     [nodeHeight]="50"
     [curve]="curve"
     [panningEnabled]="false"
-    [enableZoom]="false"
+    [enableZoom]="true"
     [draggingEnabled]="false"
     [autoZoom]="true"
     [zoomLevel]="1"
@@ -110,19 +110,15 @@
                 <text
                   class="node__text"
                   *ngIf="!checkAgents(node?.id)"
-                  alignment-baseline="central"
-                  [attr.x]="90/2"
-                  [attr.y]="5"
+                  x="50%" y="20%" dominant-baseline="middle" text-anchor="middle"
                 >
                   {{ node?.label | uppercase}}
                 </text>
 
                 <text
                   *ngIf="!checkAgents(node?.id) && !(node?.colorType==='container')"
-                  alignment-baseline="central"
-                  [attr.x]="25"
-                  [attr.y]="23"
-                  x="20"
+
+                  x="50%" y="80%" dominant-baseline="middle" text-anchor="middle"
                 >
                   {{ node?.namespace }}/{{node.label}}
                 </text>
@@ -206,6 +202,18 @@
           stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path
             d="m12 16.495c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25zm0-6.75c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25zm0-6.75c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25z"/>
+        </svg>
+
+        <svg mat-icon-button [matMenuTriggerFor]="clickMenu" #clickMenuTrigger="matMenuTrigger"
+             (click)="optionFunction()" class="cursor-pointer">
+        <rect
+          *ngIf="!(node?.type=='agentStep')"
+          [attr.width]="'15px'"
+          [attr.height]="'50px'"
+          [attr.fill]="'rgba(182,11,11,0)'"
+          x="175" y="0"
+        >
+        </rect>
         </svg>
   <!--      </mat-menu>-->
 
