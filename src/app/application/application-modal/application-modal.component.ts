@@ -123,87 +123,87 @@ export class ApplicationModalComponent implements OnInit {
 // <-----------Data in Key Value Pair----------->
   private p: any;
 
-  getDataKeyValue(allSteps:any){
-    allSteps.map((_item: any, index:number)=>{
-
-      const nextVal = _item.next.map((nextValue:any)=>{
-        return nextValue.value;
-      })
-
-      const paramVal = _item.params.map((paramValue:any)=>{
-        const param = `${paramValue.name} : ${paramValue.value}`
-        return param;
-      })
-
-      const _obj:any = {
-        name: _item.name.value,
-        type: _item.type.value,
-        trigger: _item.trigger.value,
-        params: paramVal,
-        next: nextVal,
-      }
-
-      let next_val:any = null;
-      let params_val:any = null;
-
-      // <----------Checking Next Array---------->
-      if(_item?.next !== null){
-        const nextValue = _item?.next?.map((item:any)=>{
-          return item.valid;
-        })
-        next_val = !nextValue.includes('false')
-      }
-
-      // <----------Checking Param Array---------->
-      if(_item?.params !== null){
-        const paramsValue = _item?.params?.map((item:any)=>{
-          return item.valid;
-        })
-        params_val = !paramsValue.includes('false')
-      }
-      // this.arrayData.push(_obj);
-
-      let error;
-
-
-      if(_item.name.valid=='false'){
-        error = 1;
-      }else if(_item.type.valid=='false'){
-        error = 2;
-      }else if(_item.trigger.valid=='false'){
-        error = 3;
-      }else if(params_val==false){
-        error = 4;
-      }else if(next_val==false){
-        error = 5 + _item?.params.length;
-      }
-      this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
-    })
-  }
-
-  getTotalError(appSteps:any){
-
-    const v_val=appSteps.map((p:any)=>{
-
-        const obj={
-          n_val:p.name.valid ==='true'?0:1 ,
-          ty_val:p.type.valid === 'true'?0:1,
-          t_val:p?.trigger?.valid === 'true'?0:1,
-          nx_val:p.next.filter((obj:any) => obj.valid === "false").length,
-          params:p.params.filter((obj:any) => obj.valid === "false").length
-
-        }
-
-        return obj
-
-      }
-    )
-
-    const fCount = v_val.reduce((accumulator:any, object:any) => {
-      return accumulator + object.n_val+object.ty_val+object.t_val+object.nx_val+object.params;
-    }, 0);
-    this.totalError = fCount;
-  }
+  // getDataKeyValue(allSteps:any){
+  //   allSteps.map((_item: any, index:number)=>{
+  //
+  //     const nextVal = _item.next.map((nextValue:any)=>{
+  //       return nextValue.value;
+  //     })
+  //
+  //     const paramVal = _item.params.map((paramValue:any)=>{
+  //       const param = `${paramValue.name} : ${paramValue.value}`
+  //       return param;
+  //     })
+  //
+  //     const _obj:any = {
+  //       name: _item.name.value,
+  //       type: _item.type.value,
+  //       trigger: _item.trigger.value,
+  //       params: paramVal,
+  //       next: nextVal,
+  //     }
+  //
+  //     let next_val:any = null;
+  //     let params_val:any = null;
+  //
+  //     // <----------Checking Next Array---------->
+  //     if(_item?.next !== null){
+  //       const nextValue = _item?.next?.map((item:any)=>{
+  //         return item.valid;
+  //       })
+  //       next_val = !nextValue.includes('false')
+  //     }
+  //
+  //     // <----------Checking Param Array---------->
+  //     if(_item?.params !== null){
+  //       const paramsValue = _item?.params?.map((item:any)=>{
+  //         return item.valid;
+  //       })
+  //       params_val = !paramsValue.includes('false')
+  //     }
+  //     // this.arrayData.push(_obj);
+  //
+  //     let error;
+  //
+  //
+  //     if(_item.name.valid=='false'){
+  //       error = 1;
+  //     }else if(_item.type.valid=='false'){
+  //       error = 2;
+  //     }else if(_item.trigger.valid=='false'){
+  //       error = 3;
+  //     }else if(params_val==false){
+  //       error = 4;
+  //     }else if(next_val==false){
+  //       error = 5 + _item?.params.length;
+  //     }
+  //     this.stepAsMap.set(_item?.name?.value, {isValid: _item.isValid, data: toYaml(_obj), error:error, stepData:_item})
+  //   })
+  // }
+  //
+  // getTotalError(appSteps:any){
+  //
+  //   const v_val=appSteps.map((p:any)=>{
+  //
+  //       const obj={
+  //         n_val:p.name.valid ==='true'?0:1 ,
+  //         ty_val:p.type.valid === 'true'?0:1,
+  //         t_val:p?.trigger?.valid === 'true'?0:1,
+  //         nx_val:p.next.filter((obj:any) => obj.valid === "false").length,
+  //         params:p.params.filter((obj:any) => obj.valid === "false").length
+  //
+  //       }
+  //
+  //       return obj
+  //
+  //     }
+  //   )
+  //
+  //   const fCount = v_val.reduce((accumulator:any, object:any) => {
+  //     return accumulator + object.n_val+object.ty_val+object.t_val+object.nx_val+object.params;
+  //   }, 0);
+  //   this.totalError = fCount;
+  // }
 
 
   addApplication = this.fb.group({

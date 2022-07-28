@@ -194,7 +194,6 @@
 
   <!--      <mat-menu #menu="matMenu" class="kc-node-menu">-->
         <svg
-          mat-icon-button [matMenuTriggerFor]="clickMenu" #clickMenuTrigger="matMenuTrigger"
           (click)="optionFunction()" class="cursor-pointer"
           *ngIf="!(node?.type=='agentStep') && !(node.id=='pod1' || node.id=='pod2' || node.id=='pod3') && !(node.id=='container1' || node.id=='container2' )"
           [attr.x]="172"
@@ -204,7 +203,7 @@
             d="m12 16.495c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25zm0-6.75c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25zm0-6.75c1.242 0 2.25 1.008 2.25 2.25s-1.008 2.25-2.25 2.25-2.25-1.008-2.25-2.25 1.008-2.25 2.25-2.25z"/>
         </svg>
 
-        <svg mat-icon-button [matMenuTriggerFor]="clickMenu" #clickMenuTrigger="matMenuTrigger"
+        <svg mat-button [matMenuTriggerFor]="clickMenu" #clickMenuTrigger="matMenuTrigger"
              (click)="optionFunction()" class="cursor-pointer">
         <rect
           *ngIf="!(node?.type=='agentStep')"
@@ -219,8 +218,8 @@
 
 <!--          #clickMenuTrigger="matMenuTrigger"-->
       </svg>
-      <mat-menu #clickMenu="matMenu" class="bg-white ml-5 -mt-10">
-        <button mat-menu-item class="bg-white mt-2" style="text-align: center; padding: 0" (click)="detailsModal(node?.id,node?.uid,node?.agentType,node?.containerData)">Info</button>
+      <mat-menu #clickMenu="matMenu" backdropClass="customize" class=" ml-5 -mt-10"  style="min-height: 0 !important;" >
+        <button mat-menu-item class=" " style="text-align: center; min-height: 0" (click)="detailsModal(node?.id,node?.uid,node?.agentType,node?.containerData)">Info</button>
       </mat-menu>
     </ng-template>
 

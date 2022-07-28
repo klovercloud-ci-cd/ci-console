@@ -133,4 +133,10 @@ div{
 .logPanel pre:last-child {
   scroll-snap-align: start;
 }
+.mat-menu-panel , #mat-menu-panel-4, #mat-menu-panel-12, #mat-menu-panel-3, #mat-menu-panel-2 {
+  min-height: 35px;
+}
 
+:host ::ng-deep  .mat-menu-panel {
+  min-height: 35px;
+}
