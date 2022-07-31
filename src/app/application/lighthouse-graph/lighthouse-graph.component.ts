@@ -7,7 +7,6 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
 import {RepoServiceService} from "../../repository/repo-service.service";
 import {ToolbarService} from "../../shared/services/toolbar.service";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {AppEditorModalComponent} from "../app-editor-modal/app-editor-modal.component";
 import {LighthouseInfoModalComponent} from "../lighthouse-info-modal/lighthouse-info-modal.component";
 
 @Component({
@@ -90,14 +89,6 @@ export class LighthouseGraphComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.kabir()
-  }
-
-  kabir(){
-    setTimeout(()=>{
-      this.kabir()
-      // @ts-ignore
-    },1000)
   }
 
   public getStyles(): any {
@@ -224,14 +215,10 @@ export class LighthouseGraphComponent implements OnInit {
                 }
                 let reason:string='';
                 if(this.containerAllArray[i].status[container].state.hasOwnProperty('running')){
-
                   reason='running';
                 }else if(this.containerAllArray[i].status[container].state.hasOwnProperty('waiting')){
-
                   reason=this.containerAllArray[i].status[container].state.waiting.reason;
                 }
-
-
 
                 subNodes = [
                     {
@@ -369,7 +356,7 @@ export class LighthouseGraphComponent implements OnInit {
               this.updateChart();
             },
             (err) => {
-              this.snack.openSnackBar('Localagents not found!', err.error.message,'sb-warn');
+              this.snack.openSnackBar('Agent not found!', err.error.message,'sb-warn');
             });
       }
     }
@@ -445,6 +432,7 @@ export class LighthouseGraphComponent implements OnInit {
                 this.containerAllArray = some;
                 this.podArray = res;
                 this.podArray.data.map((pod: any,index:number) => {
+                  console.log("Pod Status:",pod);
                   let podColor;
                   if (pod.status.phase === 'Succeeded') {
                     podColor = '#1d8d13'
@@ -499,7 +487,6 @@ export class LighthouseGraphComponent implements OnInit {
                       }
                     }
                   ]
-
                   subLinks = [
                     {
                       source: node_id,

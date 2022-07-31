@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
   logIn(): void {
 
     this.isLoading =true
-    
+
     this.authService
       .login({
         email: this.loginForm.value.email,
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
           this.cacheUserResourcePermission(res.data.access_token)
         }
       },error => {
-        this.snack.openSnackBar('Error!',error,'sb-error')
+        this.snack.openSnackBar('Authentication error!',error,'sb-error')
         this.isLoading =false;
       });
   }

@@ -91,7 +91,6 @@ export class AppEditorModalComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    console.log("DATAAAA",this.data)
 
     // <----------Fetching User Info---------->
     this.repositoryId = this.data.repositoryId;
@@ -210,7 +209,6 @@ export class AppEditorModalComponent implements OnInit {
       }
       let nextErrorIndexes=[]
       for (var i in _item.next) {
-        console.log("Validity",_item.next[i].valid)
         if (_item.next[i].valid=='false'){
           if (paramErrorIndexes.length>0){
             nextErrorIndexes.push(Number(i)+6+Number(paramErrorIndexes[paramErrorIndexes.length-1]))
@@ -274,7 +272,6 @@ export class AppEditorModalComponent implements OnInit {
       if (process.next){
         next_value=process?.next?.filter((obj:any) => obj?.valid === 'false').length
       }else{
-        console.log("here...")
         next_value=0
       }
       const obj={
@@ -288,15 +285,12 @@ export class AppEditorModalComponent implements OnInit {
       }
     )
 
-    console.log("appStepObject",appStepObject)
 
     const fCount = appStepObject.reduce((accumulator:any, object:any) => {
-      console.log("accumulatoraccumulator---accumulator",accumulator,object)
       return accumulator + Number(Number(object.name_value)+Number(object.type_value)+Number(object.trigger_value)+Number(object.next_value)+Number(object.params));
     }, 0);
 
     this.totalError = fCount;
-    console.log("this.totalError", fCount)
   }
 
   addApplication = this.fb.group({
@@ -346,7 +340,6 @@ export class AppEditorModalComponent implements OnInit {
         x.set(newKey, newKeyValue)
         continue
       }
-      console.log("Key----------------",key)
       x.set(key, value)
     }
     return x

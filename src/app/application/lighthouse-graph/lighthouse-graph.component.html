@@ -19,24 +19,32 @@
   *ngIf="hasData && !isLoading; else noData">
   <div class="w-full flex justify-center gap-6 mt-10 pt-10 bg-light-600" xmlns:svg="">
     <div class="flex items-center gap-2">
-      <div class="w-5 h-5 bg-info"></div>
+      <div class="w-5 h-5 bg-[#50A649]"></div>
       <h1 class="text-lg font-bold">Running</h1>
     </div>
     <div class="flex items-center gap-2">
-      <div class="w-5 h-5 bg-success"></div>
+      <div class="w-5 h-5 bg-[#22571D]"></div>
       <h1 class="text-lg font-bold">Completed</h1>
     </div>
     <div class="flex items-center gap-2">
-      <div class="w-5 h-5 bg-danger"></div>
+      <div class="w-5 h-5 bg-[#B51601]"></div>
       <h1 class="text-lg font-bold">Failed</h1>
     </div>
     <div class="flex items-center gap-2">
-      <div class="w-5 h-5 bg-rose-400"></div>
+      <div class="w-5 h-5 bg-[#E160C5]"></div>
       <h1 class="text-lg font-bold">ImagePullBackOff</h1>
     </div>
     <div class="flex items-center gap-2">
-      <div class="w-5 h-5 bg-teal-500"></div>
-      <h1 class="text-lg font-bold">Other</h1>
+      <div class="w-5 h-5 bg-[#9EE598]"></div>
+      <h1 class="text-lg font-bold">Available</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-5 h-5 bg-[#F28E8E]"></div>
+      <h1 class="text-lg font-bold">Unavailable</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-5 h-5 bg-[#F84141]"></div>
+      <h1 class="text-lg font-bold">Unknown</h1>
     </div>
   </div>
   <ngx-graph
@@ -142,7 +150,7 @@
           *ngIf="node?.unavailable_replicas>0"
           [attr.width]="'10px'"
           [attr.height]="(50 - node?.replica_height)+'px'"
-          [attr.fill]="'#F28E8E'"
+          [attr.fill]="'#9EE598'"
           x="0" y="0"
         >
         </rect>
@@ -151,7 +159,7 @@
           *ngIf="node?.available_replicas>0"
           [attr.width]="'10px'"
           [attr.height]="node?.replica_height+'px'"
-          [attr.fill]="'#9EE598'"
+          [attr.fill]="'#F28E8E'"
           x="0" [attr.y]="node?.rep_height"
         >
         </rect>
