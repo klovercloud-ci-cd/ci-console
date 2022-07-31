@@ -17,6 +17,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {UserDataService} from "../../shared/services/user-data.service";
 import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 import {AddCompanyComponent} from "../../company/add-company/add-company.component";
+import {Router, NavigationEnd,ActivatedRoute} from "@angular/router";
+import { Observable,Subscription, interval  } from 'rxjs';
 
 // import {Chart} from 'chartjs';
 
@@ -73,6 +75,10 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     private cdref: ChangeDetectorRef,
     public resource: ResourcePermissionService,
     private snack: SharedSnackbarService,
+    // private navigateRoute: Router,
+    private router: Router, private activatedRoute: ActivatedRoute
+    // private updateSubscription: Subscription
+
   ) {
     this._toolbarService.changeData({ title: 'Dashboard' });
     this.currentUser = this.authService.getUserData();
@@ -109,7 +115,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   public pipelineChartColors: Color[] = [
     { backgroundColor: ['#a3e8b9', '#ff6e85','#74aafa', '#f8c87e', '#bbbcc7'] },
   ];
-  podsStatusWiseColor:any=['#74aafa', '#a3e8b9','#f8c87e','#ff6e85', '#EC7063','#34495E','#BFC9CA']
+  podsStatusWiseColor:any=['#74aafa', '#a3e8b9','#f8c87e','#ff6e85', '#EC7063','#34495E','#BFC9CA','#CB4335']
   public agentsChartColors: Color[] = [{ backgroundColor: this.podsStatusWiseColor}];
   public usersChartColors: Color[] = [
     { backgroundColor: ['#A3E4D7', '#85929E'] },
@@ -167,9 +173,22 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   agentWiseTotalPodCount:any=[]
   // agentsInfo: Agent[];
 
+  // reloadCurrentRoute() {
+  //   let currentUrl = this.navigateRoute.url;
+  //   this.navigateRoute.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+  //     this.navigateRoute.navigate([currentUrl]);
+  //   });
+  // }
+  refreshComponent(){
+    this.router.navigate([this.router.url])
+  }
+
   async ngOnInit(): Promise<void> {
-    setTimeout(() => { this.ngOnInit() }, 10000);
+    setTimeout(() => { this.refreshComponent()}, 3000);
     console.log("Dashboard Reloaded!")
+    // this.updateSubscription = interval(3000).subscribe(
+    //   (val) => { this.getProducts()});
+
     if (!this.currentUser.metadata.company_id) {
       this.openDialog();
     }

@@ -56,7 +56,7 @@
     [nodeHeight]="50"
     [curve]="curve"
     [panningEnabled]="false"
-    [enableZoom]="true"
+    [enableZoom]="false"
     [draggingEnabled]="false"
     [autoZoom]="true"
     [zoomLevel]="1"
@@ -164,6 +164,7 @@
         >
         </rect>
 
+
         <!--      Status Left-Sign-->
 
         <rect
@@ -178,13 +179,30 @@
         <!--     Trigger Arrow Agents-->
 
         <svg
-          *ngIf="(agents != node?.id && afterAgents != node?.id && pods != node?.id) && !(node?.colorType==='container') && !node?.trigger"
+          *ngIf="!isTriggered &&(agents !== node?.id && afterAgents !== node?.id && pods !== node?.id ) && !(node?.colorType==='container') && !node?.trigger"
           xmlns="http://www.w3.org/2000/svg"
           [attr.x]="191"
           [attr.y]="node?.height / 2 || '18px'"
           width="18" height="18" viewBox="0 0 24 24" (click)="trigger(node?.id, $event, node?.uid,node?.agentType,1)" class="cursor-pointer" >
           <path d="M21 12l-18 12v-24z" fill="#3498DB" id="{{node?.type}}" [class]="node?.agentType || node?.pod" />
         </svg>
+
+        <svg *ngIf="isTriggered && (agents !== node?.id  && pods !== node?.id ) && (afterAgents !== node?.id) && triggeredNode===node?.id && !(node?.colorType==='container')  && !node?.trigger" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" height="40px" width="40px"
+             viewBox="0 0 100 100"  xml:space="preserve"
+             [attr.x]="183"
+             [attr.y]="node?.height / 2 || '6px'">
+            <path fill="#3498DB" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50" >
+              <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="rotate"
+                dur="1s"
+                from="0 50 50"
+                to="360 50 50"
+                repeatCount="indefinite" />
+            </path>
+          </svg>
 
         <!--     Kubernetes Logo-->
 
@@ -200,7 +218,6 @@
 
         <!--     Option three dot After Agents-->
 
-  <!--      <mat-menu #menu="matMenu" class="kc-node-menu">-->
         <svg
           (click)="optionFunction()" class="cursor-pointer"
           *ngIf="!(node?.type=='agentStep') && !(node.id=='pod1' || node.id=='pod2' || node.id=='pod3') && !(node.id=='container1' || node.id=='container2' )"
@@ -222,13 +239,14 @@
         >
         </rect>
         </svg>
-  <!--      </mat-menu>-->
 
 <!--          #clickMenuTrigger="matMenuTrigger"-->
       </svg>
-      <mat-menu #clickMenu="matMenu" backdropClass="customize" class=" ml-5 -mt-10"  style="min-height: 0 !important;" >
-        <button mat-menu-item class=" " style="text-align: center; min-height: 0" (click)="detailsModal(node?.id,node?.uid,node?.agentType,node?.containerData)">Info</button>
+
+      <mat-menu #clickMenu="matMenu" backdropClass="customize" class=" ml-5 -mt-10 "  style="min-height: 35px !important;" >
+        <button mat-menu-item class=" " style="text-align: center; min-height: 0" (click)="detailsModal(node?.id,node?.uid,node?.agentType,node?.containerData)">Details</button>
       </mat-menu>
+
     </ng-template>
 
     <ng-template #linkTemplate let-link>
@@ -241,8 +259,8 @@
       </svg:g>
     </ng-template>
   </ngx-graph>
-
 </div>
+
 
 <ng-template #noData>
   <div

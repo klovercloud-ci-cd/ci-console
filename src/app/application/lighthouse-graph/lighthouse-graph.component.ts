@@ -56,7 +56,9 @@ export class LighthouseGraphComponent implements OnInit {
   enableReload:boolean=false;
   hasData:boolean=false;
   isLoading:boolean=false;
+  isTriggered:boolean=false;
   isPodChanged:number=1;
+  triggeredNode:string='';
   nodes = [
     {
       id: 'root',
@@ -135,6 +137,7 @@ export class LighthouseGraphComponent implements OnInit {
   }
 
   getPipeline(processId: any) {
+    this.isTriggered=true
     this.isLoading = true;
     this.repo?.getPipeLine(processId)?.subscribe((res: any) => {
       if(res.data.steps){
@@ -142,10 +145,12 @@ export class LighthouseGraphComponent implements OnInit {
       }
       this.isLoading = false;
       this.fullAgentsArray = res.data.steps;
+    this.isTriggered=false
       this.drawAgents();
     },(err)=>{
       this.hasData=false;
       this.isLoading = false;
+    this.isTriggered=false
     });
   }
 
@@ -160,7 +165,7 @@ export class LighthouseGraphComponent implements OnInit {
   }
 
   trigger(node_id:string, event: any, uid:string, agentType:string, triggerInitialization:number) {
-
+this.triggeredNode=node_id;
     if(this.checkAgents(node_id)){
       this.agentName=node_id;
     }
@@ -189,13 +194,15 @@ export class LighthouseGraphComponent implements OnInit {
 
           for (let i=0; i<this.containerAllArray.length; i++){
 
+            console.log("Color1:",this.containerAllArray[i])
+
             if(this.containerAllArray[i].id===node_id) {
 
               for (let container in this.containerAllArray[i].name) {
 
                 for (let containerInfo in this.containerAllArray[i].name[container]){
                 }
-
+                console.log("Color:",this.containerAllArray[i])
                 let c_Color="";
 
                 for (let containerColor in this.containerAllArray[i].status){
@@ -203,6 +210,7 @@ export class LighthouseGraphComponent implements OnInit {
                 }
                 for(let stateColor in this.containerAllArray[i].status[container].state){
 
+                  console.log("Color:",stateColor)
                   if(stateColor==='running'){
                     c_Color='#1482d2'
                   }
@@ -268,6 +276,7 @@ export class LighthouseGraphComponent implements OnInit {
   // Drawing K8Objects
 
   getKObjects(node_id:string, event: any, uid:string){
+    this.isTriggered=true
     this.enableReload = false;
     let subLinks: any, subNodes: any, agentNodes: any, agentLinks: any;
 
@@ -280,6 +289,7 @@ export class LighthouseGraphComponent implements OnInit {
         this.lighthouseService.getAfterAgents(this.processID,node_id)
           .subscribe(
             (res) => {
+              this.isTriggered=false
               this.agents = node_id;
               this.afterAgentArray = res;
 
@@ -357,6 +367,7 @@ export class LighthouseGraphComponent implements OnInit {
             },
             (err) => {
               this.snack.openSnackBar('Agent not found!', err.error.message,'sb-warn');
+              this.isTriggered=true
             });
       }
     }
@@ -365,8 +376,10 @@ export class LighthouseGraphComponent implements OnInit {
   // Drawing Pods
 
   getPods(node_id:string, event: any, uid:string,agentType:string,triggerInitialization:number){
+
     if(triggerInitialization){
       this.isPodChanged=1
+      this.isTriggered=true;
     }
 
     let pod_changed:number=1;
@@ -401,6 +414,8 @@ export class LighthouseGraphComponent implements OnInit {
           this.podNodes = this.nodeArray;
           this.podLinks = this.linkArray;
 
+          // http://localhost:8080/api/v1/config-maps?agent=test_agent&processId=abc123
+
           if (agentType === 'deployments') {
             this.typeName = 'deployments';
           } else if (agentType === 'daemon_sets') {
@@ -415,6 +430,7 @@ export class LighthouseGraphComponent implements OnInit {
           this.lighthouseService.getPods(this.processID, this.agentName, this.typeName, uid)
             .subscribe(
               (res) => {
+                this.isTriggered=false
                 this.allPodsArray = res.data;
                 this.afterAgents = node_id;
                 let some = res.data.map((containerItem: any) => {
