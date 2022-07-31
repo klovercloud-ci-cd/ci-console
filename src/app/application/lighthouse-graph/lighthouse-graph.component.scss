@@ -90,8 +90,10 @@ text{
 .svgClass,foreignObject{
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
 }
-::ng-deep .mat-menu-content {
-  //width: 20px !important;
-  //max-height: 10px !important;
-  min-height: 0 !important;
+.mat-menu-panel , #mat-menu-panel-4, #mat-menu-panel-12, #mat-menu-panel-3, #mat-menu-panel-2 {
+  min-height: 35px;
+}
+
+:host ::ng-deep  .mat-menu-panel {
+  min-height: 35px;
 }
