@@ -93,4 +93,20 @@ export class LighthouseService {
       );
   }
 
+  // getDetails(processId:string,agentName:string,objType:string,uid:string): Observable<any> {
+  //   HTTP_OPTIONS.params = {
+  //     processId: processId,
+  //     agent:agentName,
+  //   };
+  //
+  //   return this.http
+  //     .get(`${BASE_URL}${objType}/${uid}`, HTTP_OPTIONS)
+  //     .pipe(
+  //       tap((res: any) => {
+  //         // console.log('Response Log: ',);
+  //       }),
+  //       catchError(LighthouseService.handleError)
+  //     );
+  // }
+
 }

@@ -24,10 +24,10 @@
   cursor: move; }
 .graph .node-group .node:focus {
   outline: none; }.graph {
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                    user-select: none; }
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
 .graph .edge {
   stroke: #666;
   fill: none; }
@@ -98,6 +98,4 @@ mat-menu , .mat-menu-panel ,#mat-menu-panel, #mat-menu-panel-1, #mat-menu-panel-
   min-height: 35px !important;
 }
 //, #mat-menu-panel-1, #mat-menu-panel-2, #mat-menu-panel-3, #mat-menu-panel-4, #mat-menu-panel-5, #mat-menu-panel-6, #mat-menu-panel-7, #mat-menu-panel-8, #mat-menu-panel-9, #mat-menu-panel-10, #mat-menu-panel-11, #mat-menu-panel-12, #mat-menu-panel-13
-.customize+* .mat-menu-panel {
-  background: red !important;
-}
+

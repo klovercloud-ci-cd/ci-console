@@ -184,10 +184,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   }
 
   async ngOnInit(): Promise<void> {
-    setTimeout(() => { this.refreshComponent()}, 3000);
-    console.log("Dashboard Reloaded!")
-    // this.updateSubscription = interval(3000).subscribe(
-    //   (val) => { this.getProducts()});
+    setTimeout(() => { location.reload()}, 10000);
 
     if (!this.currentUser.metadata.company_id) {
       this.openDialog();
@@ -202,7 +199,6 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       for(let item=0; item<res?.data?.length; item++){
 
         this._dashboardService.getPodsByAgent(res.data[item]["agent_name"]).subscribe((response)=>{
-          console.log("Agents:",response)
 
           this.hasData = true;
           this.labelAndColor=new Map<string, string>();
@@ -265,7 +261,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       this.showPodsStatus=true
     },(err)=>{
       if (err.status==500){
-        console.log("May be light-house-query is down!")
+        this.snack.openSnackBar('Error!', err.error.message, 'sb-error')
       }else{
         if (this.hasCompany) {
           this.snack.openSnackBar('Error!', err.error.message, 'sb-error')

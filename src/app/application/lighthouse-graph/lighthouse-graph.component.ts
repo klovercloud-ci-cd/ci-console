@@ -165,7 +165,7 @@ export class LighthouseGraphComponent implements OnInit {
   }
 
   trigger(node_id:string, event: any, uid:string, agentType:string, triggerInitialization:number) {
-this.triggeredNode=node_id;
+    this.triggeredNode=node_id;
     if(this.checkAgents(node_id)){
       this.agentName=node_id;
     }
@@ -184,7 +184,6 @@ this.triggeredNode=node_id;
       this.pods = node_id;
 
       let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
-
       for (let i = 0; i < this.podLinkArray.length; i++) {
         // @ts-ignore
         if ((node_id == this.podLinkArray[i]?.target)) {
@@ -193,8 +192,15 @@ this.triggeredNode=node_id;
           this.containerLinks = this.podLinkArray;
 
           for (let i=0; i<this.containerAllArray.length; i++){
+            let containerClr='';
 
-            console.log("Color1:",this.containerAllArray[i])
+            console.log("Colorss---:",this.containerAllArray[i].podStatus)
+            if (this.containerAllArray[i].podStatus==='Succeeded'){
+              containerClr='#749413'
+            }
+            if (this.containerAllArray[i].podStatus==='Failed'){
+              containerClr='#f60d0d'
+            }
 
             if(this.containerAllArray[i].id===node_id) {
 
@@ -238,7 +244,7 @@ this.triggeredNode=node_id;
                       reason:reason,
                       containerData:this.containerAllArray[i].name[container]||'',
                       options: {
-                        color: c_Color,
+                        color: c_Color || containerClr,
                       }
                     }
                   ]
@@ -434,8 +440,8 @@ this.triggeredNode=node_id;
                 this.allPodsArray = res.data;
                 this.afterAgents = node_id;
                 let some = res.data.map((containerItem: any) => {
-
-                  let name: any = [], status: any = [];
+                  console.log("containerItem",containerItem.status.phase)
+                  let name: any = [], status: any = [], podStatus = containerItem.status.phase;
 
                   for (let c_name in containerItem.spec.containers) {
                     name.push(containerItem.spec.containers[c_name]);
@@ -443,7 +449,7 @@ this.triggeredNode=node_id;
                   for (let c_status in containerItem.status.containerStatuses) {
                     status.push(containerItem.status.containerStatuses[c_status])
                   }
-                  return {'id': containerItem.metadata.name, 'name': name, 'status': status}
+                  return {'id': containerItem.metadata.name, 'name': name, 'status': status, 'podStatus':podStatus}
                 })
                 this.containerAllArray = some;
                 this.podArray = res;
@@ -573,6 +579,39 @@ this.triggeredNode=node_id;
     }
 
   }
+
+  // detailsModal(id:string,uid:string,type:any,containerData:any){
+  //   let objectType;
+  //   if(containerData){
+  //     const dialogConfig = new MatDialogConfig();
+  //     dialogConfig.disableClose = false;
+  //     dialogConfig.autoFocus = true;
+  //     dialogConfig.width = '100%';
+  //     dialogConfig.maxWidth = '600px',
+  //       dialogConfig.data = containerData
+  //     this.dialog.open(LighthouseInfoModalComponent, dialogConfig);
+  //   }else {
+  //     if (type == 'pod') {
+  //       objectType = 'pods'
+  //     }
+  //     objectType = type.replace(/_/g, "-");
+  //
+  //     this.lighthouseService.getDetails(this.processID, this.agentName, objectType, uid)
+  //       .subscribe(
+  //         (res) => {
+  //           const dialogConfig = new MatDialogConfig();
+  //           dialogConfig.disableClose = false;
+  //           dialogConfig.autoFocus = true;
+  //           dialogConfig.width = '100%';
+  //           dialogConfig.maxWidth = '600px',
+  //             dialogConfig.data = res.data.obj
+  //           this.dialog.open(LighthouseInfoModalComponent, dialogConfig);
+  //         }, (err) => {
+  //
+  //         })
+  //   }
+  //
+  // }
 
   checkPods(id:string):boolean{
     return this.containerAllArray.some((item:any)=>{
