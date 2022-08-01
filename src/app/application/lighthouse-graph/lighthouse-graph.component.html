@@ -16,8 +16,9 @@
 
 
 <div
+  class="mx-5 rounded-md bg-light-600"
   *ngIf="hasData && !isLoading; else noData">
-  <div class="w-full flex justify-center gap-6 mt-10 pt-10 bg-light-600" xmlns:svg="">
+  <div class="w-full flex justify-center gap-6 mt-5 pt-10 bg-light-600 rounded-md" xmlns:svg="">
     <div class="flex items-center gap-2">
       <div class="w-5 h-5 bg-[#50A649]"></div>
       <h1 class="text-lg font-bold">Running</h1>
@@ -53,7 +54,7 @@
   </div>
   <ngx-graph
     class="chart-container"
-    [view]="[1400, 700]"
+    [view]="[1400, 600]"
     [links]="hierarchialGraph.links"
     [nodes]="hierarchialGraph.nodes"
     [nodeWidth]="190"
