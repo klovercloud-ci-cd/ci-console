@@ -96,7 +96,7 @@ export class PipelineGraphComponent
   logs: any[] = [];
   prevStepName: string = '';
   page: number = 0;
-  limit: any = 10;
+  limit: any = 5;
   skip: number = 0;
   prev_logs_size: number = 0;
   nodeDetails: any = '';
@@ -127,6 +127,7 @@ export class PipelineGraphComponent
       this.title = res['title'];
     });
     this._toolbarService.changeData({ title: this.title });
+    // location.reload();
   }
 
   ngAfterContentInit(): void {

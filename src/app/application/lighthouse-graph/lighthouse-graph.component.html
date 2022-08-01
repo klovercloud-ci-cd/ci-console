@@ -24,7 +24,7 @@
     </div>
     <div class="flex items-center gap-2">
       <div class="w-5 h-5 bg-[#22571D]"></div>
-      <h1 class="text-lg font-bold">Completed</h1>
+      <h1 class="text-lg font-bold">Succeeded</h1>
     </div>
     <div class="flex items-center gap-2">
       <div class="w-5 h-5 bg-[#B51601]"></div>
@@ -33,6 +33,10 @@
     <div class="flex items-center gap-2">
       <div class="w-5 h-5 bg-[#E160C5]"></div>
       <h1 class="text-lg font-bold">ImagePullBackOff</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-5 h-5 bg-[#A569BD]"></div>
+      <h1 class="text-lg font-bold">CrashLoopBackOff</h1>
     </div>
     <div class="flex items-center gap-2">
       <div class="w-5 h-5 bg-[#9EE598]"></div>
@@ -128,14 +132,14 @@
 
                   x="50%" y="80%" dominant-baseline="middle" text-anchor="middle"
                 >
-                  {{ node?.namespace }}/{{node.label}}
+                  {{ node?.namespace }}/{{node.id}}
                 </text>
 
                 <text
                   *ngIf="!checkAgents(node?.id) && (node?.colorType==='container')"
                   x="50%" y="80%" dominant-baseline="middle" text-anchor="middle"
                 >
-                  {{node?.reason}}
+                  {{node?.id}}
                 </text>
               </svg>
 
@@ -150,7 +154,7 @@
           *ngIf="node?.unavailable_replicas>0"
           [attr.width]="'10px'"
           [attr.height]="(50 - node?.replica_height)+'px'"
-          [attr.fill]="'#9EE598'"
+          [attr.fill]="'#F28E8E'"
           x="0" y="0"
         >
         </rect>
@@ -159,7 +163,7 @@
           *ngIf="node?.available_replicas>0"
           [attr.width]="'10px'"
           [attr.height]="node?.replica_height+'px'"
-          [attr.fill]="'#F28E8E'"
+          [attr.fill]="'#9EE598'"
           x="0" [attr.y]="node?.rep_height"
         >
         </rect>

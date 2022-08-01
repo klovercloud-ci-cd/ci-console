@@ -173,19 +173,16 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   agentWiseTotalPodCount:any=[]
   // agentsInfo: Agent[];
 
-  // reloadCurrentRoute() {
-  //   let currentUrl = this.navigateRoute.url;
-  //   this.navigateRoute.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-  //     this.navigateRoute.navigate([currentUrl]);
-  //   });
-  // }
   refreshComponent(){
     this.router.navigate([this.router.url])
   }
 
   async ngOnInit(): Promise<void> {
-    setTimeout(() => { location.reload()}, 10000);
-
+    if (this.currentUser.metadata.company_id) {
+      setTimeout(() => {
+        this.router.url === '/' && location.reload()
+      }, 10000);
+    }
     if (!this.currentUser.metadata.company_id) {
       this.openDialog();
     }
@@ -291,9 +288,6 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
       },(err)=>{
         this.hasData = false;
 
-        // if (this.hasCompany) {
-        //   this.snack.openSnackBar('Webhook!',err.error.message,'sb-error');
-        // }
       })
     })
 

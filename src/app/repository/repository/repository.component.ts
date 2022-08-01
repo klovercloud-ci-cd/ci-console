@@ -61,8 +61,10 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
           }
           this.isLoading = false;
           this.repoArray = response.data.repositories;
+
         },(err)=>{
           this.isLoading = false;
+          this.hasRepository=false;
         });
     },(err)=>{
       this.isLoading = false;

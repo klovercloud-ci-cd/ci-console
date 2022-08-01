@@ -60,18 +60,10 @@ export class DashboardService {
 
   getPodsByAgent(agent_name:string): Observable<any>{
     HTTP_OPTIONS.params = {
-      object:'pod',
       action:'dashboard_data',
       agent:agent_name
     };
-    return this.http.get(`${BASE_URL}kube_objects`, HTTP_OPTIONS);
+    return this.http.get(`${BASE_URL}pods`, HTTP_OPTIONS);
   }
-  // getPodsByAgent(agent_name:string): Observable<any>{
-  //   HTTP_OPTIONS.params = {
-  //     action:'dashboard_data',
-  //     agent:agent_name
-  //   };
-  //   return this.http.get(`${BASE_URL}pods`, HTTP_OPTIONS);
-  // }
 
 }
