@@ -94,7 +94,6 @@ export class RepoServiceService {
   }
 
   getPrevNextCommit(repoType: string, repoId: string | null, repoUrl: string, branchName:any,page:number , limit: number){
-    console.log("NEXT:",repoType, repoId, repoUrl,page,branchName);
     HTTP_OPTIONS.params = {
       repoId,
       url: repoUrl,

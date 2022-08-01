@@ -127,7 +127,6 @@ export class PipelineGraphComponent
       this.title = res['title'];
     });
     this._toolbarService.changeData({ title: this.title });
-    // location.reload();
   }
 
   ngAfterContentInit(): void {
