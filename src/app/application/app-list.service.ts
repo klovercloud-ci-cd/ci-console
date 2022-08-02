@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import { catchError, of, Subject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -33,7 +33,12 @@ export class AppListService {
         companyId: companyID,
         loadApplications: true,
       },
-    });
+    })
+      // .pipe(
+      //   tap((res: any) => {
+      //     this._refreshNeeded$.next();
+      //   })
+      // );
   }
 
   getAppSteps(companyID:String,repoId: String,appURL:String): Observable<any> {
@@ -52,20 +57,15 @@ export class AppListService {
     repoId: any
   ): Observable<any> {
     HTTP_OPTIONS.params = {
-      // companyId: companyID,
-      // repositoryId: repoId,
       companyUpdateOption: 'APPEND_APPLICATION',
     };
     // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
       .put(`${BASE_URL}companies/${companyID}/repositories/${repoId}/applications`, appPayload, HTTP_OPTIONS)
       .pipe(
-        map((res: any) => {
+        tap((res: any) => {
           this._refreshNeeded$.next();
         }),
-        // map(()=>{
-        //   this._refreshNeeded$.next();
-        // }),
         catchError((error: HttpErrorResponse): Observable<any> => {
           // we expect 404, it's not a failure for us.
           if (error.status === 404) {
@@ -88,12 +88,10 @@ export class AppListService {
       repositoryId: repoId,
       companyUpdateOption: 'DELETE_APPLICATION',
     };
-
-    // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
-      .post(`${BASE_URL}applications`, appPayload, HTTP_OPTIONS)
+      .put(`${BASE_URL}companies/${companyID}/repositories/${repoId}/applications`, appPayload, HTTP_OPTIONS)
       .pipe(
-        map((res: any) => {
+        tap((res: any) => {
           this._refreshNeeded$.next();
         }),
         catchError((error: HttpErrorResponse): Observable<any> => {

@@ -56,7 +56,6 @@ export class RepositoryComponent implements OnInit, AfterViewInit {
       this.repoService
         .getCompanyInfo(this.companyID)
         .subscribe((response: any) => {
-          console.log("response",response.data.repositories)
           if(response.data.repositories){
             this.hasRepository = true;
           }else{

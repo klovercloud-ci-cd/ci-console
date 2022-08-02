@@ -1,6 +1,6 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as shape from 'd3-shape';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from "@angular/router";
 import {LighthouseService} from "../lighthouse.service";
 import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
@@ -14,7 +14,10 @@ import {LighthouseInfoModalComponent} from "../lighthouse-info-modal/lighthouse-
   templateUrl: './lighthouse-graph.component.html',
   styleUrls: ['./lighthouse-graph.component.scss']
 })
-export class LighthouseGraphComponent implements OnInit {
+export class LighthouseGraphComponent implements OnInit, OnDestroy {
+  height:number=600;
+  width:number=800;
+  subscription!: Subscription;
   root:string='';
   agents?:string|null;
   afterAgents:string='';
@@ -68,7 +71,7 @@ export class LighthouseGraphComponent implements OnInit {
   ]
   links = []
 
-  timeoutId: any
+  timeoutId: any;
   allPodsArray: any;
 
   constructor(
@@ -114,6 +117,7 @@ export class LighthouseGraphComponent implements OnInit {
       agentNodes = [
         {
           id: this.agentsArray[i].agent,
+          name:this.agentsArray[i].agent,
           label: this.agentsArray[i].agent,
           type: 'agentStep',
           replicas: null,
@@ -136,6 +140,7 @@ export class LighthouseGraphComponent implements OnInit {
     // @ts-ignore
     this.hierarchialGraph.links = this.links;
     this.updateChart();
+    console.log("arr",this.nodes,this.links)
   }
 
   getPipeline(processId: any) {
@@ -166,127 +171,31 @@ export class LighthouseGraphComponent implements OnInit {
     })
   }
 
-  trigger(node_id:string, event: any, uid:string, agentType:string, triggerInitialization:number) {
+  trigger(node_id:string,label:string, event: any, uid:string, agentType:string, triggerInitialization:number) {
+
     this.triggeredNode=node_id;
     if(this.checkAgents(node_id)){
       this.agentName=node_id;
     }
 
     if (event.target.getAttribute('id') == 'agentStep') {
-    this.getKObjects(node_id,event,uid);
+    this.getKObjects(node_id,event,uid,label);
     }
 
     if (event.target.getAttribute('id') == 'k8s'){
-      this.getPods(node_id,event,uid,agentType,triggerInitialization);
+      this.getPods(node_id,event,uid,agentType,triggerInitialization,label);
     }
-
+    // console.log("eventCont",event.target.getAttribute('id'))
     if (this.containerAllArray && this.checkPods(event.target.getAttribute('id'))){
-
-      this.containerArrow = false;
-      this.pods = node_id;
-
-      let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
-      for (let i = 0; i < this.podLinkArray.length; i++) {
-        // @ts-ignore
-        if ((node_id == this.podLinkArray[i]?.target)) {
-
-          this.containerNodes = this.podNodeArray;
-          this.containerLinks = this.podLinkArray;
-
-          for (let i=0; i<this.containerAllArray.length; i++){
-            let containerClr='';
-
-            if (this.containerAllArray[i].podStatus==='Succeeded'){
-              containerClr='#22571D'
-            }
-            if (this.containerAllArray[i].podStatus==='Failed'){
-              containerClr='#B51601'
-            }
-
-            if(this.containerAllArray[i].id===node_id) {
-
-              for (let container in this.containerAllArray[i].name) {
-
-                for (let containerInfo in this.containerAllArray[i].name[container]){
-                }
-                let c_Color="";
-
-                for (let containerColor in this.containerAllArray[i].status){
-
-                }
-                for(let stateColor in this.containerAllArray[i].status[container].state){
-
-                  if(stateColor==='running'){
-                    c_Color='#50A649'
-                  }
-                  if(stateColor==='waiting'){
-                    c_Color='#e3c918'
-                  }
-                  if(stateColor==='terminated'){
-                    c_Color='#f60d0d'
-                  }
-                }
-                let reason:string='';
-                if(this.containerAllArray[i].status[container].state.hasOwnProperty('running')){
-                  reason='running';
-                }else if(this.containerAllArray[i].status[container].state.hasOwnProperty('waiting')){
-                  reason=this.containerAllArray[i].status[container].state.waiting.reason;
-                  if(this.containerAllArray[i].status[container].state.waiting.reason==='ImagePullBackOff'){
-                    c_Color = '#E160C5'
-                  }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CrashLoopBackOff'){
-                    c_Color = '#A569BD'
-                  }else if(this.containerAllArray[i].status[container].state.waiting.reason==='Unknown'){
-                    c_Color = '#F84141'
-                  }
-                }
-                subNodes = [
-                    {
-                      id: this.containerAllArray[i].name[container].name,
-                      label: 'CONTAINER',
-                      type: "container",
-                      colorType:'container',
-                      namespace: this.containerAllArray[i].namespace,
-                      reason:reason,
-                      containerData:this.containerAllArray[i].name[container]||'',
-                      options: {
-                        color: c_Color || containerClr,
-                      }
-                    }
-                  ]
-
-              subLinks = [
-                {
-                  source: node_id,
-                  target: this.containerAllArray[i].name[container].name,
-                },
-              ]
-
-              // @ts-ignore
-              this.containerNodes = [...this.containerNodes, ...subNodes];
-
-              // @ts-ignore
-              this.containerLinks = [...this.containerLinks, ...subLinks];
-            }
-              //   })
-            }
-          }
-          podNodes = this.containerNodes;
-          podLinks = this.containerLinks;
-          // @ts-ignore
-          this.hierarchialGraph.nodes = podNodes;
-          this.updateChart();
-          // @ts-ignore
-          this.hierarchialGraph.links = podLinks;
-          this.updateChart();
-        }
-      }
+      // console.log("in")
+      this.getContainer(node_id);
     }
-
   }
 
   // Drawing K8Objects
 
-  getKObjects(node_id:string, event: any, uid:string){
+  getKObjects(node_id:string, event: any, uid:string,label:string){
+    // console.log("[[[]]]onj",node_id)
     this.isTriggered=true
     this.enableReload = false;
     let subLinks: any, subNodes: any, agentNodes: any, agentLinks: any;
@@ -300,9 +209,11 @@ export class LighthouseGraphComponent implements OnInit {
         this.lighthouseService.getAfterAgents(this.processID,node_id)
           .subscribe(
             (res) => {
+              this.width = this.width + 100;
               this.isTriggered=false
               this.agents = node_id;
               this.afterAgentArray = res;
+
 
               for (let agent in this.afterAgentArray?.data) {
 
@@ -324,9 +235,11 @@ export class LighthouseGraphComponent implements OnInit {
                   if(!(agent=='deployments' || agent=='daemon_sets' || agent=='stateful_sets' || agent=='replica_sets')){
                     enableTrigger=true;
                   }
+
                   subNodes = [
                     {
-                      id: item.name,
+                      id: item.name+item.uid,
+                      name:item.name,
                       label: item.kind,
                       namespace: item.namespace,
                       replicas: item.replicas || null,
@@ -353,7 +266,7 @@ export class LighthouseGraphComponent implements OnInit {
                   subLinks = [
                     {
                       source: node_id,
-                      target: item.name,
+                      target: item.name+item.uid,
                     },
                   ]
 
@@ -375,6 +288,8 @@ export class LighthouseGraphComponent implements OnInit {
               // @ts-ignore
               this.hierarchialGraph.links = this.linkArray;
               this.updateChart();
+
+              this.height = this.height + (this.nodeArray.length*40);
             },
             (err) => {
               this.snack.openSnackBar('Agent not found!', err.error.message,'sb-warn');
@@ -386,8 +301,9 @@ export class LighthouseGraphComponent implements OnInit {
 
   // Drawing Pods
 
-  getPods(node_id:string, event: any, uid:string,agentType:string,triggerInitialization:number){
-
+  getPods(node_id:string, event: any, uid:string,agentType:string,triggerInitialization:number,label:string){
+    // console.log("[[[]]]",node_id)
+    this.width = this.width + 100;
     if(triggerInitialization){
       this.isPodChanged=1
       this.isTriggered=true;
@@ -406,13 +322,16 @@ export class LighthouseGraphComponent implements OnInit {
       (this.tab==='light-house') && this.lighthouseService.getPods(this.processID,this.agentName,this.typeName,uid)
         .subscribe(
           (res) => {
-            if((res.data.length!==this.allPodsArray.length)){
+            if((res.data?.length!==this.allPodsArray?.length)){
               this.isPodChanged=1;
             }else {
               this.isPodChanged++;
             }
+            if(!res){
+              this.pods='';
+            }
           })
-      this.getPods(node_id,event,uid,agentType,0);
+      this.getPods(node_id,event,uid,agentType,0,label);
     }, 5000);
 
       let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
@@ -435,14 +354,17 @@ export class LighthouseGraphComponent implements OnInit {
           }
 
           if(this.isPodChanged===1){
-          this.lighthouseService.getPods(this.processID, this.agentName, this.typeName, uid)
+            this.lighthouseService.getPods(this.processID, this.agentName, this.typeName, uid)
             .subscribe(
               (res) => {
-                this.isTriggered=false
+                if (res.data) {
+                  console.log("response")
+                this.isTriggered = false;
                 this.allPodsArray = res.data;
                 this.afterAgents = node_id;
-                let some = res.data.map((containerItem: any) => {
-                  let name: any = [], status: any = [], podStatus = containerItem.status.phase, namespace=containerItem.metadata.namespace;
+                let some = res.data?.map((containerItem: any) => {
+                  let name: any = [], status: any = [], podStatus = containerItem.status.phase,
+                    namespace = containerItem.metadata.namespace;
 
                   for (let c_name in containerItem.spec.containers) {
                     name.push(containerItem.spec.containers[c_name]);
@@ -450,58 +372,88 @@ export class LighthouseGraphComponent implements OnInit {
                   for (let c_status in containerItem.status.containerStatuses) {
                     status.push(containerItem.status.containerStatuses[c_status])
                   }
-                  return {'id': containerItem.metadata.name, 'name': name, 'status': status, 'podStatus':podStatus, 'namespace':namespace}
+                  return {
+                    'id': label + containerItem.metadata.name + containerItem.metadata.uid,
+                    'name': name,
+                    'status': status,
+                    'podStatus': podStatus,
+                    'namespace': namespace
+                  }
                 })
                 this.containerAllArray = some;
                 this.podArray = res;
-                this.podArray.data.map((pod: any,index:number) => {
+                this.podArray?.data?.map((pod: any, index: number) => {
                   let podColor;
                   if (pod.status.phase === 'Succeeded') {
                     podColor = '#22571D'
                   }
-                  if (pod.status.phase === 'Failed') {
+                  else if (pod.status.phase === 'Failed') {
                     podColor = '#B51601'
                   }
-                  if (pod.status.phase === 'Unknown') {
+                  else if (pod.status.phase === 'Unknown') {
                     podColor = '#F84141'
                   }
-                  if (pod.status.phase === 'Running') {
-
+                  else{
+                    let running: boolean = true;
                     for (let podItem in pod.status.containerStatuses) {
-
-                      let running: boolean = true;
                       for (let containerState in pod.status.containerStatuses[podItem].state) {
-
                         if (containerState == 'terminated') {
-                          podColor = '#B51601';
-                          running = false;
-                          break;
+                          if(pod.status.containerStatuses[podItem].state[containerState].reason === 'OOMKilled') {
+                            podColor = '#B51601';
+                            running = false;
+                            break;
+                          }
+                          else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'Error') {
+                            podColor = '#B51601';
+                            running = false;
+                            break;
+                          }
+                          else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'ContainerCannotRun') {
+                            podColor = '#B51601';
+                            running = false;
+                            break;
+                          }
+                          else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'DeadlineExceeded') {
+                            podColor = '#0f11a8';
+                            running = false;
+                            break;
+                          }
+                          else if(pod.status.containerStatuses[podItem].state[containerState].reason !== 'Completed' && pod.status.containerStatuses[podItem].state[containerState].reason !== 'Running') {
+                            podColor = '#B51601';
+                            running = false;
+                            break;
+                          }
+                          else {
+                            podColor = '#B51601';
+                            running = false;
+                          }
                         } else if (containerState == 'waiting') {
+                          running = false;
                           if (pod.status.containerStatuses[podItem].state[containerState].reason == 'ImagePullBackOff') {
                             podColor = '#E160C5'
                             break;
                           } else if (pod.status.containerStatuses[podItem].state[containerState].reason == 'CrashLoopBackOff') {
-                            podColor = '#cc1567';
+                            podColor = '#A569BD';
                             break;
                           } else {
                             podColor = '#F84141';
                           }
-                          running = false;
                         }
                       }
-                      if (running) {
-                        podColor = '#50A649'
-                      }
+                    }
+                    if (running) {
+                      podColor = '#50A649'
                     }
                   }
                   subNodes = [
                     {
-                      id: pod.metadata.name,
+                      id: label + pod.metadata.name + pod.metadata.uid,
                       label: pod?.metadata.kind || 'POD',
-                      type: pod.metadata.name,
+                      name: pod.metadata.name,
+                      type: label + pod.metadata.name + pod.metadata.uid,
                       pod: 'pod',
-                      uid:pod.metadata.uid||'',
-                      containerData:pod,
+                      uid: pod.metadata.uid || '',
+                      containerData: pod,
                       agentType: pod.kind.toLowerCase() || '',
                       namespace: pod.metadata.namespace,
                       options: {
@@ -512,7 +464,7 @@ export class LighthouseGraphComponent implements OnInit {
                   subLinks = [
                     {
                       source: node_id,
-                      target: pod.metadata.name,
+                      target: label + pod.metadata.name + pod.metadata.uid,
                     },
                   ]
 
@@ -534,12 +486,138 @@ export class LighthouseGraphComponent implements OnInit {
                 // @ts-ignore
                 this.hierarchialGraph.links = this.podLinkArray;
                 this.updateChart();
+              }else {
+                  console.log("no data")
+                  this.afterAgents = '';
+                  this.isTriggered = false;
+                  this.snack.openSnackBar('No Pods found!', '','sb-warn');
+                }
               })
-        }
+          }
         }
       }
 
     this.isPodChanged++;
+  }
+
+  getContainer(node_id:string){
+
+    this.width = this.width + 100;
+    this.containerArrow = false;
+    this.pods = node_id;
+
+    let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
+    // console.log("in")
+    for (let i = 0; i < this.podLinkArray.length; i++) {
+
+      // console.log("in")
+      // @ts-ignore
+      if ((node_id == this.podLinkArray[i]?.target)) {
+        this.containerNodes = this.podNodeArray;
+        this.containerLinks = this.podLinkArray;
+
+        for (let i=0; i<this.containerAllArray.length; i++){
+          let containerClr='';
+
+          if (this.containerAllArray[i].podStatus==='Succeeded'){
+            containerClr='#22571D'
+          }
+          if (this.containerAllArray[i].podStatus==='Failed'){
+            containerClr='#B51601'
+          }
+          // console.log("in",'----',this.containerAllArray[i].id,"----",node_id)
+          if(this.containerAllArray[i].id===node_id) {
+
+            // console.log("in",'----',this.containerAllArray[i].id,"----",node_id)
+            for (let container in this.containerAllArray[i].name) {
+              // console.log("COntainer:",this.containerAllArray[i].name)
+              for (let containerInfo in this.containerAllArray[i].name[container]){
+              }
+              let c_Color="";
+
+              for (let containerColor in this.containerAllArray[i].status){
+
+              }
+              for(let stateColor in this.containerAllArray[i].status[container].state){
+
+                if(stateColor==='running'){
+                  c_Color='#50A649'
+                }
+                if(stateColor==='waiting'){
+                  c_Color='#e3c918'
+                }
+                if(stateColor==='terminated'){
+                  c_Color='#f60d0d'
+                }
+              }
+              let reason:string='';
+              if(this.containerAllArray[i].status[container].state.hasOwnProperty('running')){
+                reason='running';
+              }else if(this.containerAllArray[i].status[container].state.hasOwnProperty('waiting')){
+                reason=this.containerAllArray[i].status[container].state.waiting.reason;
+                if(this.containerAllArray[i].status[container].state.waiting.reason==='ImagePullBackOff'){
+                  c_Color = '#E160C5'
+                }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CrashLoopBackOff'){
+                  c_Color = '#A569BD'
+                }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ErrImagePull'){
+                  c_Color = 'rgb(204,21,103)'
+                }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ImagePullBackOff'){
+                  c_Color = '#A569BD'
+                }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CreateContainerConfigError'){
+                  c_Color = '#F84141'
+                }else if(this.containerAllArray[i].status[container].state.waiting.reason==='InvalidImageName'){
+                  c_Color = '#A569BD'
+                }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CreateContainerError'){
+                  c_Color = '#cf96e7'
+                }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ContainerCreating'){
+                  c_Color = '#e3ad00'
+                }else{
+                  c_Color = '#b68c08'
+                }
+              }
+              // console.log('COntainer',this.containerAllArray[i].name[container].name)
+              subNodes = [
+                {
+                  id: this.containerAllArray[i].name[container].name,
+                  name:this.containerAllArray[i].name[container].name,
+                  label: 'CONTAINER',
+                  type: this.containerAllArray[i].name[container].name,
+                  colorType:'container',
+                  namespace: this.containerAllArray[i].namespace,
+                  reason:reason,
+                  containerData:this.containerAllArray[i].name[container]||'',
+                  options: {
+                    color: c_Color || containerClr,
+                  }
+                }
+              ]
+
+              subLinks = [
+                {
+                  source: node_id,
+                  target: this.containerAllArray[i].name[container].name,
+                },
+              ]
+
+              // @ts-ignore
+              this.containerNodes = [...this.containerNodes, ...subNodes];
+
+              // @ts-ignore
+              this.containerLinks = [...this.containerLinks, ...subLinks];
+            }
+            //   })
+          }
+        }
+        podNodes = this.containerNodes;
+        podLinks = this.containerLinks;
+        // @ts-ignore
+        this.hierarchialGraph.nodes = podNodes;
+        this.updateChart();
+        // @ts-ignore
+        this.hierarchialGraph.links = podLinks;
+        this.updateChart();
+      }
+    }
   }
 
   detailsModal(id:string,uid:string,type:any,containerData:any){
@@ -576,6 +654,7 @@ export class LighthouseGraphComponent implements OnInit {
   }
 
   checkPods(id:string):boolean{
+    console.log("contArray",this.containerAllArray)
     return this.containerAllArray.some((item:any)=>{
       if(item.id==id){
         return true;
@@ -594,4 +673,9 @@ export class LighthouseGraphComponent implements OnInit {
   optionFunction() {
   }
 
+  ngOnDestroy() {
+    // console.log("this.subscription",this.timeoutId)
+    // clearTimeout(this.timeoutId);
+    // this.timeoutId && this.timeoutId.unsubscribe();
+  }
 }

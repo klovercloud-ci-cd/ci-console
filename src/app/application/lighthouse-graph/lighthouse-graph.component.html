@@ -16,9 +16,9 @@
 
 
 <div
-  class="mx-5 rounded-md bg-light-600"
+  class="mx-5 rounded-md bg-light-600 " [style]="height"
   *ngIf="hasData && !isLoading; else noData">
-  <div class="w-full flex justify-center gap-6 mt-5 pt-10 bg-light-600 rounded-md" xmlns:svg="">
+  <div class="w-full z-50 flex justify-center gap-6 mt-5 pt-10 bg-light-600 rounded-md" xmlns:svg="">
     <div class="flex items-center gap-2">
       <div class="w-5 h-5 bg-[#50A649]"></div>
       <h1 class="text-lg font-bold">Running</h1>
@@ -53,8 +53,8 @@
     </div>
   </div>
   <ngx-graph
-    class="chart-container"
-    [view]="[1400, 600]"
+    class="chart-container "
+    [view]="[1400, height]"
     [links]="hierarchialGraph.links"
     [nodes]="hierarchialGraph.nodes"
     [nodeWidth]="190"
@@ -133,7 +133,7 @@
 
                   x="50%" y="80%" dominant-baseline="middle" text-anchor="middle"
                 >
-                  {{ node?.namespace }}/{{node.id}}
+                  {{ node?.namespace }}/{{node?.name}}
                 </text>
 
                 <text
@@ -188,7 +188,7 @@
           xmlns="http://www.w3.org/2000/svg"
           [attr.x]="191"
           [attr.y]="node?.height / 2 || '18px'"
-          width="18" height="18" viewBox="0 0 24 24" (click)="trigger(node?.id, $event, node?.uid,node?.agentType,1)" class="cursor-pointer" >
+          width="18" height="18" viewBox="0 0 24 24" (click)="trigger(node?.id,node?.label, $event, node?.uid,node?.agentType,1)" class="cursor-pointer" >
           <path d="M21 12l-18 12v-24z" fill="#3498DB" id="{{node?.type}}" [class]="node?.agentType || node?.pod" />
         </svg>
 
@@ -269,7 +269,7 @@
 
 <ng-template #noData>
   <div
-       class="absolute h-80  left-16 right-16 top-1/3  kc-card border-kc-bdr-card bg-warn-200 p-12 mx-16 flex justify-center items-center">
+       class="absolute h-80  left-16 right-16 top-[200px]  kc-card border-kc-bdr-card bg-warn-200 p-12 mx-16 flex justify-center items-center">
     <div class="text-center">
       <h3 class="text-sub-title">Process not found!</h3>
       <h4 class="">No Process found for lighthouse!</h4>

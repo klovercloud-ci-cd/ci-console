@@ -49,7 +49,6 @@ export class AuthService {
   }
 
   login(loginPayload: any): Observable<any> {
-
     var date = new Date();
     localStorage.setItem('loginTime',date.toISOString());
     HTTP_OPTIONS.params = {

@@ -76,7 +76,7 @@
           <ng-container matColumnDef="url">
             <th mat-header-cell *matHeaderCellDef width="30%">URL</th>
             <td mat-cell *matCellDef="let element">
-              <a [href]="element.url" class=" flex items-center gap-1"><mat-icon class="text-blue-400">link</mat-icon>{{ element.url }}</a>
+              <a target="_blank" [href]="element.url" class=" flex items-center gap-1"><mat-icon class="text-blue-400">link</mat-icon>{{ element.url }}</a>
             </td>
           </ng-container>
           <ng-container matColumnDef="action">

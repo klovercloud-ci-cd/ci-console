@@ -72,6 +72,7 @@ export class PipelineGraphComponent
   commitsPerCall: any;
   newLogs: any[] = [];
   branchName: any;
+  newBranchName: any;
   pipeline: any;
   pipelineStep: any;
   envList: any;
@@ -202,6 +203,7 @@ export class PipelineGraphComponent
       this.type = res['type'].toLowerCase() + 's';
       this.repoUrl = atob(res['url']);
       this.commitId = res['commitId'];
+      this.newBranchName = res['branch'];
       if (res['page']) {
         this.currentPage = Number(res['page']);
       }
@@ -230,11 +232,14 @@ export class PipelineGraphComponent
   }
 
   getCommit(branchName: any) {
+    console.log("this.currentPage",this.currentPage,this.newBranchName)
     this.repo
-      .getCommit(this.type, this.repoId, this.repoUrl, branchName)
+      .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
       .subscribe(async (res: any) => {
         this.commitsPerCall = res;
+        console.log("Commits",res);
         for (let link of res._metadata.links) {
+          console.log("link---",link)
           if (link.next) {
             this.next = link.next;
           }
@@ -262,7 +267,7 @@ export class PipelineGraphComponent
         var numb = selfUrl.match(/\d/g);
 
         await this.navigateRoute.navigate([], {
-          queryParams: { page: this.currentPage, limit: this.limit },
+          queryParams: { page: this.currentPage, limit: this.limit, branch: branchName },
           queryParamsHandling: 'merge',
         });
         if (this.commitId) {
@@ -274,6 +279,7 @@ export class PipelineGraphComponent
   }
 
   getPrevNextCommit(branchName: any, pageNumber: number) {
+    console.log(branchName,'+++')
     this.repo
       .getPrevNextCommit(
         this.type,
@@ -307,11 +313,18 @@ export class PipelineGraphComponent
             this.next = '';
           }
           this.navigateRoute.navigate([], {
-            queryParams: { page: pageNumber, limit: this.limit },
+            queryParams: { page: pageNumber, limit: this.limit, branch: branchName },
             queryParamsHandling: 'merge',
           });
         }
       });
+  }
+
+  getPrevCommit(){
+
+  }
+  getNextCommit(){
+
   }
 
   getProcess(commitId: any) {
@@ -391,7 +404,7 @@ export class PipelineGraphComponent
   loadCommit(branchName: string) {
     this.currentPage = 0;
     this.navigateRoute.navigate([], {
-      queryParams: { page: 0, limit: 5 },
+      queryParams: { page: 0, limit: 5, branch: branchName },
       queryParamsHandling: 'merge',
     });
 
@@ -400,7 +413,7 @@ export class PipelineGraphComponent
     );
     if (!findLogByBranceName) {
       this.repo
-        .getCommit(this.type, this.repoId, this.repoUrl, branchName)
+        .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
         .subscribe((res: any) => {
           this.commitList.push({
             branch: branchName,
@@ -410,7 +423,7 @@ export class PipelineGraphComponent
         });
     } else {
       this.repo
-        .getCommit(this.type, this.repoId, this.repoUrl, branchName)
+        .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
         .subscribe((res: any) => {
           Object.assign(
             this.commitList[

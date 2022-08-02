@@ -23,7 +23,7 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
   styleUrls: ['./application-list.component.scss'],
 })
 export class ApplicationListComponent implements OnInit {
-  isLoading = false;
+  isLoading = true;
 
   load = false;
 
@@ -70,22 +70,20 @@ export class ApplicationListComponent implements OnInit {
     private snack: SharedSnackbarService
   ) {
     this._toolbarService.changeData({ title: 'Applications' });
+    // @ts-ignore
+    this.repositoryId = this.route.snapshot.paramMap.get('repoID');
   }
 
   ngOnInit() {
     // @ts-ignore
-    this.repositoryId = this.route.snapshot.paramMap.get('repoID');
-
-    this.service.refreshNeeded$.subscribe(() => {
-      this.getAppList();
-      // this.dialog.closeAll();
-    });
-
+    // this.service.refreshNeeded$.subscribe(() => {
+    //   // @ts-ignore
+    //   this.getAppList();
+    // });
     this.getAppList();
   }
 
   getAppList() {
-    this.isLoading = true;
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
@@ -93,8 +91,7 @@ export class ApplicationListComponent implements OnInit {
         .getRepositoryInfo(this.companyID, this.repositoryId)
         .subscribe((response: any) => {
           this.isLoading = false;
-          console.log("response",response);
-          if(response.data.applications.length){
+          if(response?.data?.applications?.length){
             this.hasData = true;
             this.isLoading = false;
           }

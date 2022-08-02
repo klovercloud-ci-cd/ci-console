@@ -53,7 +53,6 @@ export class RepoServiceService {
       .pipe(
         tap((res: any) => {
           this._refreshNeeded$.next();
-          console.log('Response Loggg: ', res);
         }),
         catchError((error: HttpErrorResponse): Observable<any> => {
           // we expect 404, it's not a failure for us.
@@ -83,36 +82,45 @@ export class RepoServiceService {
     repoType: string,
     repoId: string | null,
     repoUrl: string,
-    branceName: string
+    branchName: string,
+    page:number ,
+    limit: number
   ) {
     HTTP_OPTIONS.params = {
-      repoId,
-      url: repoUrl,
-      branch: branceName,
-    };
-    return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
-  }
-
-  getPrevNextCommit(repoType: string, repoId: string | null, repoUrl: string, branchName:any,page:number , limit: number){
-    HTTP_OPTIONS.params = {
-      repoId,
+      repoId: repoId,
       url: repoUrl,
       branch: branchName,
       page:page,
       limit:limit
     };
+    console.log("LOGS:",   BASE_URL + repoType,'/commits',   repoId,      repoUrl,      branchName,      page,      limit)
     return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
-    // HTTP_OPTIONS.params = {
-    //   repoId : repoID,
-    //   url: repoUrl,
-    //   branch: branch,
-    // };
-    // const removeBaseFromNextLink = next.replace('/api/v1/','')
-    // return this.http.get(
-    //   BASE_URL+removeBaseFromNextLink,
-    //   HTTP_OPTIONS
-    // );
   }
+
+  getPrevNextCommit(repoType: string, repoId: string | null, repoUrl: string, branchName:any,page:number , limit: number){
+    HTTP_OPTIONS.params = {
+      repoId: repoId,
+      url: repoUrl,
+      branch: branchName,
+      page:page,
+      limit:limit
+    };
+
+    console.log("LOGS:2",      repoId,      repoUrl,      branchName,      page,      limit)
+    return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
+  }
+
+
+  // getNextCommit(link:any){
+  //   HTTP_OPTIONS.params = {
+  //     repoId: repoId,
+  //     url: repoUrl,
+  //     branch: branchName,
+  //     page:page,
+  //     limit:limit
+  //   };
+  //   return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
+  // }
 
   // getNextCommit(next: string, repoID:string | null, repoUrl:string, branch:string) {
   //   console.log("NEXT:",next)
