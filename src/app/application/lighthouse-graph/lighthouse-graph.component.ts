@@ -16,7 +16,7 @@ import {LighthouseInfoModalComponent} from "../lighthouse-info-modal/lighthouse-
 })
 export class LighthouseGraphComponent implements OnInit, OnDestroy {
   height:number=600;
-  width:number=800;
+  width:number=1000;
   subscription!: Subscription;
   root:string='';
   agents?:string|null;
@@ -73,6 +73,77 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
 
   timeoutId: any;
   allPodsArray: any;
+
+  legendArray:any=[
+    {
+      colorCode:'bg-[#50A649]',
+      title:'Running'
+    },
+    {
+      colorCode:'bg-[#22571D]',
+      title:'Succeeded'
+    },
+    {
+      colorCode:'bg-[#F1C40F]',
+      title:'ContainerCreating'
+    },
+    {
+      colorCode:'bg-[#9EE598]',
+      title:'Available'
+    },
+    {
+      colorCode:'bg-[#F28E8E]',
+      title:'Unavailable'
+    },
+    {
+      colorCode:'bg-[#DC7633]',
+      title:'ErrImagePull'
+    },
+    {
+      colorCode:'bg-[#EC7063]',
+      title:'CreateContainerConfigError'
+    },
+    {
+      colorCode:'bg-[#E74C3C]',
+      title:'InvalidImageName'
+    },
+    {
+      colorCode:'bg-[#CB4335]',
+      title:'CreateContainerError'
+    },
+    {
+      colorCode:'bg-[#B03A2E]',
+      title:'ImagePullBackOff'
+    },
+    {
+      colorCode:'bg-[#943126]',
+      title:'CrashLoopBackOff'
+    },
+    {
+      colorCode:'bg-[#B51601]',
+      title:'Failed'
+    },
+    {
+      colorCode:'bg-[#C0392B]',
+      title:'OOMKilled'
+    },
+    {
+      colorCode:'bg-[#A93226]',
+      title:'Error'
+    },
+    {
+      colorCode:'bg-[#922B21]',
+      title:'ContainerCannotRun'
+    },
+    {
+      colorCode:'bg-[#7B241C]',
+      title:'DeadlineExceeded'
+    },
+    {
+      colorCode:'bg-[#D35400]',
+      title:'Unknown'
+    }
+  ]
 
   constructor(
     private route: ActivatedRoute,
@@ -196,6 +267,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
 
   getKObjects(node_id:string, event: any, uid:string,label:string){
     // console.log("[[[]]]onj",node_id)
+    // this.width = this.width + 200;
     this.isTriggered=true
     this.enableReload = false;
     let subLinks: any, subNodes: any, agentNodes: any, agentLinks: any;
@@ -209,7 +281,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
         this.lighthouseService.getAfterAgents(this.processID,node_id)
           .subscribe(
             (res) => {
-              this.width = this.width + 100;
               this.isTriggered=false
               this.agents = node_id;
               this.afterAgentArray = res;
@@ -302,8 +373,9 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   // Drawing Pods
 
   getPods(node_id:string, event: any, uid:string,agentType:string,triggerInitialization:number,label:string){
-    // console.log("[[[]]]",node_id)
-    this.width = this.width + 100;
+    console.log("Subscription",(this.subscription)?"A":"B")
+
+    // this.width = this.width + 200;
     if(triggerInitialization){
       this.isPodChanged=1
       this.isTriggered=true;
@@ -354,7 +426,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
           }
 
           if(this.isPodChanged===1){
-            this.lighthouseService.getPods(this.processID, this.agentName, this.typeName, uid)
+            this.subscription = this.lighthouseService.getPods(this.processID, this.agentName, this.typeName, uid)
             .subscribe(
               (res) => {
                 if (res.data) {
@@ -391,7 +463,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                     podColor = '#B51601'
                   }
                   else if (pod.status.phase === 'Unknown') {
-                    podColor = '#F84141'
+                    podColor = '#D35400'
                   }
                   else{
                     let running: boolean = true;
@@ -399,22 +471,22 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                       for (let containerState in pod.status.containerStatuses[podItem].state) {
                         if (containerState == 'terminated') {
                           if(pod.status.containerStatuses[podItem].state[containerState].reason === 'OOMKilled') {
-                            podColor = '#B51601';
+                            podColor = '#C0392B';
                             running = false;
                             break;
                           }
                           else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'Error') {
-                            podColor = '#B51601';
+                            podColor = '#A93226';
                             running = false;
                             break;
                           }
                           else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'ContainerCannotRun') {
-                            podColor = '#B51601';
+                            podColor = '#922B21';
                             running = false;
                             break;
                           }
                           else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'DeadlineExceeded') {
-                            podColor = '#0f11a8';
+                            podColor = '#7B241C';
                             running = false;
                             break;
                           }
@@ -430,10 +502,10 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                         } else if (containerState == 'waiting') {
                           running = false;
                           if (pod.status.containerStatuses[podItem].state[containerState].reason == 'ImagePullBackOff') {
-                            podColor = '#E160C5'
+                            podColor = '#B03A2E'
                             break;
                           } else if (pod.status.containerStatuses[podItem].state[containerState].reason == 'CrashLoopBackOff') {
-                            podColor = '#A569BD';
+                            podColor = '#943126';
                             break;
                           } else {
                             podColor = '#F84141';
@@ -502,7 +574,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
 
   getContainer(node_id:string){
 
-    this.width = this.width + 100;
+    // this.width = this.width + 200;
     this.containerArrow = false;
     this.pods = node_id;
 
@@ -556,21 +628,21 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
               }else if(this.containerAllArray[i].status[container].state.hasOwnProperty('waiting')){
                 reason=this.containerAllArray[i].status[container].state.waiting.reason;
                 if(this.containerAllArray[i].status[container].state.waiting.reason==='ImagePullBackOff'){
-                  c_Color = '#E160C5'
+                  c_Color = '#B03A2E'
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CrashLoopBackOff'){
-                  c_Color = '#A569BD'
+                  c_Color = '#943126'
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ErrImagePull'){
-                  c_Color = 'rgb(204,21,103)'
+                  c_Color = '#DC7633'
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ImagePullBackOff'){
-                  c_Color = '#A569BD'
+                  c_Color = '#B03A2E'
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CreateContainerConfigError'){
-                  c_Color = '#F84141'
+                  c_Color = '#EC7063'
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='InvalidImageName'){
-                  c_Color = '#A569BD'
+                  c_Color = '#E74C3C'
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CreateContainerError'){
-                  c_Color = '#cf96e7'
+                  c_Color = '#CB4335'
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ContainerCreating'){
-                  c_Color = '#e3ad00'
+                  c_Color = '#F1C40F'
                 }else{
                   c_Color = '#b68c08'
                 }
@@ -676,6 +748,8 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // console.log("this.subscription",this.timeoutId)
     // clearTimeout(this.timeoutId);
+    clearTimeout(this.timeoutId)
+    this.subscription&& this.subscription.unsubscribe();
     // this.timeoutId && this.timeoutId.unsubscribe();
   }
 }

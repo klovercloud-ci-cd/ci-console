@@ -46,7 +46,7 @@ export class RepositoryModalComponent implements OnInit {
     token: ['', [Validators.required]],
   });
 
-  subsub() {
+  addRepo() {
     this.isLoading = true;
     this.service
       .addRepository(this.data.companyID, this.repoFormGroup.value)

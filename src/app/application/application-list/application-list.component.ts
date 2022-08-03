@@ -75,9 +75,7 @@ export class ApplicationListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // @ts-ignore
     // this.service.refreshNeeded$.subscribe(() => {
-    //   // @ts-ignore
     //   this.getAppList();
     // });
     this.getAppList();
@@ -93,7 +91,6 @@ export class ApplicationListComponent implements OnInit {
           this.isLoading = false;
           if(response?.data?.applications?.length){
             this.hasData = true;
-            this.isLoading = false;
           }
           this.array = response;
           this.dataSource = new MatTableDataSource(response.data.applications);
@@ -150,6 +147,7 @@ export class ApplicationListComponent implements OnInit {
   }
 
   openDialog() {
+    this.getAppList();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
@@ -157,7 +155,7 @@ export class ApplicationListComponent implements OnInit {
     dialogConfig.maxWidth = '600px';
     dialogConfig.data = {
       repositoryId: this.repositoryId,
-      step:1
+      step:1,
     };
     this.dialog.open(ApplicationModalComponent, dialogConfig);
   }
@@ -184,6 +182,7 @@ export class ApplicationListComponent implements OnInit {
       .deleteApplication(data, this.companyID, this.repositoryId)
       .subscribe(
         (res) => {
+          this.getAppList();
           this.snack.openSnackBar('Application Deleted Successfully!','','sb-success')
         },
         (err) => {
@@ -195,13 +194,12 @@ export class ApplicationListComponent implements OnInit {
   }
 
   webUpdate(appId: any) {
-    this.isLoading = true;
+    // this.isLoading = true;
     this.repositoryId = this.route.snapshot.paramMap.get('repoID');
-
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.companyID = res.data.metadata.company_id;
-      this.isLoading = false;
+      // this.isLoading = false;
       const queryPayload = {
         action: appId._metadata.is_webhook_enabled ? 'enable' : 'disable',
         companyId: this.companyID,
@@ -211,6 +209,7 @@ export class ApplicationListComponent implements OnInit {
       };
       this.service.updateWebhook(queryPayload).subscribe(
         (res: any) => {
+          this.getAppList();
           this.snack.openSnackBar('Webhook Updated','','sb-success')
         },
         (err) => {

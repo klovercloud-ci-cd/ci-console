@@ -76,7 +76,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
     console.log("this.getScreenWidthsss: ",this.getScreenWidth);
-    
+
 
     if (this.getScreenWidth < 1400) {
       this.dialogWidth = '70%';
@@ -114,7 +114,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   onDelete(user: any): void {
-
     const dialogRef = this.dialog.open(DeleteConformationDialogComponent, {
       data: {
         message: `Are you sure! You want to delete "${user?.email}" user?`,

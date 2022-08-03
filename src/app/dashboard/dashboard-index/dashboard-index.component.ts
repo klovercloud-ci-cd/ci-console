@@ -1,7 +1,7 @@
 import {
   AfterContentChecked,
   ChangeDetectorRef,
-  ElementRef,
+  ElementRef, OnDestroy,
   OnInit,
   Renderer2,
 } from '@angular/core';
@@ -27,7 +27,7 @@ import { Observable,Subscription, interval  } from 'rxjs';
   templateUrl: './dashboard-index.component.html',
   styleUrls: ['./dashboard-index.component.scss'],
 })
-export class DashboardIndexComponent implements OnInit, AfterContentChecked {
+export class DashboardIndexComponent implements OnInit, AfterContentChecked, OnDestroy {
   @ViewChild('textElement') textElement: ElementRef | any;
   hasData:boolean=false;
   hasUser:boolean=false;
@@ -65,6 +65,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
   test: any = 1;
   labelWiseColor= new Map<string, string>();
   currentUser: any;
+  timeoutId: any;
   constructor(
     private dialog: MatDialog,
     private authService: AuthService,
@@ -179,7 +180,7 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
 
   async ngOnInit(): Promise<void> {
     if (this.currentUser.metadata.company_id) {
-      setTimeout(() => {
+      this.timeoutId = setTimeout(() => {
         this.router.url === '/' && location.reload()
       }, 10000);
     }
@@ -335,8 +336,6 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
         // this.snack.openSnackBar('Users',err.error.message,'sb-error')
         }
       );
-
-
   }
 
   openDialog() {
@@ -344,11 +343,14 @@ export class DashboardIndexComponent implements OnInit, AfterContentChecked {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '45vw';
-
     this.dialog.open(AddCompanyComponent, dialogConfig);
   }
 
   ngAfterContentChecked() {
     // this.cdref.detectChanges();
+  }
+
+  ngOnDestroy() {
+    clearTimeout(this.timeoutId)
   }
 }

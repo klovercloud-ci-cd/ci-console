@@ -6,6 +6,7 @@ import { catchError, of, Subject, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { TokenService } from '../auth/token.service';
+import {Router} from "@angular/router";
 
 const BASE_URL = environment.v1ApiEndPoint;
 const HTTP_OPTIONS = {
@@ -19,7 +20,7 @@ const HTTP_OPTIONS = {
   providedIn: 'root',
 })
 export class AppListService {
-  constructor(private http: HttpClient, private token: TokenService) {}
+  constructor(private http: HttpClient, private token: TokenService,private router: Router) {}
 
   private _refreshNeeded$ = new Subject<void>();
 
@@ -34,11 +35,6 @@ export class AppListService {
         loadApplications: true,
       },
     })
-      // .pipe(
-      //   tap((res: any) => {
-      //     this._refreshNeeded$.next();
-      //   })
-      // );
   }
 
   getAppSteps(companyID:String,repoId: String,appURL:String): Observable<any> {
@@ -59,13 +55,16 @@ export class AppListService {
     HTTP_OPTIONS.params = {
       companyUpdateOption: 'APPEND_APPLICATION',
     };
-    // return this.http.post(BASE_URL + 'applications', appPayload, HTTP_OPTIONS);
     return this.http
       .put(`${BASE_URL}companies/${companyID}/repositories/${repoId}/applications`, appPayload, HTTP_OPTIONS)
       .pipe(
         tap((res: any) => {
+          this.router.navigate([`/repository/${repoId}`])
+            .then(() => {
+              window.location.reload();
+            });
           this._refreshNeeded$.next();
-        }),
+          }),
         catchError((error: HttpErrorResponse): Observable<any> => {
           // we expect 404, it's not a failure for us.
           if (error.status === 404) {

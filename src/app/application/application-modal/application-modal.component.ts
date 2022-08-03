@@ -79,8 +79,7 @@ export class ApplicationModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-   // <----------Fetching User Info---------->
+    console.log("data---",this.data)
     this.repositoryId = this.data.repositoryId;
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
@@ -91,34 +90,34 @@ export class ApplicationModalComponent implements OnInit {
 
 // <-----------Check Validity of Steps----------->
 
-  checkValidity(allSteps:any){
-    allSteps.map((items:any, index:number)=>{
-      let next_val:any = null;
-      let params_val:any = null;
-
-      // <----------Checking Next Array---------->
-      if(items?.next !== null){
-        const nextValue = items?.next?.map((item:any)=>{
-          return item.valid;
-        })
-        next_val = !nextValue.includes('false')
-      }
-
-      // <----------Checking Param Array---------->
-      if(items?.params !== null){
-        const paramsValue = items?.params?.map((item:any)=>{
-          return item.valid;
-        })
-        params_val = !paramsValue.includes('false')
-      }
-      if(items.name.valid=='true' && next_val==true && params_val==true && items.trigger.valid=='true' && items.type.valid=='true'){
-        return items.isValid = true;
-      }
-      else{
-        return items.isValid = false;
-      }
-    })
-  }
+  // checkValidity(allSteps:any){
+  //   allSteps.map((items:any, index:number)=>{
+  //     let next_val:any = null;
+  //     let params_val:any = null;
+  //
+  //     // <----------Checking Next Array---------->
+  //     if(items?.next !== null){
+  //       const nextValue = items?.next?.map((item:any)=>{
+  //         return item.valid;
+  //       })
+  //       next_val = !nextValue.includes('false')
+  //     }
+  //
+  //     // <----------Checking Param Array---------->
+  //     if(items?.params !== null){
+  //       const paramsValue = items?.params?.map((item:any)=>{
+  //         return item.valid;
+  //       })
+  //       params_val = !paramsValue.includes('false')
+  //     }
+  //     if(items.name.valid=='true' && next_val==true && params_val==true && items.trigger.valid=='true' && items.type.valid=='true'){
+  //       return items.isValid = true;
+  //     }
+  //     else{
+  //       return items.isValid = false;
+  //     }
+  //   })
+  // }
 
 // <-----------Data in Key Value Pair----------->
   private p: any;
@@ -211,84 +210,81 @@ export class ApplicationModalComponent implements OnInit {
     url: ['', Validators.required],
   });
 
-  gotoNext(e:number){
-    const {name,url} = this.addApplication.value;
-    this.href = this.router.url;
-
-    this.stepper = e;
-
-  }
+  // gotoNext(e:number){
+  //   const {name,url} = this.addApplication.value;
+  //   this.href = this.router.url;
+  //   this.stepper = e;
+  // }
 
   addApplicationFormData() {
-    this.isLoading = true;
-    const data = {
-      applications: [
-        {
-          _metadata: {
-            name: this.addApplication.value.name,
-          },
-          url: this.addApplication.value.url,
-        },
-      ],
-    };
-
-    this.service
-      .addApplication(data, this.companyID, this.repositoryId)
-      .subscribe(
-        (res) => {
-          this.isLoading = false;
-          this.dialogRef.close();
-
-        },
-        (err) => {
-          // this.openSnackBarError('Authentication Error', '');
-          this.snack.openSnackBar('Webhook Updated Action Failed',err.error.message,'sb-error')
-        }
-      );
+    // console.log("this.repositoryId",this.repositoryId)
+    // this.isLoading = true;
+    // const data = {
+    //   applications: [
+    //     {
+    //       _metadata: {
+    //         name: this.addApplication.value.name,
+    //       },
+    //       url: this.addApplication.value.url,
+    //     },
+    //   ],
+    // };
+    //
+    // this.service
+    //   .addApplication(data, this.companyID, this.repositoryId)
+    //   .subscribe(
+    //     (res) => {
+    //       this.isLoading = false;
+    //       this.dialogRef.close();
+    //       console.log("appRes:",res)
+    //     },
+    //     (err) => {
+    //       // this.openSnackBarError('Authentication Error', '');
+    //       this.snack.openSnackBar('Webhook Updated Action Failed',err.error.message,'sb-error')
+    //     }
+    //   );
   }
 
   closeAppModal() {
     this.dialogRef.close();
   }
 
-  editorPropsFix(data: any): void {
-  //  Update Editor item
-  //   key: "name" replaceValue: "step1" stepname: "interstep"
-    const stepName= data?.stepname;
-    const itemValue = this.stepAsMap.get(stepName)
-    const newStepName= data?.replaceValue;
-    const _item = itemValue?.stepData;
-
-    const nextVal = _item?.next?.map((nextValue:any)=>{
-      return nextValue.value;
-    })
-
-    const paramVal = _item?.params?.map((paramValue:any)=>{
-      const param = `${paramValue.name} : ${paramValue.value}`
-      return param;
-    })
-    const _obj:any = {
-      name: newStepName,
-      type: _item.type.value,
-      trigger: _item.trigger.value,
-      params: paramVal,
-      next: nextVal,
-    }
-    const newKeyValue = {isValid: _item.isValid, data: toYaml(_obj),  stepData:_item}
-    this.stepAsMap = this.mapReplace(this.stepAsMap, stepName, newStepName, newKeyValue)
-  }
-
-  mapReplace(map: any, prevKey: string, newKey: string, newKeyValue: any): any {
-    const x = new Map()
-    for (const [key, value] of this.stepAsMap) {
-      if (prevKey === key) {
-        x.set(newKey, newKeyValue)
-        continue
-      }
-      x.set(key, value)
-    }
-    return x
-  }
+  // editorPropsFix(data: any): void {
+  //   const stepName= data?.stepname;
+  //   const itemValue = this.stepAsMap.get(stepName)
+  //   const newStepName= data?.replaceValue;
+  //   const _item = itemValue?.stepData;
+  //
+  //   const nextVal = _item?.next?.map((nextValue:any)=>{
+  //     return nextValue.value;
+  //   })
+  //
+  //   const paramVal = _item?.params?.map((paramValue:any)=>{
+  //     const param = `${paramValue.name} : ${paramValue.value}`
+  //     return param;
+  //   })
+  //   const _obj:any = {
+  //     name: newStepName,
+  //     type: _item.type.value,
+  //     trigger: _item.trigger.value,
+  //     params: paramVal,
+  //     next: nextVal,
+  //   }
+  //   const newKeyValue = {isValid: _item.isValid, data: toYaml(_obj),  stepData:_item}
+  //   this.stepAsMap = this.mapReplace(this.stepAsMap, stepName, newStepName, newKeyValue)
+  // }
+  //
+  // mapReplace(map: any, prevKey: string, newKey: string, newKeyValue: any): any {
+  //   const x = new Map()
+  //   for (const [key, value] of this.stepAsMap) {
+  //     if (prevKey === key) {
+  //       x.set(newKey, newKeyValue)
+  //       continue
+  //     }
+  //     x.set(key, value)
+  //   }
+  //   return x
+  // }
 
   openAppEditor() {
     const dialogConfig = new MatDialogConfig();

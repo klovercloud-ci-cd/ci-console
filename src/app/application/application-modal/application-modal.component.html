@@ -4,7 +4,7 @@
   <div class="flex justify-between items-center">
   <h1 class="pt-3 pb-4" >Add New Application</h1>
 
-  <h1 *ngIf="stepper==2">Totaliii <span class="text-red-500">{{totalError}} errors</span> in this pipeline</h1>
+  <h1 *ngIf="stepper==2">Total <span class="text-red-500">{{totalError}} errors</span> in this pipeline</h1>
   </div>
   <div class="example-container">
     <form [formGroup]="addApplication" (ngSubmit)="addApplicationFormData()">
