@@ -128,6 +128,9 @@
         <!--      Success Left-Sign-->
 
         <rect
+
+          ngx-tooltip
+          [tooltipTitle]="'Unavailable: '+node?.unavailable"
           *ngIf="node?.unavailable_replicas>0"
           [attr.width]="'10px'"
           [attr.height]="(50 - node?.replica_height)+'px'"
@@ -137,6 +140,8 @@
         </rect>
 
         <rect
+          ngx-tooltip
+          [tooltipTitle]="'Available: '+node?.available"
           *ngIf="node?.available_replicas>0"
           [attr.width]="'10px'"
           [attr.height]="node?.replica_height+'px'"
@@ -145,11 +150,12 @@
         >
         </rect>
 
-
         <!--      Status Left-Sign-->
 
         <rect
           *ngIf="(node?.pod==='pod') || (node?.colorType==='container') "
+          ngx-tooltip
+          [tooltipTitle]="'Status: '+node?.status"
           [attr.width]="'10px'"
           [attr.height]="'50px'"
           [attr.fill]="node?.options?.color || '#000'"

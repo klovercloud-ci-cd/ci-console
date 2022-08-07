@@ -3,7 +3,7 @@ import {
   AfterContentInit,
   ChangeDetectorRef,
   Component,
-  Input,
+  Input, OnDestroy,
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
@@ -29,7 +29,7 @@ import { SharedSnackbarService } from '../../shared/snackbar/shared-snackbar.ser
   encapsulation: ViewEncapsulation.None,
 })
 export class PipelineGraphComponent
-  implements OnInit, AfterContentChecked, AfterContentInit
+  implements OnInit, AfterContentChecked, AfterContentInit, OnDestroy
 {
   openBranch = 0;
   openFootMark = 0;
@@ -51,6 +51,7 @@ export class PipelineGraphComponent
     pipeline: '',
   };
   commitId: any;
+  logClaim: any;
 
   setOpenBranch(index: number) {
     this.openBranch = index;
@@ -69,6 +70,7 @@ export class PipelineGraphComponent
   }
 
   currentPage: number = 0;
+  c_page:any;
   commitsPerCall: any;
   newLogs: any[] = [];
   branchName: any;
@@ -194,30 +196,42 @@ export class PipelineGraphComponent
     if (this.sendWS) {
       clearInterval(this.sendWS);
     }
+
+    // localStorage.removeItem('page');
   }
 
   ngOnInit() {
-    ///test
+
     this.route.queryParams.subscribe((res) => {
       this.title = res['title'];
       this.type = res['type'].toLowerCase() + 's';
       this.repoUrl = atob(res['url']);
       this.commitId = res['commitId'];
       this.newBranchName = res['branch'];
+      // @ts-ignore
+      if(localStorage.getItem('page')){
+        // @ts-ignore
+        this.currentPage = parseInt(localStorage.getItem('page'));
+      }
+      // // @ts-ignore
+      // this.currentPage= parseInt(localStorage.getItem('page'));
       if (res['page']) {
         this.currentPage = Number(res['page']);
       }
       if (res['limit']) {
         this.limit = res['limit'];
       }
+      // console.log("this.curren",this.currentPage)
     });
 
+    // console.log("this.currentPage----init",this.currentPage);
     this.pipes
       .getBranch(this.type, this.repoId, this.repoUrl)
       .subscribe((res: any) => {
         this.branchs = res.data;
         this.branchName = this.branchs[0].name;
-        this.getCommit(this.branchs[0].name);
+        // console.log('this.newBranchName',this.newBranchName)
+        this.getCommit((this.newBranchName)?this.newBranchName:this.branchs[0].name);
       });
     this.navigateRoute
       .navigate([], {
@@ -232,14 +246,21 @@ export class PipelineGraphComponent
   }
 
   getCommit(branchName: any) {
-    console.log("this.currentPage",this.currentPage,this.newBranchName)
+    let pageNumber:any;
+    // console.log("PageN",this.currentPage)
+    // if(this.currentPage>0)
+    // {
+    //   branchName=this.currentPage;
+    // }else {
+    //   branchName = 0;
+    // }
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
       .subscribe(async (res: any) => {
         this.commitsPerCall = res;
-        console.log("Commits",res);
+        // console.log("Commits",res);
         for (let link of res._metadata.links) {
-          console.log("link---",link)
+          // console.log("link---",link)
           if (link.next) {
             this.next = link.next;
           }
@@ -265,21 +286,24 @@ export class PipelineGraphComponent
           }
         }
         var numb = selfUrl.match(/\d/g);
-
+        // console.log("States:",this.currentPage,this.limit,branchName);
         await this.navigateRoute.navigate([], {
           queryParams: { page: this.currentPage, limit: this.limit, branch: branchName },
           queryParamsHandling: 'merge',
         });
         if (this.commitId) {
-          this.getProcess(this.commitId);
+          this.getProcess(this.commitId,this.currentPage);
         } else {
-          this.getProcess(this.commit[0].sha);
+          this.getProcess(this.commit[0].sha,this.currentPage);
         }
       });
   }
 
   getPrevNextCommit(branchName: any, pageNumber: number) {
-    console.log(branchName,'+++')
+    this.currentPage=pageNumber;
+    this.c_page=pageNumber;
+    localStorage.setItem('page', String(pageNumber));
+      // console.log("this.currentPage====",this.currentPage,pageNumber)
     this.repo
       .getPrevNextCommit(
         this.type,
@@ -324,16 +348,22 @@ export class PipelineGraphComponent
 
   }
   getNextCommit(){
-
   }
 
-  getProcess(commitId: any) {
+  getProcess(commitId: any,page:any) {
+    // @ts-ignore
+    // console.log("Pro::ss",typeof parseInt(localStorage.getItem('page')))
+    // @ts-ignore
+    let pageNumber = parseInt(localStorage.getItem('page'));
+
+    // @ts-ignore
+    // console.log("Pro::ss",parseInt(localStorage.getItem('page')),'----',typeof parseInt(localStorage.getItem('page')))
     this.isLoading.graph = true;
+    let newBranch:string='';
     this.repo.getProcess(commitId).subscribe((res: any) => {
 
       this.processIds = [];
       if (res.data == null) {
-
         this.error.pipeline = 'error';
         this.envList = '';
         this.pipeline = '';
@@ -349,17 +379,20 @@ export class PipelineGraphComponent
           for (let branch in this.branchs) {
             for (let data of res?.data) {
               if (data.branch === this.branchs[branch].name) {
+                newBranch=data.branch;
+                // console.log("data.branch",data.branch)
                 this.setOpenBranch(parseInt(branch));
-                this.loadCommit(data.branch);
+                this.loadCommit(data.branch,0);
               }
             }
           }
+          // console.log('branch',newBranch)
           this.error.pipeline = '';
           this.processIds = res.data;
           this.getPipeline(this.processIds[0].process_id);
           this.navigateRoute
             .navigate([], {
-              queryParams: { processID: this.processIds[0].process_id },
+              queryParams: { processID: this.processIds[0].process_id, branch: newBranch, page:pageNumber},
               queryParamsHandling: 'merge',
             })
             .then((r) => {});
@@ -401,23 +434,34 @@ export class PipelineGraphComponent
     document.getElementById('svg')?.style.width = svgWidth + 'px';
   }
 
-  loadCommit(branchName: string) {
-    this.currentPage = 0;
+  loadCommit(branchName: string,click:number) {
+
+    if(click==1){
+      localStorage.removeItem('page');
+    }
+
+    if(localStorage.getItem('page'))
+    {
+      this.currentPage=this.currentPage;
+    }else {
+      this.currentPage = 0;
+    }
+
+    // console.log("this.currentPage",this.currentPage);
     this.navigateRoute.navigate([], {
-      queryParams: { page: 0, limit: 5, branch: branchName },
+      queryParams: { page: this.currentPage, limit: this.limit, branch: branchName },
       queryParamsHandling: 'merge',
     });
 
-    const findLogByBranceName = this.commitList.find(
+    const findLogByBranchName = this.commitList.find(
       (list) => list.branch === branchName
     );
-    if (!findLogByBranceName) {
+    if (!findLogByBranchName) {
       this.repo
         .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
         .subscribe((res: any) => {
           this.commitList.push({
             branch: branchName,
-
             commits: [...res.data],
           });
         });
@@ -433,6 +477,7 @@ export class PipelineGraphComponent
           );
         });
     }
+
   }
 
   sleep(milliseconds: number) {
@@ -632,9 +677,9 @@ export class PipelineGraphComponent
           this.stepFootMark(processId, step.name);
 
           setTimeout(() => {
-            this.pipeline.data.steps.find((hola: any) => {
-              if (hola.name === step.name) {
-                this.nodeDetails = hola;
+            this.pipeline.data.steps.find((pipeStep: any) => {
+              if (pipeStep.name === step.name) {
+                this.nodeDetails = pipeStep;
               }
             });
           }, 300);
@@ -687,25 +732,28 @@ export class PipelineGraphComponent
     this.stepFootMark(processId, stepName);
 
     setTimeout(() => {
-      this.pipeline.data.steps.find((hola: any) => {
-        if (hola.name === stepName) {
-          this.nodeDetails = hola;
+      this.pipeline.data.steps.find((pipeStep: any) => {
+        if (pipeStep.name === stepName) {
+          this.nodeDetails = pipeStep;
           this.openFootMarkName = this.footMarks[this.footMarks.length - 1];
-          this.getLogs(
-            processId,
-            stepName,
-            this.openFootMarkName,
-            this.page,
-            this.limit,
-            this.skip,
-            this.pipeline.data.claim
-          );
+          this.logClaim = pipeStep.claim;
+            this.getLogs(
+              processId,
+              stepName,
+              this.openFootMarkName,
+              this.page,
+              this.limit,
+              this.skip,
+              pipeStep.claim
+            );
         }
       });
     }, 300);
   }
 
   trigger(step: any) {
+    // this.logClaim =
+    console.log("Step",step)
     const processId = this.pipeline.data.process_id;
     this.processLifecycleEventService
       .reclaim(processId, step.name, step.type)
@@ -778,6 +826,7 @@ export class PipelineGraphComponent
     claim: number,
     status: string
   ) {
+    console.log("claim---",claim)
     this.singleLogDetails = {
       index: footMarkIndex,
       footmark: foot,
@@ -839,8 +888,7 @@ export class PipelineGraphComponent
             }
           });
       } else {
-
-        this.getProcess(commit_Id);
+        this.getProcess(commit_Id,this.currentPage);
       }
     });
   }

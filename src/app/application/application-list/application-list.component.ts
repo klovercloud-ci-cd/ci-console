@@ -1,4 +1,4 @@
-import { OnInit } from '@angular/core';
+import {OnDestroy, OnInit} from '@angular/core';
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -22,8 +22,9 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
   templateUrl: './application-list.component.html',
   styleUrls: ['./application-list.component.scss'],
 })
-export class ApplicationListComponent implements OnInit {
+export class ApplicationListComponent implements OnInit, OnDestroy {
   isLoading = true;
+  webhookLoader:boolean=false;
 
   load = false;
 
@@ -67,7 +68,7 @@ export class ApplicationListComponent implements OnInit {
     private repo: RepoServiceService,
     private navigateRoute: Router,
     public resource: ResourcePermissionService,
-    private snack: SharedSnackbarService
+    private snack: SharedSnackbarService,
   ) {
     this._toolbarService.changeData({ title: 'Applications' });
     // @ts-ignore
@@ -194,6 +195,8 @@ export class ApplicationListComponent implements OnInit {
   }
 
   webUpdate(appId: any) {
+    this.webhookLoader=false;
+    console.log("Appid",appId._metadata.id)
     // this.isLoading = true;
     this.repositoryId = this.route.snapshot.paramMap.get('repoID');
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
@@ -201,6 +204,7 @@ export class ApplicationListComponent implements OnInit {
       this.companyID = res.data.metadata.company_id;
       // this.isLoading = false;
       const queryPayload = {
+        appId: appId._metadata.id,
         action: appId._metadata.is_webhook_enabled ? 'enable' : 'disable',
         companyId: this.companyID,
         repoId: this.repositoryId,
@@ -210,12 +214,17 @@ export class ApplicationListComponent implements OnInit {
       this.service.updateWebhook(queryPayload).subscribe(
         (res: any) => {
           this.getAppList();
+          this.webhookLoader=true;
           this.snack.openSnackBar('Webhook Updated','','sb-success')
         },
         (err) => {
+          this.getAppList();
           this.snack.openSnackBar('Webhook Updated Action Failed',err.error.message,'sb-error')
         }
       );
     });
+  }
+  ngOnDestroy() {
+    localStorage.removeItem('page');
   }
 }

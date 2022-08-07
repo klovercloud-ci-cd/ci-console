@@ -59,7 +59,7 @@
             <td mat-cell *matCellDef="let element">
               <div class="w-28 flex justify-between">
                 <span>{{
-                  element._metadata.is_webhook_enabled ? "enabled" : "disabled"
+                  (element._metadata.is_webhook_enabled) ? "enabled" : "disabled"
                   }}</span>
 
                 <mat-slide-toggle

@@ -19,7 +19,7 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
 export class UserListComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   isAlive = true;
-
+  user: any = this.authService.getUserData();
   isLoading = false;
 
   listLoading = true;
@@ -61,6 +61,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   public getScreenWidth: any;
 
   ngOnInit(): void {
+    console.log("User",this.user.user_id)
     this.getScreenWidth = window.innerWidth;
     this._toolbarService.changeData({ title: 'Settings' });
     if (this.currentUser.metadata.company_id) {
@@ -75,9 +76,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
-    console.log("this.getScreenWidthsss: ",this.getScreenWidth);
-
-
     if (this.getScreenWidth < 1400) {
       this.dialogWidth = '70%';
     } else {
@@ -103,10 +101,20 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   getUsers(): void {
     this.isLoading = true;
+
+    let userArray:any=[];
     this._userService.getUsers(this.queryParams).subscribe(
       (res) => {
+        console.log(res.data)
         this.isLoading = false;
-        this.dataSource = res?.data;
+        for(let i=0; i<res?.data.length; i++) {
+          console.log('---',res?.data[i].id)
+          if(res?.data[i].id!==this.user.user_id){
+            userArray.push(res?.data[i]);
+          }
+        }
+        console.log("res?.data::==",userArray);
+        this.dataSource = userArray;
       },
       (err) => {
       }
@@ -123,6 +131,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       if (confirmed) {
         this._userService.deleteUser(user).subscribe(
           (res) => {
+            this.getUsers();
             this.snack.openSnackBar('Delete initiated','','sb-success');
           },
           (err) => {

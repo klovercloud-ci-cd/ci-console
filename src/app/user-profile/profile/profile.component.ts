@@ -12,6 +12,7 @@ import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.servi
 })
 export class ProfileComponent implements OnInit {
   user: any = this.auth.getUserData();
+  userResourceArray:any;
 
   userInfo: any;
 
@@ -26,7 +27,12 @@ export class ProfileComponent implements OnInit {
     this._toolbarService.changeData({ title: 'Account' });
     this.userData.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userInfo = res;
+      this.userResourceArray = res.data.resource_permission.resources;
     },(err)=>{
       this.snack.openSnackBar('User not found!',err.error.message,'sb-error')});
+
   }
+some(item:any){
+  console.log("item:",item)
+}
 }

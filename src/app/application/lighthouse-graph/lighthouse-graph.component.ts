@@ -31,7 +31,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   linkArray:any=[]
   afterAgentArray?:any;
   private processID: any;
-
   podArray: any ;
 
   hierarchialGraph = {nodes: [], links: []};
@@ -62,6 +61,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   isLoading:boolean=false;
   isTriggered:boolean=false;
   isPodChanged:number=1;
+  hasPodFound:number=1;
   triggeredNode:string='';
   nodes = [
     {
@@ -285,20 +285,23 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
               this.agents = node_id;
               this.afterAgentArray = res;
 
-
               for (let agent in this.afterAgentArray?.data) {
 
                 this.afterAgentArray?.data[agent]?.map((item: any) => {
 
-                  let available_replicas;
+                  let available_replicas, available, unavailable;
                   let unavailable_replicas;
                   if(item.number_available){
                     let total_replicas=item.number_available+item.number_unavailable;
                     available_replicas = (50 * item.number_available) / total_replicas;
                     unavailable_replicas = (50 * item.number_unavailable) / total_replicas;
+                    available = item.number_available;
+                    unavailable = item.number_unavailable;
                   }else {
                     available_replicas = (50 * item.ready_replicas) / item.replicas;
                     unavailable_replicas = (50 * (item.replicas - item.ready_replicas)) / item.replicas;
+                    available = item.ready_replicas;
+                    unavailable = item.replicas -  item.ready_replicas;
                   }
                   let rep_height = (50 - available_replicas).toString();
 
@@ -307,6 +310,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                     enableTrigger=true;
                   }
 
+                  console.log("replicas",item)
                   subNodes = [
                     {
                       id: item.name+item.uid,
@@ -318,6 +322,8 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                       available_replicas: available_replicas || 0,
                       unavailable_replicas: unavailable_replicas || 0,
                       rep_height:rep_height,
+                      available: available,
+                      unavailable: unavailable,
                       type: "k8s",
                       podType:'',
                       containerData:'',
@@ -373,12 +379,11 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   // Drawing Pods
 
   getPods(node_id:string, event: any, uid:string,agentType:string,triggerInitialization:number,label:string){
-    console.log("Subscription",(this.subscription)?"A":"B")
 
-    // this.width = this.width + 200;
     if(triggerInitialization){
       this.isPodChanged=1
       this.isTriggered=true;
+      this.hasPodFound=1;
     }
 
     let pod_changed:number=1;
@@ -455,15 +460,18 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                 this.containerAllArray = some;
                 this.podArray = res;
                 this.podArray?.data?.map((pod: any, index: number) => {
-                  let podColor;
+                  let podColor, status;
                   if (pod.status.phase === 'Succeeded') {
                     podColor = '#22571D'
+                    status='Succeeded';
                   }
                   else if (pod.status.phase === 'Failed') {
                     podColor = '#B51601'
+                    status='Failed';
                   }
                   else if (pod.status.phase === 'Unknown') {
                     podColor = '#D35400'
+                    status='Unknown';
                   }
                   else{
                     let running: boolean = true;
@@ -472,49 +480,59 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                         if (containerState == 'terminated') {
                           if(pod.status.containerStatuses[podItem].state[containerState].reason === 'OOMKilled') {
                             podColor = '#C0392B';
+                            status='OOMKilled';
                             running = false;
                             break;
                           }
                           else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'Error') {
                             podColor = '#A93226';
+                            status='Error';
                             running = false;
                             break;
                           }
                           else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'ContainerCannotRun') {
                             podColor = '#922B21';
+                            status='ContainerCannotRun';
                             running = false;
                             break;
                           }
                           else if(pod.status.containerStatuses[podItem].state[containerState].reason === 'DeadlineExceeded') {
                             podColor = '#7B241C';
+                            status='DeadlineExceeded';
                             running = false;
                             break;
                           }
                           else if(pod.status.containerStatuses[podItem].state[containerState].reason !== 'Completed' && pod.status.containerStatuses[podItem].state[containerState].reason !== 'Running') {
                             podColor = '#B51601';
+                            status='Completed';
                             running = false;
                             break;
                           }
                           else {
                             podColor = '#B51601';
+                            status='OOMKilled';
                             running = false;
                           }
                         } else if (containerState == 'waiting') {
                           running = false;
                           if (pod.status.containerStatuses[podItem].state[containerState].reason == 'ImagePullBackOff') {
                             podColor = '#B03A2E'
+                            status='ImagePullBackOff';
                             break;
                           } else if (pod.status.containerStatuses[podItem].state[containerState].reason == 'CrashLoopBackOff') {
                             podColor = '#943126';
+                            status='CrashLoopBackOff';
                             break;
                           } else {
                             podColor = '#F84141';
+                            status=pod.status.containerStatuses[podItem].state[containerState].reason;
                           }
                         }
                       }
                     }
                     if (running) {
-                      podColor = '#50A649'
+                      podColor = '#50A649',
+                        status=pod.status.phase;
                     }
                   }
                   subNodes = [
@@ -524,6 +542,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                       name: pod.metadata.name,
                       type: label + pod.metadata.name + pod.metadata.uid,
                       pod: 'pod',
+                      status:status,
                       uid: pod.metadata.uid || '',
                       containerData: pod,
                       agentType: pod.kind.toLowerCase() || '',
@@ -559,16 +578,23 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                 this.hierarchialGraph.links = this.podLinkArray;
                 this.updateChart();
               }else {
+                  // @ts-ignore
+                  this.hierarchialGraph.nodes = this.nodeArray;
+                  this.updateChart();
+                  // @ts-ignore
+                  this.hierarchialGraph.links = this.linkArray;
+                  this.updateChart();
                   console.log("no data")
                   this.afterAgents = '';
                   this.isTriggered = false;
-                  this.snack.openSnackBar('No Pods found!', '','sb-warn');
+                  this.hasPodFound === 1 && this.snack.openSnackBar('No Pods found!', '','sb-warn');
+                  this.hasPodFound = 2;
+
                 }
               })
           }
         }
       }
-
     this.isPodChanged++;
   }
 
@@ -605,21 +631,24 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
               // console.log("COntainer:",this.containerAllArray[i].name)
               for (let containerInfo in this.containerAllArray[i].name[container]){
               }
-              let c_Color="";
+              let c_Color="", status;
 
-              for (let containerColor in this.containerAllArray[i].status){
-
-              }
+              // for (let containerColor in this.containerAllArray[i].status){
+              //
+              // }
               for(let stateColor in this.containerAllArray[i].status[container].state){
 
                 if(stateColor==='running'){
                   c_Color='#50A649'
+                  status=stateColor;
                 }
                 if(stateColor==='waiting'){
                   c_Color='#e3c918'
+                  status=stateColor;
                 }
                 if(stateColor==='terminated'){
                   c_Color='#f60d0d'
+                  status=stateColor;
                 }
               }
               let reason:string='';
@@ -629,22 +658,31 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                 reason=this.containerAllArray[i].status[container].state.waiting.reason;
                 if(this.containerAllArray[i].status[container].state.waiting.reason==='ImagePullBackOff'){
                   c_Color = '#B03A2E'
+                  status='ImagePullBackOff';
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CrashLoopBackOff'){
                   c_Color = '#943126'
+                  status='CrashLoopBackOff';
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ErrImagePull'){
                   c_Color = '#DC7633'
+                  status='ErrImagePull';
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ImagePullBackOff'){
                   c_Color = '#B03A2E'
+                  status='ImagePullBackOff';
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CreateContainerConfigError'){
                   c_Color = '#EC7063'
+                  status='CreateContainerConfigError';
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='InvalidImageName'){
                   c_Color = '#E74C3C'
+                  status='InvalidImageName';
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='CreateContainerError'){
                   c_Color = '#CB4335'
+                  status='CreateContainerError';
                 }else if(this.containerAllArray[i].status[container].state.waiting.reason==='ContainerCreating'){
                   c_Color = '#F1C40F'
+                  status='ContainerCreating';
                 }else{
                   c_Color = '#b68c08'
+                  status=this.containerAllArray[i].status[container].state.waiting.reason;
                 }
               }
               // console.log('COntainer',this.containerAllArray[i].name[container].name)
@@ -654,6 +692,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                   name:this.containerAllArray[i].name[container].name,
                   label: 'CONTAINER',
                   type: this.containerAllArray[i].name[container].name,
+                  status:status,
                   colorType:'container',
                   namespace: this.containerAllArray[i].namespace,
                   reason:reason,

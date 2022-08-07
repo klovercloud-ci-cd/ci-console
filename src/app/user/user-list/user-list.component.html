@@ -17,7 +17,7 @@
           mat-table
           [dataSource]="dataSource"
           class="w-full"
-          *ngIf="!isLoading && resource.authorizedUser('user','READ')"
+          *ngIf="dataSource.length && !isLoading && ( resource.authorizedUser('user','READ') ||  resource.authorizedUser('user','CREATE') ||  resource.authorizedUser('user','UPDATE') ||  resource.authorizedUser('user','DELETE'))"
         >
           <!-- Email Column -->
           <ng-container matColumnDef="email">
@@ -91,6 +91,9 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
+        <div *ngIf="!isLoading && dataSource.length==0">
+          <h1 class=" flex justify-center text-title pt-10" >No User Found</h1>
+        </div>
       </div>
     </div>
 

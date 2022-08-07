@@ -67,7 +67,7 @@
         <div *ngFor="let foot of footMarks; let i = index;let last = last" class=" ">
           <mat-accordion class="example-headers-align">
             <mat-expansion-panel [expanded]="openFootMark === i"
-                                 (opened)="expandLog(i,foot,nodeDetails.name, pipeline.data.claim,nodeDetails.status)"
+                                 (opened)="expandLog(i,foot,nodeDetails.name, logClaim,nodeDetails.status)"
                                  hideToggle
                                  *ngIf="!isLoading.commit"
                                  class="bg-light-400"
@@ -131,7 +131,7 @@
             >
 
               <mat-expansion-panel-header
-                (click)="loadCommit(branch.name)"
+                (click)="loadCommit(branch.name,1)"
                 id="{{ branch.name }} "
               >
                 <mat-panel-title class="flex gap-2 text-md">
@@ -179,7 +179,7 @@
               <div class="flex justify-between items-center">
                 <button
                   [ngClass]="[currentPage==0?'flex items-center disabled text-light-1000':'flex items-center']"
-                  (click)="getPrevNextCommit(branch.name, currentPage-1)">
+                  (click)="getPrevNextCommit(branch.name, currentPage-1)" [disabled]="currentPage<=0">
                   <mat-icon [ngClass]="[currentPage==0?'text-light-1000':'']">chevron_left
                   </mat-icon>
                   Previous

@@ -109,7 +109,7 @@ export class AppListService {
     HTTP_OPTIONS.params = {
       action: qp.action,
       // companyId: qp.companyId,
-      // repoId: qp.repoId,
+      appId: qp.appId,
       url: qp.url,
       webhookId: qp.webhookId,
       // companyUpdateOption: 'DELETE_APPLICATION',
