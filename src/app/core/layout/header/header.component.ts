@@ -50,6 +50,7 @@ export class HeaderComponent implements OnInit {
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
       this.wsService.wsData.subscribe((res) => {
+
         const socketRes: any = res;
         if (
           socketRes.status === 'INITIALIZING' ||
@@ -58,17 +59,19 @@ export class HeaderComponent implements OnInit {
         ) {
           this.newNoticeCount = this.newNoticeCount + 1;
           if (socketRes.status === 'FAILED') {
-            this.tostr.info(`Step: ${socketRes.step}`, 'Process Failed!', {
+            this.tostr.warning(`Step: ${socketRes.step}`, 'Process Failed!', {
               enableHtml: true,
               positionClass: 'toast-top-center',
               tapToDismiss: false,
+              progressBar:true,
             });
           }
           if (socketRes.status === 'SUCCESSFUL') {
-            this.tostr.info(`Step: ${socketRes.step}`, 'Successful!', {
+            this.tostr.success(`Step: ${socketRes.step}`, 'Successful!', {
               enableHtml: true,
               positionClass: 'toast-top-center',
               tapToDismiss: false,
+              progressBar:true,
             });
           }
         }
@@ -99,7 +102,6 @@ export class HeaderComponent implements OnInit {
                         const type = repoRes.data.type;
                         const repoId = processRes.data.repository_id;
                         const appId = processRes.data.app_id;
-                        //http://localhost:2022/repository/5d372397-28bf-4c27-a305-8681520403be/application?type=GITHUB&title=Test-application&url=aHR0cHM6Ly9naXRodWIuY29tL3plcm9tc2kvdGVzdC1hcHA%3D&repoId=5d372397-28bf-4c27-a305-8681520403be&appId=7ef757e6-adc3-4699-bb81-ddbac0522096&page=0&limit=5
                         const queryPerams = `?type=${type}&title=${title}&url=${gitUrl}&repoId=${repoId}&appId=${appId}&commitId=${commitId}`;
 
                         const link = `repository/${processRes.data.repository_id}/application/${queryPerams}`;
@@ -113,15 +115,32 @@ export class HeaderComponent implements OnInit {
                             step: socketRes.step,
                           });
                           this.wsService.wsData.subscribe((res) => {});
-                          this.tostr.info(
+                          const infoToaster = this.tostr.info(
                             `<a class="text-dark" href="${link}">Application: ${appRes.data._metadata.name}, Step: ${socketRes.step}</a>`,
                             'New Process Initializing!',
                             {
                               enableHtml: true,
                               positionClass: 'toast-top-center',
                               tapToDismiss: false,
+                              progressBar:true,
+                              newestOnTop:true,
                             }
                           );
+                          infoToaster.onTap.subscribe(action => {
+                            console.log("Action")
+                            this.navigateRoute
+                              .navigate([`repository/${processRes.data.repository_id}/application/`], {
+                                queryParams: {
+                                  type: type,
+                                  title: title,
+                                  url: gitUrl,
+                                  repoId: repoId,
+                                  appId: appId,
+                                  commitId: commitId,
+                                },
+                              })
+                              .then(() => {});
+                          });
                         }
                       });
                   });
@@ -157,7 +176,7 @@ export class HeaderComponent implements OnInit {
     socket.onopen = (e) => {
       this.sendWS = setInterval(() => {
         socket.send(' ');
-      }, 300);
+      }, 1000);
     };
   }
 

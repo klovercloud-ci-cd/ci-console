@@ -155,7 +155,7 @@
         <rect
           *ngIf="(node?.pod==='pod') || (node?.colorType==='container') "
           ngx-tooltip
-          [tooltipTitle]="'Status: '+node?.status"
+          [tooltipTitle]="node?.status"
           [attr.width]="'10px'"
           [attr.height]="'50px'"
           [attr.fill]="node?.options?.color || '#000'"

@@ -45,7 +45,7 @@ export class PipelineGraphComponent
   prev: any;
   self: any;
   title: any;
-
+  initialPrevPage:number = 0;
   failed: any[] = [];
   error: any = {
     pipeline: '',
@@ -98,7 +98,7 @@ export class PipelineGraphComponent
   public footMarksLegth: number = 0;
   logs: any[] = [];
   prevStepName: string = '';
-  page: number = 0;
+  page: number = 1;
   limit: any = 5;
   skip: number = 0;
   prev_logs_size: number = 0;
@@ -136,7 +136,7 @@ export class PipelineGraphComponent
     this.wsService.wsData.subscribe((res) => {
       this.socketres = res;
       const socketRes: any = res;
-      if (socketRes.process_id == this.pipeline.data.process_id) {
+      if (socketRes.process_id == this.pipeline?.data?.process_id) {
         if (socketRes.status === 'INITIALIZING') {
           this.init = true;
           this.pipes
@@ -196,7 +196,6 @@ export class PipelineGraphComponent
     if (this.sendWS) {
       clearInterval(this.sendWS);
     }
-
     // localStorage.removeItem('page');
   }
 
@@ -224,7 +223,6 @@ export class PipelineGraphComponent
       // console.log("this.curren",this.currentPage)
     });
 
-    // console.log("this.currentPage----init",this.currentPage);
     this.pipes
       .getBranch(this.type, this.repoId, this.repoUrl)
       .subscribe((res: any) => {
@@ -254,6 +252,19 @@ export class PipelineGraphComponent
     // }else {
     //   branchName = 0;
     // }
+
+    if(localStorage.getItem('page'))
+    {
+      this.currentPage=this.currentPage;
+      this.initialPrevPage=1;
+    }else{
+      if(this.type=='githubs'){
+        this.currentPage = 1;
+      }else {
+        this.currentPage = 0;
+      }
+    }
+    // console.log(this.currentPage)
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
       .subscribe(async (res: any) => {
@@ -300,6 +311,7 @@ export class PipelineGraphComponent
   }
 
   getPrevNextCommit(branchName: any, pageNumber: number) {
+
     this.currentPage=pageNumber;
     this.c_page=pageNumber;
     localStorage.setItem('page', String(pageNumber));
@@ -314,6 +326,11 @@ export class PipelineGraphComponent
         this.limit
       )
       .subscribe((res: any) => {
+        if(pageNumber==1){
+          this.initialPrevPage=0;
+        }else {
+          this.initialPrevPage=1;
+        }
         this.commit = res.data;
         this.commitList = [
           {
@@ -435,19 +452,22 @@ export class PipelineGraphComponent
   }
 
   loadCommit(branchName: string,click:number) {
-
+    // console.log("Commit Loaded",this.initialPrevPage,this.type)
     if(click==1){
       localStorage.removeItem('page');
+      this.initialPrevPage=0;
     }
-
     if(localStorage.getItem('page'))
     {
       this.currentPage=this.currentPage;
-    }else {
-      this.currentPage = 0;
+    }else{
+      if(this.type=='githubs'){
+        this.currentPage = 1;
+      }else {
+        this.currentPage = 0;
+      }
     }
 
-    // console.log("this.currentPage",this.currentPage);
     this.navigateRoute.navigate([], {
       queryParams: { page: this.currentPage, limit: this.limit, branch: branchName },
       queryParamsHandling: 'merge',
@@ -460,10 +480,21 @@ export class PipelineGraphComponent
       this.repo
         .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
         .subscribe((res: any) => {
-          this.commitList.push({
-            branch: branchName,
-            commits: [...res.data],
-          });
+          if(click==1){
+            this.initialPrevPage=0;
+          }else{
+            this.initialPrevPage=1;
+          }
+          // this.commitList.push({
+          //   branch: branchName,
+          //   commits: [...res.data],
+          // });
+          this.commitList = [
+            {
+              branch: branchName,
+              commits: res.data,
+            },
+          ];
         });
     } else {
       this.repo
@@ -509,7 +540,7 @@ export class PipelineGraphComponent
         threshold: 1,
       }
     );
-    observer.observe(intObj);
+    observer?.observe(intObj);
 
     this.repo
       .getFootamarkLog(processId, nodeName, footmarkName, page, limit, claim)
@@ -556,7 +587,7 @@ export class PipelineGraphComponent
   fullMode(footMarkIndex: any, foot: any) {
     this.fullmode = true;
     // @ts-ignore
-    document.getElementById('scrollArea' + foot).classList.add('logPanel');
+    document.getElementById('scrollArea' + foot)?.classList.add('logPanel');
     this.singleLogDetails = {
       index: footMarkIndex,
       footmark: foot,
@@ -566,7 +597,7 @@ export class PipelineGraphComponent
   fullModeClose() {
     this.fullmode = false;
     // @ts-ignore
-    document.getElementById('scrollArea' + foot).classList.remove('logPanel');
+    document.getElementById('scrollArea' + foot)?.classList.remove('logPanel');
   }
 
   private totalenv() {
@@ -777,11 +808,11 @@ export class PipelineGraphComponent
           if (socketRes.process_id == this.pipeline.data.process_id) {
             if (
               this.stepStatus !== 'active' &&
-              this.openFootMark !== this.footMarks.indexOf(socketRes.footmark)
+              this.openFootMark !== this.footMarks?.indexOf(socketRes?.footmark)
             ) {
               this.activeStep = socketRes.footmark;
               this.setActiveFootMark(
-                this.footMarks.indexOf(socketRes.footmark)
+                this.footMarks?.indexOf(socketRes?.footmark)
               );
             }
             if (this.stepStatus === 'active') {
@@ -826,7 +857,7 @@ export class PipelineGraphComponent
     claim: number,
     status: string
   ) {
-    console.log("claim---",claim)
+    // console.log("claim---",claim)
     this.singleLogDetails = {
       index: footMarkIndex,
       footmark: foot,

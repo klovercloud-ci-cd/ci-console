@@ -93,7 +93,6 @@ export class RepoServiceService {
       page:page,
       limit:limit
     };
-    console.log("LOGS:",   BASE_URL + repoType,'/commits',   repoId,      repoUrl,      branchName,      page,      limit)
     return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
   }
 
@@ -106,7 +105,6 @@ export class RepoServiceService {
       limit:limit
     };
 
-    console.log("LOGS:2",      repoId,      repoUrl,      branchName,      page,      limit)
     return this.http.get(`${BASE_URL + repoType}/commits`, HTTP_OPTIONS);
   }
 
@@ -123,7 +121,7 @@ export class RepoServiceService {
   // }
 
   // getNextCommit(next: string, repoID:string | null, repoUrl:string, branch:string) {
-  //   console.log("NEXT:",next)
+
   //   HTTP_OPTIONS.params = {
   //     repoId : repoID,
   //     url: repoUrl,
@@ -137,7 +135,7 @@ export class RepoServiceService {
   // }
 
   getPrevCommit(prev: string, repoID:string | null, repoUrl:string, branch:string) {
-    console.log("PREV:",prev)
+
     HTTP_OPTIONS.params = {
       repoId : repoID,
       url: repoUrl,

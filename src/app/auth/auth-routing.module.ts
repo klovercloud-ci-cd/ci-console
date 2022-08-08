@@ -14,13 +14,13 @@ const routes: Routes = [
       title: 'CI-console | Log In',
     },
   },
-  {
-    path: 'register',
-    component: RegistrationComponent,
-    data: {
-      title: 'CI-console | Register',
-    },
-  },
+  // {
+  //   path: 'register',
+  //   component: RegistrationComponent,
+  //   data: {
+  //     title: 'CI-console | Register',
+  //   },
+  // },
   {
     path: 'forgot-password',
     component: ForgotPasswordComponent,

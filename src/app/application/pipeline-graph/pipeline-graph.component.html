@@ -72,11 +72,12 @@
                                  *ngIf="!isLoading.commit"
                                  class="bg-light-400"
             >
-              <mat-expansion-panel-header
+              <mat-expansion-panel-header class="flex justify-between"
               >
                 <mat-panel-title class="flex gap-2 text-md">
                   {{ foot }}
                 </mat-panel-title>
+<!--                <mat-icon  class="text-danger">close</mat-icon>-->
               </mat-expansion-panel-header>
               <!--log panel start-->
               <div class=" h-80 bg-dark flex flex-col relative">
@@ -178,8 +179,8 @@
               </div>
               <div class="flex justify-between items-center">
                 <button
-                  [ngClass]="[currentPage==0?'flex items-center disabled text-light-1000':'flex items-center']"
-                  (click)="getPrevNextCommit(branch.name, currentPage-1)" [disabled]="currentPage<=0">
+                  [ngClass]="[currentPage==0  || initialPrevPage==0?'flex items-center disabled text-light-1000':'flex items-center']"
+                  (click)="getPrevNextCommit(branch.name, currentPage-1)" [disabled]="currentPage<=0 || initialPrevPage==0">
                   <mat-icon [ngClass]="[currentPage==0?'text-light-1000':'']">chevron_left
                   </mat-icon>
                   Previous
