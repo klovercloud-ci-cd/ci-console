@@ -155,7 +155,10 @@ export class RepoServiceService {
     return this.http.get(`${BASE_URL}processes`, HTTP_OPTIONS);
   }
 
-  getfootPrint(processId: any, stepName: any) {
+  getfootPrint(processId: any, stepName: any, claim: number) {
+    HTTP_OPTIONS.params = {
+      claim:claim
+    };
     return this.http.get(
       `${BASE_URL}processes/${processId}/steps/${stepName}/footmarks`,
       HTTP_OPTIONS
@@ -169,14 +172,13 @@ export class RepoServiceService {
     return this.http.get(`${BASE_URL}pipelines/${processId}`, HTTP_OPTIONS);
   }
 
-  getFootamarkLog(processId: any, stepName: any, footmarkName: any,page:number,limit:number,claim:number) {
+  getFootmarkLog(processId: any, stepName: any, footmarkName: any,page:number,limit:number,claim:number) {
     HTTP_OPTIONS.params = {
       claims: claim,
       page:page,
       limit:limit,
-      loadApplications:true,
-      loadRepositories:true
-
+      // loadApplications:true,
+      // loadRepositories:true
     };
     return this.http.get(
       `${BASE_URL}processes/${processId}/steps/${stepName}/footmarks/${footmarkName}/logs`,

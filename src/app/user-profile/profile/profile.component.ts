@@ -32,7 +32,5 @@ export class ProfileComponent implements OnInit {
       this.snack.openSnackBar('User not found!',err.error.message,'sb-error')});
 
   }
-some(item:any){
-  console.log("item:",item)
-}
+
 }

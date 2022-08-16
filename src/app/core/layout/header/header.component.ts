@@ -80,6 +80,7 @@ export class HeaderComponent implements OnInit {
           this.userPersonalInfo.data.metadata.company_id
         ) {
           if (socketRes.status === 'INITIALIZING') {
+
             this.applist
               .getProcessDetails(socketRes.process_id)
               .subscribe((processRes: any) => {
@@ -89,6 +90,7 @@ export class HeaderComponent implements OnInit {
                     processRes.data.app_id
                   )
                   .subscribe((appRes: any) => {
+
                     appRes.data.url;
                     this.applist
                       .getRepositoryInfo(
@@ -114,6 +116,7 @@ export class HeaderComponent implements OnInit {
                           this.checkDubble.push({
                             step: socketRes.step,
                           });
+                          console.log('----',this.checkDubble)
                           this.wsService.wsData.subscribe((res) => {});
                           const infoToaster = this.tostr.info(
                             `<a class="text-dark" href="${link}">Application: ${appRes.data._metadata.name}, Step: ${socketRes.step}</a>`,
@@ -127,7 +130,6 @@ export class HeaderComponent implements OnInit {
                             }
                           );
                           infoToaster.onTap.subscribe(action => {
-                            console.log("Action")
                             this.navigateRoute
                               .navigate([`repository/${processRes.data.repository_id}/application/`], {
                                 queryParams: {

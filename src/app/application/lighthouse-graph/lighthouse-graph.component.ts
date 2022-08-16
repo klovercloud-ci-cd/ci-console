@@ -166,8 +166,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
     this.getPipeline(this.processID);
   }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void {}
 
   public getStyles(): any {
     return {
@@ -211,7 +210,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
     // @ts-ignore
     this.hierarchialGraph.links = this.links;
     this.updateChart();
-    console.log("arr",this.nodes,this.links)
   }
 
   getPipeline(processId: any) {
@@ -256,9 +254,9 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
     if (event.target.getAttribute('id') == 'k8s'){
       this.getPods(node_id,event,uid,agentType,triggerInitialization,label);
     }
-    // console.log("eventCont",event.target.getAttribute('id'))
+
     if (this.containerAllArray && this.checkPods(event.target.getAttribute('id'))){
-      // console.log("in")
+
       this.getContainer(node_id);
     }
   }
@@ -266,8 +264,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   // Drawing K8Objects
 
   getKObjects(node_id:string, event: any, uid:string,label:string){
-    // console.log("[[[]]]onj",node_id)
-    // this.width = this.width + 200;
+
     this.isTriggered=true
     this.enableReload = false;
     let subLinks: any, subNodes: any, agentNodes: any, agentLinks: any;
@@ -310,7 +307,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                     enableTrigger=true;
                   }
 
-                  console.log("replicas",item)
                   subNodes = [
                     {
                       id: item.name+item.uid,
@@ -435,7 +431,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
             .subscribe(
               (res) => {
                 if (res.data) {
-                  console.log("response")
                 this.isTriggered = false;
                 this.allPodsArray = res.data;
                 this.afterAgents = node_id;
@@ -584,7 +579,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                   // @ts-ignore
                   this.hierarchialGraph.links = this.linkArray;
                   this.updateChart();
-                  console.log("no data")
                   this.afterAgents = '';
                   this.isTriggered = false;
                   this.hasPodFound === 1 && this.snack.openSnackBar('No Pods found!', '','sb-warn');
@@ -605,10 +599,8 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
     this.pods = node_id;
 
     let subLinks: any, subNodes: any, podNodes: any, podLinks: any;
-    // console.log("in")
     for (let i = 0; i < this.podLinkArray.length; i++) {
 
-      // console.log("in")
       // @ts-ignore
       if ((node_id == this.podLinkArray[i]?.target)) {
         this.containerNodes = this.podNodeArray;
@@ -623,12 +615,9 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
           if (this.containerAllArray[i].podStatus==='Failed'){
             containerClr='#B51601'
           }
-          // console.log("in",'----',this.containerAllArray[i].id,"----",node_id)
           if(this.containerAllArray[i].id===node_id) {
 
-            // console.log("in",'----',this.containerAllArray[i].id,"----",node_id)
             for (let container in this.containerAllArray[i].name) {
-              // console.log("COntainer:",this.containerAllArray[i].name)
               for (let containerInfo in this.containerAllArray[i].name[container]){
               }
               let c_Color="", status;
@@ -685,7 +674,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
                   status=this.containerAllArray[i].status[container].state.waiting.reason;
                 }
               }
-              // console.log('COntainer',this.containerAllArray[i].name[container].name)
               subNodes = [
                 {
                   id: this.containerAllArray[i].name[container].name,
@@ -765,7 +753,6 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   }
 
   checkPods(id:string):boolean{
-    console.log("contArray",this.containerAllArray)
     return this.containerAllArray.some((item:any)=>{
       if(item.id==id){
         return true;
@@ -785,10 +772,7 @@ export class LighthouseGraphComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // console.log("this.subscription",this.timeoutId)
-    // clearTimeout(this.timeoutId);
     clearTimeout(this.timeoutId)
     this.subscription&& this.subscription.unsubscribe();
-    // this.timeoutId && this.timeoutId.unsubscribe();
   }
 }

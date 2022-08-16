@@ -33,5 +33,4 @@ export class ProcessLifecycleEventService {
     return this.http.put(`${BASE_URL}process_life_cycle_events?action=reclaim&step=${step}&processId=${processId}&status=${stepStatus}`, {
     });
   }
-
 }

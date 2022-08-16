@@ -4,7 +4,7 @@
   <div class="log-card relative">
 
     <div [ngClass]="fullmode?'':'hidden'"
-         class="absolute right-0 h-[calc(100vh-170px)] overflow-hidden top-[.78rem] z-50 w-[calc(100%-1.5rem)] bg-black">
+         class="absolute right-0 h-[calc(100vh-170px)] top-[.78rem] z-50 w-[calc(100%-1.5rem)] bg-dark">
       <div (click)="fullModeClose()"
            class="flex items-center justify-between cursor-pointer w-full h-10 bg-primary-800 px-3">
         <div class="text-light font-semi-bold">
@@ -14,15 +14,17 @@
           <mat-icon class="text-white">fullscreen_exit</mat-icon>
         </div>
       </div>
-      <div class="p-3">
+      <div class="p-3 overflow-x-scroll h-full">
         <span *ngFor="let logDetails of logs">
         <span *ngIf="logDetails.name === singleLogDetails.footmark" class="space-y-2">
           <pre
             *ngFor="let log of logDetails.data"
-            class=" text-white text-sm break-words flex"
-          >{{ log }}</pre>
+            class=" text-sm"
+            [innerHTML]="log"
+          ></pre>
         </span>
         </span>
+        <span *ngIf="isLogLoading" class="terminal-spinner py-2"></span>
       </div>
     </div>
     <div
@@ -61,13 +63,72 @@
           </div>
         </div>
       </div>
+
       <mat-divider></mat-divider>
+
       <p class="text-sub-title pt-6 pb-3">Foot Mark</p>
-      <div class="h-[calc(100vh-320px)] overflow-y-auto " id="footmarkDiv">
+      <div class="h-[calc(100vh-320px)] overflow-y-auto" id="footmarkDiv">
+
+<!--        Livelog Section-->
+
+        <div *ngIf="openLiveLogPanel; else oldLogs">
+          <div *ngFor="let foot of footMarks; let i = index;let last = last" class=" ">
+            <mat-accordion class="example-headers-align ">
+              <mat-expansion-panel [expanded]="openFootMark === i"
+                                   (opened)="expandLog(i,foot,nodeDetails.name, logClaim,nodeDetails.status)"
+                                   hideToggle
+                                   *ngIf="!isLoading.commit"
+                                   class="bg-light-400"
+              >
+                <mat-expansion-panel-header class="flex justify-between"
+                >
+                  <mat-panel-title class="flex gap-2 text-md">
+                    {{foot}}
+                  </mat-panel-title>
+<!--                <mat-icon  class="text-danger">close</mat-icon>-->
+                </mat-expansion-panel-header>
+                <!--log panel start-->
+                <div class=" h-80 bg-dark flex flex-col relative  rounded-md">
+                  <div class="h-8 bg-primary-800 flex justify-end items-center px-2 rounded-t-md">
+                    <mat-icon class="text-white cursor-pointer" (click)="fullMode(i,foot)">
+                      fullscreen
+                    </mat-icon>
+                  </div>
+
+                  <!--logPanel-->
+
+                  <div #pipelineLogViewContainer class="px-3 py-3 overflow-auto h-full w-full scroll-smooth">
+                    <div class="h-[80%]  pb-6">
+                       <span *ngFor="let logDetails of logs">
+                        <div>
+                          <span *ngIf="logDetails.name === foot" class="space-y-2">
+                            <pre
+                              *ngFor="let log of logDetails.data"
+                              class=" text-xs"
+                              [innerHTML]="log"
+                            ></pre>
+                          </span>
+                          </div>
+                        </span>
+                      <span *ngIf="isLogLoading" class="terminal-spinner py-2"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!--log panel end-->
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+
+
+<!--        Old Log Section-->
+
+        <ng-template #oldLogs>
         <div *ngFor="let foot of footMarks; let i = index;let last = last" class=" ">
-          <mat-accordion class="example-headers-align">
+          <mat-accordion class="example-headers-align ">
             <mat-expansion-panel [expanded]="openFootMark === i"
-                                 (opened)="expandLog(i,foot,nodeDetails.name, logClaim,nodeDetails.status)"
+                                 (opened)="expandOldLog(i,foot,nodeDetails.name, logClaim,nodeDetails.status)"
                                  hideToggle
                                  *ngIf="!isLoading.commit"
                                  class="bg-light-400"
@@ -80,25 +141,31 @@
 <!--                <mat-icon  class="text-danger">close</mat-icon>-->
               </mat-expansion-panel-header>
               <!--log panel start-->
-              <div class=" h-80 bg-dark flex flex-col relative">
-                <div class="h-8 bg-primary-800 flex justify-end items-center px-2">
+              <div class=" h-80 bg-dark flex flex-col relative  rounded-md">
+                <div class="h-8 bg-primary-800 flex justify-end items-center px-2 rounded-t-md">
                   <mat-icon class="text-white cursor-pointer" (click)="fullMode(i,foot)">
                     fullscreen
                   </mat-icon>
                 </div>
-                //logPanel
-                <div class="px-3 overflow-auto h-full w-full" id="{{'scrollArea'+foot}}">
-                  <div class="h-full">
+
+              <!--logPanel-->
+
+                <div #pipelineLogViewContainer class="px-3 py-3 overflow-auto h-full w-full scroll-smooth">
+                  <div class="h-[80%]  pb-6">
                        <span *ngFor="let logDetails of logs">
+                    <div>
                       <span *ngIf="logDetails.name === foot" class="space-y-2">
                         <pre
                           *ngFor="let log of logDetails.data"
-                          class=" text-white text-sm break-words flexp"
-                        >{{ log }}</pre>
+                          class=" text-xs"
+                          [innerHTML]="log"
+                        ></pre>
                       </span>
+                      </div>
                      </span>
+                    <span *ngIf="isLogLoading" class="terminal-spinner py-2"></span>
                   </div>
-                  <div class="my-3 h-5" id="{{'intObj'+foot}}"></div>
+<!--                  <div class="my-3 h-5" id="{{'intObj'+foot}}"></div>-->
                 </div>
               </div>
 
@@ -106,7 +173,7 @@
             </mat-expansion-panel>
           </mat-accordion>
         </div>
-
+        </ng-template>
       </div>
     </div>
   </div>
@@ -156,7 +223,7 @@
               <div *ngFor="let list of commitList">
                 <div *ngIf="list.branch === branch.name">
                   <div *ngFor="let msg of list.commits; let j = index" class="">
-                    <div mat-ripple class="kc-card p-3 mb-3 cursor-pointer"
+                    <div mat-ripple class="kc-card p-3 mb-3 cursor-pointer gru"
                          (click)="navigateToCommit(msg.sha)"
                     >
                       <div class="flex justify-between items-center break-words space-y-2">
@@ -223,6 +290,9 @@
         </div>
       </div>
     </mat-card>
+
+<!--    Pipeline Section-->
+
     <mat-card
       class="kc-card overflow-hidden col-span-6 mid-right-border"
       id="mid"
@@ -313,12 +383,12 @@
                       <mat-menu #menu="matMenu" class="kc-node-menu">
                         <p class="mx-4 py-3 uppercase font-semi-bold">{{step.name}}</p>
                         <mat-divider></mat-divider>
-                        <button (click)="openLogPanel(step.name)" mat-menu-item>
-                          <mat-icon
-                            aria-hidden="false"
-                            aria-label="Example home icon"
-                          >start
-                          </mat-icon>
+                        <button (click)="showOldLogs(step.name, step.claim)" mat-menu-item>
+<!--                          <mat-icon-->
+<!--                            aria-hidden="false"-->
+<!--                            aria-label="Example home icon"-->
+<!--                          >start-->
+<!--                          </mat-icon>-->
                           Logs
                         </button>
 

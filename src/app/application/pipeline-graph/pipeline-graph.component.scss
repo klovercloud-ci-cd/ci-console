@@ -140,3 +140,153 @@ div{
 :host ::ng-deep  .mat-menu-panel {
   min-height: 35px;
 }
+
+.console-log-container {
+  width: 50vw !important;
+  @media screen and (max-width: 768px) {
+    width: 84vw !important;
+    overflow-x: scroll;
+  }
+  height: 650px;
+  position: fixed;
+  display: inline-block;
+  bottom: -1px;
+  right: 0;
+  // border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: var(--background);
+  color: var(--text-color);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.2s ease-in-out;
+
+  .header-container {
+    background-color: var(--background-1);
+    height: 40px;
+    padding-left: 20px;
+    color: var(--text-color);
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+  //.header-container:hover {
+  //  background-color: var(--background);
+  //  transition: all 0.2s ease-in-out;
+  //}
+
+  .log-container {
+    display: none;
+  }
+}
+
+.console-log-container.expanded {
+  position: relative;
+  right: 0;
+  width: 50vw !important;
+  @media screen and (max-width: 768px) {
+    width: 84vw !important;
+    overflow-x: scroll;
+  }
+  height: 650px !important;
+  transition: all 0.2s ease-in-out;
+
+  .log-container {
+    position: absolute;
+    display: block;
+    padding: 15px;
+    width: 50vw !important;
+    @media screen and (max-width: 768px) {
+      width: 84vw !important;
+      overflow-x: scroll;
+    }
+    height: 612px !important;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    color: var(--text-color);
+    font-size: var(--fs-small);
+  }
+}
+
+.console-log-container.expanded.maximized {
+  width: calc(100vw - 262px) !important;
+  height: 100vh !important;
+  transition: all 0.2s ease-in-out;
+
+  .log-container {
+    width: calc(100vw - 580px) !important;
+    height: calc(100vh - 40px) !important;
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+.console-log-container.expanded.maximized.sidenav-collapsed {
+  width: calc(100vw - 390px) !important;
+  transition: all 0.2s ease-in-out;
+
+  .log-container {
+    width: calc(100vw - 390px) !important;
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+pre {
+  font-size: 14px;
+  color: #afc0e1;
+}
+
+.terminal-spinner {
+  color: #9ca1b9;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.terminal-spinner:after {
+  animation: changeContent 0.8s linear infinite;
+  display: block;
+  content: "⠋";
+  font-size: 18px;
+}
+
+@keyframes changeContent {
+  10% {
+    content: "⠙";
+  }
+  20% {
+    content: "⠹";
+  }
+  30% {
+    content: "⠸";
+  }
+  40% {
+    content: "⠼";
+  }
+  50% {
+    content: "⠴";
+  }
+  60% {
+    content: "⠦";
+  }
+  70% {
+    content: "⠧";
+  }
+  80% {
+    content: "⠇";
+  }
+  90% {
+    content: "⠏";
+  }
+}
+.text-processing {
+  color: #d7d9e8;
+}
+h4{
+  font-size: 15px;
+}
+::ng-deep mat-expansion-panel, .mat-expansion-panel{
+  margin-bottom: 10px;
+}
