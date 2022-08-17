@@ -543,7 +543,8 @@ export class PipelineGraphComponent
 
   // Old Log Showing Button Trigger Function
 
-  showOldLogs(stepName: any, claim:number) {
+  showOldLogs(stepName: any, claim:number, initialCall:number) {
+    this.openLiveLogPanel = false;
     this.openOldLogPanel = true;
     this.logOpen = true;
     const processId = this.pipeline.data.process_id;
@@ -619,7 +620,7 @@ export class PipelineGraphComponent
     this.repo
       .getFootmarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
-        console.log("Old Logs Response:",res)
+        // console.log("Old Logs Response:",res)
         let pageNumber = 0;
         if (res?.data !== null) {
           const footmarkData = [];
@@ -630,7 +631,6 @@ export class PipelineGraphComponent
           this.logs.push({
             name: footmarkName,
             data: [...footmarkData],
-            status:'success'
           });
         }
 
@@ -833,11 +833,11 @@ export class PipelineGraphComponent
 
   trigger(step: any) {
     this.openLiveLogPanel = true;
+    this.openOldLogPanel = false;
     const processId = this.pipeline.data.process_id;
     this.processLifecycleEventService
       .reclaim(processId, step.name, step.type)
       .subscribe((res: any) => {
-
         const processId = this.pipeline.data.process_id;
         this.openLogPanel(step.name,step.claim)
       });
@@ -873,6 +873,8 @@ export class PipelineGraphComponent
   // Footmark List
 
   stepFootMark(processId: any, stepName: any, claim:number) {
+
+    this.logs = [];
     let newClaim:number=0;
     if(typeof claim === 'number'){
       newClaim=claim;
@@ -882,16 +884,37 @@ export class PipelineGraphComponent
     this.repo
       .getfootPrint(processId, stepName, newClaim)
       .subscribe((footMarkRes: any) => {
+
         this.stepStatus = footMarkRes.status;
         this.footMarks = footMarkRes.data;
         this.activeStep = stepName;
         // console.log("this.footMarks",this.footMarks)
         this.setActiveFootMark(this.footMarks?.length - 1);
-
+        let temp: number = 1 ;
+        let currentLogValue:string ='', nextLogValue:string='';
         this.wsService.wsData.subscribe((WSRes) => {
+          this.isLogLoading=true;
           const socketRes: any = WSRes;
-          console.log("socketRes",socketRes)
+          const footmarkData:any = [];
+          console.log("socketRes",temp,'----',socketRes)
           this.openFootMarkName = this.footMarks[this.footMarks?.length - 1];
+          // console.log('stepname',footmarkData);
+
+          if (footMarkRes.data !== null) {
+
+            currentLogValue = socketRes.log;
+            console.log("currentLogValue1--------",currentLogValue)
+            if(currentLogValue !== nextLogValue) {
+              footmarkData.push(currentLogValue);
+              this.logs.push({
+                name: this.openFootMarkName,
+                data: [...footmarkData],
+              });
+            }
+            console.log("currentLogValue ",currentLogValue ,'!== nextLogValue-------', nextLogValue)
+            nextLogValue = currentLogValue;
+          }
+          console.log('==',nextLogValue , currentLogValue)
           if (socketRes.process_id == this.pipeline.data.process_id) {
 
             if (this.stepStatus !== 'active' && this.openFootMark !== this.footMarks?.indexOf(socketRes?.footmark)) {
@@ -920,7 +943,8 @@ export class PipelineGraphComponent
               this.footMarks.push(socketRes.footmark);
             }
           // }
-
+          temp++;
+          this.isLogLoading=false;
         });
 
 
@@ -993,11 +1017,12 @@ export class PipelineGraphComponent
     claim: number
   ) {
 
+    console.log('footmarkName',footmarkName);
     this.repo
       .getFootmarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
         let pageNumber = 0;
-        console.log("New Logs Response:",res)
+        // console.log("New Logs Response:",res)
         let page = 0;
         if (res?.data !== null) {
           const footmarkData = [];

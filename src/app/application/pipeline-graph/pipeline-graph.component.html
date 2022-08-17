@@ -24,7 +24,7 @@
           ></pre>
         </span>
         </span>
-        <span *ngIf="isLogLoading" class="terminal-spinner py-2"></span>
+        <span *ngIf="isLogLoading" class="terminal-spinner  pt-2 pb-4"></span>
       </div>
     </div>
     <div
@@ -35,11 +35,11 @@
     ></div>
     <div
       [ngClass]="logOpen ? 'visible right-0 ' : ' -right-3/4'"
-      class="mat-elevation-z8 log-card absolute h-[calc(100vh-170px)] top-[.78rem] z-40 w-2/6 bg-light-500 p-6 rounded-l opacity-100"
+      class="mat-elevation-z8 log-card absolute h-[calc(100vh-170px)] top-[.78rem] z-40 w-2/6 bg-light-500 p-4 rounded-l opacity-100"
     >
       <div class="flex items-center gap-4 pb-6">
 
-        <mat-icon (click)="logClose()" class="text-title text-dark-500 hover:text-dark">
+        <mat-icon (click)="logClose()" class="text-lg text-dark-500 hover:text-dark">
           arrow_back_ios_new
         </mat-icon>
         <div class=" w-full  flex justify-center gap-4 items-center">
@@ -78,7 +78,7 @@
                                    (opened)="expandLog(i,foot,nodeDetails.name, logClaim,nodeDetails.status)"
                                    hideToggle
                                    *ngIf="!isLoading.commit"
-                                   class="bg-light-400"
+                                   class="bg-light-400 mb-4"
               >
                 <mat-expansion-panel-header class="flex justify-between"
                 >
@@ -110,7 +110,7 @@
                           </span>
                           </div>
                         </span>
-                      <span *ngIf="isLogLoading" class="terminal-spinner py-2"></span>
+                      <span *ngIf="isLogLoading" class="terminal-spinner pt-2 pb-4"></span>
                     </div>
                   </div>
                 </div>
@@ -131,7 +131,7 @@
                                  (opened)="expandOldLog(i,foot,nodeDetails.name, logClaim,nodeDetails.status)"
                                  hideToggle
                                  *ngIf="!isLoading.commit"
-                                 class="bg-light-400"
+                                 class="bg-light-400 mb-4"
             >
               <mat-expansion-panel-header class="flex justify-between"
               >
@@ -163,7 +163,7 @@
                       </span>
                       </div>
                      </span>
-                    <span *ngIf="isLogLoading" class="terminal-spinner py-2"></span>
+                    <span *ngIf="isLogLoading" class="terminal-spinner  pt-2 pb-4"></span>
                   </div>
 <!--                  <div class="my-3 h-5" id="{{'intObj'+foot}}"></div>-->
                 </div>
@@ -383,7 +383,7 @@
                       <mat-menu #menu="matMenu" class="kc-node-menu">
                         <p class="mx-4 py-3 uppercase font-semi-bold">{{step.name}}</p>
                         <mat-divider></mat-divider>
-                        <button (click)="showOldLogs(step.name, step.claim)" mat-menu-item>
+                        <button (click)="showOldLogs(step.name, step.claim, 1)" mat-menu-item>
 <!--                          <mat-icon-->
 <!--                            aria-hidden="false"-->
 <!--                            aria-label="Example home icon"-->

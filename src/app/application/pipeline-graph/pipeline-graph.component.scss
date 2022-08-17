@@ -287,6 +287,6 @@ pre {
 h4{
   font-size: 15px;
 }
-::ng-deep mat-expansion-panel, .mat-expansion-panel{
-  margin-bottom: 10px;
+:host ::ng-deep mat-expansion-panel, .mat-expansion-panel{
+  margin-bottom: 10px !important;
 }
