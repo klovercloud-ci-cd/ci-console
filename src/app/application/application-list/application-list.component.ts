@@ -89,6 +89,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       this.service
         .getRepositoryInfo(this.companyID, this.repositoryId)
         .subscribe((response: any) => {
+          console.log("response",response)
           this.isLoading = false;
           if(response?.data?.applications?.length){
             this.hasData = true;

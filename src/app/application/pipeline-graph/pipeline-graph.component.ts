@@ -60,6 +60,12 @@ export class PipelineGraphComponent
   logClicked: number=0;
   openLiveLogPanel: boolean = false;
   openOldLogPanel: boolean = false;
+  commit_SHA: string='';
+  commitUserName: string='';
+  commitUserEmail: string='';
+  commitUrl: string='';
+  selectedIndex: number | undefined;
+  appId:string='';
 
   setOpenBranch(index: number) {
     this.openBranch = index;
@@ -140,6 +146,7 @@ export class PipelineGraphComponent
       this.title = res['title'];
     });
     this._toolbarService.changeData({ title: this.title });
+    console.log()
   }
 
   ngAfterContentInit(): void {
@@ -154,7 +161,7 @@ export class PipelineGraphComponent
             .subscribe((res: any) => {
               if (
                 res?.data.status === 'active' ||
-                res?.data.status === 'non_initialized'
+                res?.data.status === 'queued'
               ) {
                 this.getPipeline(socketRes.process_id);
                 this.openLogPanel(socketRes.step, socketRes.claim);
@@ -221,6 +228,7 @@ export class PipelineGraphComponent
       this.type = res['type'].toLowerCase() + 's';
       this.repoUrl = atob(res['url']);
       this.commitId = res['commitId'];
+      this.appId = res['appId'];
       this.newBranchName = res['branch'];
       // @ts-ignore
       if(localStorage.getItem('page')){
@@ -279,6 +287,12 @@ export class PipelineGraphComponent
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
       .subscribe(async (res: any) => {
+        console.log("rrr",res)
+        this.commitUserName = res.data[0].commit.author.name;
+        this.commitUserEmail = res.data[0].commit.author.email;
+        this.commitUrl = res.data[0].html_url;
+        this.commit_SHA = res.data[0].sha;
+        this.selectedIndex = 0;
         this.commitsPerCall = res;
         for (let link of res._metadata.links) {
           if (link.next) {
@@ -383,6 +397,7 @@ export class PipelineGraphComponent
     let newBranch:string='';
     this.repo.getProcess(commitId).subscribe((res: any) => {
 
+      console.log('process res',res)
       this.processIds = [];
       if (res.data == null) {
         this.error.pipeline = 'error';
@@ -431,7 +446,7 @@ export class PipelineGraphComponent
       } else {
         this.isLoading.graph = false;
         setTimeout(() => {
-          this.pipelineStep = res.data.steps;
+          this.pipelineStep = res?.data?.steps;
           this.pipeline = res;
           this.envList = this.allenv();
           this.stepsLists = this.stepsDetails();
@@ -454,6 +469,7 @@ export class PipelineGraphComponent
   }
 
   loadCommit(branchName: string,click:number) {
+    this.branchName = branchName;
     if(click==1){
       localStorage.removeItem('page');
       this.initialPrevPage=0;
@@ -569,7 +585,8 @@ export class PipelineGraphComponent
               this.page,
               this.limit,
               this.skip,
-              claim
+              claim,
+              initialCall
             );
           }
         });
@@ -602,7 +619,8 @@ export class PipelineGraphComponent
       this.page,
       this.limit,
       this.skip,
-      claim
+      claim,
+      0
     );
   }
 
@@ -615,8 +633,13 @@ export class PipelineGraphComponent
     page: number,
     limit: number,
     skip: number,
-    claim: number
+    claim: number,
+    initialCall:number
   ) {
+    // console.log('initialCall',initialCall)
+    if(initialCall===1){
+      this.logs=[];
+    }
     this.repo
       .getFootmarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
@@ -633,7 +656,7 @@ export class PipelineGraphComponent
             data: [...footmarkData],
           });
         }
-
+        // console.log('log:',this.logs);
         for(let link of res._metadata.links){
           this.isLogLoading=true;
           setTimeout(() => {
@@ -645,7 +668,8 @@ export class PipelineGraphComponent
                 pageNumber,
                 this.limit,
                 this.skip,
-                claim
+                claim,
+                0
               );
             }else{
               this.isLogLoading=false;
@@ -888,22 +912,22 @@ export class PipelineGraphComponent
         this.stepStatus = footMarkRes.status;
         this.footMarks = footMarkRes.data;
         this.activeStep = stepName;
-        // console.log("this.footMarks",this.footMarks)
+        // console.log("this.footMarks",this.footMarks);
         this.setActiveFootMark(this.footMarks?.length - 1);
         let temp: number = 1 ;
-        let currentLogValue:string ='', nextLogValue:string='';
+        let currentLogValue:string ='', nextLogValue:string='', count=0;
         this.wsService.wsData.subscribe((WSRes) => {
           this.isLogLoading=true;
           const socketRes: any = WSRes;
           const footmarkData:any = [];
-          console.log("socketRes",temp,'----',socketRes)
+          // console.log("socketRes",temp,'----',socketRes)
           this.openFootMarkName = this.footMarks[this.footMarks?.length - 1];
           // console.log('stepname',footmarkData);
 
           if (footMarkRes.data !== null) {
 
             currentLogValue = socketRes.log;
-            console.log("currentLogValue1--------",currentLogValue)
+            // console.log("currentLogValue1--------",count,'::',currentLogValue);
             if(currentLogValue !== nextLogValue) {
               footmarkData.push(currentLogValue);
               this.logs.push({
@@ -911,10 +935,11 @@ export class PipelineGraphComponent
                 data: [...footmarkData],
               });
             }
-            console.log("currentLogValue ",currentLogValue ,'!== nextLogValue-------', nextLogValue)
+            console.log("this.logs------- ",this.logs)
             nextLogValue = currentLogValue;
+            count++;
           }
-          console.log('==',nextLogValue , currentLogValue)
+          // console.log('==',nextLogValue , currentLogValue)
           if (socketRes.process_id == this.pipeline.data.process_id) {
 
             if (this.stepStatus !== 'active' && this.openFootMark !== this.footMarks?.indexOf(socketRes?.footmark)) {
@@ -1017,7 +1042,7 @@ export class PipelineGraphComponent
     claim: number
   ) {
 
-    console.log('footmarkName',footmarkName);
+    // console.log('footmarkName',footmarkName);
     this.repo
       .getFootmarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
@@ -1078,12 +1103,76 @@ export class PipelineGraphComponent
   }
 
   loadInfo(stepName: string) {
-    this.pipelineStep.filter(function (data: any) {
+    this.pipelineStep?.filter(function (data: any) {
       return data.name == stepName;
     });
   }
 
-  navigateToCommit(commit_Id: any) {
+  processTrigger(data:any){
+    // console.log("this.commitUrl!", this.commitUrl);
+    // this.repo.getCompanyInfo(data?.companyId).subscribe((res: any) => {
+    //   console.log("Repository")
+    // })
+    // 'companyId': data?.companyId,
+
+    this.usersInfo.getUserInfo(this.userInfo.user_id).subscribe((userResponse:any)=>{
+      console.log('this.commitUserEmail',this.commitUserEmail, '-----',data?.repoUrl)
+
+      const githubUsername = (data?.repoUrl.split('github.com/')[1]).split('/')[0];
+      const repositoryName = (data?.repoUrl.split(githubUsername)[1]).replace('/','');
+      console.log('repositoryName',repositoryName)
+      const payload = {
+          "after": this.commit_SHA,
+          "ref": `refs/heads/${this.branchName}`,
+          "repository": {
+            "name": repositoryName,
+            "full_name": `${userResponse.data.first_name}/${repositoryName}`,
+            "owner": {
+              "name": userResponse.data.first_name,
+              "email": this.commitUserEmail,
+              "login": githubUsername,
+            },
+            "url": data?.repoUrl,
+            "default_branch": this.branchName,
+          },
+          "commits": [
+            {
+              "id": this.commit_SHA,
+              "url": this.commitUrl
+            }
+          ]
+      }
+      this.pipes
+        .triggerProcess(payload,this.type,this.appId)
+        .subscribe((res: any) => {
+          console.log("Payload:",res)
+        });
+    })
+
+  }
+
+
+  navigateToCommit(commitInfo: any, index:number,event:any) {
+    console.log("event",this.commitList,event.target.getAttribute('id'))
+    // for(let i=0; i<this.commitList.length; i++){
+    //   // console.log(this.commitList[i].commits)
+    //   for(let item of this.commitList[i].commits){
+    //     // console.log("item:",item)
+    //     if(item.sha === event.target.getAttribute('id')){
+    //       // console.log("item.sha Walah",item.sha)
+    //       // @ts-ignore
+    //       document.getElementById(item.sha).classList.add('active__commit');
+    //     }else{
+    //       // @ts-ignore
+    //       document.getElementById(item.sha).classList.remove('active__commit');
+    //     }
+    //   }
+    // }
+    this.commitUserName = commitInfo.commit.author.name;
+    this.commitUserEmail = commitInfo.commit.author.email;
+    this.commitUrl = commitInfo.html_url;
+    const commit_Id = commitInfo.sha;
+    this.commit_SHA=commit_Id;
     this.repo.getProcess(commit_Id).subscribe((res: any) => {
       if (res.data !== null) {
         this.applist

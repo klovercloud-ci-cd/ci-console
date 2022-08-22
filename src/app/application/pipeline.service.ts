@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { TokenService } from '../auth/token.service';
+import {tap} from "rxjs/operators";
+import {catchError, throwError} from "rxjs";
 
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
@@ -24,6 +26,16 @@ export class PipelineService {
     private token: TokenService
   ) {}
 
+  private handleError(error: HttpErrorResponse): any {
+    if (error.error instanceof ErrorEvent) {
+      // @ts-ignore
+      return throwError('An Error occurred: ', error.error.message);
+    }
+    return throwError(`${error.error.message}`);
+
+    // return throwError('Internal server error!');
+  }
+
   socket: any;
 
   connectToSocket(id?: any) {
@@ -39,6 +51,20 @@ export class PipelineService {
     return socket;
   }
 
+  triggerProcess(payload:any, type:string, appId:string) {
+    console.log("payload,type",payload,type)
+    HTTP_OPTIONS.params = {
+      appId:appId
+    };
+    return this.http.post(`${BASE_URL}${type}`,payload, HTTP_OPTIONS)
+      .pipe(
+        tap((res: any) => {
+          console.log('Process Triggered');
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getBranch(repoType: string, repoId: string | null, repoUrl: string) {
     HTTP_OPTIONS.params = {
       repoId,
@@ -46,6 +72,7 @@ export class PipelineService {
     };
     return this.http.get(`${BASE_URL + repoType}/branches`, HTTP_OPTIONS);
   }
+
   getStepDetails(stepName:string,processId:string){
     HTTP_OPTIONS.params = {
       step:stepName
