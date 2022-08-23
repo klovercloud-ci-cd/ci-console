@@ -20,7 +20,7 @@ import { WsService } from '../../shared/services/ws.service';
 import { ToastrService } from 'ngx-toastr';
 import { ProcessLifecycleEventService } from '../process-lifecycle-event.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SharedSnackbarService } from '../../shared/snackbar/shared-snackbar.service';
+import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -139,7 +139,7 @@ export class PipelineGraphComponent
     private navigateRoute: Router,
     private wsService: WsService,
     private tostr: ToastrService,
-    private snackBar: SharedSnackbarService,
+    private snack: SharedSnackbarService,
     private processLifecycleEventService: ProcessLifecycleEventService
   ) {
     this.route.queryParams.subscribe((res) => {
@@ -147,6 +147,7 @@ export class PipelineGraphComponent
     });
     this._toolbarService.changeData({ title: this.title });
     console.log()
+
   }
 
   ngAfterContentInit(): void {
@@ -1145,7 +1146,9 @@ export class PipelineGraphComponent
       this.pipes
         .triggerProcess(payload,this.type,this.appId)
         .subscribe((res: any) => {
-          console.log("Payload:",res)
+          this.snack.openSnackBar('Process Trigger','Successful','sb-success')
+        },(err)=>{
+          this.snack.openSnackBar('Process Trigger Failed',err,'sb-error')
         });
     })
 
