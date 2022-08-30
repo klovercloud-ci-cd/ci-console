@@ -57,15 +57,18 @@ export class PipelineGraphComponent
   logClaim: any;
   scrollTimeout: any;
   scrollTimeoutCount: string = '';
+  liveLogTimeoutId: any;
   logClicked: number=0;
   openLiveLogPanel: boolean = false;
   openOldLogPanel: boolean = false;
   commit_SHA: string='';
+  initialCommitData: string='';
   commitUserName: string='';
   commitUserEmail: string='';
   commitUrl: string='';
   selectedIndex: number | undefined;
   appId:string='';
+  processLoading: boolean = false;
 
   setOpenBranch(index: number) {
     this.openBranch = index;
@@ -126,6 +129,9 @@ export class PipelineGraphComponent
   socket: any;
   isObjerving: boolean = false;
 
+  // dummy
+  counter = 0;
+
   constructor(
     private _toolbarService: ToolbarService,
     private http: HttpClient,
@@ -146,8 +152,6 @@ export class PipelineGraphComponent
       this.title = res['title'];
     });
     this._toolbarService.changeData({ title: this.title });
-    console.log()
-
   }
 
   ngAfterContentInit(): void {
@@ -218,9 +222,6 @@ export class PipelineGraphComponent
   }
 
   ngOnInit() {
-    // if (this.scrollTimeout) {
-    // clearTimeout();
-    // }
 
     this.scrollTimeout=this.autoScrollFunction();
 
@@ -266,7 +267,6 @@ export class PipelineGraphComponent
   }
 
   getCommit(branchName: any) {
-
     let pageNumber:any;
     // if(this.currentPage>0)
     // {
@@ -288,7 +288,6 @@ export class PipelineGraphComponent
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
       .subscribe(async (res: any) => {
-        console.log("rrr",res)
         this.commitUserName = res.data[0].commit.author.name;
         this.commitUserEmail = res.data[0].commit.author.email;
         this.commitUrl = res.data[0].html_url;
@@ -383,22 +382,21 @@ export class PipelineGraphComponent
       });
   }
 
-  getPrevCommit(){
-
-  }
-  getNextCommit(){
-  }
-
   getProcess(commitId: any,page:any) {
     // @ts-ignore
-    let pageNumber = parseInt(localStorage.getItem('page'));
-
+    let savedPageNumber = parseInt(localStorage.getItem('page'));
+    let query_page:number=0;
+    if(savedPageNumber){
+      query_page=savedPageNumber;
+    }else{
+      query_page=this.page;
+    }
     // @ts-ignore
     this.isLoading.graph = true;
     let newBranch:string='';
     this.repo.getProcess(commitId).subscribe((res: any) => {
 
-      console.log('process res',res)
+      // console.log('process res',res)
       this.processIds = [];
       if (res.data == null) {
         this.error.pipeline = 'error';
@@ -427,7 +425,7 @@ export class PipelineGraphComponent
           this.getPipeline(this.processIds[0].process_id);
           this.navigateRoute
             .navigate([], {
-              queryParams: { processID: this.processIds[0].process_id, branch: newBranch, page:pageNumber},
+              queryParams: { processID: this.processIds[0].process_id, branch: newBranch, page:query_page},
               queryParamsHandling: 'merge',
             })
             .then((r) => {});
@@ -498,6 +496,7 @@ export class PipelineGraphComponent
       this.repo
         .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
         .subscribe((res: any) => {
+          // console.log("Commit Response:",res)
           if(click==1){
             this.initialPrevPage=0;
           }else{
@@ -526,7 +525,6 @@ export class PipelineGraphComponent
           );
         });
     }
-
   }
 
   // sleep(milliseconds: number) {
@@ -570,6 +568,7 @@ export class PipelineGraphComponent
       .subscribe((footMarkRes: any) => {
         this.stepStatus = footMarkRes.status;
         this.footMarks = footMarkRes.data;
+        // console.log("reclaimed-2", this.footMarks)
         this.activeStep = stepName;
         this.setActiveFootMark(this.footMarks?.length - 1);
       });
@@ -587,7 +586,8 @@ export class PipelineGraphComponent
               this.limit,
               this.skip,
               claim,
-              initialCall
+              initialCall,
+              's1'
             );
           }
         });
@@ -621,7 +621,8 @@ export class PipelineGraphComponent
       this.limit,
       this.skip,
       claim,
-      0
+      0,
+      's2'
     );
   }
 
@@ -635,15 +636,18 @@ export class PipelineGraphComponent
     limit: number,
     skip: number,
     claim: number,
-    initialCall:number
+    initialCall:number,
+    showCount: string
   ) {
-    // console.log('initialCall',initialCall)
+    // console.log('showCount',showCount)
     if(initialCall===1){
       this.logs=[];
     }
     this.repo
       .getFootmarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
+        // console.log("printed!!")
+        this.isLogLoading=true;
         // console.log("Old Logs Response:",res)
         let pageNumber = 0;
         if (res?.data !== null) {
@@ -659,7 +663,7 @@ export class PipelineGraphComponent
         }
         // console.log('log:',this.logs);
         for(let link of res._metadata.links){
-          this.isLogLoading=true;
+
           setTimeout(() => {
             if (link.next) {
               this.getOldLogs(
@@ -670,7 +674,8 @@ export class PipelineGraphComponent
                 this.limit,
                 this.skip,
                 claim,
-                0
+                0,
+                's3'
               );
             }else{
               this.isLogLoading=false;
@@ -864,7 +869,7 @@ export class PipelineGraphComponent
       .reclaim(processId, step.name, step.type)
       .subscribe((res: any) => {
         const processId = this.pipeline.data.process_id;
-        this.openLogPanel(step.name,step.claim)
+        this.openLogPanel(step.name,step.claim);
       });
   }
 
@@ -877,6 +882,7 @@ export class PipelineGraphComponent
     this.stepFootMark(processId, stepName, claim);
       setTimeout(() => {
         this.pipeline.data.steps.find((pipeStep: any) => {
+          this.isLogLoading=true;
           if (pipeStep.name === stepName) {
             this.nodeDetails = pipeStep;
             this.openFootMarkName = this.footMarks[this.footMarks?.length - 1];
@@ -888,7 +894,8 @@ export class PipelineGraphComponent
               this.page,
               this.limit,
               this.skip,
-              claim
+              claim,
+              's1'
             );
           }
         });
@@ -898,7 +905,6 @@ export class PipelineGraphComponent
   // Footmark List
 
   stepFootMark(processId: any, stepName: any, claim:number) {
-
     this.logs = [];
     let newClaim:number=0;
     if(typeof claim === 'number'){
@@ -909,18 +915,24 @@ export class PipelineGraphComponent
     this.repo
       .getfootPrint(processId, stepName, newClaim)
       .subscribe((footMarkRes: any) => {
+        // console.log("reclaimed-2", footMarkRes);
+        if (footMarkRes.data.length < 2) {
 
         this.stepStatus = footMarkRes.status;
         this.footMarks = footMarkRes.data;
+
+          // console.log("reclaimed-1", this.footMarks);
+
         this.activeStep = stepName;
         // console.log("this.footMarks",this.footMarks);
         this.setActiveFootMark(this.footMarks?.length - 1);
-        let temp: number = 1 ;
-        let currentLogValue:string ='', nextLogValue:string='', count=0;
+        let temp: number = 1;
+        let currentLogValue: string = '', nextLogValue: string = '', count = 0;
         this.wsService.wsData.subscribe((WSRes) => {
-          this.isLogLoading=true;
+          this.isLogLoading = true;
           const socketRes: any = WSRes;
-          const footmarkData:any = [];
+          // console.log("socketResponse---", socketRes)
+          const footmarkData: any = [];
           // console.log("socketRes",temp,'----',socketRes)
           this.openFootMarkName = this.footMarks[this.footMarks?.length - 1];
           // console.log('stepname',footmarkData);
@@ -929,14 +941,14 @@ export class PipelineGraphComponent
 
             currentLogValue = socketRes.log;
             // console.log("currentLogValue1--------",count,'::',currentLogValue);
-            if(currentLogValue !== nextLogValue) {
+            if (currentLogValue !== nextLogValue) {
               footmarkData.push(currentLogValue);
               this.logs.push({
                 name: this.openFootMarkName,
                 data: [...footmarkData],
               });
             }
-            console.log("this.logs------- ",this.logs)
+            // console.log("this.logs------- ",this.logs)
             nextLogValue = currentLogValue;
             count++;
           }
@@ -949,28 +961,21 @@ export class PipelineGraphComponent
               this.setActiveFootMark(this.footMarks?.indexOf(socketRes?.footmark));
             }
           }
-          // console.log("Update",this.footMarks,'----Matching---->',socketRes?.footmark,'---===---',this.openFootMarkName)
-          // console.log("socketRes.process_id == this.pipeline.data.process_id",socketRes)
-          // || socketRes.footmark == 'git_clone' || socketRes.footmark == 'build_and_push_0' || socketRes.footmark == 'build_and_push_1' || socketRes.footmark == 'post_build_job'
-          // if (socketRes?.footmark === this.openFootMarkName || socketRes?.footmark === 'init_build_job') {
-            // console.log("Update",this.footMarks,'------',this.footMarks.find(item => item == socketRes?.footmark))
-            let found = 0;
-            for (let x of this.footMarks) {
-              // console.log('Not Matched',x)
-              // @ts-ignore
-              if (x === socketRes.footmark) {
-                found = 1;
-                // console.log("Matched")
-              }
+          let found = 0;
+          for (let x of this.footMarks) {
+            // @ts-ignore
+            if (x === socketRes.footmark) {
+              found = 1;
             }
+          }
 
-            if (found === 0) {
-              // @ts-ignore
-              this.footMarks.push(socketRes.footmark);
-            }
+          if (found === 0 && (this.nodeDetails.name === socketRes.step)) {
+            // @ts-ignore
+            this.footMarks.push(socketRes.footmark);
+          }
           // }
           temp++;
-          this.isLogLoading=false;
+          this.isLogLoading = false;
         });
 
 
@@ -994,6 +999,7 @@ export class PipelineGraphComponent
         //     }
         //   }
         // });
+      }
       });
   }
 
@@ -1020,6 +1026,11 @@ export class PipelineGraphComponent
     this.skip = 0;
     this.logs = [];
     const processId = this.pipeline.data.process_id;
+    // if (this.liveLogTimeoutId) {
+    //   console.log("exists")
+    //   clearTimeout(this.liveLogTimeoutId);
+    //   console.log("liveLogTimeoutId clear",this.liveLogTimeoutId)
+    // }
     this.getLiveLogs(
       processId,
       nodeName,
@@ -1027,7 +1038,8 @@ export class PipelineGraphComponent
       this.page,
       this.limit,
       this.skip,
-      claim
+      claim,
+      's2'
     );
   }
 
@@ -1040,22 +1052,23 @@ export class PipelineGraphComponent
     page: number,
     limit: number,
     skip: number,
-    claim: number
+    claim: number,
+    showCount:string
   ) {
-
-    // console.log('footmarkName',footmarkName);
+    // console.log("showCount-----",showCount);
     this.repo
       .getFootmarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
+        this.counter ++
+        console.log("res" , res.data)
+        this.isLogLoading=true;
         let pageNumber = 0;
-        // console.log("New Logs Response:",res)
         let page = 0;
         if (res?.data !== null) {
           const footmarkData = [];
           for (let i = this.skip; i < res?.data.length; i++) {
             footmarkData.push(res?.data[i]);
           }
-
           // if (res?.data.length < limit) {
           //   this.skip = res?.data.length;
           // } else {
@@ -1074,10 +1087,23 @@ export class PipelineGraphComponent
           // if (this.skip == 0) {
           //   this.page++;
         }
-
+        // console.log("liveLogTimeoutId first",this.liveLogTimeoutId)
+        // if (this.liveLogTimeoutId) {
+        //   console.log("exists--1")
+        //   clearTimeout(this.liveLogTimeoutId);
+        //   console.log("liveLogTimeoutId clear---1",this.liveLogTimeoutId)
+        // }
+        let i = 0
+        // console.log("liveLogTimeoutId",this.liveLogTimeoutId)
         for(let link of res._metadata.links){
-          this.isLogLoading=true;
-          setTimeout(() => {
+          // if (this.liveLogTimeoutId) {
+          //   console.log("exists",this.liveLogTimeoutId)
+          //   window.clearTimeout(this.liveLogTimeoutId);
+          //   console.log("liveLogTimeoutId clear",this.liveLogTimeoutId)
+          // }
+          this.liveLogTimeoutId = window.setTimeout(() => {
+            // i ++
+            // console.log(i)
             if (link.next) {
               this.getLiveLogs(
                 processId,
@@ -1086,7 +1112,8 @@ export class PipelineGraphComponent
                 pageNumber,
                 this.limit,
                 this.skip,
-                claim
+                claim,
+                's3'
               );
             }else{
               this.isLogLoading=false;
@@ -1110,18 +1137,30 @@ export class PipelineGraphComponent
   }
 
   processTrigger(data:any){
+    this.processLoading = true;
     // console.log("this.commitUrl!", this.commitUrl);
     // this.repo.getCompanyInfo(data?.companyId).subscribe((res: any) => {
     //   console.log("Repository")
     // })
     // 'companyId': data?.companyId,
+    let commitDetails:any;
+    // console.log("data",data);
+    for(let item of this.commitList){
+      // console.log('item',item.commits)
+      for(let commit of item.commits){
+        if(commit.sha===this.commit_SHA){
+          commitDetails=commit;
+        }
+      }
+    }
 
+    // console.log("commitDetails",commitDetails)
     this.usersInfo.getUserInfo(this.userInfo.user_id).subscribe((userResponse:any)=>{
-      console.log('this.commitUserEmail',this.commitUserEmail, '-----',data?.repoUrl)
+      // console.log('this.commitUserEmail',this.commitUserEmail, '-----',data?.repoUrl)
 
       const githubUsername = (data?.repoUrl.split('github.com/')[1]).split('/')[0];
       const repositoryName = (data?.repoUrl.split(githubUsername)[1]).replace('/','');
-      console.log('repositoryName',repositoryName)
+      // console.log('repositoryName',repositoryName)
       const payload = {
           "after": this.commit_SHA,
           "ref": `refs/heads/${this.branchName}`,
@@ -1146,17 +1185,20 @@ export class PipelineGraphComponent
       this.pipes
         .triggerProcess(payload,this.type,this.appId)
         .subscribe((res: any) => {
+          this.navigateToCommit(commitDetails,0,'some');
           this.snack.openSnackBar('Process Trigger','Successful','sb-success')
+          this.processLoading = false;
         },(err)=>{
           this.snack.openSnackBar('Process Trigger Failed',err,'sb-error')
+          this.processLoading = false;
         });
     })
-
   }
 
 
   navigateToCommit(commitInfo: any, index:number,event:any) {
-    console.log("event",this.commitList,event.target.getAttribute('id'))
+    // console.log("Commit Clicked!!")
+      // ,event.target.getAttribute('id'))
     // for(let i=0; i<this.commitList.length; i++){
     //   // console.log(this.commitList[i].commits)
     //   for(let item of this.commitList[i].commits){
@@ -1188,7 +1230,7 @@ export class PipelineGraphComponent
                 const commitId = commit_Id;
                 const type = appRes.data.type;
                 const repoId = res.data[0].repository_id;
-                const appId = res.data[0].process_id;
+                // const appId = res.data[0].process_id;
                 this.navigateRoute
                   .navigateByUrl('/RefreshComponent', {
                     skipLocationChange: true,
@@ -1201,7 +1243,7 @@ export class PipelineGraphComponent
                           title: title,
                           url: gitUrl,
                           repoId: repoId,
-                          appId: appId,
+                          appId: this.appId,
                           commitId: commitId,
                         },
                       })

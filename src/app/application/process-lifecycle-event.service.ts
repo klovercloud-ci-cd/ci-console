@@ -24,9 +24,10 @@ export class ProcessLifecycleEventService {
   ) {}
 
   reclaim(processId: any, step: any, stepType: any): Observable<any> {
+    console.log('Process Lifecycle: ', processId, step, stepType,)
     let stepStatus =""
     if(stepType=='BUILD'  ){
-      stepStatus='non_initialized'
+      stepStatus='queued'
     }else{
       stepStatus='paused'
     }

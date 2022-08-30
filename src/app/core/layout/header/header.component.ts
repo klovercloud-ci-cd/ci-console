@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../auth/auth.service';
-import { UserDataService } from '../../../shared/services/user-data.service';
-import { SharedSnackbarService } from '../../../shared/snackbar/shared-snackbar.service';
-import { PipelineService } from '../../../application/pipeline.service';
-import { TokenService } from '../../../auth/token.service';
-import { AppListService } from '../../../application/app-list.service';
-import { WsService } from '../../../shared/services/ws.service';
-import { HeaderService } from '../header.service';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../../auth/auth.service';
+import {UserDataService} from '../../../shared/services/user-data.service';
+import {SharedSnackbarService} from '../../../shared/snackbar/shared-snackbar.service';
+import {PipelineService} from '../../../application/pipeline.service';
+import {TokenService} from '../../../auth/token.service';
+import {AppListService} from '../../../application/app-list.service';
+import {WsService} from '../../../shared/services/ws.service';
+import {HeaderService} from '../header.service';
+import {Router} from '@angular/router';
+import {findWhere} from "underscore";
 
 @Component({
   selector: 'app-header',
@@ -33,18 +34,30 @@ export class HeaderComponent implements OnInit {
     private wsService: WsService,
     private header: HeaderService,
     private navigateRoute: Router
-  ) {}
+  ) {
+  }
 
   pageTitle = '';
 
   user: any = this.auth.getUserData();
 
   userPersonalInfo: any;
+  notification: any = [];
 
   sendWS: any;
   checkDubble: any[] = [];
+  checkFailed: any[] = [];
+  checkSuccessfull: any[] = [];
+  checkInitializing: any[] = [];
 
   async ngOnInit(): Promise<void> {
+    var list = [{"title": "Learn Java", "Author": "kkk", "Cost": 100},
+      {"title": "Learn Scala", "Author": "Joe", "Cost": 200},
+      {"title": "Learn C", "Author": "Sam", "Cost": 200} ];
+    console.log(findWhere(list, { "Author": "Sam" }))
+    if (!findWhere(list, { "Author": "Sam" })) {
+      console.log('########################');
+    }
     this.connectWs();
 
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
@@ -52,6 +65,7 @@ export class HeaderComponent implements OnInit {
       this.wsService.wsData.subscribe((res) => {
 
         const socketRes: any = res;
+
         if (
           socketRes.status === 'INITIALIZING' ||
           socketRes.status === 'FAILED' ||
@@ -59,27 +73,34 @@ export class HeaderComponent implements OnInit {
         ) {
           this.newNoticeCount = this.newNoticeCount + 1;
           if (socketRes.status === 'FAILED') {
+
+            // console.log('socketRes---FAILED:',socketRes)
             this.tostr.warning(`Step: ${socketRes.step}`, 'Process Failed!', {
               enableHtml: true,
               positionClass: 'toast-top-center',
               tapToDismiss: false,
-              progressBar:true,
+              progressBar: true,
             });
           }
           if (socketRes.status === 'SUCCESSFUL') {
+            // console.log('socketRes---SUCCESSFUL:',socketRes)
             this.tostr.success(`Step: ${socketRes.step}`, 'Successful!', {
               enableHtml: true,
               positionClass: 'toast-top-center',
               tapToDismiss: false,
-              progressBar:true,
+              progressBar: true,
             });
           }
         }
-        if (
-          socketRes.company_id ===
-          this.userPersonalInfo.data.metadata.company_id
-        ) {
+        if (socketRes.company_id === this.userPersonalInfo.data.metadata.company_id) {
           if (socketRes.status === 'INITIALIZING') {
+            this.notification.push(socketRes);
+            console.log(this.notification)
+            // @ts-ignore
+            if (!findWhere(this.notification, {log: socketRes.log})) {
+              console.log(socketRes, '########################')
+
+            }
 
             this.applist
               .getProcessDetails(socketRes.process_id)
@@ -108,42 +129,58 @@ export class HeaderComponent implements OnInit {
 
                         const link = `repository/${processRes.data.repository_id}/application/${queryPerams}`;
 
-                        if (
-                          !this.checkDubble.find(
-                            (element) => element.step == socketRes.step
-                          )
-                        ) {
-                          this.checkDubble.push({
-                            step: socketRes.step,
-                          });
-                          console.log('----',this.checkDubble)
-                          this.wsService.wsData.subscribe((res) => {});
-                          const infoToaster = this.tostr.info(
-                            `<a class="text-dark" href="${link}">Application: ${appRes.data._metadata.name}, Step: ${socketRes.step}</a>`,
-                            'New Process Initializing!',
-                            {
-                              enableHtml: true,
-                              positionClass: 'toast-top-center',
-                              tapToDismiss: false,
-                              progressBar:true,
-                              newestOnTop:true,
-                            }
-                          );
-                          infoToaster.onTap.subscribe(action => {
-                            this.navigateRoute
-                              .navigate([`repository/${processRes.data.repository_id}/application/`], {
-                                queryParams: {
-                                  type: type,
-                                  title: title,
-                                  url: gitUrl,
-                                  repoId: repoId,
-                                  appId: appId,
-                                  commitId: commitId,
-                                },
-                              })
-                              .then(() => {});
-                          });
-                        }
+                        // if (
+                        //   !this.checkDubble.find(
+                        //     (element) => element.step == socketRes.step
+                        //   )
+                        // ) {
+                        //   this.checkDubble.push({
+                        //     step: socketRes.step,
+                        //   });
+                        this.wsService.wsData.subscribe((res) => {
+                        });
+                        // console.log("")
+                        // if (!this.checkInitializing.find((element) => element == socketRes.footmark)) {
+                        //   this.checkInitializing.push(socketRes.footmark);
+                        //   console.log("inserted");
+
+                        // this.checkInitializing.push(socketRes.footmark);
+                        // for(let item of this.checkInitializing){
+                        //   if(item===socketRes.footmark){
+                        //     console.log("item match found!",item)
+                        //   }
+                        // }
+                        const infoToaster = this.tostr.info(
+                          `<a class="text-dark" href="${link}">Application: ${appRes.data._metadata.name}, Step: ${socketRes.step}</a>`,
+                          'New Process Initializing!',
+                          {
+                            enableHtml: true,
+                            positionClass: 'toast-top-center',
+                            tapToDismiss: false,
+                            progressBar: true,
+                            newestOnTop: true,
+                          }
+                        );
+                        infoToaster.onTap.subscribe(action => {
+                          this.navigateRoute
+                            .navigate([`repository/${processRes.data.repository_id}/application/`], {
+                              queryParams: {
+                                type: type,
+                                title: title,
+                                url: gitUrl,
+                                repoId: repoId,
+                                appId: appId,
+                                commitId: commitId,
+                              },
+                            })
+                            .then(() => {
+                            });
+                        });
+                        // }
+                        // this.checkInitializing.push(socketRes.footmark);
+                        // console.log('-checkInitializing---',this.checkInitializing)
+                        // }
+                        // }
                       });
                   });
               });
