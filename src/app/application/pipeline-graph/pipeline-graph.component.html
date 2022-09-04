@@ -4,17 +4,19 @@
   <div class="log-card relative">
 
     <div [ngClass]="fullmode?'':'hidden'"
-         class="absolute right-0 h-[calc(100vh-170px)] top-[.78rem] z-50 w-[calc(100%-1.5rem)] bg-dark">
+         class="absolute right-0 h-[calc(100vh-170px)] top-[.78rem] z-50 w-[calc(100%-1.5rem)] bg-dark overflow-hidden">
       <div (click)="fullModeClose()"
            class="flex items-center justify-between cursor-pointer w-full h-10 bg-primary-800 px-3">
-        <div class="text-light font-semi-bold">
+        <div class="text-light font-medium">
           {{singleLogDetails.footmark}}
         </div>
         <div>
           <mat-icon class="text-white">fullscreen_exit</mat-icon>
         </div>
       </div>
-      <div class="p-3 overflow-x-scroll h-full">
+
+      <div #pipelineLogViewContainer class="px-3 py-3 overflow-auto h-[80vh] w-full scroll-smooth">
+        <div class="h-[80%]  pb-6">
         <span *ngFor="let logDetails of logs">
         <span *ngIf="logDetails.name === singleLogDetails.footmark" class="space-y-2">
           <pre
@@ -25,7 +27,26 @@
         </span>
         </span>
         <span *ngIf="isLogLoading" class="terminal-spinner  pt-2 pb-4"></span>
+        </div>
       </div>
+
+<!--      <div #pipelineLogViewContainer class="px-3 py-3 overflow-auto h-full w-full scroll-smooth">-->
+<!--        <div class="h-[80%]  pb-6">-->
+<!--                       <span *ngFor="let logDetails of logs">-->
+<!--                        <div>-->
+<!--                          <span *ngIf="logDetails.name === foot" class="space-y-2">-->
+<!--                            <pre-->
+<!--                              *ngFor="let log of logDetails.data"-->
+<!--                              class=" text-xs"-->
+<!--                              [innerHTML]="log"-->
+<!--                            ></pre>-->
+<!--                          </span>-->
+<!--                          </div>-->
+<!--                        </span>-->
+<!--          <span *ngIf="isLogLoading" class="terminal-spinner pt-2 pb-4"></span>-->
+<!--        </div>-->
+<!--      </div>-->
+
     </div>
     <div
       (click)="logClose()"
@@ -242,7 +263,7 @@
                   <div *ngFor="let commitInfo of list.commits; let j = index" class="">
                     <div mat-ripple class="kc-card p-3 mb-3 cursor-pointer"
                          (click)="navigateToCommit(commitInfo,i,$event)"
-                         [class.active]="selectedIndex === i"
+                         [class.active]="activeRoute === commitInfo.sha"
                          [id]="commitInfo.sha"
                     >
                       <div class="flex justify-between items-center break-words space-y-2">
@@ -450,7 +471,16 @@
           </div>
         </div>
       </div>
-      <div *ngIf="error.pipeline !=''">
+
+      <div *ngIf="noStepsFound">
+        <div class="absolute h-80  left-16 right-16 top-1/3  kc-card border-kc-bdr-card bg-warn-200 p-12 mx-16 flex justify-center items-center">
+          <div class="text-center">
+            <h3 class="text-sub-title">{{noStepLog}}</h3>
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="error.pipeline !='' ">
 <!--        <button *ngIf="error.pipeline !=''" (click)="processTrigger({companyId,type,repoUrl})" class="absolute top-[12.5%] right-8 flex justify-end px-4 py-2 kc-button-primary rounded-md shadow-md">Trigger Process</button>-->
         <div class="absolute h-80  left-16 right-16 top-1/3  kc-card border-kc-bdr-card bg-warn-200 p-12 mx-16 flex justify-center items-center">
           <div class="text-center">
@@ -469,7 +499,6 @@
               </div>
             </div>
           </div>
-
 
         </div>
       </div>

@@ -93,7 +93,6 @@ export class AuthService {
   }
 
   logOut(): void {
-
     localStorage.removeItem('loginTime');
     this.tokenService.removeAccessToken();
     this.tokenService.removeRefreshToken();

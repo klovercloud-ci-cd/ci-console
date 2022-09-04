@@ -46,7 +46,9 @@ div{
 .loader-step.active {
   opacity: 100;
 }
-
+.active {
+  @apply bg-light-900;
+}
 .env-name {
   padding: 8px;
   white-space: nowrap;

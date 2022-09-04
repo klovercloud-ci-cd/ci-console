@@ -45,9 +45,9 @@ export class PipelineService {
       `${BASE_URL_WS}pipelines/ws?token=${this.token.getAccessToken()}&from=${login_time}`
     );
 
-    socket.onopen = (e: any) => {
-      console.log('Connected');
-    };
+    // socket.onopen = (e: any) => {
+    //   console.log('Connected');
+    // };
     return socket;
   }
 

@@ -29,8 +29,8 @@ export class ProfileComponent implements OnInit {
       this.userInfo = res;
       this.userResourceArray = res.data.resource_permission.resources;
     },(err)=>{
-      this.snack.openSnackBar('User not found!',err.error.message,'sb-error')});
-
+      this.snack.openSnackBar('User not found!',err.error.message,'sb-error')
+    });
   }
 
 }

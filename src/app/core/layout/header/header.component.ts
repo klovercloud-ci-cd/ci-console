@@ -11,6 +11,8 @@ import {WsService} from '../../../shared/services/ws.service';
 import {HeaderService} from '../header.service';
 import {Router} from '@angular/router';
 import {findWhere} from "underscore";
+import {Subscription} from "rxjs";
+import {GlobalConstants} from "../../../shared/global-constants";
 
 @Component({
   selector: 'app-header',
@@ -21,7 +23,8 @@ export class HeaderComponent implements OnInit {
   notices: any[] = [];
   next: string = '';
   newNoticeCount: any = 0;
-
+  subscribeId!: Subscription;
+  title = GlobalConstants.siteTitle;
   constructor(
     public dialog: MatDialog,
     private auth: AuthService,
@@ -51,20 +54,12 @@ export class HeaderComponent implements OnInit {
   checkInitializing: any[] = [];
 
   async ngOnInit(): Promise<void> {
-    var list = [{"title": "Learn Java", "Author": "kkk", "Cost": 100},
-      {"title": "Learn Scala", "Author": "Joe", "Cost": 200},
-      {"title": "Learn C", "Author": "Sam", "Cost": 200} ];
-    console.log(findWhere(list, { "Author": "Sam" }))
-    if (!findWhere(list, { "Author": "Sam" })) {
-      console.log('########################');
-    }
     this.connectWs();
-
     this.userInfo.getUserInfo(this.user.user_id).subscribe((res) => {
       this.userPersonalInfo = res;
-      this.wsService.wsData.subscribe((res) => {
-
+      this.subscribeId = this.wsService.wsData.subscribe((res) => {
         const socketRes: any = res;
+        // console.log('this.sendWS',socketRes,'----',this.sendWS)
 
         if (
           socketRes.status === 'INITIALIZING' ||
@@ -74,7 +69,6 @@ export class HeaderComponent implements OnInit {
           this.newNoticeCount = this.newNoticeCount + 1;
           if (socketRes.status === 'FAILED') {
 
-            // console.log('socketRes---FAILED:',socketRes)
             this.tostr.warning(`Step: ${socketRes.step}`, 'Process Failed!', {
               enableHtml: true,
               positionClass: 'toast-top-center',
@@ -83,7 +77,6 @@ export class HeaderComponent implements OnInit {
             });
           }
           if (socketRes.status === 'SUCCESSFUL') {
-            // console.log('socketRes---SUCCESSFUL:',socketRes)
             this.tostr.success(`Step: ${socketRes.step}`, 'Successful!', {
               enableHtml: true,
               positionClass: 'toast-top-center',
@@ -95,12 +88,6 @@ export class HeaderComponent implements OnInit {
         if (socketRes.company_id === this.userPersonalInfo.data.metadata.company_id) {
           if (socketRes.status === 'INITIALIZING') {
             this.notification.push(socketRes);
-            console.log(this.notification)
-            // @ts-ignore
-            if (!findWhere(this.notification, {log: socketRes.log})) {
-              console.log(socketRes, '########################')
-
-            }
 
             this.applist
               .getProcessDetails(socketRes.process_id)
@@ -137,17 +124,14 @@ export class HeaderComponent implements OnInit {
                         //   this.checkDubble.push({
                         //     step: socketRes.step,
                         //   });
-                        this.wsService.wsData.subscribe((res) => {
-                        });
-                        // console.log("")
+                        // this.wsService.wsData.subscribe((res) => {
+                        // });
                         // if (!this.checkInitializing.find((element) => element == socketRes.footmark)) {
                         //   this.checkInitializing.push(socketRes.footmark);
-                        //   console.log("inserted");
 
                         // this.checkInitializing.push(socketRes.footmark);
                         // for(let item of this.checkInitializing){
                         //   if(item===socketRes.footmark){
-                        //     console.log("item match found!",item)
                         //   }
                         // }
                         const infoToaster = this.tostr.info(
@@ -178,7 +162,6 @@ export class HeaderComponent implements OnInit {
                         });
                         // }
                         // this.checkInitializing.push(socketRes.footmark);
-                        // console.log('-checkInitializing---',this.checkInitializing)
                         // }
                         // }
                       });
@@ -195,28 +178,72 @@ export class HeaderComponent implements OnInit {
       clearInterval(this.sendWS);
     }
   }
-
   connectWs() {
     const company_Id: string = this.auth.getUserData().metadata.company_id;
     const socket = this.pipelineLog.connectToSocket(company_Id);
+
+    socket.onopen = function() {
+    }
+
     socket.onmessage = (e) => {
+      this.title.add(this.sendWS);
+      const text='';
+      // let anyArray = Object.values(this.title);
+      // console.log('anyArray',anyArray);
+      // this.title.forEach (function(value:any) {
+      //   // text += value;
+      //   console.log('value',value,'-----');
+      //   clearInterval(value)
+      // })
+      // if (this.sendWS) {
+      //   clearInterval(this.sendWS);
+      // }
+      // this.sendWS = setInterval(() => {
+      //   socket.send('');
+      // }, 1000);
       if (e.data !== 'null') {
         const socketRes = JSON.parse(e.data);
-
         this.wsService.setWsData(socketRes);
       }
     };
-    socket.close = (e) => {
-      if (this.sendWS) {
-        clearInterval(this.sendWS);
-      }
-      this.connectWs();
-    };
-    socket.onopen = (e) => {
-      this.sendWS = setInterval(() => {
-        socket.send(' ');
+    // socket.close = (e) => {
+    //   if (this.sendWS) {
+    //     clearInterval(this.sendWS);
+    //   }
+    //   // this.connectWs();
+    // };
+    // socket.onopen = (e) => {
+      // console.log('clicked',this.sendWS)
+      // const interval_id = window.setInterval(() => {
+      //   socket.send('');
+      // }, 1000)
+      //
+      // for (let i = 1; i < interval_id; i++) {
+      //   console.log('id---',i)
+      //   window.clearInterval(i);
+      // }
+      // clearInterval(this.sendWS);
+      // if(this.sendWS){
+      //   clearInterval(this.sendWS);
+      // }
+      // this.sendWS = setInterval(() => {
+      //   socket.send('');
+      // }, 1000);
+      // clearInterval(this.sendWS);
+      // if(this.sendWS){
+      //   clearInterval(this.sendWS);
+      // }
+      // console.log('this.sendWS outside----',this.sendWS)
+
+    this.sendWS = setInterval(function() {
+        socket.send('Hello, Server!');
       }, 1000);
-    };
+    // console.log('sendWS====+++=',this.sendWS);
+     // this.sendWS =  setInterval(() => {
+     //    socket.send('');
+     //    console.log('sendWS====+++=',this.sendWS)
+     //  }, 1000);
+    // };
   }
 
   logout() {
