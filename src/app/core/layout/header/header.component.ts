@@ -69,6 +69,7 @@ export class HeaderComponent implements OnInit {
           this.newNoticeCount = this.newNoticeCount + 1;
           if (socketRes.status === 'FAILED') {
 
+            console.log('sss this.sendWS',socketRes)
             this.tostr.warning(`Step: ${socketRes.step}`, 'Process Failed!', {
               enableHtml: true,
               positionClass: 'toast-top-center',

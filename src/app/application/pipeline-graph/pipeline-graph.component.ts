@@ -21,6 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ProcessLifecycleEventService } from '../process-lifecycle-event.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import {SharedSnackbarService} from "../../shared/snackbar/shared-snackbar.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'kcci-pipeline-graph',
@@ -58,6 +59,8 @@ export class PipelineGraphComponent
   scrollTimeout: any;
   scrollTimeoutCount: string = '';
   liveLogTimeoutId: any;
+  dummyTimeoutId: any;
+  dummyTimeoutId2: any;
   logClicked: number=0;
   openLiveLogPanel: boolean = false;
   openOldLogPanel: boolean = false;
@@ -72,6 +75,8 @@ export class PipelineGraphComponent
   activeRoute: string = '';
   noStepLog: string = '';
   noStepsFound!: boolean;
+  wsSubscription!: Subscription;
+  commitLoading !: boolean;
 
   setOpenBranch(index: number) {
     this.openBranch = index;
@@ -182,6 +187,7 @@ export class PipelineGraphComponent
 
   ngAfterContentInit(): void {
     this.wsService.wsData.subscribe((res) => {
+      console.log('sss ngAfterContentInit')
       this.socketres = res;
       const socketRes: any = res;
       if (socketRes.process_id == this.pipeline?.data?.process_id) {
@@ -254,6 +260,13 @@ export class PipelineGraphComponent
   }
 
   ngOnInit() {
+    console.log('oninit');
+    this.scrollTimeout=this.autoScrollFunction();
+    this.error.pipeline = '';
+    this.getBranches();
+  }
+
+  getBranches(){
     this.isLoading.graph = true;
     this.scrollTimeout=this.autoScrollFunction();
     this.error.pipeline = '';
@@ -298,7 +311,7 @@ export class PipelineGraphComponent
     this.repo
       .getCommit(this.type, this.repoId, this.repoUrl, branchName, this.currentPage , this.limit)
       .subscribe(async (res: any) => {
-        console.log("Commit Info",res)
+        // console.log("Commit Info",res)
         this.commitUserName = res.data[0].commit.author.name;
         this.commitUserEmail = res.data[0].commit.author.email;
         this.commitUrl = res.data[0].html_url;
@@ -351,6 +364,8 @@ export class PipelineGraphComponent
   }
 
   getPrevNextCommit(branchName: any, pageNumber: number) {
+    this.commitLoading = true;
+    console.log('np clicked!')
     this.currentPage=pageNumber;
     this.c_page=pageNumber;
     localStorage.setItem('page', String(pageNumber));
@@ -396,6 +411,8 @@ export class PipelineGraphComponent
             queryParamsHandling: 'merge',
           });
         }
+
+        this.commitLoading = false;
       });
   }
 
@@ -437,7 +454,7 @@ export class PipelineGraphComponent
             }
           }
           this.error.pipeline = '';
-          console.log('res.data',res.data)
+          // console.log('res.data',res.data)
           this.processIds = res.data;
           // this.activeRoute = this.processIds[0].commit_id;
           this.getPipeline(this.processIds[0].process_id);
@@ -467,7 +484,7 @@ export class PipelineGraphComponent
           this.repo
             .getFootmarkLog(processId, '_', 'pre_process', 0, 5, 0)
             .subscribe((res: any) => {
-              console.log('No Steps',typeof res.data[res.data.length-1]);
+              // console.log('No Steps',typeof res.data[res.data.length-1]);
               this.noStepLog = res.data[res.data.length-1];
             })
         }
@@ -477,7 +494,7 @@ export class PipelineGraphComponent
           this.pipeline = res;
           this.envList = this.allenv();
           this.stepsLists = this.stepsDetails();
-          console.log("this.stepsLists",this.stepsLists,'envList-------',this.envList )
+
           this.initSvgArrow();
           this.drawLines();
         });
@@ -915,9 +932,19 @@ export class PipelineGraphComponent
   // LiveLog opening panel
 
   openLogPanel(stepName: any, claim:number) {
+    console.log('openLogPanel',this.liveLogTimeoutId)
+    // if(this.liveLogTimeoutId){
+    //   console.log('openLogPanel should be removed!',this.liveLogTimeoutId);
+    //   clearTimeout(this.liveLogTimeoutId)
+    //   console.log('openLogPanel removed!',this.liveLogTimeoutId);
+    // }
     this.logOpen = true;
     const processId = this.pipeline.data.process_id;
     this.stepFootMark(processId, stepName, claim);
+    // if(this.dummyTimeoutId2){
+    //   clearTimeout(this.dummyTimeoutId2)
+    // }
+
       setTimeout(() => {
         this.pipeline.data.steps.find((pipeStep: any) => {
           this.isLogLoading=true;
@@ -925,16 +952,24 @@ export class PipelineGraphComponent
             this.nodeDetails = pipeStep;
             this.openFootMarkName = this.footMarks[this.footMarks?.length - 1];
             this.logClaim = pipeStep.claim;
-            this.getLiveLogs(
-              processId,
-              stepName,
-              this.openFootMarkName,
-              this.page,
-              this.limit,
-              this.skip,
-              claim,
-              's1'
-            );
+            console.log('openLogPanel this.dummyTimeoutId2',this.dummyTimeoutId2)
+            // if(this.dummyTimeoutId2){
+            //   console.log('openLogPanel should be removed!',this.dummyTimeoutId2);
+            //   clearTimeout(this.dummyTimeoutId2);
+            //   console.log('openLogPanel removed!',this.dummyTimeoutId2);
+            // }
+            this.dummyTimeoutId2 = setTimeout(()=>{
+                this.getLiveLogs(
+                processId,
+                stepName,
+                this.openFootMarkName,
+                this.page,
+                this.limit,
+                this.skip,
+                claim,
+                's1'
+              );
+            })
           }
         });
         this.isLogLoading=false;
@@ -967,10 +1002,15 @@ export class PipelineGraphComponent
         this.setActiveFootMark(this.footMarks?.length - 1);
         let temp: number = 1;
         let currentLogValue: string = '', nextLogValue: string = '', count = 0;
-        this.wsService.wsData.subscribe((WSRes) => {
+          console.log('sss this.wsSubscription',this.wsSubscription);
+          if(this.wsSubscription){
+            this.wsSubscription.unsubscribe();
+            console.log('sss this.Unsubscribe',this.wsSubscription);
+          }
+        this.wsSubscription =  this.wsService.wsData.subscribe((WSRes) => {
           this.isLogLoading = true;
           const socketRes: any = WSRes;
-          // console.log("socketResponse---", socketRes)
+          console.log("sss stepFootMark---",)
           const footmarkData: any = [];
           // console.log("socketRes",temp,'----',socketRes)
           this.openFootMarkName = this.footMarks[this.footMarks?.length - 1];
@@ -979,7 +1019,7 @@ export class PipelineGraphComponent
           if (footMarkRes.data !== null) {
 
             currentLogValue = socketRes.log;
-            // console.log("currentLogValue1--------",count,'::',currentLogValue);
+            console.log("sss log",currentLogValue);
             if (currentLogValue !== nextLogValue) {
               footmarkData.push(currentLogValue);
               this.logs.push({
@@ -1011,6 +1051,8 @@ export class PipelineGraphComponent
           if (found === 0 && (this.nodeDetails.name === socketRes.step)) {
             // @ts-ignore
             this.footMarks.push(socketRes.footmark);
+            this.openFootMarkName = this.footMarks[this.footMarks?.length - 1];
+            console.log('sss this.footMarks',this.footMarks,'======',this.openFootMarkName)
           }
           // }
           temp++;
@@ -1051,6 +1093,8 @@ export class PipelineGraphComponent
     claim: number,
     status: string
   ) {
+
+    console.log('expandLog')
     this.singleLogDetails = {
       index: footMarkIndex,
       footmark: foot,
@@ -1070,16 +1114,23 @@ export class PipelineGraphComponent
     //   clearTimeout(this.liveLogTimeoutId);
     //   console.log("liveLogTimeoutId clear",this.liveLogTimeoutId)
     // }
-    this.getLiveLogs(
-      processId,
-      nodeName,
-      foot,
-      this.page,
-      this.limit,
-      this.skip,
-      claim,
-      's2'
-    );
+    if(this.dummyTimeoutId){
+      clearTimeout(this.dummyTimeoutId);
+    }
+    console.log('Expandlog Inside!')
+    this.dummyTimeoutId = setTimeout(()=>{
+      this.getLiveLogs(
+        processId,
+        nodeName,
+        foot,
+        this.page,
+        this.limit,
+        this.skip,
+        claim,
+        's2'
+      );
+    })
+
   }
 
   // Getting Live Log
@@ -1094,12 +1145,12 @@ export class PipelineGraphComponent
     claim: number,
     showCount:string
   ) {
-    // console.log("page",page)
+    console.log('getLiveLogs')
     this.repo
       .getFootmarkLog(processId, nodeName, footmarkName, page, limit, claim)
       .subscribe((res: any) => {
         this.counter ++
-        // console.log("page",res)
+        // console.log("log",res)
         this.isLogLoading=true;
         let pageNumber = page;
         if (res?.data !== null) {
@@ -1134,11 +1185,11 @@ export class PipelineGraphComponent
         let i = 0
         // console.log("liveLogTimeoutId",this.liveLogTimeoutId)
         for(let link of res._metadata.links){
-          // if (this.liveLogTimeoutId) {
-          //   console.log("exists",this.liveLogTimeoutId)
-          //   window.clearTimeout(this.liveLogTimeoutId);
-          //   console.log("liveLogTimeoutId clear",this.liveLogTimeoutId)
-          // }
+          if (this.liveLogTimeoutId) {
+            // console.log("exists",this.liveLogTimeoutId)
+            window.clearTimeout(this.liveLogTimeoutId);
+            // console.log("liveLogTimeoutId clear",this.liveLogTimeoutId)
+          }
           this.liveLogTimeoutId = window.setTimeout(() => {
             // i ++
             // console.log(i)
@@ -1237,8 +1288,9 @@ export class PipelineGraphComponent
   }
 
   navigateToCommit(commitInfo: any, index:number,event:any) {
+    this.envList = '';
     // this.isLoading.graph = true;
-    console.log("Commit Clicked!!",commitInfo);
+    // console.log("Commit Clicked!!",commitInfo);
       // ,event.target.getAttribute('id'))
     // for(let i=0; i<this.commitList.length; i++){
     //   // console.log(this.commitList[i].commits)
@@ -1280,8 +1332,8 @@ export class PipelineGraphComponent
                 this.commitId = commitId;
                 this.appId = this.appId;
                 this.newBranchName = this.newBranchName;
-                this.ngAfterContentInit();
-                this.ngOnInit();
+                // this.ngAfterContentInit();
+                this.getBranches();
 
                 // this.navigateRoute
                 //   .navigateByUrl('/RefreshComponent', {
