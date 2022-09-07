@@ -8,45 +8,26 @@
       <div (click)="fullModeClose()"
            class="flex items-center justify-between cursor-pointer w-full h-10 bg-primary-800 px-3">
         <div class="text-light font-medium">
-          {{singleLogDetails.footmark}}
+          <span class="font-bold uppercase">{{nodeDetails.name}}</span>  <span class="mx-3 text-xl font-bold">-</span> <span class="font-bold"> {{singleLogDetails.footmark}}</span>
         </div>
         <div>
           <mat-icon class="text-white">fullscreen_exit</mat-icon>
         </div>
       </div>
 
-      <div #pipelineLogViewContainer class="px-3 py-3 overflow-auto h-[80vh] w-full scroll-smooth">
-        <div class="h-[80%]  pb-6">
-        <span *ngFor="let logDetails of logs">
-        <span *ngIf="logDetails.name === singleLogDetails.footmark" class="space-y-2">
+      <div #pipelineLogViewContainer class="px-3 pt-3 overflow-auto h-[100%] w-full scroll-smooth">
+        <div class="h-[100%]">
+        <span *ngFor="let logDetails of allLogsArray">
+<!--        <span *ngIf="logDetails.name === singleLogDetails.footmark" class="space-y-2">-->
           <pre
-            *ngFor="let log of logDetails.data"
             class=" text-sm"
-            [innerHTML]="log"
+            [innerHTML]="logDetails"
           ></pre>
-        </span>
+<!--        </span>-->
         </span>
         <span *ngIf="isLogLoading" class="terminal-spinner  pt-2 pb-4"></span>
         </div>
       </div>
-
-<!--      <div #pipelineLogViewContainer class="px-3 py-3 overflow-auto h-full w-full scroll-smooth">-->
-<!--        <div class="h-[80%]  pb-6">-->
-<!--                       <span *ngFor="let logDetails of logs">-->
-<!--                        <div>-->
-<!--                          <span *ngIf="logDetails.name === foot" class="space-y-2">-->
-<!--                            <pre-->
-<!--                              *ngFor="let log of logDetails.data"-->
-<!--                              class=" text-xs"-->
-<!--                              [innerHTML]="log"-->
-<!--                            ></pre>-->
-<!--                          </span>-->
-<!--                          </div>-->
-<!--                        </span>-->
-<!--          <span *ngIf="isLogLoading" class="terminal-spinner pt-2 pb-4"></span>-->
-<!--        </div>-->
-<!--      </div>-->
-
     </div>
     <div
       (click)="logClose()"
@@ -489,7 +470,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="noStepsFound">
+      <div *ngIf="noStepsFound && !isLoading.graph">
         <div class="absolute h-80  left-16 right-16 top-1/3  kc-card border-kc-bdr-card bg-warn-200 p-12 mx-16 flex justify-center items-center">
           <div class="text-center">
             <h3 class="text-sub-title">{{noStepLog}}</h3>

@@ -127,7 +127,7 @@ div{
   transition: all 0.1s ease-in-out;
 }
 .logPanel {
-  overflow-y: auto;
+  //overflow-y: auto;
   overscroll-behavior-y: contain;
   scroll-snap-type: y mandatory;
 }

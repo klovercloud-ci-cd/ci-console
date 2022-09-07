@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit {
       this.userPersonalInfo = res;
       this.subscribeId = this.wsService.wsData.subscribe((res) => {
         const socketRes: any = res;
-        // console.log('this.sendWS',socketRes,'----',this.sendWS)
+        console.log('this.sendWS',socketRes.status);
 
         if (
           socketRes.status === 'INITIALIZING' ||
@@ -68,22 +68,124 @@ export class HeaderComponent implements OnInit {
         ) {
           this.newNoticeCount = this.newNoticeCount + 1;
           if (socketRes.status === 'FAILED') {
+            this.applist
+              .getProcessDetails(socketRes.process_id)
+              .subscribe((processRes: any) => {
+                this.applist
+                  .getAppDetails(
+                    processRes.data.repository_id,
+                    processRes.data.app_id
+                  )
+                  .subscribe((appRes: any) => {
 
-            console.log('sss this.sendWS',socketRes)
-            this.tostr.warning(`Step: ${socketRes.step}`, 'Process Failed!', {
-              enableHtml: true,
-              positionClass: 'toast-top-center',
-              tapToDismiss: false,
-              progressBar: true,
-            });
+                    appRes.data.url;
+                    this.applist
+                      .getRepositoryInfo(
+                        appRes.data._metadata.CompanyId,
+                        processRes.data.repository_id
+                      )
+                      .subscribe((repoRes) => {
+                        const gitUrl = btoa(appRes.data.url);
+                        const title = appRes.data._metadata.name;
+                        const commitId = processRes.data.commit_id;
+                        const type = repoRes.data.type;
+                        const repoId = processRes.data.repository_id;
+                        const appId = processRes.data.app_id;
+                        const queryPerams = `?type=${type}&title=${title}&url=${gitUrl}&repoId=${repoId}&appId=${appId}&commitId=${commitId}`;
+                        const link = `repository/${processRes.data.repository_id}/application/${queryPerams}`;
+
+                        const infoToaster = this.tostr.warning(`Step: ${socketRes.step}`, 'Process Failed!', {
+                          enableHtml: true,
+                          positionClass: 'toast-top-center',
+                          tapToDismiss: false,
+                          progressBar: true,
+                        });
+                        infoToaster.onTap.subscribe(action => {
+                          this.navigateRoute
+                            .navigate([`repository/${processRes.data.repository_id}/application/`],
+                                {
+                                queryParams: {
+                                  type: type,
+                                  title: title,
+                                  url: gitUrl,
+                                  repoId: repoId,
+                                  appId: appId,
+                                  commitId: commitId,
+                                },
+                              }
+                            )
+                            .then(() => {
+                            });
+                        });
+                        // }
+                        // this.checkInitializing.push(socketRes.footmark);
+                        // }
+                        // }
+                      });
+                  });
+              });
+
+
+
           }
           if (socketRes.status === 'SUCCESSFUL') {
-            this.tostr.success(`Step: ${socketRes.step}`, 'Successful!', {
-              enableHtml: true,
-              positionClass: 'toast-top-center',
-              tapToDismiss: false,
-              progressBar: true,
-            });
+            this.applist
+              .getProcessDetails(socketRes.process_id)
+              .subscribe((processRes: any) => {
+                this.applist
+                  .getAppDetails(
+                    processRes.data.repository_id,
+                    processRes.data.app_id
+                  )
+                  .subscribe((appRes: any) => {
+
+                    appRes.data.url;
+                    this.applist
+                      .getRepositoryInfo(
+                        appRes.data._metadata.CompanyId,
+                        processRes.data.repository_id
+                      )
+                      .subscribe((repoRes) => {
+                        const gitUrl = btoa(appRes.data.url);
+                        const title = appRes.data._metadata.name;
+                        const commitId = processRes.data.commit_id;
+                        const type = repoRes.data.type;
+                        const repoId = processRes.data.repository_id;
+                        const appId = processRes.data.app_id;
+                        const queryPerams = `?type=${type}&title=${title}&url=${gitUrl}&repoId=${repoId}&appId=${appId}&commitId=${commitId}`;
+                        const link = `repository/${processRes.data.repository_id}/application/${queryPerams}`;
+
+                        const infoToaster = this.tostr.success(`Step: ${socketRes.step}`, 'Successful!', {
+                          enableHtml: true,
+                          positionClass: 'toast-top-center',
+                          tapToDismiss: false,
+                          progressBar: true,
+                        });
+                        infoToaster.onTap.subscribe(action => {
+                          this.navigateRoute
+                            .navigate([`repository/${processRes.data.repository_id}/application`],
+                              {
+                              queryParams: {
+                                type: type,
+                                title: title,
+                                url: gitUrl,
+                                repoId: repoId,
+                                appId: appId,
+                                commitId: commitId,
+                              },
+                            }
+                            )
+                            .then(() => {
+                            });
+                        });
+                        // }
+                        // this.checkInitializing.push(socketRes.footmark);
+                        // }
+                        // }
+                      });
+                  });
+              });
+
           }
         }
         if (socketRes.company_id === this.userPersonalInfo.data.metadata.company_id) {
@@ -114,7 +216,6 @@ export class HeaderComponent implements OnInit {
                         const repoId = processRes.data.repository_id;
                         const appId = processRes.data.app_id;
                         const queryPerams = `?type=${type}&title=${title}&url=${gitUrl}&repoId=${repoId}&appId=${appId}&commitId=${commitId}`;
-
                         const link = `repository/${processRes.data.repository_id}/application/${queryPerams}`;
 
                         // if (
@@ -158,8 +259,7 @@ export class HeaderComponent implements OnInit {
                                 commitId: commitId,
                               },
                             })
-                            .then(() => {
-                            });
+                            .then(() => {});
                         });
                         // }
                         // this.checkInitializing.push(socketRes.footmark);
@@ -168,6 +268,8 @@ export class HeaderComponent implements OnInit {
                       });
                   });
               });
+
+
           }
         }
       });
