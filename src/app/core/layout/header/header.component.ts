@@ -59,7 +59,6 @@ export class HeaderComponent implements OnInit {
       this.userPersonalInfo = res;
       this.subscribeId = this.wsService.wsData.subscribe((res) => {
         const socketRes: any = res;
-        console.log('this.sendWS',socketRes.status);
 
         if (
           socketRes.status === 'INITIALIZING' ||
@@ -291,62 +290,14 @@ export class HeaderComponent implements OnInit {
     socket.onmessage = (e) => {
       this.title.add(this.sendWS);
       const text='';
-      // let anyArray = Object.values(this.title);
-      // console.log('anyArray',anyArray);
-      // this.title.forEach (function(value:any) {
-      //   // text += value;
-      //   console.log('value',value,'-----');
-      //   clearInterval(value)
-      // })
-      // if (this.sendWS) {
-      //   clearInterval(this.sendWS);
-      // }
-      // this.sendWS = setInterval(() => {
-      //   socket.send('');
-      // }, 1000);
       if (e.data !== 'null') {
         const socketRes = JSON.parse(e.data);
         this.wsService.setWsData(socketRes);
       }
     };
-    // socket.close = (e) => {
-    //   if (this.sendWS) {
-    //     clearInterval(this.sendWS);
-    //   }
-    //   // this.connectWs();
-    // };
-    // socket.onopen = (e) => {
-      // console.log('clicked',this.sendWS)
-      // const interval_id = window.setInterval(() => {
-      //   socket.send('');
-      // }, 1000)
-      //
-      // for (let i = 1; i < interval_id; i++) {
-      //   console.log('id---',i)
-      //   window.clearInterval(i);
-      // }
-      // clearInterval(this.sendWS);
-      // if(this.sendWS){
-      //   clearInterval(this.sendWS);
-      // }
-      // this.sendWS = setInterval(() => {
-      //   socket.send('');
-      // }, 1000);
-      // clearInterval(this.sendWS);
-      // if(this.sendWS){
-      //   clearInterval(this.sendWS);
-      // }
-      // console.log('this.sendWS outside----',this.sendWS)
-
     this.sendWS = setInterval(function() {
         socket.send('Hello, Server!');
       }, 1000);
-    // console.log('sendWS====+++=',this.sendWS);
-     // this.sendWS =  setInterval(() => {
-     //    socket.send('');
-     //    console.log('sendWS====+++=',this.sendWS)
-     //  }, 1000);
-    // };
   }
 
   logout() {
@@ -432,7 +383,10 @@ export class HeaderComponent implements OnInit {
                         commitId: commitId,
                       },
                     }
-                  );
+                  ).then(()=>{
+                    window.location.reload();
+                  })
+                  ;
                 });
             });
         });

@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { TokenService } from '../auth/token.service';
 import {tap} from "rxjs/operators";
-import {catchError, throwError} from "rxjs";
+import {catchError, Observable, throwError, of} from "rxjs";
 
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({
@@ -20,11 +20,14 @@ const BASE_URL_WS = environment.v1ApiEndPointWS;
   providedIn: 'root',
 })
 export class PipelineService {
+  private footMarkCredentials: any = [];
   constructor(
     private http: HttpClient,
     private location: Location,
     private token: TokenService
   ) {}
+
+  public observableFootmark$: Observable<any>[]=[];
 
   private handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
@@ -79,4 +82,19 @@ export class PipelineService {
     };
     return this.http.get(`${BASE_URL}processes/${processId}/process_life_cycle_events`, HTTP_OPTIONS);
   }
+
+  setProcessId(processId:any){
+    this.footMarkCredentials.processId = processId;
+  }
+  setStepName(stepName:any){
+    this.footMarkCredentials.stepName = stepName;
+  }
+  setClaim(claim:any){
+    this.footMarkCredentials.claim = claim;
+  }
+  getFootMarksCredentials(){
+    return this.footMarkCredentials;
+  }
+
+
 }
