@@ -1,106 +1,95 @@
 <div class=" my__profile">
-  <div class="edit__profile">
+  <div class="edit__profile px-10 md:px-16">
     <div>
-      <h1 class="text-xl m-8 text-dark tracking-wider font-semibold">
+      <h1 class="text-xl mt-[44px] text-dark tracking-wider font-semibold ">
         Basic Information
       </h1>
     </div>
-    <div class="m-7">
-      <div
-        class="w-full h-full"
-        gdColumns="1fr 1fr 1fr 1fr"
-        gdColumns.md="1fr 1fr 1fr"
-        gdColumns.lt-md="1fr 1fr"
-        gdColumns.lt-sm="1fr"
-        gdColumns.lt-xs="1fr"
-        gdGap="20px"
-      >
-        <div class="profile_card">
-          <div class="flex gap-5 items-center pl-3 py-1">
-            <div class="flex flex-col gap-1">
-              <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
-                First Name
-              </h1>
-              <h1 class="text-base tracking-wider">
-                {{ userInfo?.data?.first_name }}
-              </h1>
-            </div>
-          </div>
-        </div>
-        <div class="profile_card">
-          <div class="flex gap-5 items-center pl-3 py-1">
-            <div class="flex flex-col gap-1">
-              <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
-                Last Name
-              </h1>
-              <h1 class="text-base tracking-wider">
-                {{ userInfo?.data?.last_name }}
-              </h1>
-            </div>
-          </div>
-        </div>
-        <div class="profile_card">
-          <div class="flex gap-5 items-center pl-3 py-1">
-            <div class="flex flex-col gap-1">
-              <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
-                Email
-              </h1>
-              <h1 class="text-base tracking-wider">
-                {{ userInfo?.data?.email }}
-              </h1>
-            </div>
-          </div>
-        </div>
-<!--        <div class="profile_card">-->
-<!--          <div class="flex gap-5 items-center pl-3 py-1">-->
-<!--            <div class="flex flex-col gap-1">-->
-<!--              <h1 class="text-xs font-bold tracking-wider text-dark-text-label">-->
-<!--                Password-->
-<!--              </h1>-->
-<!--              <h1 class="text-base tracking-wider">************</h1>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-        <div class="profile_card">
-          <div class="flex gap-5 items-center pl-3 py-1">
-            <div class="flex flex-col gap-1 ">
-              <h1 class="text-xs font-bold tracking-wider text-dark-text-label">
-                Phone Number
-              </h1>
-              <h1 class="text-base tracking-wider">
-                {{ userInfo?.data?.phone }}
-              </h1>
-            </div>
-          </div>
-        </div>
+    <!-- Basic information div items start -->
+      <div class="sm:mt-[60px] pb-[46px]  border-b-1.5 w-full border-[#E7E9EB] md:flex md:flex-wrap">    
+      <!-- Image Container Div -->
+                  <div class="w-[100%] flex justify-center md:flex md:justify-start md:w-[40%] lg:w-[25%] sm:mb-[20px] lg:mb-[0px]">
+                    <img class="image md:block"src="../../../assets/img/illustrations/icon/Capture.PNG"  alt="">
+                  </div>
+    <!-- Information Container Div -->
+                  <div class="w-[100%] md:w-[60%] lg:w-[50%] sm:w-[100%]">
+    <!-- Left Item Div -->
+                      <div class="flex justify-around">    
+                          <div class="">  
+                              <div class="pb-4 leading-8">
+                                  <h3 class="text-[#A7A7A7]">First Name</h3>
+                                  <h3 class="text-black font-bold">{{userInfo.data.first_name}}</h3>
+                              </div>
+                              <div class="leading-8">
+                                   <h3 class="text-[#A7A7A7]">Email Address</h3>
+                                  <h3 class="text-black font-bold">{{userInfo.data.email}}</h3>
+                              </div>
+                          </div>
+    <!-- Right side Item Div -->
+                          <div class="">
+                              <div class="pb-4 leading-8">
+                                  <h3 class="text-[#A7A7A7]">Last Name</h3>
+                                  <h3 class="text-black font-bold">{{userInfo.data.last_name}}</h3>
+                              </div>
+                              <div class="leading-8">
+                                  <h3 class="text-[#A7A7A7]">Contact No</h3>
+                                  <h3 class="text-black font-bold">{{userInfo.data.phone}}</h3>
+                              </div>
+                          </div>
+                      </div>
+                   </div>
+    <!-- Button Div -->
+                  <div class="w-[100%] mt-[30px] lg:mt-[0px] sm:w-[100%] lg:w-[25%]">
+                    <div class="lg:flex lg:justify-end md:flex md:justify-start flex justify-center">
+                      <button class="btn ">Change Passward</button>
+                    </div>
+                  </div>
+    <!-- Basic Infromation Div items end -->
       </div>
-    </div>
+  
+    <!-- Resource Infromation Start -->
+                <h1 class="text-xl mt-[44px]  text-dark tracking-wider font-semibold">
+                    Resource Information
+                </h1>
+    <!--Role & Resources Bar  -->
+                <div class="flex mt-[36px]  text-dark font-semibold bg-[#F0F5FF] py-4 ">
+                  <h3 class="w-[35%] px-4">Role</h3>
+                  <h3 class="w-[75%]">Resource</h3>
+                </div> 
 
-    <div class="mr-0 sm:mr-7 full flex justify-center sm:justify-end block">
-      <div class="w-52 sm:w-56 md:w-60 lg:w-52">
-        <button
-          routerLink="/user-profile/reset-password"
-          class="kc-button-primary block text-button rounded-md"
-        >
-          Change Password
-        </button>
-      </div>
-    </div>
+                  <div class="mt-[34px] mb-[10px] w-full flex">
+                    <div class="sm:pl-[20px] pl-[15px] w-[35%] font-[400] text-[16px] text-[#4164A9]">
+                      SUPERADMIN
+                    </div>
+                    <div class=" w-[75%] flex overflow-x-auto md:flex-wrap gap-2">
+                        <div *ngFor="let item of superadminresponsibilityarray" class=" flex flex-wrap">
+                          <div class="superAdminRoles">{{item}}</div>
+                        </div>
+                    </div>
+                  </div>
 
-    <h1 class="text-xl m-8 text-dark tracking-wider font-semibold">
-      Resource Information
-    </h1>
-    <div  class="block w-full flex justify-center md:justify-start mt-[1%] flex-wrap text-dark gap-5 px-7">
-    <div *ngFor="let user of userResourceArray; let i = index;" class="">
-      <div class="h-48 w-64 bg-light-700 shadow-md rounded-xl">
-      <h1 class="text-dark-background-3 text-left p-3">{{user.name}}: </h1>
-      <div class=" flex flex-wrap pt-7 justify-center">
-        <div *ngFor="let item of user.roles; let i = index;">
-          <h1 class="text-dark-background">{{item.name}}{{(i<(user.roles.length-1)?',':'')}}</h1>
-        </div>
-      </div>
-      </div>
-    </div>
-    </div>
-  </div>
-</div>
+                  <div class="mt-[34px] w-full flex  pb-[10px]">
+                    <div class="sm:pl-[20px] pl-[15px] w-[35%] font-[400] text-[16px] text-[#4164A9]">
+                      ADMIN
+                    </div>
+                    <div class=" w-[75%] flex md:flex-wrap  overflow-x-auto gap-2">
+                        <div *ngFor="let item of adminresponsibilityarray" class=" flex flex-wrap">
+                          <div class="Adminroles">{{item}}</div>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-[34px] w-full flex pb-[10px]">
+                    <div class="sm:pl-[20px] pl-[15px] w-[35%] font-[400] text-[16px] text-[#4164A9]">
+                      VIEWER
+                    </div>
+                    <div class="w-[75%] flex md:flex-wrap  overflow-x-auto gap-2">
+                      <div *ngFor="let item of viewerresponsibilityarray" class=" flex flex-wrap">
+                        <div class="viewerRoles">{{item}}</div>
+                      </div>
+                    </div>
+                  </div>
+  </div>                
+</div>                  
+          
+   

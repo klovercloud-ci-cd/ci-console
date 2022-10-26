@@ -1,10 +1,13 @@
+// body{
+//   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&display=swap');
+// }
 .my__profile {
   width: 100%;
   @apply flex justify-center items-center;
 }
 .edit__profile {
   min-height: 85vh;
-  @apply w-full h-full text-dark-text mx-7 bg-light-400;
+  @apply w-full h-full text-dark-text mx-7 bg-[#FFFFFF];
 }
 
 .profile_card {
@@ -19,4 +22,53 @@
   div {
     @apply py-4;
   }
+}
+
+//For Passward Change Button
+.btn{
+  padding: 5px 13px;
+  background: #4164A9;
+  color:#fff;
+  border-radius: 3px;
+}
+// For circle an image 
+.image{
+  width: 109px;
+  height: 107px;
+  margin-top: 7%;
+  border-radius: 50%;
+}
+.superAdminRoles{
+  padding: 7px 15px;
+  height: auto;
+  width: auto;
+  background: #3EAEC1;
+  color:#fff;
+  line-height: 18.15px;
+  font-size:15px;
+  border-radius: 3px;
+  text-transform: capitalize;
+}
+
+.Adminroles{
+  padding: 7px 15px;
+  height: auto;
+  width: auto;
+  background: #4164A9;
+  color:#fff;
+  line-height: 18.15px;
+  font-size:15px;
+  border-radius: 3px;
+  text-transform: capitalize;
+}
+.viewerRoles{
+  padding: 7px 15px;
+  height: auto;
+  width: auto;
+  background: #038500;
+  color:#fff;
+  line-height: 18.15px;
+  font-size:15px;
+  border-radius: 3px;
+  text-transform: capitalize;
 }
